@@ -18,13 +18,13 @@ import java.util.List;
  * update interval (500ms). The class maintains separate lists for subsystems with
  * different update intervals and updates them accordingly.
  * 
- * @see CSSubsystemBase
+ * @see CS_SubsystemBase
  * @see edu.wpi.first.wpilibj2.command.SubsystemBase
  */
 public class Dashboard extends SubsystemBase {
 
-  private static List<CSSubsystemBase> subsystemsShortInterval = new ArrayList<>();
-  private static List<CSSubsystemBase> subsystemsLongInterval = new ArrayList<>();
+  private static List<CS_SubsystemBase> subsystemsShortInterval = new ArrayList<>();
+  private static List<CS_SubsystemBase> subsystemsLongInterval = new ArrayList<>();
 
   private static final boolean kEnableDashBoard = true;
 
@@ -49,7 +49,7 @@ public class Dashboard extends SubsystemBase {
    * @param interval The update interval for the subsystem (SHORT_INTERVAL or LONG_INTERVAL).
   *                  By default (no parameter) the update interval is SHORT_INTERVAL
    */
-  public static void registerSubsystem(CSSubsystemBase subsystem, UpdateInterval interval) {
+  public static void registerSubsystem(CS_SubsystemBase subsystem, UpdateInterval interval) {
       if(interval == UpdateInterval.LONG_INTERVAL){
           subsystemsLongInterval.add(subsystem);
       } else {
@@ -63,12 +63,12 @@ public class Dashboard extends SubsystemBase {
    * 
    * @param subsystem The subsystem to register.
    */
-  public static void registerSubsystem(CSSubsystemBase subsystem) {
+  public static void registerSubsystem(CS_SubsystemBase subsystem) {
     registerSubsystem(subsystem, UpdateInterval.SHORT_INTERVAL);
   }
 
-  public static List<CSSubsystemBase> listRegisteredSubsystems() {
-    List<CSSubsystemBase> combinedIntervals = new ArrayList<>();
+  public static List<CS_SubsystemBase> listRegisteredSubsystems() {
+    List<CS_SubsystemBase> combinedIntervals = new ArrayList<>();
     combinedIntervals.addAll(subsystemsShortInterval);
     combinedIntervals.addAll(subsystemsLongInterval);
     return combinedIntervals;
@@ -81,7 +81,7 @@ public class Dashboard extends SubsystemBase {
       // Update short interval
       if ((time - m_shortOldTime) > kShortInterval) {
         m_shortOldTime = time;
-        for (CSSubsystemBase s: subsystemsShortInterval){
+        for (CS_SubsystemBase s: subsystemsShortInterval){
           s.updateDashboard();
         }
       }
@@ -89,10 +89,10 @@ public class Dashboard extends SubsystemBase {
       if ((time - m_longOldTime) > kLongInterval) {
         // Thing that should be updated every LONG_DELAY
         m_longOldTime = time;
-        for (CSSubsystemBase s : subsystemsShortInterval) {
+        for (CS_SubsystemBase s : subsystemsShortInterval) {
           s.updateDashboard();
         }
-        for (CSSubsystemBase s : subsystemsLongInterval) {
+        for (CS_SubsystemBase s : subsystemsLongInterval) {
           s.updateDashboard();
         }
       }

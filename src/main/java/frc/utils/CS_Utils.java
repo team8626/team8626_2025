@@ -6,7 +6,7 @@ import java.util.function.Consumer;
  * Team 8626 (Cyber Sailors) utility class.
  * <p>This is a collections of utility methods that are used across the robot code.
  */
-public class CSUtils {
+public class CS_Utils {
 
     /**
      * Helper method to update from SmartDashboard  values

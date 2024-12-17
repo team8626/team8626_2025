@@ -16,7 +16,7 @@ import frc.robot.subsystems.Dashboard.UpdateInterval;
  *
  * <p> This class is designed to streamline the creation and management of subsystems within the robot code.
 */
-public abstract class CSSubsystemBase extends SubsystemBase{
+public abstract class CS_SubsystemBase extends SubsystemBase{
 
     /** MasterSubsystem Constructor
      * This registers the subsystem with the Dashboard.
@@ -28,11 +28,11 @@ public abstract class CSSubsystemBase extends SubsystemBase{
      * @param interval The update interval for the subsystem (SHORT_INTERVAL or LONG_INTERVAL)
      *                 By default (no parameter) the update interval is "SHORT_INTERVAL"
      */
-    public CSSubsystemBase(UpdateInterval interval) {
+    public CS_SubsystemBase(UpdateInterval interval) {
         Dashboard.registerSubsystem(this);
         this.initDashboard();
     }
-    public CSSubsystemBase() {
+    public CS_SubsystemBase() {
         this(UpdateInterval.SHORT_INTERVAL);
     }
 
