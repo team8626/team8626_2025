@@ -6,9 +6,9 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotConstants.RobotType;
-import frc.robot.subsystems.swervedrive.CS_DriveSubsystemIO;
-import frc.robot.subsystems.swervedrive.CS_DriveSubsystemIO_Swerve;
-import frc.robot.subsystems.swervedrive.CS_DriveSubsystemIO_Tank;
+import frc.robot.subsystems.drive.CS_DriveSubsystemIO;
+import frc.robot.subsystems.drive.CS_DriveSubsystemIO_Swerve;
+import frc.robot.subsystems.drive.CS_DriveSubsystemIO_Tank;
 
 public class RobotContainer {
     // Define subsystems and commands here
