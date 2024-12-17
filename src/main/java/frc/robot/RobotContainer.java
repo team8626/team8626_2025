@@ -2,27 +2,25 @@ package frc.robot;
 
 import java.io.File;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.subsystems.swervedrive.Constants;
-import frc.robot.subsystems.swervedrive.SwerveSubsystem;
+import frc.robot.RobotConstants.RobotType;
+import frc.robot.subsystems.swervedrive.CS_DriveSubsystemIO;
+import frc.robot.subsystems.swervedrive.CS_DriveSubsystemIO_Swerve;
+import frc.robot.subsystems.swervedrive.CS_DriveSubsystemIO_Tank;
 
 public class RobotContainer {
     // Define subsystems and commands here
     // private final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
     // private final ExampleCommand exampleCommand = new ExampleCommand(exampleSubsystem);
 
-    // Define joystick and buttons
-    private final SwerveSubsystem m_drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
-                                                                         "swerve_dart"));
+    public RobotType robotType = RobotType.KITBOT; // POssible options: SIMBOT, KITBOT, DART, DEVBOT, COMPBOT
 
-  private final CommandXboxController m_xboxController =
-      new CommandXboxController(OperatorConstants.kXboxControllerPort);
+    private CS_DriveSubsystemIO drivebase; 
+    
+    private final CommandXboxController xboxController =
+        new CommandXboxController(OperatorConstants.kXboxControllerPort);
 
 //   private final CommandXboxController m_testController =
 //       new CommandXboxController(OperatorConstants.kTestControllerPort);
@@ -31,6 +29,27 @@ public class RobotContainer {
 //       new CommandButtonController(OperatorConstants.kButtonBoxPort);
 
     public RobotContainer() {
+
+        // Define Robot Subsystems
+        if(Robot.isSimulation()) robotType = RobotConstants.RobotType.SIMBOT;
+
+        switch(robotType){
+            case KITBOT:
+                drivebase = new CS_DriveSubsystemIO_Tank();
+                break;
+            case SIMBOT:
+            case DART:
+                drivebase = new CS_DriveSubsystemIO_Swerve(new File(Filesystem.getDeployDirectory(),
+                                                            "swerve_dart"));
+                break;
+            case DEVBOT:
+            case COMPBOT:
+            default:   
+                drivebase = new CS_DriveSubsystemIO_Swerve(new File(Filesystem.getDeployDirectory(),
+                                                             "swerve_devbot"));
+                break;
+        }
+
         // Configure the button bindings
         configureButtonBindings();
         configureDefaultCommands();
@@ -42,36 +61,13 @@ public class RobotContainer {
         // exampleButton.whenPressed(exampleCommand);
         
     }
+    
     private void configureDefaultCommands () {
         // Set the default command for a subsystem here.
-        // drivebase.setDefaultCommand(new DriveCommand(drivebase, driverJoystick));
-         Command driveFieldOrientedAnglularVelocity =
-        m_drivebase.driveCommand(
-            () ->
-                MathUtil.applyDeadband(-m_xboxController.getLeftY(), 0.1),
-            () ->
-                MathUtil.applyDeadband(-m_xboxController.getLeftX(), 0.1),
-            () -> -m_xboxController.getRightX());
-
-
-
             // TODO: @NickCanCode do we need invert for red? 
             // TODO: @NickCanCode implement slow drive in swerve subsystem
-        //              Command driveFieldOrientedAnglularVelocity =
-        // m_drivebase.driveCommand(
-        //     () ->
-        //         MathUtil.applyDeadband(-m_xboxController.getLeftY() * invert, 0.1)
-        //             * driveSpeedFactor,
-        //     () ->
-        //         MathUtil.applyDeadband(-m_xboxController.getLeftX() * invert, 0.1)
-        //             * driveSpeedFactor,
-        //     () -> -m_xboxController.getRightX() * rotationSpeedFactor);
 
-  m_drivebase.setDefaultCommand(
-        !RobotBase.isSimulation()
-            ? driveFieldOrientedAnglularVelocity
-            : driveFieldOrientedAnglularVelocity);
-
+        drivebase.setDefaultCommand(xboxController);
     }
 
     public Command getAutonomousCommand() {

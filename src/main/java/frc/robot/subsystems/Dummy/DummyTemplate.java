@@ -1,16 +1,16 @@
-package frc.robot.subsystems.SubsystemTemplate;
+package frc.robot.subsystems.Dummy;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.subsystems.CSSubsystemBase;
-import frc.robot.subsystems.SubsystemTemplate.SubsystemConstants.SubsystemStates.SubsystemState;
-import frc.utils.CSUtils;
+import frc.robot.subsystems.CS_SubsystemBase;
+import frc.robot.subsystems.Dummy.DummyConstants.SubsystemStates.SubsystemState;
+import frc.utils.CS_Utils;
 
-public class SubsystemTemplate extends CSSubsystemBase {
+public class DummyTemplate extends CS_SubsystemBase {
 
     private boolean m_enabled;
     private SubsystemState m_currentState;
 
-    public SubsystemTemplate() {
+    public DummyTemplate() {
         super();
         this.println("Has been created");
     }

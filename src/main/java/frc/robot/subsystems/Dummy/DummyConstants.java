@@ -1,6 +1,6 @@
-package frc.robot.subsystems.SubsystemTemplate;
+package frc.robot.subsystems.Dummy;
 
-public class SubsystemConstants {
+public class DummyConstants {
   public class SubsystemStates {
     public static enum SubsystemState {
       IDLE(0, "idle"),
@@ -8,21 +8,23 @@ public class SubsystemConstants {
       STATE_2(2, "State2"),
       STATE_3(3, "State3");
 
-      private final int m_id;
-      private final String m_string;
+      private final int id;
+      private final String string;
 
       SubsystemState(int newId, String newString) {
-        this.m_id = newId;
-        this.m_string = newString.toUpperCase();
+        this.id = newId;
+        this.string = newString.toUpperCase();
       }
 
       public String getString() {
-        return m_string.toUpperCase();
+        return string.toUpperCase();
       }
 
       public double getId() {
-        return m_id;
+        return id;
       }
     }
   }
+
+  public static int kvalue1 = 0;
 }
