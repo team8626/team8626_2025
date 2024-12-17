@@ -15,7 +15,7 @@ public class RobotContainer {
     // private final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
     // private final ExampleCommand exampleCommand = new ExampleCommand(exampleSubsystem);
 
-    public RobotType robotType = RobotType.KITBOT; // POssible options: SIMBOT, KITBOT, DART, DEVBOT, COMPBOT
+    public RobotType robotType = RobotType.DART; // POssible options: SIMBOT, KITBOT, DART, DEVBOT, COMPBOT
 
     private CS_DriveSubsystemIO drivebase; 
     
