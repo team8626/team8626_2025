@@ -2,7 +2,11 @@ package frc.robot;
 
 import java.io.File;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotConstants.RobotType;
@@ -21,6 +25,8 @@ public class RobotContainer {
     
     private final CommandXboxController xboxController =
         new CommandXboxController(OperatorConstants.kXboxControllerPort);
+
+    private SendableChooser<Command> autoChooser;
 
 //   private final CommandXboxController m_testController =
 //       new CommandXboxController(OperatorConstants.kTestControllerPort);
@@ -53,6 +59,10 @@ public class RobotContainer {
         // Configure the button bindings
         configureButtonBindings();
         configureDefaultCommands();
+
+        // Configure the autonomous path chooser
+        autoChooser = AutoBuilder.buildAutoChooser();
+        SmartDashboard.putData("Auto Path", autoChooser);
     }
 
     private void configureButtonBindings() {
@@ -71,8 +81,7 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        // Return the command to run in autonomous
-        return null;
-        // TODO: @NickCanCode Replace null with the command to run in autonomous
+        // Return the path to follow in autonomous mode
+        return this.autoChooser.getSelected();
     }
 }
