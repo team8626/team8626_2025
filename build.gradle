@@ -1,6 +1,7 @@
 plugins {
     id "java"
     id "edu.wpi.first.GradleRIO" version "2024.3.2"
+    id "com.peterabeles.gversion" version "1.10"
 }
 
 java {
@@ -69,6 +70,16 @@ dependencies {
 
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.1'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    project.compileJava.dependsOn(createVersionFile)
+    gversion {
+        srcDir       = "src/main/java/"
+        classPackage = "frc.robot"
+        className    = "BuildConstants"
+        dateFormat   = "yyyy-MM-dd HH:mm:ss z"
+        timeZone     = "America/New_York" // Use preferred time zone
+        indent       = "  "
+    }
 }
 
 test {
