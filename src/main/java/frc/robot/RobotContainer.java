@@ -13,14 +13,27 @@ import frc.robot.RobotConstants.RobotType;
 import frc.robot.subsystems.drive.CS_DriveSubsystemIO;
 import frc.robot.subsystems.drive.CS_DriveSubsystemIO_Swerve;
 import frc.robot.subsystems.drive.CS_DriveSubsystemIO_Tank;
+import frc.robot.subsystems.ledManager.LEDManager;
 
 public class RobotContainer {
+    // Instantiate the Commodore running the robot state machine. 
+    private Commodore commodore = Commodore.getInstance();
+
+    // Instantiate the LED manager 
+    private LEDManager ledManager = LEDManager.getInstance();
+
+
+    // ****************************************************************************************
+    // Change robot type here if needed
+    // Possible options: SIMBOT, KITBOT, DART, DEVBOT, COMPBOT
+    //
+    private RobotType robotType = RobotType.DART;
+    //
+    // ****************************************************************************************
+
     // Define subsystems and commands here
     // private final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
     // private final ExampleCommand exampleCommand = new ExampleCommand(exampleSubsystem);
-
-    public RobotType robotType = RobotType.DART; // POssible options: SIMBOT, KITBOT, DART, DEVBOT, COMPBOT
-
     private CS_DriveSubsystemIO drivebase; 
     
     private final CommandXboxController xboxController =

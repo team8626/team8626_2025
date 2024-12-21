@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Commodore.CommodoreState;
 
 
 /**
@@ -35,8 +36,10 @@ public class Robot extends TimedRobot {
     // log to USB
     DataLogManager.start();
     DriverStation.startDataLog(DataLogManager.getLog());
-  }
 
+    // Set the Commodore to boot up (disconnected)
+    Commodore.setCommodoreState(CommodoreState.BOOT, true);
+  }
 
   /**
    * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
@@ -48,6 +51,15 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
+
+    // // Check if the DS is NOT attached
+    // if(!isSimulation() && (!DriverStation.isDSAttached() || !DriverStation.isFMSAttached())){
+
+    // // if(/*!DriverStation.isDSAttached() || */!DriverStation.isFMSAttached()){
+    //   Commodore.setCommodoreState(CommodoreState.DISCONNECTED, true);
+    // } else if (isSimulation() && !DriverStation.isFMSAttached()){
+    //   Commodore.setCommodoreState(CommodoreState.DISCONNECTED, true);
+    // }
   }
 
   /**
@@ -62,12 +74,16 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    System.out.println("--- Autonomous ---");
+
+    if(DriverStation.isDSAttached() || DriverStation.isFMSAttached()){
+      Commodore.setCommodoreState(CommodoreState.IDLE, true);
+    }
     Command autonomousCommand = robotContainer.getAutonomousCommand();
 
     if (autonomousCommand != null) {
       autonomousCommand.schedule();
     }
-
   }
 
   /** This function is called periodically during autonomous. */
@@ -77,7 +93,13 @@ public class Robot extends TimedRobot {
 
   /** This function is called once when teleop is enabled. */
   @Override
-  public void teleopInit() {}
+  public void teleopInit() {
+    System.out.println("--- Teleop ---");
+
+    if((DriverStation.isDSAttached() || DriverStation.isFMSAttached())){
+      Commodore.setCommodoreState(CommodoreState.IDLE, true);
+    }
+  }
 
   /** This function is called periodically during operator control. */
   @Override
@@ -85,15 +107,34 @@ public class Robot extends TimedRobot {
 
   /** This function is called once when the robot is disabled. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    System.out.println("--- Disabled ---");
+  }
 
   /** This function is called periodically when disabled. */
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    if (!(DriverStation.isFMSAttached() && DriverStation.isDSAttached())) {
+      if(Commodore.getCurrentState()!= CommodoreState.DISCONNECTED){
+        Commodore.setCommodoreState(CommodoreState.DISCONNECTED, true);
+      }
+    } else {
+      if(Commodore.getCurrentState()!= CommodoreState.DISABLED){
+        Commodore.setCommodoreState(CommodoreState.DISABLED, true);
+      }
+    }
+  }
+
+  @Override
+  public void disabledExit() {
+  }
 
   /** This function is called once when test mode is enabled. */
   @Override
-  public void testInit() {}
+  public void testInit() {
+    System.out.println("--- Test ---");
+
+  }
 
   /** This function is called periodically during test mode. */
   @Override
@@ -101,7 +142,10 @@ public class Robot extends TimedRobot {
 
   /** This function is called once when the robot is first started up. */
   @Override
-  public void simulationInit() {}
+  public void simulationInit() {
+    System.out.println("--- Simulation ---");
+
+  }
 
   /** This function is called periodically whilst in simulation. */
   @Override
