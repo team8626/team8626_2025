@@ -80,9 +80,7 @@ public abstract class CS_SubsystemBase extends SubsystemBase{
      */
     @Override
     public final void periodic() {
-        // if(Robot.isSimulation()) {
-        //     this.updateSimValues();
-        // }
+        this.updateDashboard();
         this.CS_periodic();
     }
 
