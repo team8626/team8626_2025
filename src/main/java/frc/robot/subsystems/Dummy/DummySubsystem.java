@@ -1,4 +1,4 @@
-package frc.robot.subsystems.Dummy;
+package frc.robot.subsystems.dummy;
 
 import frc.robot.subsystems.CS_SubsystemBase;
 // import frc.robot.subsystems.Dummy.DummyIO.DummyIO_Inputs;
@@ -29,12 +29,6 @@ public class DummySubsystem extends CS_SubsystemBase {
     public void updateDashboard() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'updateDashboard'");
-    }
-
-    @Override
-    public void updateSimValues() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateSimValues'");
     }
 
     @Override

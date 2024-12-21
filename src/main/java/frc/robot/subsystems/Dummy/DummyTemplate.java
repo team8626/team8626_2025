@@ -1,8 +1,8 @@
-package frc.robot.subsystems.Dummy;
+package frc.robot.subsystems.dummy;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.CS_SubsystemBase;
-import frc.robot.subsystems.Dummy.DummyConstants.SubsystemStates.SubsystemState;
+import frc.robot.subsystems.dummy.DummyConstants.SubsystemStates.SubsystemState;
 import frc.utils.CS_Utils;
 
 public class DummyTemplate extends CS_SubsystemBase {
@@ -48,15 +48,6 @@ public class DummyTemplate extends CS_SubsystemBase {
         // m_D = Utils8626.updateFromSmartDashboard(newD, m_D, (value) -> somePIDController.setP(value));
         // m_FF = Utils8626.updateFromSmartDashboard(newFF, m_FF, (value) -> somePIDController.setP(value));
 
-
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void updateSimValues() {
-        // Read "Sensors" as Toggles from Shuffleboard
-        // m_sensorA = SmartDashboard.getBoolean("subsystem/sensorA", m_sensorA);
 
         // TODO Auto-generated method stub
 

@@ -1,4 +1,4 @@
-package frc.robot.subsystems.Dummy;
+package frc.robot.subsystems.dummy;
 
 public class DummyConstants {
   public class SubsystemStates {

@@ -1,4 +1,4 @@
-package frc.robot.subsystems.Dummy;
+package frc.robot.subsystems.dummy;
 
 public interface DummyIO {
     public static class DummyIO_Inputs {

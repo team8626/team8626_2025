@@ -1,4 +1,4 @@
-package frc.robot.subsystems.Dummy;
+package frc.robot.subsystems.dummy;
 
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;

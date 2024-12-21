@@ -32,12 +32,6 @@ public class CS_DriveSubsystem extends CS_SubsystemBase {
     }
 
     @Override
-    public void updateSimValues() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateSimValues'");
-    }
-
-    @Override
     public void CS_periodic() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'CS_periodic'");

@@ -70,12 +70,6 @@ public abstract class CS_SubsystemBase extends SubsystemBase{
     public abstract void updateDashboard();
 
     /**
-     * Abstract method to update simulation values.
-     * Subclasses must implement this method.
-     */
-    public abstract void updateSimValues();
-
-    /**
      * This method is called periodically by the {@link CommandScheduler}. Useful for updating
      * subsystem-specific state that you don't want to offload to a {@link Command}. Teams should try
      * to be consistent within their own codebases about which responsibilities will be handled by
@@ -86,9 +80,9 @@ public abstract class CS_SubsystemBase extends SubsystemBase{
      */
     @Override
     public final void periodic() {
-        if(Robot.isSimulation()) {
-            this.updateSimValues();
-        }
+        // if(Robot.isSimulation()) {
+        //     this.updateSimValues();
+        // }
         this.CS_periodic();
     }
 
