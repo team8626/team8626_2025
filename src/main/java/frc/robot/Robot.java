@@ -21,12 +21,7 @@ import frc.robot.Commodore.CommodoreState;
 public class Robot extends TimedRobot {
   private RobotContainer robotContainer;
 
-  /**
-   * This function is run when the robot is first started up and should be used for any
-   * initialization code.
-   */
-  @Override
-  public void robotInit() {
+  public Robot() {
     robotContainer = new RobotContainer();
     // TODO: Remove? We aren't using that m_chooser.set
     // DefaultOption("Default Auto", kDefaultAuto);
