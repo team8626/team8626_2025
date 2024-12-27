@@ -3,25 +3,35 @@ package frc.robot;
 import java.io.File;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+
+import frc.robot.Commodore.CommodoreState;
 import frc.robot.RobotConstants.RobotType;
 import frc.robot.subsystems.drive.CS_DriveSubsystemIO;
 import frc.robot.subsystems.drive.CS_DriveSubsystemIO_Swerve;
 import frc.robot.subsystems.drive.CS_DriveSubsystemIO_Tank;
+import frc.robot.subsystems.dummy.DummyIO_Specific1;
+import frc.robot.subsystems.dummy.DummySubsystem;
 import frc.robot.subsystems.ledManager.LEDManager;
 
+import frc.utils.CS_ButtonBoxController;
+import frc.utils.CS_XboxController;
+
 public class RobotContainer {
+    // Singleton instance
+    private static RobotContainer instance;
+
     // Instantiate the Commodore running the robot state machine. 
-    private Commodore commodore = Commodore.getInstance();
+    private final Commodore commodore = Commodore.getInstance();
 
     // Instantiate the LED manager 
-    private LEDManager ledManager = LEDManager.getInstance();
-
+    private final LEDManager ledManager = LEDManager.getInstance();
 
     // ****************************************************************************************
     // Change robot type here if needed
@@ -34,20 +44,17 @@ public class RobotContainer {
     // Define subsystems and commands here
     // private final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
     // private final ExampleCommand exampleCommand = new ExampleCommand(exampleSubsystem);
-    private CS_DriveSubsystemIO drivebase; 
-    
-    private final CommandXboxController xboxController =
-        new CommandXboxController(OperatorConstants.kXboxControllerPort);
+    public static CS_DriveSubsystemIO drivebase = null; 
+    public static DummySubsystem dummy = null;
+
+    // Controllers
+    private final CS_XboxController driverController = new CS_XboxController(OperatorConstants.kXboxControllerPort);
+    private final CS_XboxController operatorController = new CS_XboxController(OperatorConstants.kTestControllerPort);
+    private final CS_ButtonBoxController buttonBox = new CS_ButtonBoxController(OperatorConstants.kButtonBoxPort);
 
     private SendableChooser<Command> autoChooser;
 
-//   private final CommandXboxController m_testController =
-//       new CommandXboxController(OperatorConstants.kTestControllerPort);
-
-//   private final CommandButtonController m_buttonBox =
-//       new CommandButtonController(OperatorConstants.kButtonBoxPort);
-
-    public RobotContainer() {
+    private RobotContainer() {
 
         // Define Robot Subsystems
         if(Robot.isSimulation()) robotType = RobotConstants.RobotType.SIMBOT;
@@ -58,6 +65,7 @@ public class RobotContainer {
                 break;
             case SIMBOT:
             case DART:
+                dummy = new DummySubsystem(new DummyIO_Specific1());
                 drivebase = new CS_DriveSubsystemIO_Swerve(new File(Filesystem.getDeployDirectory(),
                                                             "swerve_dart"));
                 break;
@@ -70,19 +78,36 @@ public class RobotContainer {
         }
 
         // Configure the button bindings
-        configureButtonBindings();
+        configureDriverBindings(driverController);
+        configureOperatorBindings(operatorController);
+        configureButtonBoxBindings(buttonBox);
         configureDefaultCommands();
 
         // Configure the autonomous path chooser
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Path", autoChooser);
+
+        // Configure NamedCommands for PathPlanner
+        configureNamedCommands();
     }
 
-    private void configureButtonBindings() {
-   
-        // Bind the example command to the example button
-        // exampleButton.whenPressed(exampleCommand);
-        
+    // Public method to provide access to the singleton instance
+    public static RobotContainer getInstance() {
+        if (instance == null) {
+            instance = new RobotContainer();
+        }
+        return instance;
+    }
+    private void configureDriverBindings(CS_XboxController controller) {
+        controller.btn_A.onTrue(new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.INTAKE, true)));        
+    }
+    private void configureOperatorBindings(CS_XboxController controller) {
+        controller.btn_A. onTrue(new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.INTAKE, true)));
+    }
+    private void configureButtonBoxBindings(CS_ButtonBoxController controller) {
+        controller.btn_1.onTrue(new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.INTAKE, true).withToggleState()));         
+        controller.btn_2.onTrue(new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.SHOOT, true)));         
+        controller.btn_9.onTrue(new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.IDLE, true)));         
     }
     
     private void configureDefaultCommands () {
@@ -90,9 +115,20 @@ public class RobotContainer {
             // TODO: @NickCanCode do we need invert for red? 
             // TODO: @NickCanCode implement slow drive in swerve subsystem
 
-        drivebase.setDefaultCommand(xboxController);
+        drivebase.setDefaultCommand(driverController);
     }
 
+    private void configureNamedCommands() {
+
+        NamedCommands.registerCommand("Idle", new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.IDLE, true)));
+        NamedCommands.registerCommand("Shoot", new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.SHOOT, true)));
+        NamedCommands.registerCommand("Intake", new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.INTAKE, true)));
+        
+        // NamedCommands.registerCommand("Note1_Check", new Note1_Check());
+        // NamedCommands.registerCommand("Note2_Check", new Note2_Check());
+        // NamedCommands.registerCommand("Note3_Check", new Note3_Check());
+    }
+    
     public Command getAutonomousCommand() {
         // Return the path to follow in autonomous mode
         return this.autoChooser.getSelected();
