@@ -1,5 +1,12 @@
+// Copyright (c) 2024 FRC 8626
+// http://github.com/team8626
+//
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
 package frc.robot.subsystems.dummy;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.CS_SubsystemBase;
 // import frc.robot.subsystems.Dummy.DummyIO.DummyIO_Inputs;
 
@@ -22,18 +29,14 @@ public class DummySubsystem extends CS_SubsystemBase {
     @Override
     public void initDashboard() {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'initDashboard'");
     }
 
     @Override
     public void updateDashboard() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateDashboard'");
+        // SmartDashboard.putData("Commands/DummySubsystem", this);
     }
 
     @Override
     public void CS_periodic() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'CS_periodic'");
     }
 }

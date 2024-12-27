@@ -1,11 +1,17 @@
+// Copyright (c) 2024 FRC 8626
+// http://github.com/team8626
+//
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
 package frc.robot.subsystems.drive;
 
 import java.io.File;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.OperatorConstants;
+import frc.utils.CS_XboxController;
 
 public class CS_DriveSubsystemIO_Tank extends TankSubsystem implements CS_DriveSubsystemIO {
     
@@ -19,7 +25,7 @@ public class CS_DriveSubsystemIO_Tank extends TankSubsystem implements CS_DriveS
      *
      * @param xboxController The Xbox controller to use for driving the robot.
      */
-    public void setDefaultCommand(CommandXboxController xboxController){
+    public void setDefaultCommand(CS_XboxController xboxController){
         Command driveCommand = run(() -> this.tankDrive(
                 MathUtil.applyDeadband(-xboxController.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
                 MathUtil.applyDeadband(-xboxController.getRightY(), OperatorConstants.LEFT_X_DEADBAND)));
