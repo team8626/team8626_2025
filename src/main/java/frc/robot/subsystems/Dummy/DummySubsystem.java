@@ -6,7 +6,6 @@
 
 package frc.robot.subsystems.dummy;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.CS_SubsystemBase;
 // import frc.robot.subsystems.Dummy.DummyIO.DummyIO_Inputs;
 
@@ -16,6 +15,7 @@ public class DummySubsystem extends CS_SubsystemBase {
 
     public DummySubsystem(DummyIO subsystem_interface){
         this.m_interface = subsystem_interface;
+        println("Created");
     }
 
     public void setValue1(double new_value1){

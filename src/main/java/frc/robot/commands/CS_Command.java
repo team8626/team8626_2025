@@ -7,6 +7,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.RobotContainer;
 
 /**
  * The CS_Command class is an abstract base class for commands 
@@ -32,7 +33,9 @@ public abstract class CS_Command extends Command{
      */
     protected void printf(String format, Object... args) {
         String formattedMessage = String.format(format, args);
-        System.out.println("[Cmd: " + TAG + "] " + formattedMessage);
+        if(RobotContainer.isDebugEnabled()){
+            System.out.println("[" + TAG + "] " + formattedMessage);
+        }
     }
 
     /**

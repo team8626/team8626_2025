@@ -21,10 +21,9 @@ import frc.robot.Commodore.CommodoreState;
  * project.
  */
 public class Robot extends TimedRobot {
-  private RobotContainer robotContainer;
-
+  private RobotContainer robotContainer = null;
+  private static boolean isReady = false;
   public Robot() {
-    // RobotContainer robotContainer = new RobotContainer();
     robotContainer = RobotContainer.getInstance();
 
     // TODO: Remove? We aren't using that m_chooser.set
@@ -37,7 +36,21 @@ public class Robot extends TimedRobot {
     DriverStation.startDataLog(DataLogManager.getLog());
 
     // Set the Commodore to boot up (disconnected)
+    // if(RobotContainer.isDebugEnabled()){
+    //   DriverStation.reportWarning("################################################################################", false);
+    //   DriverStation.reportWarning("########## WARNING !!!                                                ##########", false);
+    //   DriverStation.reportWarning("########## DEBUG IS ENABLED ON THIS BUILD...                          ##########", false);
+    //   DriverStation.reportWarning("################################################################################", false);
+    // }
     Commodore.setCommodoreState(CommodoreState.BOOT, true);
+    isReady = true;
+  }
+
+  /**
+    * Returns true of we have been thought the constructor and are ready to run
+   */
+  public static  boolean isReady(){
+    return isReady;
   }
 
   /**
@@ -64,7 +77,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    System.out.println("--- Autonomous ---");
+    System.out.println("------------------------------ Autonomous ------------------------------");
 
     if(DriverStation.isDSAttached() || DriverStation.isFMSAttached()){
       Commodore.setCommodoreState(CommodoreState.IDLE, true);
@@ -84,7 +97,7 @@ public class Robot extends TimedRobot {
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
-    System.out.println("--- Teleop ---");
+    System.out.println("------------------------------ Teleop ------------------------------");
 
     if((DriverStation.isDSAttached() || DriverStation.isFMSAttached())){
       Commodore.setCommodoreState(CommodoreState.IDLE, true);
@@ -98,7 +111,7 @@ public class Robot extends TimedRobot {
   /** This function is called once when the robot is disabled. */
   @Override
   public void disabledInit() {
-    System.out.println("--- Disabled ---");
+    System.out.println("------------------------------ Disabled ------------------------------");
   }
 
   /** This function is called periodically when disabled. */
@@ -122,7 +135,7 @@ public class Robot extends TimedRobot {
   /** This function is called once when test mode is enabled. */
   @Override
   public void testInit() {
-    System.out.println("--- Test ---");
+    System.out.println("------------------------------ Test ------------------------------");
 
   }
 
@@ -133,7 +146,7 @@ public class Robot extends TimedRobot {
   /** This function is called once when the robot is first started up. */
   @Override
   public void simulationInit() {
-    System.out.println("--- Simulation ---");
+    System.out.println("------------------------------ Simulation ------------------------------");
 
   }
 

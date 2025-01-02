@@ -32,7 +32,7 @@ public class DummyInfinite extends CS_Command {
         timer.reset();
         timer.start();
         lastPrintTime = 0;
-        System.out.println("Started");
+        println("Started");
 
     }
 

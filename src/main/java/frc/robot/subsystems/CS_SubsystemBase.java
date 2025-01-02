@@ -6,10 +6,13 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.Dashboard.UpdateInterval;
 
 /**
@@ -51,9 +54,10 @@ public abstract class CS_SubsystemBase extends SubsystemBase{
     protected void printf(String format, Object... args) {
         String className = this.getClass().getSimpleName().toUpperCase();
         String formattedMessage = String.format(format, args);
-        System.out.println("[" + className + "] " + formattedMessage);
+        if(!Robot.isReady() || RobotContainer.isDebugEnabled()){
+                 System.out.println("[" + className + "] " + formattedMessage);
+        }
     }
-
     /**
      * Print a given string prefixed with the subsystem name.
      *
@@ -61,6 +65,45 @@ public abstract class CS_SubsystemBase extends SubsystemBase{
      */
     protected void println(String string) {
         this.printf(string);
+    }
+
+    /**
+     * Print a given DriverStation Warning string prefixed with the subsystem name.
+     *
+     * @param string The string to print.
+     */
+    protected void DSWarningf(String format, Object... args) {
+        String className = this.getClass().getSimpleName().toUpperCase();
+        String formattedMessage = String.format(format, args);
+        DriverStation.reportWarning("[" + className + "] " + formattedMessage, false);
+    }
+
+    /**
+     * Print a given DriverStation Warning string prefixed with the subsystem name.
+     *
+     * @param string The string to print.
+     */
+    protected void DSWarningln(String string) {
+        DSWarningf(string);
+    }
+    /**
+     * Print a given DriverStation Warning string prefixed with the subsystem name.
+     *
+     * @param string The string to print.
+     */
+    protected void DSErrorf(String format, Object... args) {
+        String className = this.getClass().getSimpleName().toUpperCase();
+        String formattedMessage = String.format(format, args);
+        DriverStation.reportError("[" + className + "] " + formattedMessage, false);
+    }
+
+    /**
+     * Print a given DriverStation Warning string prefixed with the subsystem name.
+     *
+     * @param string The string to print.
+     */
+    protected void DSErrorln(String string) {
+        DSErrorf(string);
     }
 
     /**

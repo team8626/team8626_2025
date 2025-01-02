@@ -118,7 +118,6 @@ public class LEDManager extends CS_SubsystemBase {
    */
   private static void updateMainLeds() {
     mainMode = Commodore.getCurrentState();
-    // System.out.printf("[LED] State: %s\n", mainMode.toString());
 
     switch (mainMode) {
       case DISCONNECTED:

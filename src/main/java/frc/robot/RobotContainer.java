@@ -7,6 +7,8 @@
 package frc.robot;
 
 import java.io.File;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -44,6 +46,9 @@ public class RobotContainer {
     // Possible options: SIMBOT, KITBOT, DART, DEVBOT, COMPBOT
     //
     private RobotType robotType = RobotType.DART;
+    private boolean debugEnabled = true;
+    private static final String GIT_VERSION = "v0.0.0"; // Replace this with actual version during build
+
     //
     // ****************************************************************************************
 
@@ -82,6 +87,9 @@ public class RobotContainer {
                                                              "swerve_devbot"));
                 break;
         }
+        
+        // Display build information
+        displayCredits();
 
         // Configure the button bindings
         configureDriverBindings(driverController);
@@ -104,6 +112,12 @@ public class RobotContainer {
         }
         return instance;
     }
+
+    // Public method to check if debug is enabled
+    public static boolean isDebugEnabled() {
+        return instance.debugEnabled;
+    }
+
     private void configureDriverBindings(CS_XboxController controller) {
         controller.btn_A.onTrue(new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.INTAKE, true)));        
     }
@@ -138,5 +152,33 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         // Return the path to follow in autonomous mode
         return this.autoChooser.getSelected();
+    }
+
+    private void displayCredits(){
+
+        // Get the current date and time
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedDateTime = now.format(formatter);
+        
+        System.out.println("");
+        System.out.println("####################################################################################");
+        System.out.println("###   ___     _               ___       _ _                    ___   __ ___  __  ###");
+        System.out.println("###  / __|  _| |__  ___ _ _  / __| __ _(_) |___ _ _ ___  ___  ( _ ) / /|_  )/ /  ###");
+        System.out.println("### | (_| || | '_ \\/ -_) '_| \\__ \\/ _` | | / _ \\ '_(_-< |___| / _ \\/ _ \\/ // _ \\ ###");
+        System.out.println("###  \\___\\_, |_.__/\\___|_|   |___/\\__,_|_|_\\___/_| /__/       \\___/\\___/___\\___/ ###");
+        System.out.println("###      |__/                                                                    ###");
+        System.out.println("###                                                                              ###");
+        System.out.printf("### %-76s ###\n", "Compliled for: " + robotType.toString());
+        System.out.printf("### %-76s ###\n", "Debug        : " + (debugEnabled? "Enabled" : "Disabled"));
+        System.out.println("###                                                                              ###");
+        System.out.printf("### %-76s ###\n", "Git Version  : " + BuildConstants.VERSION);
+        System.out.printf("### %-76s ###\n", "Git Branch   : " + BuildConstants.GIT_BRANCH);
+        System.out.printf("### %-76s ###\n", "Build Date   : " + BuildConstants.BUILD_DATE);
+        System.out.printf("### %-76s ###\n", "Dirty Flag   : " + BuildConstants.DIRTY);
+        System.out.println("###                                                                              ###");
+        System.out.println("####################################################################################");
+        System.out.println("");
+
     }
 }

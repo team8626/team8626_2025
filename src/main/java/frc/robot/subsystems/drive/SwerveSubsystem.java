@@ -37,6 +37,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
+import frc.robot.subsystems.CS_SubsystemBase;
 import frc.robot.subsystems.drive.Constants.AutonConstants;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
@@ -49,7 +50,7 @@ import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
-public class SwerveSubsystem extends SubsystemBase
+public class SwerveSubsystem extends CS_SubsystemBase
 {
 
   /**
@@ -85,10 +86,10 @@ public class SwerveSubsystem extends SubsystemBase
     //  The gear ratio is 6.75 motor revolutions per wheel rotation.
     //  The encoder resolution per motor revolution is 1 per motor revolution.
     double driveConversionFactor = SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(4), 6.75);
-    System.out.println("\"conversionFactors\": {");
-    System.out.println("\t\"angle\": {\"factor\": " + angleConversionFactor + " },");
-    System.out.println("\t\"drive\": {\"factor\": " + driveConversionFactor + " }");
-    System.out.println("}");
+    println("\"conversionFactors\": {");
+    println("\t\"angle\": {\"factor\": " + angleConversionFactor + " },");
+    println("\t\"drive\": {\"factor\": " + driveConversionFactor + " }");
+    println("}");
 
     // Configure the Telemetry before creating the SwerveDrive to avoid unnecessary objects being created.
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
@@ -138,7 +139,7 @@ public class SwerveSubsystem extends SubsystemBase
   }
 
   @Override
-  public void periodic()
+  public void CS_periodic()
   {
     // When vision is enabled we must manually update odometry in SwerveDrive
     if (visionDriveTest)
@@ -694,5 +695,15 @@ public class SwerveSubsystem extends SubsystemBase
   public void addFakeVisionReading()
   {
     swerveDrive.addVisionMeasurement(new Pose2d(3, 3, Rotation2d.fromDegrees(65)), Timer.getFPGATimestamp());
+  }
+
+  @Override
+  public void initDashboard() {
+    // TODO Auto-generated method stub
+  }
+
+  @Override
+  public void updateDashboard() {
+    // TODO Auto-generated method stub
   }
 }

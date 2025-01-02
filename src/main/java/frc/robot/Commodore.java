@@ -87,7 +87,7 @@ public class Commodore extends CS_SubsystemBase{
      */
     public static Commodore setCommodoreState(CommodoreState newState, boolean override) {
     
-        System.out.printf("[COMMODORE] New: %s, Current %s\n", newState.toString(), currentState.toString());
+        getInstance().printf("Setting State: Requested: %s%s, Current %s\n", newState.toString(), override?"(OVERRIDE)":"", currentState.toString());
 
         // If we are in the same state and it's a toggle, go back to IDLE
         if((currentState == newState) && (isToggleState == true)){
@@ -112,6 +112,7 @@ public class Commodore extends CS_SubsystemBase{
                  break;
 
                  // Those cases are just for LED update
+                 // The Robot is disabled in those states, there will be no command launched.
                 case BOOT:
                 case ESTOP:
                 case DISCONNECTED:
@@ -132,10 +133,10 @@ public class Commodore extends CS_SubsystemBase{
 
                 // We shouldn't be there!
                 case TRANSITION:
-                    System.out.println("[COMMODORE] ########## Check your code, TRANSITION state should be overwritten by commands ##########");
+                    getInstance().println("########## Check your code, TRANSITION state should be overwritten by commands ##########");
                     break;
                 default:
-                    System.out.printf("[COMMODORE] ########## Check your code, %s not handled ##########\n", newState.toString());
+                    getInstance().printf("########## Check your code, %s not handled ##########\n", newState.toString());
                     break;
             }
         }
@@ -145,10 +146,10 @@ public class Commodore extends CS_SubsystemBase{
     public Commodore withToggleState() {
         if(currentState == CommodoreState.TRANSITION){
             isToggleState = false;
-            // System.out.println("[COMMODORE] ------ TRANSITION, No Toggle");
+            // getInstance().println("------ TRANSITION, No Toggle");
         } else {
             isToggleState = true;
-            System.out.println("[COMMODORE] ------ ("+ currentState.toString() +") IT'S A TOGGLE");
+            getInstance().println("------ ("+ currentState.toString() +") IT'S A TOGGLE");
         }
         return this;
     }
@@ -157,12 +158,12 @@ public class Commodore extends CS_SubsystemBase{
         if(newState != currentState){
             pushLastState(currentState);
             currentState = newState;
-            System.out.printf("[COMMODORE] New State to %s %s(was %s)\n", newState.toString(), isToggleState==true?"--TOGGLE ":"", getLastState().toString());
+            getInstance().printf("New State to %s %s(was %s)\n", newState.toString(), isToggleState==true?"--TOGGLE ":"", getLastState().toString());
             // displayStateHistory();
         }
         // Same state, nothing to do
         else {
-            System.out.printf("[COMMODORE] Same state (%s) -- Do Nothing\n", newState.toString());
+            getInstance().printf("Same state (%s) -- Do Nothing\n", newState.toString());
         }
     }
     public static CommodoreState getCurrentState() {
@@ -183,11 +184,11 @@ public class Commodore extends CS_SubsystemBase{
 
     // Method to display the content of the last states queue
     private static void displayStateHistory() {
-        System.out.print("Last States:");
+        getInstance().printf("Last States:");
         for (CommodoreState state : stateHistory) {
-            System.out.printf("  - %s",state);
+            getInstance().printf("  - %s",state);
         }
-        System.out.println();
+        getInstance().println("");
     }
 
     // Method to get the n-th element of the last states queue

@@ -21,7 +21,7 @@ import java.util.List;
  * @see CS_SubsystemBase
  * @see edu.wpi.first.wpilibj2.command.SubsystemBase
  */
-public class Dashboard extends SubsystemBase {
+public class Dashboard extends CS_SubsystemBase {
 
   private static List<CS_SubsystemBase> subsystemsShortInterval = new ArrayList<>();
   private static List<CS_SubsystemBase> subsystemsLongInterval = new ArrayList<>();
@@ -75,7 +75,7 @@ public class Dashboard extends SubsystemBase {
   }
 
   @Override
-  public void periodic() {
+  public void CS_periodic() {
     double time = Timer.getFPGATimestamp();
     if (kEnableDashBoard) {
       // Update short interval
@@ -97,5 +97,15 @@ public class Dashboard extends SubsystemBase {
         }
       }
     }
+  }
+
+  @Override
+  public void initDashboard() {
+    // TODO Auto-generated method stub
+  }
+
+  @Override
+  public void updateDashboard() {
+    // TODO Auto-generated method stub
   }
 }
