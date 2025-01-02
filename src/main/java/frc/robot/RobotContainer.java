@@ -7,9 +7,6 @@
 package frc.robot;
 
 import java.io.File;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
@@ -47,7 +44,6 @@ public class RobotContainer {
     //
     private RobotType robotType = RobotType.DART;
     private boolean debugEnabled = true;
-    private static final String GIT_VERSION = "v0.0.0"; // Replace this with actual version during build
 
     //
     // ****************************************************************************************
@@ -155,11 +151,6 @@ public class RobotContainer {
     }
 
     private void displayCredits(){
-
-        // Get the current date and time
-        LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        String formattedDateTime = now.format(formatter);
         
         System.out.println("");
         System.out.println("####################################################################################");
