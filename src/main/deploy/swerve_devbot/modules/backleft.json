@@ -1,6 +1,6 @@
 {
   "drive": {
-    "type": "sparkmax",
+    "type": "sparkflex_vortex",
     "id": 16,
     "canbus": null
   },
