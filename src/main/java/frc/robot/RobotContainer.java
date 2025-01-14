@@ -70,19 +70,21 @@ public class RobotContainer {
       case KITBOT:
         drivebase = new CS_DriveSubsystemIO_Tank();
         break;
-      case SIMBOT:
       case DART:
         dummy = new DummySubsystem(new DummyIO_Specific1());
         drivebase =
             new CS_DriveSubsystemIO_Swerve(
                 new File(Filesystem.getDeployDirectory(), "swerve_dart"));
         break;
+      case SIMBOT:
       case DEVBOT:
       case COMPBOT:
       default:
         drivebase =
             new CS_DriveSubsystemIO_Swerve(
                 new File(Filesystem.getDeployDirectory(), "swerve_devbot"));
+        dummy = new DummySubsystem(new DummyIO_Specific1());
+
         break;
     }
 
