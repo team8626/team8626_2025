@@ -3,7 +3,7 @@ package frc.robot.subsystems.elevator;
 import frc.robot.subsystems.CS_SubsystemBase;
 import frc.robot.subsystems.elevator.ElevatorConstants.ElevatorStates.ElevatorState;
 
-public class Elevator_3Stage extends CS_SubsystemBase implements ElevatorInterface {
+public class Elevator_LinearSparkMax extends CS_SubsystemBase implements ElevatorInterface {
   // Declare the subsystem specific hardware here
   // Example:
   // private final SparkMax motor1;
@@ -12,7 +12,7 @@ public class Elevator_3Stage extends CS_SubsystemBase implements ElevatorInterfa
   private boolean is_enabled = false;
   private ElevatorState current_state = ElevatorState.STOPPED;
 
-  public Elevator_3Stage() {
+  public Elevator_LinearSparkMax() {
     
     // Instantiante and initilaze the substem according to Specific1 configuration.
     // This is specific to that robot (Motors, Sensors, controllers...)

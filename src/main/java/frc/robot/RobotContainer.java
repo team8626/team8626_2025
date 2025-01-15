@@ -20,7 +20,7 @@ import frc.robot.subsystems.drive.CS_DriveSubsystemIO_Swerve;
 import frc.robot.subsystems.drive.CS_DriveSubsystemIO_Tank;
 import frc.robot.subsystems.dummy.DummyIO_Specific1;
 import frc.robot.subsystems.dummy.DummySubsystem;
-import frc.robot.subsystems.elevator.Elevator_3Stage;
+import frc.robot.subsystems.elevator.Elevator_LinearSparkMax;
 import frc.robot.subsystems.elevator.Elevator_Simulation;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.ledManager.LEDManager;
@@ -96,7 +96,7 @@ public class RobotContainer {
             new CS_DriveSubsystemIO_Swerve(
                 new File(Filesystem.getDeployDirectory(), "swerve_devbot"));
         dummy = new DummySubsystem(new DummyIO_Specific1());
-        elevator = new ElevatorSubsystem(new Elevator_3Stage());
+        elevator = new ElevatorSubsystem(new Elevator_LinearSparkMax());
 
 
         break;
