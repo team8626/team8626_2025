@@ -20,6 +20,9 @@ import frc.robot.subsystems.drive.CS_DriveSubsystemIO_Swerve;
 import frc.robot.subsystems.drive.CS_DriveSubsystemIO_Tank;
 import frc.robot.subsystems.dummy.DummyIO_Specific1;
 import frc.robot.subsystems.dummy.DummySubsystem;
+import frc.robot.subsystems.elevator.Elevator_3Stage;
+import frc.robot.subsystems.elevator.Elevator_Simulation;
+import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.ledManager.LEDManager;
 import frc.utils.CS_ButtonBoxController;
 import frc.utils.CS_XboxController;
@@ -50,6 +53,7 @@ public class RobotContainer {
   // private final ExampleCommand exampleCommand = new ExampleCommand(exampleSubsystem);
   public static CS_DriveSubsystemIO drivebase = null;
   public static DummySubsystem dummy = null;
+  public static ElevatorSubsystem elevator = null;
 
   // Controllers
   private final CS_XboxController driverController =
@@ -69,6 +73,7 @@ public class RobotContainer {
     switch (robotType) {
       case KITBOT:
         drivebase = new CS_DriveSubsystemIO_Tank();
+        // elevator = new ElevatorArm();
         break;
       case DART:
         dummy = new DummySubsystem(new DummyIO_Specific1());
@@ -77,6 +82,13 @@ public class RobotContainer {
                 new File(Filesystem.getDeployDirectory(), "swerve_dart"));
         break;
       case SIMBOT:
+        drivebase =
+            new CS_DriveSubsystemIO_Swerve(
+                new File(Filesystem.getDeployDirectory(), "swerve_devbot"));
+        dummy = new DummySubsystem(new DummyIO_Specific1());
+        elevator = new ElevatorSubsystem(new Elevator_Simulation());
+
+        break;
       case DEVBOT:
       case COMPBOT:
       default:
@@ -84,6 +96,8 @@ public class RobotContainer {
             new CS_DriveSubsystemIO_Swerve(
                 new File(Filesystem.getDeployDirectory(), "swerve_devbot"));
         dummy = new DummySubsystem(new DummyIO_Specific1());
+        elevator = new ElevatorSubsystem(new Elevator_3Stage());
+
 
         break;
     }
@@ -121,6 +135,13 @@ public class RobotContainer {
   private void configureDriverBindings(CS_XboxController controller) {
     controller.btn_A.onTrue(
         new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.INTAKE, true)));
+
+    controller.btn_B.onTrue(
+        new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.SHOOT, true)));
+
+
+
+
   }
 
   private void configureOperatorBindings(CS_XboxController controller) {
