@@ -3,10 +3,10 @@ package frc.robot.subsystems.elevator;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
-import frc.robot.subsystems.CS_SubsystemBase;
+import frc.robot.subsystems.CS_InterfaceBase;
 import frc.robot.subsystems.elevator.ElevatorConstants.ElevatorStates.ElevatorState;
 
-public class Elevator_Simulation extends CS_SubsystemBase implements ElevatorInterface {
+public class Elevator_Simulation implements ElevatorInterface, CS_InterfaceBase {
 
   private boolean is_enabled = false;
   private ElevatorState current_state = ElevatorState.STOPPED;
@@ -75,9 +75,5 @@ public class Elevator_Simulation extends CS_SubsystemBase implements ElevatorInt
   @Override
   public void setElevatorFF(double ff) {
     printf("New FF: %f\n", ff);
-  }
-
-  @Override
-  public void CS_periodic() {
   }
 }

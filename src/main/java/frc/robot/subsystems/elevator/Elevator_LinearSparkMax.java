@@ -1,9 +1,9 @@
 package frc.robot.subsystems.elevator;
 
-import frc.robot.subsystems.CS_SubsystemBase;
+import frc.robot.subsystems.CS_InterfaceBase;
 import frc.robot.subsystems.elevator.ElevatorConstants.ElevatorStates.ElevatorState;
 
-public class Elevator_LinearSparkMax extends CS_SubsystemBase implements ElevatorInterface {
+public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceBase {
   // Declare the subsystem specific hardware here
   // Example:
   // private final SparkMax motor1;
@@ -65,25 +65,21 @@ public class Elevator_LinearSparkMax extends CS_SubsystemBase implements Elevato
 
   @Override
   public void setElevatorkP(double kP) {
-    System.out.printf("New kP: %f\n", kP);
+    printf("New kP: %f\n", kP);
   }
 
   @Override
   public void setElevatorkI(double kI) {
-    System.out.printf("New kI: %f\n", kI);
+    printf("New kI: %f\n", kI);
   }
 
   @Override
   public void setElevatorkD(double kD) {
-    System.out.printf("New kD: %f\n", kD);
+    printf("New kD: %f\n", kD);
   }
 
   @Override
   public void setElevatorFF(double ff) {
-    System.out.printf("New FF: %f\n", ff);
-  }
-
-  @Override
-  public void CS_periodic() {
+    printf("New FF: %f\n", ff);
   }
 }
