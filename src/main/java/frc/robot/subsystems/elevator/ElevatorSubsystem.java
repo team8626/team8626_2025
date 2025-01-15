@@ -57,7 +57,7 @@ public class ElevatorSubsystem extends CS_SubsystemBase {
     SmartDashboard.putNumber("Subsystem/Elevator/P Gain", ElevatorConstants.kP);
     SmartDashboard.putNumber("Subsystem/Elevator/D Gain", ElevatorConstants.kI);
     SmartDashboard.putNumber("Subsystem/Elevator/I Gain", ElevatorConstants.kD);
-    SmartDashboard.putNumber("Subsystem/Elevator/FF Gain", ElevatorConstants.FF);
+    SmartDashboard.putNumber("Subsystem/Elevator/FF", ElevatorConstants.FF);
   }
 
   @Override
@@ -75,16 +75,16 @@ public class ElevatorSubsystem extends CS_SubsystemBase {
 
     // Using SmartDashboard to tune PIDs
     // --------------------------------------------------
-    double newP = SmartDashboard.getNumber("Subsystem/Elevator/P Gain", values.kP);
-    double newI = SmartDashboard.getNumber("Subsystem/Elevator/I Gain", values.kI);
-    double newD = SmartDashboard.getNumber("Subsystem/Elevator/D Gain", values.kD);
+    double newkP = SmartDashboard.getNumber("Subsystem/Elevator/P Gain", values.kP);
+    double newkI = SmartDashboard.getNumber("Subsystem/Elevator/I Gain", values.kI);
+    double newkD = SmartDashboard.getNumber("Subsystem/Elevator/D Gain", values.kD);
     double newFF = SmartDashboard.getNumber("Subsystem/Elevator/FF", values.FF);
 
     // Coefficients on SmartDashboard have changed, save new values to the PID controller
     // --------------------------------------------------
-    values.kP = CS_Utils.updateFromSmartDashboard(newP, values.kP, (value) -> setkP(value));
-    values.kI = CS_Utils.updateFromSmartDashboard(newI, values.kI, (value) -> setkI(value));
-    values.kD = CS_Utils.updateFromSmartDashboard(newD, values.kD, (value) -> setkD(value));
+    values.kP = CS_Utils.updateFromSmartDashboard(newkP, values.kP, (value) -> setkP(value));
+    values.kI = CS_Utils.updateFromSmartDashboard(newkI, values.kI, (value) -> setkI(value));
+    values.kD = CS_Utils.updateFromSmartDashboard(newkD, values.kD, (value) -> setkD(value));
     values.FF = CS_Utils.updateFromSmartDashboard(newFF, values.FF, (value) -> setFF(value));
 
     // System.out.printf("P: %f, I: %f, D: %f, FF: %f\n", values.kP, values.kI, values.kD, values.FF); 

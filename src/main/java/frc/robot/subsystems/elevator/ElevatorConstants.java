@@ -12,8 +12,6 @@ public class ElevatorConstants {
   public final static double drumRadiusMeters = Units.inchesToMeters(1);
 
   // PID Constants
-  public final static double kS = 0.0;
-  public final static double kV = 0.0;
   public final static double kP = 1.0;
   public final static double kI = 0.0;
   public final static double kD = 0.0;

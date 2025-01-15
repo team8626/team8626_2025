@@ -64,22 +64,22 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
   }
 
   @Override
-  public void setElevatorkP(double kP) {
-    printf("New kP: %f\n", kP);
+  public void setElevatorkP(double new_value) {
+    printf("New kP: %f\n", new_value);
   }
 
   @Override
-  public void setElevatorkI(double kI) {
-    printf("New kI: %f\n", kI);
+  public void setElevatorkI(double new_value) {
+    printf("New kI: %f\n", new_value);
   }
 
   @Override
-  public void setElevatorkD(double kD) {
-    printf("New kD: %f\n", kD);
+  public void setElevatorkD(double new_value) {
+    printf("New kD: %f\n", new_value);
   }
 
   @Override
-  public void setElevatorFF(double ff) {
-    printf("New FF: %f\n", ff);
+  public void setElevatorFF(double new_value) {
+    printf("New FF: %f\n", new_value);
   }
 }
