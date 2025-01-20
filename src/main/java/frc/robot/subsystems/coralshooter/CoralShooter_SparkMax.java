@@ -1,6 +1,9 @@
 package frc.robot.subsystems.coralshooter;
 
 import static frc.robot.subsystems.coralshooter.CoralShooterConstants.flywheelConfig;
+import static frc.robot.subsystems.coralshooter.CoralShooterConstants.launcherConfig;
+
+import org.ejml.dense.row.factory.LinearSolverFactory_MT_DDRM;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
@@ -22,14 +25,18 @@ public class CoralShooter_SparkMax implements CoralShooterInterface, CS_Interfac
   // Example:
   private final SparkMax leftMotor;
   private final SparkMax rightMotor;
+  private final SparkMax launchMotor;
 
   private final SparkMaxConfig leftConfig;
   private final SparkMaxConfig rightConfig;
+  private final SparkMaxConfig launchConfig;
 
   private final SparkClosedLoopController leftController;
   private final RelativeEncoder leftEncoder;
+  private final SparkClosedLoopController launchController;
 
-  private boolean is_enabled = false;
+  private boolean shooterIsEnabled = false;
+  private boolean launcherIsEnabled = false;
 
   public CoralShooter_SparkMax() {
     // Setup configuration for the left motor
@@ -65,24 +72,50 @@ public class CoralShooter_SparkMax implements CoralShooterInterface, CS_Interfac
     rightConfig.encoder
         .positionConversionFactor(1)
         .velocityConversionFactor(1);
+
+    // Launcher Motor
+    launchConfig = new SparkMaxConfig();
+    launchConfig.inverted(false);
+
+    launchMotor = new SparkMax(launcherConfig.leftCANID(), MotorType.kBrushless);
+    launchMotor.configure(launchConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+    launchController = launchMotor.getClosedLoopController();
+    launchController.setReference(0, ControlType.kDutyCycle);
   }
 
   @Override
   public void updateInputs(CoralShooterValues values) {
-    values.is_enabled = is_enabled;
-    values.current_speed_left = getShooterRPMLeft();
-    values.current_speed_right = getShooterRPMRight();
+    values.launchIsEnabled = launcherIsEnabled;
+    values.shooterIsEnabled = shooterIsEnabled;
+    values.currentRPMLeft = getShooterRPMLeft();
+    values.currentRPMRight = getShooterRPMRight();
+    values.currentLauncherSpeed = launchMotor.getAppliedOutput();
   }
 
   @Override
   public void stopShooter() {
     setShooterRPM(0);
+    shooterIsEnabled = false;
+
+  }
+
+  @Override
+  public void stopLauncher() {
+    setLauncherSpeed(0);
+    launcherIsEnabled = false;
+  }
+
+  @Override
+  public void setLauncherSpeed(double new_speed) {
+    launchController.setReference(new_speed, ControlType.kDutyCycle);
+    launcherIsEnabled = true; // (new_speed != 0);
   }
 
   @Override
   public void setShooterRPM(double new_RPM) {
     leftController.setReference(new_RPM, ControlType.kVelocity);
-    is_enabled = true; // (new_speed != 0);
+    shooterIsEnabled = true; // (new_speed != 0);
   }
 
   @Override
