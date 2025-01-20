@@ -38,13 +38,6 @@ public class RobotContainer {
   // Instantiate the LED manager
   private final LEDManager ledManager = LEDManager.getInstance();
 
-  // ****************************************************************************************
-  // Change robot type here if needed
-  // Possible options: SIMBOT, KITBOT, DART, DEVBOT, COMPBOT
-  //
-  private RobotType robotType = RobotType.DART;
-  private boolean debugEnabled = true;
-
   //
   // ****************************************************************************************
 
@@ -68,9 +61,11 @@ public class RobotContainer {
   private RobotContainer() {
 
     // Define Robot Subsystems
-    if (Robot.isSimulation()) robotType = RobotConstants.RobotType.SIMBOT;
+    if (Robot.isSimulation()){
+      RobotConstants.robotType = RobotConstants.RobotType.SIMBOT;
+    }
 
-    switch (robotType) {
+    switch (RobotConstants.robotType) {
       case KITBOT:
         drivebase = new CS_DriveSubsystemIO_Tank();
         // elevator = new ElevatorArm();
@@ -129,7 +124,7 @@ public class RobotContainer {
 
   // Public method to check if debug is enabled
   public static boolean isDebugEnabled() {
-    return instance.debugEnabled;
+    return RobotConstants.debugEnabled;
   }
 
   private void configureDriverBindings(CS_XboxController controller) {
@@ -138,10 +133,6 @@ public class RobotContainer {
 
     controller.btn_B.onTrue(
         new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.SHOOT, true)));
-
-
-
-
   }
 
   private void configureOperatorBindings(CS_XboxController controller) {
@@ -187,6 +178,10 @@ public class RobotContainer {
     return this.autoChooser.getSelected();
   }
 
+  public RobotType getRobotType() {
+    return RobotConstants.robotType;
+  }
+  
   private void displayCredits() {
 
     System.out.println("");
@@ -204,9 +199,9 @@ public class RobotContainer {
         "###      |__/                                                                    ###");
     System.out.println(
         "###                                                                              ###");
-    System.out.printf("### %-76s ###\n", "Compliled for: " + robotType.toString());
+    System.out.printf("### %-76s ###\n", "Compliled for: " + RobotConstants.robotType.toString());
     System.out.printf(
-        "### %-76s ###\n", "Debug        : " + (debugEnabled ? "Enabled" : "Disabled"));
+        "### %-76s ###\n", "Debug        : " + (RobotConstants.debugEnabled ? "Enabled" : "Disabled"));
     System.out.println(
         "###                                                                              ###");
     System.out.printf("### %-76s ###\n", "Git Version  : " + BuildConstants.VERSION);
