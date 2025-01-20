@@ -15,6 +15,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Commodore.CommodoreState;
 import frc.robot.RobotConstants.RobotType;
+import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
+import frc.robot.subsystems.coralshooter.CoralShooter_Sim;
+import frc.robot.subsystems.coralshooter.CoralShooter_SparkMax;
 import frc.robot.subsystems.drive.CS_DriveSubsystemIO;
 import frc.robot.subsystems.drive.CS_DriveSubsystemIO_Swerve;
 import frc.robot.subsystems.drive.CS_DriveSubsystemIO_Tank;
@@ -47,6 +50,7 @@ public class RobotContainer {
   public static CS_DriveSubsystemIO drivebase = null;
   public static DummySubsystem dummy = null;
   public static ElevatorSubsystem elevator = null;
+  public static CoralShooterSubsystem mortar = null;
 
   // Controllers
   private final CS_XboxController driverController =
@@ -82,6 +86,7 @@ public class RobotContainer {
                 new File(Filesystem.getDeployDirectory(), "swerve_devbot"));
         dummy = new DummySubsystem(new DummyIO_Specific1());
         elevator = new ElevatorSubsystem(new Elevator_Simulation());
+        mortar = new CoralShooterSubsystem(new CoralShooter_Sim());
 
         break;
       case DEVBOT:
@@ -92,7 +97,7 @@ public class RobotContainer {
                 new File(Filesystem.getDeployDirectory(), "swerve_devbot"));
         dummy = new DummySubsystem(new DummyIO_Specific1());
         elevator = new ElevatorSubsystem(new Elevator_LinearSparkMax());
-
+        mortar = new CoralShooterSubsystem(new CoralShooter_SparkMax());
 
         break;
     }
@@ -137,7 +142,7 @@ public class RobotContainer {
 
   private void configureOperatorBindings(CS_XboxController controller) {
     controller.btn_A.onTrue(
-        new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.INTAKE, true)));
+        new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.SHOOT_CORAL, true)));
   }
 
   private void configureButtonBoxBindings(CS_ButtonBoxController controller) {

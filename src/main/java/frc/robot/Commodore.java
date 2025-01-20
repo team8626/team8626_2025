@@ -16,9 +16,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.commands.setters.ToIdle;
-import frc.robot.commands.setters.ToIntake;
-import frc.robot.commands.setters.ToShoot;
+import frc.robot.commands.setters.Example_ToIdle;
+import frc.robot.commands.setters.Example_ToIntake;
+import frc.robot.commands.setters.groups.ToShootCoral;
 // import frc.robot.commands.setters.groups...;
 import frc.robot.subsystems.CS_SubsystemBase;
 import java.util.LinkedList;
@@ -44,6 +44,8 @@ public class Commodore extends CS_SubsystemBase {
 
     UNKNOWN,
     TRANSITION,
+
+    SHOOT_CORAL,
 
     INTAKE,
     SHOOT
@@ -124,6 +126,10 @@ public class Commodore extends CS_SubsystemBase {
         case ERROR_CRITICAL:
         case UNKNOWN:
           applyState(newState);
+          break;
+
+        case SHOOT_CORAL:
+          toShootCoral();
           break;
 
           // Those cases are for launching commands
@@ -218,21 +224,6 @@ public class Commodore extends CS_SubsystemBase {
     return retVal;
   }
 
-  private static void toIdle() {
-    applyState(CommodoreState.TRANSITION);
-    CommandScheduler.getInstance().schedule(new ToIdle());
-  }
-
-  private static void toIntake() {
-    applyState(CommodoreState.TRANSITION);
-    CommandScheduler.getInstance().schedule(new ToIntake());
-  }
-
-  private static void toShoot() {
-    applyState(CommodoreState.TRANSITION);
-    CommandScheduler.getInstance().schedule(new ToShoot());
-  }
-
   public static Command getSetStateCommand(CommodoreState state) {
     SmartDashboard.putString("Commodore/Desired State", "Setting to: " + state.toString());
 
@@ -256,5 +247,25 @@ public class Commodore extends CS_SubsystemBase {
     if (DriverStation.isEStopped()) {
       setCommodoreState(CommodoreState.ESTOP, true);
     }
+  }
+
+  private static void toIdle() {
+    applyState(CommodoreState.TRANSITION);
+    CommandScheduler.getInstance().schedule(new Example_ToIdle());
+  }
+
+  private static void toIntake() {
+    applyState(CommodoreState.TRANSITION);
+    CommandScheduler.getInstance().schedule(new Example_ToIntake());
+  }
+
+  private static void toShoot() {
+    applyState(CommodoreState.TRANSITION);
+    CommandScheduler.getInstance().schedule(new ToShootCoral());
+  }
+
+  private static void toShootCoral() {
+    applyState(CommodoreState.TRANSITION);
+    CommandScheduler.getInstance().schedule(new ToShootCoral());
   }
 }
