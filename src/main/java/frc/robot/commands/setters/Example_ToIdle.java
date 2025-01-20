@@ -12,10 +12,10 @@ import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
 import frc.robot.subsystems.dummy.DummySubsystem;
 
-public class ToIdle extends CS_Command {
+public class Example_ToIdle extends CS_Command {
   private DummySubsystem dummy = RobotContainer.dummy;
 
-  public ToIdle() {
+  public Example_ToIdle() {
     // Use addRequirements() here to declare subsystem dependencies.
     // For example: addRequirements(Robot.m_subsystem);
     dummy = RobotContainer.dummy;

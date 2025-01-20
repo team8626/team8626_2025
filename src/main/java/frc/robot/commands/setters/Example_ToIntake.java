@@ -11,9 +11,9 @@ import frc.robot.Commodore;
 import frc.robot.Commodore.CommodoreState;
 import frc.robot.commands.DummyInfinite;
 
-public class ToIntake extends SequentialCommandGroup {
+public class Example_ToIntake extends SequentialCommandGroup {
 
-  public ToIntake() {
+  public Example_ToIntake() {
     System.out.println("[Cmd: TOINTAKE]");
     addCommands(
         // new StopAllRollers(),

@@ -11,9 +11,9 @@ import frc.robot.Commodore;
 import frc.robot.Commodore.CommodoreState;
 import frc.robot.commands.Dummy3sCommand;
 
-public class ToShoot extends SequentialCommandGroup {
+public class Example_ToShoot extends SequentialCommandGroup {
 
-  public ToShoot() {
+  public Example_ToShoot() {
     System.out.println("[Cmd: TOSHOOT]");
     addCommands(
         // new StopAllRollers(),
