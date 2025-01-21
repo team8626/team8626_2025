@@ -10,24 +10,21 @@ import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
 import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
 
-public class CoralShooterStop extends CS_Command {
+public class CoralShooterIntake extends CS_Command {
   private CoralShooterSubsystem mortar;
 
-  public CoralShooterStop() {
-    // Use addRequirements() here to declare subsystem dependencies.
-    // For example: addRequirements(Robot.m_subsystem);
+  public CoralShooterIntake() {
     mortar = RobotContainer.mortar;
 
     addRequirements(mortar);
 
-    this.setTAGString("CORALSHOOTER_STOP");
+    this.setTAGString("CORALSHOOTER_INTAKE");
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    mortar.stopShooter();
-    mortar.stopLauncher();
+    mortar.startIntake();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -38,11 +35,12 @@ public class CoralShooterStop extends CS_Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    mortar.stopAll();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return mortar.isLoaded();
   }
 }

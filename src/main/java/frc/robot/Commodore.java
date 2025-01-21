@@ -16,10 +16,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.commands.setters.Example_ToIdle;
 import frc.robot.commands.setters.Example_ToIntake;
-import frc.robot.commands.setters.groups.ToShootCoral;
-// import frc.robot.commands.setters.groups...;
+import frc.robot.commands.setters.Example_ToShoot;
+import frc.robot.commands.setters.groups.*;
+import frc.robot.commands.setters.tuning.Tune_CoralShooter;
 import frc.robot.subsystems.CS_SubsystemBase;
 import java.util.LinkedList;
 import java.util.List;
@@ -45,7 +45,11 @@ public class Commodore extends CS_SubsystemBase {
     UNKNOWN,
     TRANSITION,
 
-    SHOOT_CORAL,
+    CORAL_SHOOT,
+    CORAL_INTAKE,
+    CORAL_LOADED,
+
+    TUNE_CORALSHOOTER,
 
     INTAKE,
     SHOOT
@@ -128,12 +132,20 @@ public class Commodore extends CS_SubsystemBase {
           applyState(newState);
           break;
 
-        case SHOOT_CORAL:
-          toShootCoral();
+        // Those cases are indicating the status of the subsystems
+        case CORAL_LOADED:
+          applyState(newState);
           break;
 
           // Those cases are for launching commands
           // State will go to TRANSITION and then the command will update the state
+        case CORAL_SHOOT:
+          toCoralShoot();
+          break;
+        case CORAL_INTAKE:
+          toCoralIntake();
+          break;
+
         case INTAKE:
           toIntake();
           break;
@@ -141,7 +153,12 @@ public class Commodore extends CS_SubsystemBase {
           toShoot();
           break;
 
-          // We shouldn't be there!
+        // Tuning States
+        case TUNE_CORALSHOOTER:
+          tuneCoralShooter();
+          break;     
+
+        // We shouldn't be there!
         case TRANSITION:
           getInstance()
               .println(
@@ -251,7 +268,7 @@ public class Commodore extends CS_SubsystemBase {
 
   private static void toIdle() {
     applyState(CommodoreState.TRANSITION);
-    CommandScheduler.getInstance().schedule(new Example_ToIdle());
+    CommandScheduler.getInstance().schedule(new ToIdle());
   }
 
   private static void toIntake() {
@@ -261,11 +278,20 @@ public class Commodore extends CS_SubsystemBase {
 
   private static void toShoot() {
     applyState(CommodoreState.TRANSITION);
-    CommandScheduler.getInstance().schedule(new ToShootCoral());
+    CommandScheduler.getInstance().schedule(new Example_ToShoot());
   }
 
-  private static void toShootCoral() {
+  private static void toCoralShoot() {
     applyState(CommodoreState.TRANSITION);
-    CommandScheduler.getInstance().schedule(new ToShootCoral());
+    CommandScheduler.getInstance().schedule(new ToCoralShoot());
+  }
+  private static void toCoralIntake() {
+    applyState(CommodoreState.TRANSITION);
+    CommandScheduler.getInstance().schedule(new ToCoralIntake());
+  }
+
+  private static void tuneCoralShooter() {
+    applyState(CommodoreState.TUNE_CORALSHOOTER);
+    CommandScheduler.getInstance().schedule(new Tune_CoralShooter());
   }
 }

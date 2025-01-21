@@ -1,14 +1,19 @@
 package frc.robot.subsystems.coralshooter;
 
 public interface CoralShooterInterface {
-    void setShooterRPM(double new_speed);
+    void startShooter(double new_RPM);
+    void updateShooterRPM(double new_RPM);
     void stopShooter();
 
-    void setLauncherSpeed(double new_speed);
+    void startLauncher(double new_RPM);
+    void updateLauncherRPM(double new_RPM);
     void stopLauncher();
+
+    boolean shooterIsLoaded();
 
     double getShooterRPMLeft();
     double getShooterRPMRight();
+    double getLauncherRPM();
 
     default void setPID(double kP, double kI, double kD) {}
 
@@ -22,7 +27,14 @@ public interface CoralShooterInterface {
 
         protected double currentRPMLeft = 0; // RPM
         protected double currentRPMRight = 0; // RPM
-        protected double currentLauncherSpeed = 0; // [-1 ; 1]]
+        protected double currentRMPLauncher = 0; // RPM
+
+        protected double ampsLeft = 0;
+        protected double ampsRight = 0;
+        protected double ampsLauncher = 0; 
+
+        protected boolean isLoaded = false;
+        protected double desiredRPM = CoralShooterConstants.shooterRPM;
 
         protected double kP = 0.05;
         protected double kI = 0.0;

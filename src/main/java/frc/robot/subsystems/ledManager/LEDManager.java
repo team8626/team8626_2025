@@ -158,12 +158,23 @@ public class LEDManager extends CS_SubsystemBase {
       case UNKNOWN:
       case TRANSITION:
       case SHOOT:
-      case SHOOT_CORAL:
         wave(LEDConstants.kSectionMain, Color.kGreen, Color.kBlack, 25, 2.0);
         break;
+      case CORAL_SHOOT:
+        wave(LEDConstants.kSectionMain, Color.kBlueViolet, Color.kBlack, 25, 2.0);
+        break;
+      case CORAL_INTAKE:
+        wave(LEDConstants.kSectionMain, Color.kAquamarine, Color.kBlack, 25, 2.0);
+        break;
+
       case INTAKE:
         wave(LEDConstants.kSectionMain, Color.kOrange, Color.kBlack, 25, 2.0);
         break;
+
+      case TUNE_CORALSHOOTER:
+        blink(LEDConstants.kSectionMain, Color.kOrange, 0.5);
+        break;
+
 
       case ERROR_CRITICAL:
         pulse(LEDConstants.kSectionMain, Color.kYellowGreen, 0.5, 2.0);

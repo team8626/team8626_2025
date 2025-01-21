@@ -134,23 +134,25 @@ public class RobotContainer {
 
   private void configureDriverBindings(CS_XboxController controller) {
     controller.btn_A.onTrue(
-        new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.INTAKE, true)));
+        new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.CORAL_INTAKE, true)
+            .withToggleState()));
 
     controller.btn_B.onTrue(
-        new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.SHOOT, true)));
+        new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.CORAL_SHOOT, true)
+            .withToggleState()));
   }
 
   private void configureOperatorBindings(CS_XboxController controller) {
-    controller.btn_A.onTrue(
-        new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.SHOOT_CORAL, true)));
+    // controller.btn_A.onTrue(
+    //     new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.CORAL_SHOOT, true)));
   }
 
   private void configureButtonBoxBindings(CS_ButtonBoxController controller) {
     controller.btn_1.onTrue(
         new InstantCommand(
-            () -> Commodore.setCommodoreState(CommodoreState.INTAKE, true).withToggleState()));
-    controller.btn_2.onTrue(
-        new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.SHOOT, true)));
+            () -> Commodore.setCommodoreState(CommodoreState.TUNE_CORALSHOOTER, true).withToggleState()));
+    // controller.btn_2.onTrue(
+    //     new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.SHOOT, true)));
     controller.btn_9.onTrue(
         new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.IDLE, true)));
   }

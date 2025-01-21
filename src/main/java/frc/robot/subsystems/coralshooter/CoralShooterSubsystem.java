@@ -8,27 +8,50 @@ import frc.utils.CS_Utils;
 public class CoralShooterSubsystem extends CS_SubsystemBase {
     private CoralShooterInterface coralShooterInterface;
     private CoralShooterValues values;
+    private double desiredRPM = CoralShooterConstants.shooterRPM;
 
     public CoralShooterSubsystem(CoralShooterInterface subsystem_interface) {
-    super();
+        super();
 
-    this.coralShooterInterface = subsystem_interface;
-    values = new CoralShooterValues();
-    println("Created");
+        this.coralShooterInterface = subsystem_interface;
+        values = new CoralShooterValues();
+        println("Created");
     }
 
     // Calls to the coralShooter interface
-    public void setShooterRPM(double new_RPM) {
-        coralShooterInterface.setShooterRPM(new_RPM);
+    public void startShooter() {
+        coralShooterInterface.startShooter(desiredRPM);
     }
+    public void startShooter(double new_RPM) {
+        desiredRPM = new_RPM;
+        coralShooterInterface.startShooter(desiredRPM);
+    }
+    public void setShooterRPM(double new_RPM) {
+        desiredRPM = new_RPM;
+        coralShooterInterface.updateShooterRPM(new_RPM);
+    }
+    public void setShootingRPM() {
+        coralShooterInterface.updateShooterRPM(desiredRPM); 
+    }
+
+    public void startIntake() {
+        coralShooterInterface.startShooter(CoralShooterConstants.intakeRPM);
+        coralShooterInterface.startLauncher(CoralShooterConstants.launcherIntakeRPM);
+    }
+
+    public void setLauncherRPM() {
+        coralShooterInterface.updateLauncherRPM(CoralShooterConstants.launcherShootRPM);
+    }
+
     public void stopShooter() {
         coralShooterInterface.stopShooter();
     }
     public void stopLauncher() {
         coralShooterInterface.stopLauncher();
     }
-    public void setLauncherSpeed(double new_speed) {
-        coralShooterInterface.setLauncherSpeed(new_speed);
+    public void stopAll() {
+        coralShooterInterface.stopShooter();
+        coralShooterInterface.stopLauncher();
     }
     
     public double getShooterRPMLeft() {
@@ -36,6 +59,10 @@ public class CoralShooterSubsystem extends CS_SubsystemBase {
     }
     public double getShooterRPMRight() {
         return coralShooterInterface.getShooterRPMRight();
+    }
+
+    public boolean isLoaded() {
+        return coralShooterInterface.shooterIsLoaded();
     }
 
     public void setPID(double newkP, double newkI, double newkD) {
@@ -59,45 +86,50 @@ public class CoralShooterSubsystem extends CS_SubsystemBase {
     
     @Override
     public void initDashboard() {
-    println("Initializing Dashboard");
+        println("Initializing Dashboard");
 
-    // Using SmartDashboard to tune PIDs
-    // --------------------------------------------------
-    SmartDashboard.putNumber("Subsystem/CoralShooter/P Gain", CoralShooterConstants.gains.kP());
-    SmartDashboard.putNumber("Subsystem/CoralShooter/I Gain", CoralShooterConstants.gains.kI());
-    SmartDashboard.putNumber("Subsystem/CoralShooter/D Gain", CoralShooterConstants.gains.kD());
+        // Using SmartDashboard to tune PIDs
+        // --------------------------------------------------
+        SmartDashboard.putNumber("Subsystem/CoralShooter/Gains/P", CoralShooterConstants.gains.kP());
+        SmartDashboard.putNumber("Subsystem/CoralShooter/Gains/I", CoralShooterConstants.gains.kI());
+        SmartDashboard.putNumber("Subsystem/CoralShooter/Gains/D", CoralShooterConstants.gains.kD());
     }
 
     @Override
     public void updateDashboard() {
-    // Update the SmartDashboard with the current state of the subsystem
-    SmartDashboard.putBoolean("Subsystem/CoralShooter/Shooter", values.shooterIsEnabled);
-    SmartDashboard.putBoolean("Subsystem/CoralShooter/Launcher", values.launchIsEnabled);
-    SmartDashboard.putNumber("Subsystem/CoralShooter/Left RPM", values.currentRPMLeft);
-    SmartDashboard.putNumber("Subsystem/CoralShooter/Right RPM", values.currentRPMRight);
-    SmartDashboard.putNumber("Subsystem/CoralShooter/Launcher Set at", values.currentLauncherSpeed);
+        // Using SmartDashboard to tune PIDs
+        // --------------------------------------------------
+        double newkP = SmartDashboard.getNumber("Subsystem/CoralShooter/Gains/P", values.kP);
+        double newkI = SmartDashboard.getNumber("Subsystem/CoralShooter/Gains/I", values.kI);
+        double newkD = SmartDashboard.getNumber("Subsystem/CoralShooter/Gains/D", values.kD);
+        // double newFF = SmartDashboard.getNumber("Subsystem/CoralShooter/FF", values.FF);
 
-    // Using SmartDashboard to tune PIDs
-    // --------------------------------------------------
-    double newkP = SmartDashboard.getNumber("Subsystem/CoralShooter/P Gain", values.kP);
-    double newkI = SmartDashboard.getNumber("Subsystem/CoralShooter/I Gain", values.kI);
-    double newkD = SmartDashboard.getNumber("Subsystem/CoralShooter/D Gain", values.kD);
-    // double newFF = SmartDashboard.getNumber("Subsystem/CoralShooter/FF", values.FF);
+        // Coefficients on SmartDashboard have changed, save new values to the PID controller
+        // --------------------------------------------------
+        values.kP = CS_Utils.updateFromSmartDashboard(newkP, values.kP, (value) -> setkP(value));
+        values.kI = CS_Utils.updateFromSmartDashboard(newkI, values.kI, (value) -> setkI(value));
+        values.kD = CS_Utils.updateFromSmartDashboard(newkD, values.kD, (value) -> setkD(value));
 
-    // Coefficients on SmartDashboard have changed, save new values to the PID controller
-    // --------------------------------------------------
-    values.kP = CS_Utils.updateFromSmartDashboard(newkP, values.kP, (value) -> setkP(value));
-    values.kI = CS_Utils.updateFromSmartDashboard(newkI, values.kI, (value) -> setkI(value));
-    values.kD = CS_Utils.updateFromSmartDashboard(newkD, values.kD, (value) -> setkD(value));
+        // Update the SmartDashboard with the current state of the subsystem
+        SmartDashboard.putBoolean("Subsystem/CoralShooter/Shooter", values.shooterIsEnabled);
+        SmartDashboard.putBoolean("Subsystem/CoralShooter/Launcher", values.launchIsEnabled);
 
-    // System.out.printf("P: %f, I: %f, D: %f, FF: %f\n", values.kP, values.kI, values.kD, values.FF); 
+        SmartDashboard.putNumber("Subsystem/CoralShooter/Shooter RPM Left", values.currentRPMLeft);
+        SmartDashboard.putNumber("Subsystem/CoralShooter/Shooter RPM Right", values.currentRPMRight);
+        SmartDashboard.putNumber("Subsystem/CoralShooter/Launcher RPM", values.currentRMPLauncher);
 
+        SmartDashboard.putNumber("Subsystem/CoralShooter/Shooter Amps Left", values.ampsLeft);
+        SmartDashboard.putNumber("Subsystem/CoralShooter/Shooter Amps Right", values.ampsRight);
+        SmartDashboard.putNumber("Subsystem/CoralShooter/Launcher Amps", values.ampsLauncher);
+
+        SmartDashboard.putBoolean("Subsystem/CoralShooter/isLoaded", values.isLoaded);
+
+        double newRPM = SmartDashboard.getNumber("Subsystem/CoralShooter/Shooter DesiredRPM", CoralShooterConstants.shooterRPM);
+        if(newRPM != desiredRPM){ 
+            setShooterRPM(newRPM);
+        }
+        SmartDashboard.putNumber("Subsystem/CoralShooter/Shooter DesiredRPM", desiredRPM);
+
+        // System.out.printf("P: %f, I: %f, D: %f, FF: %f\n", values.kP, values.kI, values.kD, values.FF); 
     }
-
-    @Override
-    public void simulationPeriodic() {
-    // TODO Auto-generated method stub
-
-    }
-    
 }

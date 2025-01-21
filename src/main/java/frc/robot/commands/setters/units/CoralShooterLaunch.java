@@ -1,4 +1,4 @@
-// Copyright (c) 2024 FRC 8626
+// Copyright (c) 2025 FRC 8626
 // http://github.com/team8626
 //
 // Open Source Software; you can modify and/or share it under the terms of
@@ -27,15 +27,16 @@ public class CoralShooterLaunch extends CS_Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    mortar.setLauncherSpeed(CoralShooterConstants.launcherSpeed);
+    mortar.setLauncherRPM();
     timer.reset();
-    timer.start();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
+    if(!mortar.isLoaded()){
+      timer.start();
+    }
   }
 
   // Called once the command ends or is interrupted.
