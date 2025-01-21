@@ -15,11 +15,17 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Commodore.CommodoreState;
 import frc.robot.RobotConstants.RobotType;
+import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
+import frc.robot.subsystems.coralshooter.CoralShooter_Sim;
+import frc.robot.subsystems.coralshooter.CoralShooter_SparkMax;
 import frc.robot.subsystems.drive.CS_DriveSubsystemIO;
 import frc.robot.subsystems.drive.CS_DriveSubsystemIO_Swerve;
 import frc.robot.subsystems.drive.CS_DriveSubsystemIO_Tank;
 import frc.robot.subsystems.dummy.DummyIO_Specific1;
 import frc.robot.subsystems.dummy.DummySubsystem;
+import frc.robot.subsystems.elevator.Elevator_LinearSparkMax;
+import frc.robot.subsystems.elevator.Elevator_Simulation;
+import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.ledManager.LEDManager;
 import frc.utils.CS_ButtonBoxController;
 import frc.utils.CS_XboxController;
@@ -35,13 +41,6 @@ public class RobotContainer {
   // Instantiate the LED manager
   private final LEDManager ledManager = LEDManager.getInstance();
 
-  // ****************************************************************************************
-  // Change robot type here if needed
-  // Possible options: SIMBOT, KITBOT, DART, DEVBOT, COMPBOT
-  //
-  private RobotType robotType = RobotType.DART;
-  private boolean debugEnabled = true;
-
   //
   // ****************************************************************************************
 
@@ -50,6 +49,8 @@ public class RobotContainer {
   // private final ExampleCommand exampleCommand = new ExampleCommand(exampleSubsystem);
   public static CS_DriveSubsystemIO drivebase = null;
   public static DummySubsystem dummy = null;
+  public static ElevatorSubsystem elevator = null;
+  public static CoralShooterSubsystem mortar = null;
 
   // Controllers
   private final CS_XboxController driverController =
@@ -64,11 +65,14 @@ public class RobotContainer {
   private RobotContainer() {
 
     // Define Robot Subsystems
-    if (Robot.isSimulation()) robotType = RobotConstants.RobotType.SIMBOT;
+    if (Robot.isSimulation()){
+      RobotConstants.robotType = RobotConstants.RobotType.SIMBOT;
+    }
 
-    switch (robotType) {
+    switch (RobotConstants.robotType) {
       case KITBOT:
         drivebase = new CS_DriveSubsystemIO_Tank();
+        // elevator = new ElevatorArm();
         break;
       case DART:
         dummy = new DummySubsystem(new DummyIO_Specific1());
@@ -77,6 +81,14 @@ public class RobotContainer {
                 new File(Filesystem.getDeployDirectory(), "swerve_dart"));
         break;
       case SIMBOT:
+        drivebase =
+            new CS_DriveSubsystemIO_Swerve(
+                new File(Filesystem.getDeployDirectory(), "swerve_devbot"));
+        dummy = new DummySubsystem(new DummyIO_Specific1());
+        elevator = new ElevatorSubsystem(new Elevator_Simulation());
+        mortar = new CoralShooterSubsystem(new CoralShooter_Sim());
+
+        break;
       case DEVBOT:
       case COMPBOT:
       default:
@@ -84,6 +96,8 @@ public class RobotContainer {
             new CS_DriveSubsystemIO_Swerve(
                 new File(Filesystem.getDeployDirectory(), "swerve_devbot"));
         dummy = new DummySubsystem(new DummyIO_Specific1());
+        elevator = new ElevatorSubsystem(new Elevator_LinearSparkMax());
+        mortar = new CoralShooterSubsystem(new CoralShooter_SparkMax());
 
         break;
     }
@@ -115,25 +129,30 @@ public class RobotContainer {
 
   // Public method to check if debug is enabled
   public static boolean isDebugEnabled() {
-    return instance.debugEnabled;
+    return RobotConstants.debugEnabled;
   }
 
   private void configureDriverBindings(CS_XboxController controller) {
     controller.btn_A.onTrue(
-        new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.INTAKE, true)));
+        new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.CORAL_INTAKE, true)
+            .withToggleState()));
+
+    controller.btn_B.onTrue(
+        new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.CORAL_SHOOT, true)
+            .withToggleState()));
   }
 
   private void configureOperatorBindings(CS_XboxController controller) {
-    controller.btn_A.onTrue(
-        new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.INTAKE, true)));
+    // controller.btn_A.onTrue(
+    //     new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.CORAL_SHOOT, true)));
   }
 
   private void configureButtonBoxBindings(CS_ButtonBoxController controller) {
     controller.btn_1.onTrue(
         new InstantCommand(
-            () -> Commodore.setCommodoreState(CommodoreState.INTAKE, true).withToggleState()));
-    controller.btn_2.onTrue(
-        new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.SHOOT, true)));
+            () -> Commodore.setCommodoreState(CommodoreState.TUNE_CORALSHOOTER, true).withToggleState()));
+    // controller.btn_2.onTrue(
+    //     new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.SHOOT, true)));
     controller.btn_9.onTrue(
         new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.IDLE, true)));
   }
@@ -166,6 +185,10 @@ public class RobotContainer {
     return this.autoChooser.getSelected();
   }
 
+  public RobotType getRobotType() {
+    return RobotConstants.robotType;
+  }
+  
   private void displayCredits() {
 
     System.out.println("");
@@ -183,9 +206,9 @@ public class RobotContainer {
         "###      |__/                                                                    ###");
     System.out.println(
         "###                                                                              ###");
-    System.out.printf("### %-76s ###\n", "Compliled for: " + robotType.toString());
+    System.out.printf("### %-76s ###\n", "Compliled for: " + RobotConstants.robotType.toString());
     System.out.printf(
-        "### %-76s ###\n", "Debug        : " + (debugEnabled ? "Enabled" : "Disabled"));
+        "### %-76s ###\n", "Debug        : " + (RobotConstants.debugEnabled ? "Enabled" : "Disabled"));
     System.out.println(
         "###                                                                              ###");
     System.out.printf("### %-76s ###\n", "Git Version  : " + BuildConstants.VERSION);
