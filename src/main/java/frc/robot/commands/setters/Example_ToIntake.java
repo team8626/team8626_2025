@@ -9,12 +9,12 @@ package frc.robot.commands.setters;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Commodore;
 import frc.robot.Commodore.CommodoreState;
-import frc.robot.commands.Dummy3sCommand;
+import frc.robot.commands.DummyInfinite;
 
-public class ToShoot extends SequentialCommandGroup {
+public class Example_ToIntake extends SequentialCommandGroup {
 
-  public ToShoot() {
-    System.out.println("[Cmd: TOSHOOT]");
+  public Example_ToIntake() {
+    System.out.println("[Cmd: TOINTAKE]");
     addCommands(
         // new StopAllRollers(),
         // new ParallelCommandGroup(
@@ -22,9 +22,8 @@ public class ToShoot extends SequentialCommandGroup {
         //     new ArmToIntake()
         // ),
         // new GrabberToIntake(),
-        // new IntakeToIntake(),
-        Commodore.getSetStateCommand(CommodoreState.SHOOT),
-        new Dummy3sCommand(),
+        Commodore.getSetStateCommand(CommodoreState.INTAKE),
+        new DummyInfinite(),
         Commodore.getSetStateCommand(CommodoreState.IDLE));
   }
 }
