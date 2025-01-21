@@ -15,6 +15,10 @@ public interface CoralShooterInterface {
     double getShooterRPMRight();
     double getLauncherRPM();
 
+    /** Run flywheels at voltage */
+    default void runCharacterizationLeft(double input) {}
+    default void runCharacterizationRight(double input) {}
+    
     default void setPID(double kP, double kI, double kD) {}
 
     default void updateInputs(CoralShooterValues values) {

@@ -5,6 +5,8 @@ import frc.robot.subsystems.CS_SubsystemBase;
 import frc.robot.subsystems.coralshooter.CoralShooterInterface.CoralShooterValues;
 import frc.utils.CS_Utils;
 
+import org.littletonrobotics.frc2024.commands.*;
+
 public class CoralShooterSubsystem extends CS_SubsystemBase {
     private CoralShooterInterface coralShooterInterface;
     private CoralShooterValues values;
@@ -130,6 +132,18 @@ public class CoralShooterSubsystem extends CS_SubsystemBase {
         }
         SmartDashboard.putNumber("Subsystem/CoralShooter/Shooter DesiredRPM", desiredRPM);
 
+        //
+        SmartDashboard.putData("Subsystem/CoralShooter/Characterization", new FeedForwardCharacterization(this, this::runCharacterization, this::getCharacterizationVelocity));
+
         // System.out.printf("P: %f, I: %f, D: %f, FF: %f\n", values.kP, values.kI, values.kD, values.FF); 
+    }
+
+    // Characterization methods
+    public void runCharacterization(double input) {
+        coralShooterInterface.runCharacterizationLeft(input);
+        coralShooterInterface.runCharacterizationRight(input);
+    }
+    public double getCharacterizationVelocity() {
+        return (values.currentRPMLeft + values.currentRPMRight) / 2.0;
     }
 }
