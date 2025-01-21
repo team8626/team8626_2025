@@ -46,6 +46,8 @@ public class Commodore extends CS_SubsystemBase {
     TRANSITION,
 
     CORAL_SHOOT,
+    CORAL_SHOOT_RAMPINGUP,
+    CORAL_SHOOT_LAUNCHING,
     CORAL_INTAKE,
     CORAL_LOADED,
 

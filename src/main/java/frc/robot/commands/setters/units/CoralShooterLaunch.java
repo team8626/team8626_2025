@@ -27,7 +27,7 @@ public class CoralShooterLaunch extends CS_Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    mortar.setLauncherRPM();
+    mortar.startLauncher();
     timer.reset();
   }
 

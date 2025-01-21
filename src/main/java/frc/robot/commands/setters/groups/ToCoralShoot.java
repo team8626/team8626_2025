@@ -8,9 +8,8 @@ package frc.robot.commands.setters.groups;
 
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-
 import frc.robot.commands.setters.units.CoralShooterLaunch;
-import frc.robot.commands.setters.units.CoralShooterStart;
+import frc.robot.commands.setters.units.CoralShooterRampUp;
 import frc.robot.commands.setters.units.CoralShooterStop;
 import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
 import frc.robot.Commodore;
@@ -26,8 +25,9 @@ public class ToCoralShoot extends SequentialCommandGroup {
     addCommands(
         new ConditionalCommand(
             new SequentialCommandGroup(
-                Commodore.getSetStateCommand(CommodoreState.CORAL_SHOOT),
-                new CoralShooterStart(),
+                Commodore.getSetStateCommand(CommodoreState.CORAL_SHOOT_RAMPINGUP),
+                new CoralShooterRampUp(),
+                Commodore.getSetStateCommand(CommodoreState.CORAL_SHOOT_LAUNCHING),
                 new CoralShooterLaunch(),
                 new CoralShooterStop(),
                 Commodore.getSetStateCommand(CommodoreState.IDLE)),

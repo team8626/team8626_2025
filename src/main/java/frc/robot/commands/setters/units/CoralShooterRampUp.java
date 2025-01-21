@@ -11,18 +11,18 @@ import frc.robot.commands.CS_Command;
 import frc.robot.subsystems.coralshooter.CoralShooterConstants;
 import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
 
-public class CoralShooterStart extends CS_Command {
+public class CoralShooterRampUp extends CS_Command {
   private CoralShooterSubsystem mortar;
 
   private double desiredRPM = CoralShooterConstants.shooterRPM;
   private final double RPMTolerance = CoralShooterConstants.shooterRPMTolerance;
 
-  public CoralShooterStart() {
+  public CoralShooterRampUp() {
     mortar = RobotContainer.mortar;
 
     addRequirements(mortar);
 
-    this.setTAGString("CORALSHOOTER_START");
+    this.setTAGString("CORALSHOOTER_RAMPUP");
   }
 
   // Called when the command is initially scheduled.
@@ -40,7 +40,7 @@ public class CoralShooterStart extends CS_Command {
   @Override
   public void end(boolean interrupted) {
     if(interrupted){
-      mortar.stopShooter();
+      mortar.stopAll();
     }
   }
 

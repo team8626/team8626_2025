@@ -7,6 +7,7 @@
 package frc.robot.commands.setters.groups;
 
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Commodore;
 import frc.robot.Commodore.CommodoreState;
@@ -22,21 +23,18 @@ public class ToCoralIntake extends SequentialCommandGroup {
     System.out.println("[Cmd: TOCORALINTAKE]");
 
     addCommands(
-      // new ConditionalCommand(
-      //   new SequentialCommandGroup(
-      //     Commodore.getSetStateCommand(CommodoreState.CORAL_INTAKE),
-      //     new CoralShooterIntake()
-      //   ),
-      //   new InstantCommand(), // empty command
-      //   mortar::isLoaded),
-
-      Commodore.getSetStateCommand(CommodoreState.CORAL_INTAKE),
-      new CoralShooterIntake(),
-
+    new ConditionalCommand(
+        new SequentialCommandGroup(
+          Commodore.getSetStateCommand(CommodoreState.CORAL_INTAKE),
+          new CoralShooterIntake()
+        ),
+        new InstantCommand(), // empty command
+        () -> !mortar.isLoaded()
+      ),
       new ConditionalCommand(
         Commodore.getSetStateCommand(CommodoreState.CORAL_LOADED),
         Commodore.getSetStateCommand(CommodoreState.IDLE),
-        mortar::isLoaded
+        () -> mortar.isLoaded()
       )
     );
   }

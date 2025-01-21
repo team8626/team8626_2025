@@ -39,8 +39,8 @@ public class CoralShooterSubsystem extends CS_SubsystemBase {
         coralShooterInterface.startLauncher(CoralShooterConstants.launcherIntakeRPM);
     }
 
-    public void setLauncherRPM() {
-        coralShooterInterface.updateLauncherRPM(CoralShooterConstants.launcherShootRPM);
+    public void startLauncher() {
+        coralShooterInterface.startLauncher(CoralShooterConstants.launcherShootRPM);
     }
 
     public void stopShooter() {

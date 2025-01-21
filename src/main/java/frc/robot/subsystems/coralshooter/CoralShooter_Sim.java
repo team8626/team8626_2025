@@ -88,11 +88,12 @@ public class CoralShooter_Sim implements CoralShooterInterface, CS_InterfaceBase
     if(launcherIsEnabled){
       launchSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_RPM));
     }
+    printf("New Launcher RPM: %f\n", new_RPM);
   }
   @Override
   public void startLauncher(double new_RPM) {
-    launchSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_RPM));
     launcherIsEnabled = true;
+    updateLauncherRPM(new_RPM);
   }
 
   @Override
