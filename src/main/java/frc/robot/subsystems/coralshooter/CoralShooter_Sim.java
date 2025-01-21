@@ -1,5 +1,7 @@
 package frc.robot.subsystems.coralshooter;
 
+import static frc.robot.subsystems.coralshooter.CoralShooterConstants.flywheelConfig;
+
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.util.Units;
@@ -7,7 +9,6 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.simulation.DIOSim;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import frc.robot.subsystems.CS_InterfaceBase;
-import static frc.robot.subsystems.coralshooter.CoralShooterConstants.flywheelConfig;
 
 public class CoralShooter_Sim implements CoralShooterInterface, CS_InterfaceBase {
 
@@ -22,19 +23,29 @@ public class CoralShooter_Sim implements CoralShooterInterface, CS_InterfaceBase
   private DIOSim loadedSensorSim = new DIOSim(loadedSensor);
 
   public CoralShooter_Sim() {
-  
-    leftSim = new FlywheelSim(
-          LinearSystemId.createFlywheelSystem(DCMotor.getNEO(1), 4* flywheelConfig.momentOfInertia(), flywheelConfig.reduction()),
-          DCMotor.getNEO(1),
-          0.00363458292);
-    rightSim = new FlywheelSim(
-          LinearSystemId.createFlywheelSystem(DCMotor.getNEO(1), 4* flywheelConfig.momentOfInertia(), flywheelConfig.reduction()),
-          DCMotor.getNEO(1),
-          0.00363458292);
-    launchSim = new FlywheelSim(
-          LinearSystemId.createFlywheelSystem(DCMotor.getNEO(1), flywheelConfig.momentOfInertia(), flywheelConfig.reduction()),
-          DCMotor.getNEO(1),
-          0.00363458292);
+
+    leftSim =
+        new FlywheelSim(
+            LinearSystemId.createFlywheelSystem(
+                DCMotor.getNEO(1),
+                4 * flywheelConfig.momentOfInertia(),
+                flywheelConfig.reduction()),
+            DCMotor.getNEO(1),
+            0.00363458292);
+    rightSim =
+        new FlywheelSim(
+            LinearSystemId.createFlywheelSystem(
+                DCMotor.getNEO(1),
+                4 * flywheelConfig.momentOfInertia(),
+                flywheelConfig.reduction()),
+            DCMotor.getNEO(1),
+            0.00363458292);
+    launchSim =
+        new FlywheelSim(
+            LinearSystemId.createFlywheelSystem(
+                DCMotor.getNEO(1), flywheelConfig.momentOfInertia(), flywheelConfig.reduction()),
+            DCMotor.getNEO(1),
+            0.00363458292);
   }
 
   @Override
@@ -64,14 +75,16 @@ public class CoralShooter_Sim implements CoralShooterInterface, CS_InterfaceBase
     leftSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_RPM));
     shooterIsEnabled = true;
   }
+
   @Override
   public void stopShooter() {
     updateShooterRPM(0);
     shooterIsEnabled = false;
   }
+
   @Override
   public void updateShooterRPM(double new_RPM) {
-    if(shooterIsEnabled) {
+    if (shooterIsEnabled) {
       rightSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_RPM));
       leftSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_RPM));
     }
@@ -83,13 +96,15 @@ public class CoralShooter_Sim implements CoralShooterInterface, CS_InterfaceBase
     updateLauncherRPM(0);
     launcherIsEnabled = false;
   }
+
   @Override
   public void updateLauncherRPM(double new_RPM) {
-    if(launcherIsEnabled){
+    if (launcherIsEnabled) {
       launchSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_RPM));
     }
     printf("New Launcher RPM: %f\n", new_RPM);
   }
+
   @Override
   public void startLauncher(double new_RPM) {
     launcherIsEnabled = true;
@@ -99,15 +114,18 @@ public class CoralShooter_Sim implements CoralShooterInterface, CS_InterfaceBase
   @Override
   public double getShooterRPMLeft() {
     return leftSim.getAngularVelocityRPM();
-  } 
+  }
+
   @Override
   public double getShooterRPMRight() {
     return rightSim.getAngularVelocityRPM();
   }
+
   @Override
   public double getLauncherRPM() {
     return launchSim.getAngularVelocityRPM();
   }
+
   @Override
   public boolean shooterIsLoaded() {
     return !loadedSensorSim.getValue();

@@ -180,7 +180,6 @@ public class LEDManager extends CS_SubsystemBase {
         blink(LEDConstants.kSectionMain, Color.kOrange, 0.5);
         break;
 
-
       case ERROR_CRITICAL:
         pulse(LEDConstants.kSectionMain, Color.kYellowGreen, 0.5, 2.0);
         break;

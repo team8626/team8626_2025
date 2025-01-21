@@ -23,19 +23,15 @@ public class ToCoralIntake extends SequentialCommandGroup {
     System.out.println("[Cmd: TOCORALINTAKE]");
 
     addCommands(
-    new ConditionalCommand(
-        new SequentialCommandGroup(
-          Commodore.getSetStateCommand(CommodoreState.CORAL_INTAKE),
-          new CoralShooterIntake()
-        ),
-        new InstantCommand(), // empty command
-        () -> !mortar.isLoaded()
-      ),
-      new ConditionalCommand(
-        Commodore.getSetStateCommand(CommodoreState.CORAL_LOADED),
-        Commodore.getSetStateCommand(CommodoreState.IDLE),
-        () -> mortar.isLoaded()
-      )
-    );
+        new ConditionalCommand(
+            new SequentialCommandGroup(
+                Commodore.getSetStateCommand(CommodoreState.CORAL_INTAKE),
+                new CoralShooterIntake()),
+            new InstantCommand(), // empty command
+            () -> !mortar.isLoaded()),
+        new ConditionalCommand(
+            Commodore.getSetStateCommand(CommodoreState.CORAL_LOADED),
+            Commodore.getSetStateCommand(CommodoreState.IDLE),
+            () -> mortar.isLoaded()));
   }
 }

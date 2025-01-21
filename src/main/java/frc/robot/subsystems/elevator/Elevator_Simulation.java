@@ -14,18 +14,19 @@ public class Elevator_Simulation implements ElevatorInterface, CS_InterfaceBase 
   private DCMotor elevatorGearbox = DCMotor.getNEO(1);
 
   public Elevator_Simulation() {
-    
-    elevator = new ElevatorSim(
-          elevatorGearbox,
-          ElevatorConstants.gearRatio,
-          ElevatorConstants.carriageMassKg,
-          ElevatorConstants.drumRadiusMeters,
-          ElevatorConstants.minHeightMeters,
-          ElevatorConstants.maxHeightMeters,
-          true,
-          0.0,
-          new double[]{0.0, 0.01});
-    }
+
+    elevator =
+        new ElevatorSim(
+            elevatorGearbox,
+            ElevatorConstants.gearRatio,
+            ElevatorConstants.carriageMassKg,
+            ElevatorConstants.drumRadiusMeters,
+            ElevatorConstants.minHeightMeters,
+            ElevatorConstants.maxHeightMeters,
+            true,
+            0.0,
+            new double[] {0.0, 0.01});
+  }
 
   @Override
   public void updateInputs(ElevatorValues values) {
@@ -42,9 +43,9 @@ public class Elevator_Simulation implements ElevatorInterface, CS_InterfaceBase 
   @Override
   public void setElevatorSpeed(double new_speed) {
     elevator.setInput(new_speed);
-    if(new_speed > 0) {
+    if (new_speed > 0) {
       current_state = ElevatorState.MOVINGUP;
-    } else if(new_speed < 0) {
+    } else if (new_speed < 0) {
       current_state = ElevatorState.MOVINGDOWN;
     } else {
       current_state = ElevatorState.STOPPED;

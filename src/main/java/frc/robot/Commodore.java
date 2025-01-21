@@ -134,7 +134,7 @@ public class Commodore extends CS_SubsystemBase {
           applyState(newState);
           break;
 
-        // Those cases are indicating the status of the subsystems
+          // Those cases are indicating the status of the subsystems
         case CORAL_LOADED:
           applyState(newState);
           break;
@@ -155,12 +155,12 @@ public class Commodore extends CS_SubsystemBase {
           toShoot();
           break;
 
-        // Tuning States
+          // Tuning States
         case TUNE_CORALSHOOTER:
           tuneCoralShooter();
-          break;     
+          break;
 
-        // We shouldn't be there!
+          // We shouldn't be there!
         case TRANSITION:
           getInstance()
               .println(
@@ -287,6 +287,7 @@ public class Commodore extends CS_SubsystemBase {
     applyState(CommodoreState.TRANSITION);
     CommandScheduler.getInstance().schedule(new ToCoralShoot());
   }
+
   private static void toCoralIntake() {
     applyState(CommodoreState.TRANSITION);
     CommandScheduler.getInstance().schedule(new ToCoralIntake());
