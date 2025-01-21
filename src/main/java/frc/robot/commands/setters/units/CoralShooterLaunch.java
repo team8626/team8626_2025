@@ -34,7 +34,7 @@ public class CoralShooterLaunch extends CS_Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(!mortar.isLoaded()){
+    if (!mortar.isLoaded()) {
       timer.start();
     }
   }

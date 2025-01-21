@@ -23,9 +23,9 @@ import frc.robot.subsystems.drive.CS_DriveSubsystemIO_Swerve;
 import frc.robot.subsystems.drive.CS_DriveSubsystemIO_Tank;
 import frc.robot.subsystems.dummy.DummyIO_Specific1;
 import frc.robot.subsystems.dummy.DummySubsystem;
+import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.elevator.Elevator_LinearSparkMax;
 import frc.robot.subsystems.elevator.Elevator_Simulation;
-import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.ledManager.LEDManager;
 import frc.utils.CS_ButtonBoxController;
 import frc.utils.CS_XboxController;
@@ -65,7 +65,7 @@ public class RobotContainer {
   private RobotContainer() {
 
     // Define Robot Subsystems
-    if (Robot.isSimulation()){
+    if (Robot.isSimulation()) {
       RobotConstants.robotType = RobotConstants.RobotType.SIMBOT;
     }
 
@@ -134,12 +134,13 @@ public class RobotContainer {
 
   private void configureDriverBindings(CS_XboxController controller) {
     controller.btn_A.onTrue(
-        new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.CORAL_INTAKE, true)
-            .withToggleState()));
+        new InstantCommand(
+            () ->
+                Commodore.setCommodoreState(CommodoreState.CORAL_INTAKE, true).withToggleState()));
 
     controller.btn_B.onTrue(
-        new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.CORAL_SHOOT, true)
-            .withToggleState()));
+        new InstantCommand(
+            () -> Commodore.setCommodoreState(CommodoreState.CORAL_SHOOT, true).withToggleState()));
   }
 
   private void configureOperatorBindings(CS_XboxController controller) {
@@ -150,7 +151,9 @@ public class RobotContainer {
   private void configureButtonBoxBindings(CS_ButtonBoxController controller) {
     controller.btn_1.onTrue(
         new InstantCommand(
-            () -> Commodore.setCommodoreState(CommodoreState.TUNE_CORALSHOOTER, true).withToggleState()));
+            () ->
+                Commodore.setCommodoreState(CommodoreState.TUNE_CORALSHOOTER, true)
+                    .withToggleState()));
     // controller.btn_2.onTrue(
     //     new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.SHOOT, true)));
     controller.btn_9.onTrue(
@@ -188,7 +191,7 @@ public class RobotContainer {
   public RobotType getRobotType() {
     return RobotConstants.robotType;
   }
-  
+
   private void displayCredits() {
 
     System.out.println("");
@@ -208,7 +211,8 @@ public class RobotContainer {
         "###                                                                              ###");
     System.out.printf("### %-76s ###\n", "Compliled for: " + RobotConstants.robotType.toString());
     System.out.printf(
-        "### %-76s ###\n", "Debug        : " + (RobotConstants.debugEnabled ? "Enabled" : "Disabled"));
+        "### %-76s ###\n",
+        "Debug        : " + (RobotConstants.debugEnabled ? "Enabled" : "Disabled"));
     System.out.println(
         "###                                                                              ###");
     System.out.printf("### %-76s ###\n", "Git Version  : " + BuildConstants.VERSION);

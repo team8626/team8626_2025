@@ -108,15 +108,18 @@ public abstract class CS_SubsystemBase extends SubsystemBase {
     DSErrorf(string);
   }
 
-  /** Method to initialize the Dashboard. 
-   *  This method is called once by the {@link #CS_SubsystemBase()} constructor.
+  /**
+   * Method to initialize the Dashboard. This method is called once by the {@link
+   * #CS_SubsystemBase()} constructor.
    */
-  public void initDashboard(){}
+  public void initDashboard() {}
 
-  /** Method to update the Dashboard.  
-   *  This method is called periodically by the {@link #periodic()} method.
+  /**
+   * Method to update the Dashboard. This method is called periodically by the {@link #periodic()}
+   * method.
    */
-  public void updateDashboard(){};
+  public void updateDashboard() {}
+  ;
 
   /**
    * This method is called periodically by the {@link CommandScheduler}. Useful for updating

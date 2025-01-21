@@ -13,7 +13,7 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
   private ElevatorState current_state = ElevatorState.STOPPED;
 
   public Elevator_LinearSparkMax() {
-    
+
     // Instantiante and initilaze the substem according to Specific1 configuration.
     // This is specific to that robot (Motors, Sensors, controllers...)
     // Example:
@@ -43,9 +43,9 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
   @Override
   public void setElevatorSpeed(double new_speed) {
     // TODO: Set the speed of the elevator motor(s) to new_speed
-    if(new_speed > 0) {
+    if (new_speed > 0) {
       current_state = ElevatorState.MOVINGUP;
-    } else if(new_speed < 0) {
+    } else if (new_speed < 0) {
       current_state = ElevatorState.MOVINGDOWN;
     } else {
       current_state = ElevatorState.STOPPED;

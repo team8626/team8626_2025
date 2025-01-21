@@ -1,12 +1,13 @@
 package frc.robot.subsystems.elevator;
 
 import frc.robot.subsystems.elevator.ElevatorConstants.ElevatorStates.ElevatorState;
+
 /**
- * The xxxInterface is an interface that defines the methods that must be implemented 
- * by any subsystem of type xxx.
- * 
- * It contains the default methods that must be implemented by any subsystem of type xxx
- * and the default values that are common to all subsystems of type xxx.
+ * The xxxInterface is an interface that defines the methods that must be implemented by any
+ * subsystem of type xxx.
+ *
+ * <p>It contains the default methods that must be implemented by any subsystem of type xxx and the
+ * default values that are common to all subsystems of type xxx.
  */
 public interface ElevatorInterface {
 
@@ -22,13 +23,18 @@ public interface ElevatorInterface {
   }
 
   public default void updateInputs(ElevatorValues values) {}
+
   public abstract void stopElevator();
+
   public abstract void setElevatorSpeed(double new_speed);
+
   public abstract double getElevatorHeight();
 
   public abstract void setElevatorkP(double kP);
-  public abstract void setElevatorkI(double kI);
-  public abstract void setElevatorkD(double kD);
-  public abstract void setElevatorFF(double ff);
 
+  public abstract void setElevatorkI(double kI);
+
+  public abstract void setElevatorkD(double kD);
+
+  public abstract void setElevatorFF(double ff);
 }

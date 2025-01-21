@@ -33,21 +33,24 @@ public class ElevatorSubsystem extends CS_SubsystemBase {
   public void setkP(double new_value) {
     elevatorInterface.setElevatorkP(new_value);
   }
+
   public void setkI(double new_value) {
     elevatorInterface.setElevatorkI(new_value);
   }
+
   public void setkD(double new_value) {
     elevatorInterface.setElevatorkD(new_value);
   }
+
   public void setFF(double new_value) {
     elevatorInterface.setElevatorFF(new_value);
   }
 
   @Override
   public void CS_periodic() {
-     elevatorInterface.updateInputs(values);
+    elevatorInterface.updateInputs(values);
   }
-  
+
   @Override
   public void initDashboard() {
     println("Initializing Dashboard");
@@ -72,7 +75,6 @@ public class ElevatorSubsystem extends CS_SubsystemBase {
     // SmartDashboard.putNumber("Subsystem/Elevator/I Gain", ElevatorConstants.kD);
     // SmartDashboard.putNumber("Subsystem/Elevator/FF Gain", ElevatorConstants.FF);
 
-
     // Using SmartDashboard to tune PIDs
     // --------------------------------------------------
     double newkP = SmartDashboard.getNumber("Subsystem/Elevator/P Gain", values.kP);
@@ -87,7 +89,8 @@ public class ElevatorSubsystem extends CS_SubsystemBase {
     values.kD = CS_Utils.updateFromSmartDashboard(newkD, values.kD, (value) -> setkD(value));
     values.FF = CS_Utils.updateFromSmartDashboard(newFF, values.FF, (value) -> setFF(value));
 
-    // System.out.printf("P: %f, I: %f, D: %f, FF: %f\n", values.kP, values.kI, values.kD, values.FF); 
+    // System.out.printf("P: %f, I: %f, D: %f, FF: %f\n", values.kP, values.kI, values.kD,
+    // values.FF);
     // TODO Auto-generated method stub
 
   }
@@ -97,5 +100,4 @@ public class ElevatorSubsystem extends CS_SubsystemBase {
     // TODO Auto-generated method stub
 
   }
-  
 }

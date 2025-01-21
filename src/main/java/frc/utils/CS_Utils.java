@@ -24,7 +24,7 @@ public class CS_Utils {
    * @return The new value if it has been updated, otherwise the old value
    */
   public static double updateFromSmartDashboard(
-    double newValue, double oldValue, Consumer<Double> updateFunction) {
+      double newValue, double oldValue, Consumer<Double> updateFunction) {
     double retVal = oldValue;
     if (newValue != oldValue) {
       updateFunction.accept(newValue);
@@ -34,7 +34,7 @@ public class CS_Utils {
   }
 
   public static int updateFromSmartDashboard(
-    int newValue, int oldValue, Consumer<Integer> updateFunction) {
+      int newValue, int oldValue, Consumer<Integer> updateFunction) {
     int retVal = oldValue;
     if (newValue != oldValue) {
       updateFunction.accept(newValue);
