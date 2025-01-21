@@ -131,10 +131,6 @@ public class CoralShooterSubsystem extends CS_SubsystemBase {
             setShooterRPM(newRPM);
         }
         SmartDashboard.putNumber("Subsystem/CoralShooter/Shooter DesiredRPM", desiredRPM);
-
-        //
-        SmartDashboard.putData("Subsystem/CoralShooter/Characterization", new FeedForwardCharacterization(this, this::runCharacterization, this::getCharacterizationVelocity));
-
         // System.out.printf("P: %f, I: %f, D: %f, FF: %f\n", values.kP, values.kI, values.kD, values.FF); 
     }
 
