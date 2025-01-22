@@ -21,12 +21,7 @@ public class CoralShooterSubsystem extends CS_SubsystemBase {
   }
 
   // Calls to the coralShooter interface
-  public void startShooter() {
-    coralShooterInterface.startShooter(desiredRPM);
-  }
-
-  public void startShooter(double new_RPM) {
-    desiredRPM = new_RPM;
+  public void startRampUp() {
     coralShooterInterface.startShooter(desiredRPM);
   }
 

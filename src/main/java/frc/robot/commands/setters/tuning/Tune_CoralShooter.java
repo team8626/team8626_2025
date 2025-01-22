@@ -24,7 +24,7 @@ public class Tune_CoralShooter extends CS_Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    mortar.startShooter();
+    mortar.startRampUp();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
