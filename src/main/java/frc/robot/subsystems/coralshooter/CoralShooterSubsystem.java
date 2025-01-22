@@ -9,7 +9,8 @@ import org.littletonrobotics.frc2024.commands.*;
 public class CoralShooterSubsystem extends CS_SubsystemBase {
   private CoralShooterInterface coralShooterInterface;
   private CoralShooterValues values;
-  private double desiredRPM = CoralShooterConstants.shooterRPM;
+  private double desiredRPM = CoralShooterConstants.shootRPM;
+  // private double desiredLauncherSetpoint = CoralShooterConstants.launcherShootSetpoint;
 
   public CoralShooterSubsystem(CoralShooterInterface subsystem_interface) {
     super();
@@ -34,17 +35,13 @@ public class CoralShooterSubsystem extends CS_SubsystemBase {
     coralShooterInterface.updateShooterRPM(new_RPM);
   }
 
-  public void setShootingRPM() {
-    coralShooterInterface.updateShooterRPM(desiredRPM);
-  }
-
   public void startIntake() {
     coralShooterInterface.startShooter(CoralShooterConstants.intakeRPM);
-    coralShooterInterface.startLauncher(CoralShooterConstants.launcherIntakeRPM);
+    coralShooterInterface.startLauncher(CoralShooterConstants.launcherIntakeSetpoint);
   }
 
-  public void startLauncher() {
-    coralShooterInterface.startLauncher(CoralShooterConstants.launcherShootRPM);
+  public void startLauncher(double new_Setpoint) {
+    coralShooterInterface.startLauncher(new_Setpoint);
   }
 
   public void stopShooter() {
@@ -125,7 +122,10 @@ public class CoralShooterSubsystem extends CS_SubsystemBase {
 
     SmartDashboard.putNumber("Subsystem/CoralShooter/Shooter RPM Left", values.currentRPMLeft);
     SmartDashboard.putNumber("Subsystem/CoralShooter/Shooter RPM Right", values.currentRPMRight);
-    SmartDashboard.putNumber("Subsystem/CoralShooter/Launcher RPM", values.currentRMPLauncher);
+    SmartDashboard.putNumber(
+        "Subsystem/CoralShooter/launcher RPM Right", values.currentRMPLauncher);
+    SmartDashboard.putNumber(
+        "Subsystem/CoralShooter/Launcher Setpoint", values.currentLauncherSetpoint);
 
     SmartDashboard.putNumber("Subsystem/CoralShooter/Shooter Amps Left", values.ampsLeft);
     SmartDashboard.putNumber("Subsystem/CoralShooter/Shooter Amps Right", values.ampsRight);
@@ -135,7 +135,7 @@ public class CoralShooterSubsystem extends CS_SubsystemBase {
 
     double newRPM =
         SmartDashboard.getNumber(
-            "Subsystem/CoralShooter/Shooter DesiredRPM", CoralShooterConstants.shooterRPM);
+            "Subsystem/CoralShooter/Shooter DesiredRPM", CoralShooterConstants.shootRPM);
     if (newRPM != desiredRPM) {
       setShooterRPM(newRPM);
     }

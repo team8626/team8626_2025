@@ -7,9 +7,9 @@ public interface CoralShooterInterface {
 
   void stopShooter();
 
-  void startLauncher(double new_RPM);
+  void startLauncher(double new_Setpoint);
 
-  void updateLauncherRPM(double new_RPM);
+  void updateLauncherSetpoint(double new_Setpoint);
 
   void stopLauncher();
 
@@ -20,6 +20,8 @@ public interface CoralShooterInterface {
   double getShooterRPMRight();
 
   double getLauncherRPM();
+
+  double getLauncherSetpoint();
 
   /** Run flywheels at voltage */
   default void runCharacterizationLeft(double input) {}
@@ -39,13 +41,14 @@ public interface CoralShooterInterface {
     protected double currentRPMLeft = 0; // RPM
     protected double currentRPMRight = 0; // RPM
     protected double currentRMPLauncher = 0; // RPM
+    protected double currentLauncherSetpoint = 0; // [-1;1]
 
     protected double ampsLeft = 0;
     protected double ampsRight = 0;
     protected double ampsLauncher = 0;
 
     protected boolean isLoaded = false;
-    protected double desiredRPM = CoralShooterConstants.shooterRPM;
+    protected double desiredRPM = CoralShooterConstants.shootRPM;
 
     protected double kP = 0.05;
     protected double kI = 0.0;
