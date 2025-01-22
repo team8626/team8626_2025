@@ -37,7 +37,7 @@ public class RobotConstants {
   // Change robot type here if needed
   // Possible options: SIMBOT, KITBOT, DART, DEVBOT, COMPBOT
   //
-  public static RobotType robotType = RobotType.DART;
+  public static RobotType robotType = RobotType.DEVBOT;
   public static boolean debugEnabled = true;
 
   // Subsystems positions/translations for simulation in AdvantageScope
