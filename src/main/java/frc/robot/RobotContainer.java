@@ -108,7 +108,8 @@ public class RobotContainer {
     // Configure the button bindings
     configureDriverBindings(driverController);
     configureOperatorBindings(operatorController);
-    configureButtonBoxBindings(buttonBox);
+    // configureButtonBoxBindings(buttonBox);
+    configureTestButtonBoxBindings(buttonBox);
     configureDefaultCommands();
 
     // Configure the autonomous path chooser
@@ -133,14 +134,16 @@ public class RobotContainer {
   }
 
   private void configureDriverBindings(CS_XboxController controller) {
-    controller.btn_A.onTrue(
-        new InstantCommand(
-            () ->
-                Commodore.setCommodoreState(CommodoreState.CORAL_INTAKE, true).withToggleState()));
+    // controller.btn_A.onTrue(
+    //     new InstantCommand(
+    //         () ->
+    //             Commodore.setCommodoreState(CommodoreState.CORAL_INTAKE,
+    // true).withToggleState()));
 
-    controller.btn_B.onTrue(
-        new InstantCommand(
-            () -> Commodore.setCommodoreState(CommodoreState.CORAL_SHOOT, true).withToggleState()));
+    // controller.btn_B.onTrue(
+    //     new InstantCommand(
+    //         () -> Commodore.setCommodoreState(CommodoreState.CORAL_SHOOT,
+    // true).withToggleState()));
   }
 
   private void configureOperatorBindings(CS_XboxController controller) {
@@ -149,15 +152,19 @@ public class RobotContainer {
   }
 
   private void configureButtonBoxBindings(CS_ButtonBoxController controller) {
-    controller.btn_1.onTrue(
-        new InstantCommand(
-            () ->
-                Commodore.setCommodoreState(CommodoreState.TUNE_CORALSHOOTER, true)
-                    .withToggleState()));
-    // controller.btn_2.onTrue(
-    //     new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.SHOOT, true)));
-    controller.btn_9.onTrue(
-        new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.IDLE, true)));
+    // controller.btn_1.onTrue(
+    //     new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.INTAKE, true)));
+    // controller.btn_9.onTrue(
+    //     new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.IDLE, true)));
+  }
+
+  private void configureTestButtonBoxBindings(CS_ButtonBoxController controller) {
+    // controller.btn_1.toggleOnTrue(new CoralShooterIntake());
+    // controller.btn_2.toggleOnTrue(new Tune_CoralShooter());
+    // controller.btn_3.toggleOnTrue(new CoralShooterLaunch());
+    // controller.btn_4.onTrue(
+    //     new FeedForwardCharacterization(
+    //         mortar, mortar::runCharacterization, mortar::getCharacterizationVelocity));
   }
 
   private void configureDefaultCommands() {
