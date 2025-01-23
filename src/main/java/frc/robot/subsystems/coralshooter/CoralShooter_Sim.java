@@ -77,6 +77,7 @@ public class CoralShooter_Sim implements CoralShooterInterface, CS_InterfaceBase
     rightSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_RPM));
     leftSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_RPM));
     shooterIsEnabled = true;
+    printf("Shooter RPM: %f", new_RPM);
   }
 
   @Override
@@ -90,8 +91,8 @@ public class CoralShooter_Sim implements CoralShooterInterface, CS_InterfaceBase
     if (shooterIsEnabled) {
       rightSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_RPM));
       leftSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_RPM));
+      printf("Shooter RPM: %f", new_RPM);
     }
-    printf("New Shooter RPM: %f\n", new_RPM);
   }
 
   @Override
@@ -106,13 +107,14 @@ public class CoralShooter_Sim implements CoralShooterInterface, CS_InterfaceBase
     if (launcherIsEnabled) {
       launchSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_Setpoint));
     }
-    printf("New Launcher Setpoint: %f\n", new_Setpoint);
+    printf("Launcher Setpoint: %f", new_Setpoint);
   }
 
   @Override
   public void startLauncher(double new_Setpoint) {
     currentLauncherSetpoint = new_Setpoint;
     launcherIsEnabled = true;
+    printf("Launcher Setpoint: %f", new_Setpoint);
   }
 
   @Override

@@ -191,7 +191,7 @@ public class CoralShooter_SparkMax implements CoralShooterInterface, CS_Interfac
     rightMotor.configure(
         rightConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-    printf("New PID: %f, %f, %f \n", newkP, newkI, newkD);
+    printf("New PID: %f, %f, %f", newkP, newkI, newkD);
   }
 
   @Override

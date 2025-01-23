@@ -4,13 +4,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.CS_SubsystemBase;
 import frc.robot.subsystems.coralshooter.CoralShooterInterface.CoralShooterValues;
 import frc.utils.CS_Utils;
-import org.littletonrobotics.frc2024.commands.*;
 
 public class CoralShooterSubsystem extends CS_SubsystemBase {
   private CoralShooterInterface coralShooterInterface;
   private CoralShooterValues values;
-  private double desiredRPM = CoralShooterConstants.shootRPM;
-  // private double desiredLauncherSetpoint = CoralShooterConstants.launcherShootSetpoint;
+  private double shootingRPM = CoralShooterConstants.shootRPM;
 
   public CoralShooterSubsystem(CoralShooterInterface subsystem_interface) {
     super();
@@ -22,11 +20,11 @@ public class CoralShooterSubsystem extends CS_SubsystemBase {
 
   // Calls to the coralShooter interface
   public void startRampUp() {
-    coralShooterInterface.startShooter(desiredRPM);
+    coralShooterInterface.startShooter(shootingRPM);
   }
 
   public void setShooterRPM(double new_RPM) {
-    desiredRPM = new_RPM;
+    shootingRPM = new_RPM;
     coralShooterInterface.updateShooterRPM(new_RPM);
   }
 
@@ -130,13 +128,11 @@ public class CoralShooterSubsystem extends CS_SubsystemBase {
 
     double newRPM =
         SmartDashboard.getNumber(
-            "Subsystem/CoralShooter/Shooter DesiredRPM", CoralShooterConstants.shootRPM);
-    if (newRPM != desiredRPM) {
+            "Subsystem/CoralShooter/Shooting RPM", CoralShooterConstants.shootRPM);
+    if (newRPM != shootingRPM) {
       setShooterRPM(newRPM);
     }
-    SmartDashboard.putNumber("Subsystem/CoralShooter/Shooter DesiredRPM", desiredRPM);
-    // System.out.printf("P: %f, I: %f, D: %f, FF: %f\n", values.kP, values.kI, values.kD,
-    // values.FF);
+    SmartDashboard.putNumber("Subsystem/CoralShooter/Shooting RPM", shootingRPM);
   }
 
   // Characterization methods
