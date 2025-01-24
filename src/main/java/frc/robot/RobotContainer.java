@@ -215,10 +215,14 @@ public class RobotContainer {
         "Debug        : " + (RobotConstants.debugEnabled ? "Enabled" : "Disabled"));
     System.out.println(
         "###                                                                              ###");
-    System.out.printf("### %-76s ###\n", "Git Version  : " + BuildConstants.VERSION);
+    System.out.printf("### %-76s ###\n", "Repository   : " + BuildConstants.MAVEN_NAME);
+    System.out.printf("### %-76s ###\n", "Version      : " + BuildConstants.VERSION);
     System.out.printf("### %-76s ###\n", "Git Branch   : " + BuildConstants.GIT_BRANCH);
     System.out.printf("### %-76s ###\n", "Build Date   : " + BuildConstants.BUILD_DATE);
-    System.out.printf("### %-76s ###\n", "Dirty Flag   : " + BuildConstants.DIRTY);
+    System.out.printf(
+        "### %-76s ###\n",
+        "Dirty Flag   : "
+            + (BuildConstants.DIRTY == 0 ? "0- All changes commited" : "1- Uncomitted changes"));
     System.out.println(
         "###                                                                              ###");
     System.out.println(
