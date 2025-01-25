@@ -15,6 +15,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Commodore.CommodoreState;
 import frc.robot.RobotConstants.RobotType;
+import frc.robot.commands.setters.tuning.Tune_CoralShooter;
+import frc.robot.commands.setters.units.CoralShooterIntake;
+import frc.robot.commands.setters.units.CoralShooterLaunch;
 import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
 import frc.robot.subsystems.coralshooter.CoralShooter_Sim;
 import frc.robot.subsystems.coralshooter.CoralShooter_SparkMax;
@@ -90,6 +93,11 @@ public class RobotContainer {
 
         break;
       case DEVBOT:
+        mortar = new CoralShooterSubsystem(new CoralShooter_SparkMax());
+        drivebase =
+            new CS_DriveSubsystemIO_Swerve(
+                new File(Filesystem.getDeployDirectory(), "swerve_devbot"));
+        break;
       case COMPBOT:
       default:
         drivebase =
@@ -108,8 +116,13 @@ public class RobotContainer {
     // Configure the button bindings
     configureDriverBindings(driverController);
     configureOperatorBindings(operatorController);
-    // configureButtonBoxBindings(buttonBox);
-    configureTestButtonBoxBindings(buttonBox);
+
+    if (!hasTuningEnabled()) {
+      configureButtonBoxBindings(buttonBox);
+    } else {
+      configureTestButtonBoxBindings(buttonBox);
+    }
+
     configureDefaultCommands();
 
     // Configure the autonomous path chooser
@@ -129,8 +142,12 @@ public class RobotContainer {
   }
 
   // Public method to check if debug is enabled
-  public static boolean isDebugEnabled() {
-    return RobotConstants.debugEnabled;
+  public static boolean hasTracesEnabled() {
+    return RobotConstants.tracesEnabled;
+  }
+  // Public method to check if tuning is enabled
+  public static boolean hasTuningEnabled() {
+    return RobotConstants.tuningEnabled;
   }
 
   private void configureDriverBindings(CS_XboxController controller) {
@@ -151,6 +168,17 @@ public class RobotContainer {
     //     new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.CORAL_SHOOT, true)));
   }
 
+  // ---------------------------------------- BUTTON BOX ------------------------------
+  //
+  //           +-----------------+
+  //           |  1  |  4  |  7  |
+  //           |-----+-----+-----|
+  //           |  2  |  5  |  8  |
+  //           |-----+-----+-----|
+  //           |  3  |  6  |  9  |
+  //           +-----------------+
+  //
+  // ----------------------------------------------------------------------------------
   private void configureButtonBoxBindings(CS_ButtonBoxController controller) {
     // controller.btn_1.onTrue(
     //     new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.INTAKE, true)));
@@ -159,12 +187,14 @@ public class RobotContainer {
   }
 
   private void configureTestButtonBoxBindings(CS_ButtonBoxController controller) {
-    // controller.btn_1.toggleOnTrue(new CoralShooterIntake());
-    // controller.btn_2.toggleOnTrue(new Tune_CoralShooter());
-    // controller.btn_3.toggleOnTrue(new CoralShooterLaunch());
-    // controller.btn_4.onTrue(
+    // Coral Shooter Tuning functions
+    controller.btn_1.toggleOnTrue(new CoralShooterIntake());
+    controller.btn_2.toggleOnTrue(new Tune_CoralShooter());
+    controller.btn_3.toggleOnTrue(new CoralShooterLaunch());
+    // controller.btn_4.toggleOnTrue(
     //     new FeedForwardCharacterization(
     //         mortar, mortar::runCharacterization, mortar::getCharacterizationVelocity));
+
   }
 
   private void configureDefaultCommands() {
@@ -218,14 +248,19 @@ public class RobotContainer {
         "###                                                                              ###");
     System.out.printf("### %-76s ###\n", "Compliled for: " + RobotConstants.robotType.toString());
     System.out.printf(
-        "### %-76s ###\n",
-        "Debug        : " + (RobotConstants.debugEnabled ? "Enabled" : "Disabled"));
+        "### %-76s ###\n", "Debug        : " + (hasTracesEnabled() ? "ENABLED" : "DISABLED"));
+    System.out.printf(
+        "### %-76s ###\n", "Tuning        : " + (hasTuningEnabled() ? "ENABLED" : "DISABLED"));
     System.out.println(
         "###                                                                              ###");
-    System.out.printf("### %-76s ###\n", "Git Version  : " + BuildConstants.VERSION);
+    System.out.printf("### %-76s ###\n", "Repository   : " + BuildConstants.MAVEN_NAME);
+    System.out.printf("### %-76s ###\n", "Version      : " + BuildConstants.VERSION);
     System.out.printf("### %-76s ###\n", "Git Branch   : " + BuildConstants.GIT_BRANCH);
     System.out.printf("### %-76s ###\n", "Build Date   : " + BuildConstants.BUILD_DATE);
-    System.out.printf("### %-76s ###\n", "Dirty Flag   : " + BuildConstants.DIRTY);
+    System.out.printf(
+        "### %-76s ###\n",
+        "Dirty Flag   : "
+            + (BuildConstants.DIRTY == 0 ? "0- All changes commited" : "1- Uncomitted changes"));
     System.out.println(
         "###                                                                              ###");
     System.out.println(
