@@ -56,7 +56,7 @@ public abstract class CS_SubsystemBase extends SubsystemBase {
   protected void printf(String format, Object... args) {
     String className = this.getClass().getSimpleName().toUpperCase();
     String formattedMessage = String.format(format, args);
-    if (!Robot.isReady() || RobotContainer.isDebugEnabled()) {
+    if (!Robot.isReady() || RobotContainer.hasTracesEnabled()) {
       System.out.println("[" + className + "] " + formattedMessage);
     }
   }
