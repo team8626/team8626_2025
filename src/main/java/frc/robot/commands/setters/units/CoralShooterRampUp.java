@@ -14,7 +14,7 @@ import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
 public class CoralShooterRampUp extends CS_Command {
   private CoralShooterSubsystem mortar;
 
-  private double desiredRPM = CoralShooterConstants.shooterRPM;
+  private double desiredRPM = CoralShooterConstants.shootRPM;
   private final double RPMTolerance = CoralShooterConstants.shooterRPMTolerance;
 
   public CoralShooterRampUp() {
@@ -28,7 +28,7 @@ public class CoralShooterRampUp extends CS_Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    mortar.startShooter();
+    mortar.startRampUp();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

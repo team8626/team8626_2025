@@ -37,8 +37,9 @@ public class RobotConstants {
   // Change robot type here if needed
   // Possible options: SIMBOT, KITBOT, DART, DEVBOT, COMPBOT
   //
-  public static RobotType robotType = RobotType.DART;
-  public static boolean debugEnabled = true;
+  public static RobotType robotType = RobotType.DEVBOT;
+  public static boolean tracesEnabled = true;
+  public static boolean tuningEnabled = false; // DO NO COMMIT WITH THIS ENABLED
 
   // Subsystems positions/translations for simulation in AdvantageScope
   // public static Translation2d intakeOffset = new Translation2d(Units.inchesToMeters(24),

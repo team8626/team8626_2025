@@ -15,6 +15,8 @@ public class CoralShooter_Sim implements CoralShooterInterface, CS_InterfaceBase
   private boolean shooterIsEnabled = false;
   private boolean launcherIsEnabled = false;
 
+  private double currentLauncherSetpoint = 0;
+
   private FlywheelSim leftSim;
   private FlywheelSim rightSim;
   private FlywheelSim launchSim;
@@ -61,6 +63,7 @@ public class CoralShooter_Sim implements CoralShooterInterface, CS_InterfaceBase
     values.currentRPMRight = getShooterRPMRight();
 
     values.currentRMPLauncher = getLauncherRPM();
+    values.currentLauncherSetpoint = getLauncherSetpoint();
 
     values.ampsLeft = leftSim.getCurrentDrawAmps();
     values.ampsRight = rightSim.getCurrentDrawAmps();
@@ -74,6 +77,7 @@ public class CoralShooter_Sim implements CoralShooterInterface, CS_InterfaceBase
     rightSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_RPM));
     leftSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_RPM));
     shooterIsEnabled = true;
+    printf("Shooter RPM: %f", new_RPM);
   }
 
   @Override
@@ -87,28 +91,30 @@ public class CoralShooter_Sim implements CoralShooterInterface, CS_InterfaceBase
     if (shooterIsEnabled) {
       rightSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_RPM));
       leftSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_RPM));
+      printf("Shooter RPM: %f", new_RPM);
     }
-    printf("New Shooter RPM: %f\n", new_RPM);
   }
 
   @Override
   public void stopLauncher() {
-    updateLauncherRPM(0);
+    updateLauncherSetpoint(0);
     launcherIsEnabled = false;
   }
 
   @Override
-  public void updateLauncherRPM(double new_RPM) {
+  public void updateLauncherSetpoint(double new_Setpoint) {
+    currentLauncherSetpoint = new_Setpoint;
     if (launcherIsEnabled) {
-      launchSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_RPM));
+      launchSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_Setpoint));
     }
-    printf("New Launcher RPM: %f\n", new_RPM);
+    printf("Launcher Setpoint: %f", new_Setpoint);
   }
 
   @Override
-  public void startLauncher(double new_RPM) {
+  public void startLauncher(double new_Setpoint) {
+    currentLauncherSetpoint = new_Setpoint;
     launcherIsEnabled = true;
-    updateLauncherRPM(new_RPM);
+    printf("Launcher Setpoint: %f", new_Setpoint);
   }
 
   @Override
@@ -124,6 +130,10 @@ public class CoralShooter_Sim implements CoralShooterInterface, CS_InterfaceBase
   @Override
   public double getLauncherRPM() {
     return launchSim.getAngularVelocityRPM();
+  }
+
+  public double getLauncherSetpoint() {
+    return currentLauncherSetpoint;
   }
 
   @Override

@@ -22,8 +22,9 @@ public class ToIdle extends CS_Command {
     // For example: addRequirements(Robot.m_subsystem);
     // dummy = RobotContainer.dummy;
     // mortar = RobotContainer.mortar;
-
-    addRequirements(mortar, dummy);
+    if (mortar != null) {
+      addRequirements(mortar);
+    }
   }
 
   // Called when the command is initially scheduled.

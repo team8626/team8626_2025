@@ -19,7 +19,8 @@ public class CoralShooterLaunch extends CS_Command {
   public CoralShooterLaunch() {
     mortar = RobotContainer.mortar;
 
-    addRequirements(mortar);
+    // Do not use mortar in requirements, this would cancel the Ramp-up Command!!!
+    // addRequirements(mortar);
 
     this.setTAGString("CORALSHOOTER_LAUNCH");
   }
@@ -27,7 +28,7 @@ public class CoralShooterLaunch extends CS_Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    mortar.startLauncher();
+    mortar.startLauncher(CoralShooterConstants.launcherShootSetpoint);
     timer.reset();
   }
 

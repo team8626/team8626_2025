@@ -6,10 +6,10 @@ import frc.robot.RobotConstants;
 public class CoralShooterConstants {
 
   // Tuned Values
-  public static final double shooterRPM = 2500;
-  public static final double intakeRPM = -500;
-  public static final double launcherShootRPM = 1000;
-  public static final double launcherIntakeRPM = -100;
+  public static final double shootRPM = 1275;
+  public static final double intakeRPM = -300;
+  public static final double launcherShootSetpoint = -1.0;
+  public static final double launcherIntakeSetpoint = 0.3;
 
   public static final double shooterRPMTolerance = 50;
   public static final double launchTimerSeconds = 0.2;
@@ -30,15 +30,15 @@ public class CoralShooterConstants {
   // Flywheel Config
   public static final FlywheelConfig flywheelConfig =
       switch (RobotConstants.robotType) {
-        case COMPBOT -> new FlywheelConfig(4, 0, (3.0 / 1.0), 2 * momentOfInertia, 6000.0);
-        case DEVBOT -> new FlywheelConfig(5, 4, (3.0 / 1.0), 2 * momentOfInertia, 6000.0);
+        case COMPBOT -> new FlywheelConfig(12, 2, (3.0 / 1.0), 2 * momentOfInertia, 6000.0);
+        case DEVBOT -> new FlywheelConfig(12, 2, (3.0 / 1.0), 2 * momentOfInertia, 6000.0);
         case SIMBOT -> new FlywheelConfig(0, 0, (3.0 / 1.0), 2 * momentOfInertia, 6000.0);
-        default -> new FlywheelConfig(5, 4, (1.0 / 2.0), 2 * momentOfInertia, 6000.0);
+        default -> new FlywheelConfig(5, 4, (3.0 / 1.0), 2 * momentOfInertia, 6000.0);
       };
 
   // Launcher FLywheel Config
   public static final FlywheelConfig launcherConfig =
-      new FlywheelConfig(1, 0, (1.0 / 1.0), 2 * momentOfInertia, 6000.0);
+      new FlywheelConfig(11, 0, (1.0 / 1.0), 2 * momentOfInertia, 6000.0);
 
   // InfraRed Port (Sensor to check if the CORAL is loaded
   public static final int infraRedPort = 0; // DIO
@@ -46,10 +46,10 @@ public class CoralShooterConstants {
   // PID Constants
   public static final Gains gains =
       switch (RobotConstants.robotType) {
-        case COMPBOT -> new Gains(0.05, 0.0, 0.0, 0.3, 0.001, 0);
-        case DEVBOT -> new Gains(0.05, 0.0, 0.0, 0.3, 0.001, 0.0);
-        case SIMBOT -> new Gains(0.05, 0.0, 0.0, 0.01, 0.001, 0.0);
-        default -> new Gains(0.05, 0.0, 0.0, 0.3, 0.001, 0.0);
+        case COMPBOT -> new Gains(0.0001, 0.0, 0.0, 0.12, 0.00635, 0);
+        case DEVBOT -> new Gains(0.0001, 0.0, 0.0, 0.12, 0.00635, 0.0);
+        case SIMBOT -> new Gains(0.05, 0.0, 0.0, 0.12, 0.00635, 0.0);
+        default -> new Gains(0.05, 0.0, 0.0, 0.12, 0.00635, 0.0);
       };
 
   public record Gains(double kP, double kI, double kD, double kS, double kV, double kA) {}

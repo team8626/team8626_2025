@@ -34,7 +34,7 @@ public abstract class CS_Command extends Command {
    */
   protected void printf(String format, Object... args) {
     String formattedMessage = String.format(format, args);
-    if (RobotContainer.isDebugEnabled()) {
+    if (RobotContainer.hasTracesEnabled()) {
       System.out.println("[" + TAG + "] " + formattedMessage);
     }
   }
