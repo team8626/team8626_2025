@@ -89,18 +89,15 @@ public class LEDManager extends CS_SubsystemBase {
 
     switch (mainMode) {
       case DISCONNECTED:
-        generalPattern = wave(Color.kHotPink, Color.kPink);
+        generalPattern = wave(getAllianceColor());
         break;
 
       case DISABLED:
-        currentColor = getAllianceColor();
-
-        generalPattern = blinkSlow(currentColor[0]);
+        generalPattern = blinkSlow(getAllianceColor());
         break;
 
       case IDLE:
-        currentColor = getAllianceColor();
-        generalPattern = wave(currentColor[0], currentColor[1]);
+        generalPattern = wave(getAllianceColor());
         driverInfoPattern = off();
         break;
 
@@ -117,7 +114,7 @@ public class LEDManager extends CS_SubsystemBase {
       case UNKNOWN:
       case TRANSITION:
       case SHOOT:
-        // wave(LEDConstants.kSectionMain, Color.kGreen, Color.kBlack, 25, 2.0);
+        generalPattern = wave(Color.kGreen, Color.kBlack);
         break;
       case CORAL_SHOOT:
       case CORAL_SHOOT_RAMPINGUP:
@@ -163,27 +160,29 @@ public class LEDManager extends CS_SubsystemBase {
 
   private static LEDPattern wave(Color... colors) {
     LEDPattern new_pattern;
-
     new_pattern =
         LEDPattern.gradient(GradientType.kContinuous, colors)
             .scrollAtAbsoluteSpeed(LEDConstants.kLEDScrollSpeed, LEDConstants.kLEDSpacing);
-
     return new_pattern;
   }
 
-  private static LEDPattern blinkFast(Color color) {
+  private static LEDPattern blinkFast(Color... colors) {
     LEDPattern new_pattern;
-
-    new_pattern = LEDPattern.solid(color).breathe(LEDConstants.kBlinkFastPeriod);
-
+    new_pattern = LEDPattern.solid(colors[0]).breathe(LEDConstants.kBlinkFastPeriod);
     return new_pattern;
   }
 
-  private static LEDPattern blinkSlow(Color color) {
+  private static LEDPattern blinkSlow(Color... colors) {
     LEDPattern new_pattern;
+    new_pattern = LEDPattern.solid(colors[0]).breathe(LEDConstants.kBlinkSlowPeriod);
+    return new_pattern;
+  }
 
-    new_pattern = LEDPattern.solid(color).breathe(LEDConstants.kBlinkSlowPeriod);
-
+  private static LEDPattern rainbow() {
+    LEDPattern new_pattern;
+    new_pattern =
+        LEDPattern.rainbow(255, 127)
+            .scrollAtAbsoluteSpeed(LEDConstants.kLEDScrollSpeed, LEDConstants.kLEDSpacing);
     return new_pattern;
   }
 
