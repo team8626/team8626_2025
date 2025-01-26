@@ -11,17 +11,13 @@ import frc.robot.Commodore.CommodoreState;
 import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
 import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
-import frc.robot.subsystems.dummy.DummySubsystem;
 
 public class ToIdle extends CS_Command {
-  private DummySubsystem dummy = RobotContainer.dummy;
   private CoralShooterSubsystem mortar = RobotContainer.mortar;
 
   public ToIdle() {
-    // Use addRequirements() here to declare subsystem dependencies.
-    // For example: addRequirements(Robot.m_subsystem);
-    // dummy = RobotContainer.dummy;
-    // mortar = RobotContainer.mortar;
+    // Add requirements to the subsystems that need to be reset when going back to idle
+    // those subsystems will stop any ongoing action.
     if (mortar != null) {
       addRequirements(mortar);
     }
@@ -39,7 +35,10 @@ public class ToIdle extends CS_Command {
   @Override
   public void end(boolean interrupted) {
     Commodore.getSetStateCommand(CommodoreState.IDLE).schedule();
-    println("Ended" + (interrupted == true ? " (interrupted)" : ""));
+    // Check if subsystems are in a special state...
+    if (mortar.isLoaded()) {
+      Commodore.getSetStateCommand(CommodoreState.CORAL_LOADED).schedule();
+    }
   }
 
   // Returns true when the command should end.
