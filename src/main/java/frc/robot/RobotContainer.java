@@ -15,9 +15,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Commodore.CommodoreState;
 import frc.robot.RobotConstants.RobotType;
-import frc.robot.commands.setters.tuning.Tune_CoralShooter;
 import frc.robot.commands.setters.units.CoralShooterIntake;
 import frc.robot.commands.setters.units.CoralShooterLaunch;
+import frc.robot.commands.tuning.Tune_CoralShooter;
 import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
 import frc.robot.subsystems.coralshooter.CoralShooter_Sim;
 import frc.robot.subsystems.coralshooter.CoralShooter_SparkMax;
@@ -151,16 +151,14 @@ public class RobotContainer {
   }
 
   private void configureDriverBindings(CS_XboxController controller) {
-    // controller.btn_A.onTrue(
-    //     new InstantCommand(
-    //         () ->
-    //             Commodore.setCommodoreState(CommodoreState.CORAL_INTAKE,
-    // true).withToggleState()));
+    controller.btn_A.onTrue(
+        new InstantCommand(
+            () ->
+                Commodore.setCommodoreState(CommodoreState.CORAL_INTAKE, true).withToggleState()));
 
-    // controller.btn_B.onTrue(
-    //     new InstantCommand(
-    //         () -> Commodore.setCommodoreState(CommodoreState.CORAL_SHOOT,
-    // true).withToggleState()));
+    controller.btn_B.onTrue(
+        new InstantCommand(
+            () -> Commodore.setCommodoreState(CommodoreState.CORAL_SHOOT, true).withToggleState()));
   }
 
   private void configureOperatorBindings(CS_XboxController controller) {
