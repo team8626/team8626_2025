@@ -21,7 +21,6 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -29,7 +28,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -61,7 +59,7 @@ public class SwerveSubsystem extends CS_SubsystemBase {
   private final SwerveDrive swerveDrive;
   /** AprilTag field layout. */
   private final AprilTagFieldLayout aprilTagFieldLayout =
-      AprilTagFieldLayout.loadField(AprilTagFields.k2024Crescendo);
+      AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
   /** Enable vision odometry updates while driving. */
   private final boolean visionDriveTest = true;
   /** PhotonVision class to keep an accurate odometry. */
@@ -73,23 +71,6 @@ public class SwerveSubsystem extends CS_SubsystemBase {
    * @param directory Directory of swerve drive config files.
    */
   public SwerveSubsystem(File directory) {
-    // Angle conversion factor is 360 / (GEAR RATIO * ENCODER RESOLUTION)
-    //  In this case the gear ratio is 12.8 motor revolutions per wheel rotation.
-    //  The encoder resolution per motor revolution is 1 per motor revolution.
-    double angleConversionFactor = SwerveMath.calculateDegreesPerSteeringRotation(12.8);
-    // Motor conversion factor is (PI * WHEEL DIAMETER IN METERS) / (GEAR RATIO * ENCODER
-    // RESOLUTION).
-    //  In this case the wheel diameter is 4 inches, which must be converted to meters to get
-    // meters/second.
-    //  The gear ratio is 6.75 motor revolutions per wheel rotation.
-    //  The encoder resolution per motor revolution is 1 per motor revolution.
-    double driveConversionFactor =
-        SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(4), 6.75);
-    System.out.println("\"conversionFactors\": {");
-    System.out.println("\t\"angle\": {\"factor\": " + angleConversionFactor + " },");
-    System.out.println("\t\"drive\": {\"factor\": " + driveConversionFactor + " }");
-    System.out.println("}");
-
     // Configure the Telemetry before creating the SwerveDrive to avoid unnecessary objects being
     // created.
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
@@ -118,9 +99,8 @@ public class SwerveSubsystem extends CS_SubsystemBase {
     swerveDrive.setModuleEncoderAutoSynchronize(
         false, 1); // Enable if you want to resynchronize your absolute encoders and motor encoders
     // periodically when they are not moving.
-    swerveDrive
-        .pushOffsetsToEncoders(); // Set the absolute encoder to be used over the internal encoder
-    // and push the offsets onto it. Throws warning if not possible
+    swerveDrive.pushOffsetsToEncoders(); // Set the absolute encoder to be used over the
+    // internal encoder and push the offsets onto it. Throws warning if not possible
     if (visionDriveTest) {
       setupPhotonVision();
       // Stop the odometry thread if we are using vision that way we can synchronize updates better.
@@ -224,54 +204,6 @@ public class SwerveSubsystem extends CS_SubsystemBase {
     // Preload PathPlanner Path finding
     // IF USING CUSTOM PATHFINDER ADD BEFORE THIS LINE
     PathfindingCommand.warmupCommand().schedule();
-  }
-
-  /**
-   * Get the distance to the speaker.
-   *
-   * @return Distance to speaker in meters.
-   */
-  public double getDistanceToSpeaker() {
-    int allianceAprilTag = DriverStation.getAlliance().get() == Alliance.Blue ? 7 : 4;
-    // Taken from PhotonUtils.getDistanceToPose
-    Pose3d speakerAprilTagPose = aprilTagFieldLayout.getTagPose(allianceAprilTag).get();
-    return getPose().getTranslation().getDistance(speakerAprilTagPose.toPose2d().getTranslation());
-  }
-
-  /**
-   * Get the yaw to aim at the speaker.
-   *
-   * @return {@link Rotation2d} of which you need to achieve.
-   */
-  public Rotation2d getSpeakerYaw() {
-    int allianceAprilTag = DriverStation.getAlliance().get() == Alliance.Blue ? 7 : 4;
-    // Taken from PhotonUtils.getYawToPose()
-    Pose3d speakerAprilTagPose = aprilTagFieldLayout.getTagPose(allianceAprilTag).get();
-    Translation2d relativeTrl =
-        speakerAprilTagPose.toPose2d().relativeTo(getPose()).getTranslation();
-    return new Rotation2d(relativeTrl.getX(), relativeTrl.getY())
-        .plus(swerveDrive.getOdometryHeading());
-  }
-
-  /**
-   * Aim the robot at the speaker.
-   *
-   * @param tolerance Tolerance in degrees.
-   * @return Command to turn the robot to the speaker.
-   */
-  public Command aimAtSpeaker(double tolerance) {
-    SwerveController controller = swerveDrive.getSwerveController();
-    return run(() -> {
-          ChassisSpeeds speeds =
-              ChassisSpeeds.fromFieldRelativeSpeeds(
-                  0,
-                  0,
-                  controller.headingCalculate(
-                      getHeading().getRadians(), getSpeakerYaw().getRadians()),
-                  getHeading());
-          drive(speeds);
-        })
-        .until(() -> Math.abs(getSpeakerYaw().minus(getHeading()).getDegrees()) < tolerance);
   }
 
   /**
@@ -768,15 +700,5 @@ public class SwerveSubsystem extends CS_SubsystemBase {
    */
   public SwerveDrive getSwerveDrive() {
     return swerveDrive;
-  }
-
-  @Override
-  public void initDashboard() {
-    // TODO Auto-generated method stub
-  }
-
-  @Override
-  public void updateDashboard() {
-    // TODO Auto-generated method stub
   }
 }
