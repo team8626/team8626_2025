@@ -6,6 +6,8 @@
 
 package frc.robot.commands.setters.groups;
 
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Commodore;
@@ -17,6 +19,7 @@ import frc.robot.commands.setters.units.CoralShooterStop;
 import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
 
 public class ToCoralShoot extends SequentialCommandGroup {
+  private final Timer timer = new Timer();
 
   public ToCoralShoot() {
     CoralShooterSubsystem mortar = RobotContainer.mortar;
@@ -26,10 +29,25 @@ public class ToCoralShoot extends SequentialCommandGroup {
         new ConditionalCommand(
             new SequentialCommandGroup(
                 Commodore.getSetStateCommand(CommodoreState.CORAL_SHOOT_RAMPINGUP),
-                new CoralShooterRampUp(),
+                new CoralShooterRampUp() {
+                  @Override
+                  public void initialize() {
+                    super.initialize();
+                    timer.reset();
+                    timer.start();
+                  }
+                },
                 Commodore.getSetStateCommand(CommodoreState.CORAL_SHOOT_LAUNCHING),
                 new CoralShooterLaunch(),
-                new CoralShooterStop(),
+                new CoralShooterStop() {
+                  @Override
+                  public void initialize() {
+                    super.initialize();
+                    double elapsedTime = timer.get();
+                    SmartDashboard.putNumber(
+                        "Subsystem/CoralShooter/Last Shot in (ms)", (int) (elapsedTime * 1000));
+                  }
+                },
                 Commodore.getSetStateCommand(CommodoreState.IDLE)),
             Commodore.getSetStateCommand(CommodoreState.IDLE),
             mortar::isLoaded));

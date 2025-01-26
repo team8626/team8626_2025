@@ -92,6 +92,8 @@ public class CoralShooterSubsystem extends CS_SubsystemBase {
     SmartDashboard.putNumber("Subsystem/CoralShooter/Gains/P", CoralShooterConstants.gains.kP());
     SmartDashboard.putNumber("Subsystem/CoralShooter/Gains/I", CoralShooterConstants.gains.kI());
     SmartDashboard.putNumber("Subsystem/CoralShooter/Gains/D", CoralShooterConstants.gains.kD());
+
+    SmartDashboard.putNumber("Subsystem/CoralShooter/Last Shot in (ms)", 0);
   }
 
   @Override
