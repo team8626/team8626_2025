@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.setters.Example_ToIntake;
 import frc.robot.commands.setters.Example_ToShoot;
 import frc.robot.commands.setters.groups.*;
-import frc.robot.commands.setters.tuning.Tune_CoralShooter;
+import frc.robot.commands.tuning.Tune_CoralShooter;
 import frc.robot.subsystems.CS_SubsystemBase;
 import java.util.LinkedList;
 import java.util.List;
