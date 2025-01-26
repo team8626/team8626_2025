@@ -18,7 +18,7 @@ public class LEDConstants {
   public static final LEDSection kSectionRight = new LEDSection(25, 49);
   public static final LEDSection kSectionFront = new LEDSection(50, 74);
   public static final LEDSection kSectionBack = new LEDSection(75, 99);
-  public static final LEDSection kSectionAmbience = new LEDSection(100, 142);
+  public static final LEDSection kSectionAmbiance = new LEDSection(100, 142);
 
   public static final LinearVelocity kLEDScrollSpeed = MetersPerSecond.of(0.3);
   public static final Distance kLEDSpacing = Meters.of(0.0167);

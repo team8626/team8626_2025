@@ -23,21 +23,6 @@ public class LEDManager extends CS_SubsystemBase {
   // Singleton instance
   private static LEDManager instance;
 
-  public static enum LedAmbienceMode {
-    RAINBOW,
-    OFF
-  }
-
-  public static enum LedErrorMode {
-    NO_ERROR,
-    ERROR_CRITICAL,
-    ERROR_DRIVE_FL,
-    ERROR_DRIVE_FR,
-    ERROR_DRIVE_BL,
-    ERROR_DRIVE_BR,
-    ERROR_GIMME_LIGHT
-  }
-
   /** Creates a new LEDSubsystem. */
   private static AddressableLED LEDs;
 
@@ -51,14 +36,12 @@ public class LEDManager extends CS_SubsystemBase {
 
   private static AddressableLEDBufferView ambianceLEDs;
 
-  private static LEDPattern sidesPattern;
+  private static LEDPattern generalPattern;
   private static LEDPattern driverInfoPattern;
   private static LEDPattern ambiencePattern;
 
   // static LedMode mainMode = LedMode.OFF;
   static CommodoreState mainMode = CommodoreState.IDLE;
-  static LedErrorMode errorMode = LedErrorMode.NO_ERROR;
-  static LedAmbienceMode ambienceMode = LedAmbienceMode.OFF;
 
   static Color currentColor[] = {Color.kHotPink, Color.kPink};
 
@@ -84,11 +67,12 @@ public class LEDManager extends CS_SubsystemBase {
         buffer.createView(LEDConstants.kSectionBack.startId(), LEDConstants.kSectionBack.endId());
     ambianceLEDs =
         buffer.createView(
-            LEDConstants.kSectionAmbience.startId(), LEDConstants.kSectionAmbience.endId());
+            LEDConstants.kSectionAmbiance.startId(), LEDConstants.kSectionAmbiance.endId());
 
     // Set the default patterns
-    sidesPattern = off();
+    generalPattern = off();
     driverInfoPattern = off();
+    ambiencePattern = off();
   }
 
   // Public method to provide access to the singleton instance
@@ -105,18 +89,18 @@ public class LEDManager extends CS_SubsystemBase {
 
     switch (mainMode) {
       case DISCONNECTED:
-        sidesPattern = wave(Color.kHotPink, Color.kPink);
+        generalPattern = wave(Color.kHotPink, Color.kPink);
         break;
 
       case DISABLED:
         currentColor = getAllianceColor();
 
-        sidesPattern = blinkSlow(currentColor[0]);
+        generalPattern = blinkSlow(currentColor[0]);
         break;
 
       case IDLE:
         currentColor = getAllianceColor();
-        sidesPattern = wave(currentColor[0], currentColor[1]);
+        generalPattern = wave(currentColor[0], currentColor[1]);
         driverInfoPattern = off();
         break;
 
@@ -224,10 +208,11 @@ public class LEDManager extends CS_SubsystemBase {
     // Update the LEDs
     updateMainLeds();
 
-    sidesPattern.applyTo(leftLEDs);
-    sidesPattern.applyTo(rightLEDs);
+    generalPattern.applyTo(leftLEDs);
+    generalPattern.applyTo(rightLEDs);
     driverInfoPattern.applyTo(frontLEDs);
     driverInfoPattern.applyTo(backLEDs);
+    ambiencePattern.applyTo(ambianceLEDs);
 
     LEDs.setData(buffer);
   }
