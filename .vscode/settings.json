@@ -56,5 +56,6 @@
     "edu.wpi.first.math.proto.*",
     "edu.wpi.first.math.**.proto.*",
     "edu.wpi.first.math.**.struct.*",
-  ]
+  ],
+  "java.jdt.ls.vmargs": "-Xms512m -Xmx2048m"
 }
