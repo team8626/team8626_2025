@@ -101,10 +101,17 @@ public class Commodore extends CS_SubsystemBase {
             "Setting State: Requested: %s%s, Current %s\n",
             newState.toString(), override ? "(OVERRIDE)" : "", currentState.toString());
 
-    // If we are in the same state and it's a toggle, go back to IDLE
-    if ((currentState == newState) && (isToggleState == true)) {
-      newState = CommodoreState.IDLE;
-      override = true;
+    // If we are in a TOGGLE state
+    if (isToggleState == true) {
+      // If we are in the same state and it's a toggle, go back to IDLE
+      if ((currentState == newState)
+          // If we are in a CORAL_SHOOT_* state, we can toggle to IDLE
+          || ((newState == CommodoreState.CORAL_SHOOT)
+              && ((currentState == CommodoreState.CORAL_SHOOT_LAUNCHING)
+                  || (currentState == CommodoreState.CORAL_SHOOT_RAMPINGUP)))) {
+        newState = CommodoreState.IDLE;
+        override = true;
+      }
     }
 
     // Reset the toggle state
