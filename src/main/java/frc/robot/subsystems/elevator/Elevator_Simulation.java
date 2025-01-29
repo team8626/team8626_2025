@@ -30,6 +30,7 @@ public class Elevator_Simulation implements ElevatorInterface, CS_InterfaceBase 
 
   @Override
   public void updateInputs(ElevatorValues values) {
+    elevator.update(0.02);
     values.current_height = getElevatorHeight();
     values.state = current_state;
     values.is_enabled = is_enabled;
@@ -56,6 +57,18 @@ public class Elevator_Simulation implements ElevatorInterface, CS_InterfaceBase 
   @Override
   public double getElevatorHeight() {
     return Units.metersToInches(elevator.getPositionMeters());
+  }
+  /**
+   * Move the elevator by offset
+   *
+   * @param offsetInches
+   */
+  public void moveInches(double offsetInches) {
+    printf("Moving Elevator by %f inches\n", offsetInches);
+    printf("Current Height: %f\n", getElevatorHeight());
+    elevator.setState(
+        Units.inchesToMeters(offsetInches) + this.getElevatorHeight(),
+        ElevatorConstants.velocityMetersPerSecond);
   }
 
   @Override

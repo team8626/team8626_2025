@@ -37,4 +37,6 @@ public interface ElevatorInterface {
   public abstract void setElevatorkD(double kD);
 
   public abstract void setElevatorFF(double ff);
+
+  public abstract void moveInches(double offsetInches);
 }

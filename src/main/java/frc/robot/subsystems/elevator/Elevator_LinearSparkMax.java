@@ -82,4 +82,10 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
   public void setElevatorFF(double new_value) {
     printf("New FF: %f\n", new_value);
   }
+
+  @Override
+  public void moveInches(double offsetInches) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'moveInches'");
+  }
 }

@@ -17,6 +17,8 @@ import frc.robot.Commodore.CommodoreState;
 import frc.robot.RobotConstants.RobotType;
 import frc.robot.commands.setters.units.CoralShooterIntake;
 import frc.robot.commands.setters.units.CoralShooterLaunch;
+import frc.robot.commands.setters.units.ElevatorMoveDown;
+import frc.robot.commands.setters.units.ElevatorMoveUp;
 import frc.robot.commands.tuning.Tune_CoralShooter;
 import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
 import frc.robot.subsystems.coralshooter.CoralShooter_Sim;
@@ -115,12 +117,13 @@ public class RobotContainer {
 
     // Configure the button bindings
     configureDriverBindings(driverController);
-    configureOperatorBindings(operatorController);
 
     if (!hasTuningEnabled()) {
       configureButtonBoxBindings(buttonBox);
+      configureOperatorBindings(operatorController);
     } else {
       configureTestButtonBoxBindings(buttonBox);
+      configureTestOperatorBindings(operatorController);
     }
 
     configureDefaultCommands();
@@ -164,6 +167,11 @@ public class RobotContainer {
   private void configureOperatorBindings(CS_XboxController controller) {
     // controller.btn_A.onTrue(
     //     new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.CORAL_SHOOT, true)));
+  }
+
+  private void configureTestOperatorBindings(CS_XboxController controller) {
+    controller.btn_A.onTrue(new ElevatorMoveUp());
+    controller.btn_Y.onTrue(new ElevatorMoveDown());
   }
 
   // ---------------------------------------- BUTTON BOX ------------------------------

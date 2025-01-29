@@ -8,8 +8,9 @@ public class ElevatorConstants {
   public static final double gearRatio = 15 / 1; // 15:1
   public static final double minHeightMeters = Units.inchesToMeters(0);
   public static final double maxHeightMeters = Units.inchesToMeters(60);
-  public static final double carriageMassKg = Units.lbsToKilograms(50);
+  public static final double carriageMassKg = Units.lbsToKilograms(1);
   public static final double drumRadiusMeters = Units.inchesToMeters(1);
+  public static final double velocityMetersPerSecond = Units.inchesToMeters(30);
 
   // PID Constants
   public static final double kP = 1.0;
