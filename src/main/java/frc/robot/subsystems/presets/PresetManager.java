@@ -16,11 +16,7 @@ import frc.robot.subsystems.presets.Presets.Preset;
 import java.util.Optional;
 
 public class PresetManager extends CS_SubsystemBase {
-//<<<<<<< HEAD
   private String uiSelectedCORALLevel = "l1";
-//=======
-//private String uiSelectedCORALLevel = "UNKNOWN";
-//>>>>>>> main
   private String uiSelectedIntakeSide = "UNKNOWN";
   private String uiSelectedREEFBranch = "UNKNOWN";
 
@@ -185,8 +181,6 @@ public class PresetManager extends CS_SubsystemBase {
   public void updateUIData() {
     SmartDashboard.putStringArray("Presets/UI/AllowedCORALLevels", UIConstants.allowedCORALLevels);
 
-<<<<<<< HEAD
-=======
     // Set Alliance Color
     String alliance = "UNKNOWN";
     if (DriverStation.isFMSAttached()) {
@@ -202,14 +196,13 @@ public class PresetManager extends CS_SubsystemBase {
     }
     SmartDashboard.putString("Presets/UI/AllianceColor", alliance);
 
->>>>>>> main
     // Get Values from UI
     String new_uiSelectedCORALLevel =
         SmartDashboard.getString("Presets/UI/SelectedCORALLevel", "UNKNOWN");
     if (new_uiSelectedCORALLevel != uiSelectedCORALLevel) {
       uiSelectedCORALLevel = new_uiSelectedCORALLevel;
     }
-
+å
     String new_uiSelectedIntakeSide =
         SmartDashboard.getString("Presets/UI/SelectedIntakeSide", "UNKNOWN");
     if (new_uiSelectedIntakeSide != uiSelectedIntakeSide) {
@@ -222,4 +215,4 @@ public class PresetManager extends CS_SubsystemBase {
       uiSelectedREEFBranch = new_uiSelectedREEFBranch;
     }
   }
-}
+}å
