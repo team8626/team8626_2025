@@ -73,25 +73,25 @@ public class CoralShooter_Sim implements CoralShooterInterface, CS_InterfaceBase
   }
 
   @Override
-  public void startShooter(double new_RPM) {
-    rightSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_RPM));
-    leftSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_RPM));
+  public void startShooter(double new_RPMLeft, double new_RPMRight) {
+    rightSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_RPMLeft));
+    leftSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_RPMRight));
     shooterIsEnabled = true;
-    printf("Shooter RPM: %f", new_RPM);
+    printf("Shooter RPM: %f / %f", new_RPMLeft, new_RPMRight);
   }
 
   @Override
   public void stopShooter() {
-    updateShooterRPM(0);
+    updateShooterRPM(0, 0);
     shooterIsEnabled = false;
   }
 
   @Override
-  public void updateShooterRPM(double new_RPM) {
+  public void updateShooterRPM(double new_RPMLeft, double new_RPMRight) {
     if (shooterIsEnabled) {
-      rightSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_RPM));
-      leftSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_RPM));
-      printf("Shooter RPM: %f", new_RPM);
+      leftSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_RPMLeft));
+      rightSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_RPMRight));
+      printf("Shooter RPM: %f / %f", new_RPMLeft, new_RPMRight);
     }
   }
 

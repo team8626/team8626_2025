@@ -1,9 +1,9 @@
 package frc.robot.subsystems.coralshooter;
 
 public interface CoralShooterInterface {
-  void startShooter(double new_RPM);
+  void startShooter(double new_RPM, double new_RPMRight);
 
-  void updateShooterRPM(double new_RPM);
+  void updateShooterRPM(double new_RPM, double new_RPMRight);
 
   void stopShooter();
 
@@ -48,7 +48,8 @@ public interface CoralShooterInterface {
     protected double ampsLauncher = 0;
 
     protected boolean isLoaded = false;
-    protected double desiredRPM = CoralShooterConstants.shootRPM;
+    protected double desiredRPMLeft = CoralShooterConstants.shootRPMLeft;
+    protected double desiredRPMRight = CoralShooterConstants.shootRPMRight;
 
     protected double kP = 0.05;
     protected double kI = 0.0;

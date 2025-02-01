@@ -14,8 +14,11 @@ import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
 public class CoralShooterRampUp extends CS_Command {
   private CoralShooterSubsystem mortar;
 
-  private double desiredRPM = CoralShooterConstants.shootRPM;
+  private double desiredRPMLeft = CoralShooterConstants.shootRPMLeft;
+  private double desiredRPMRight = CoralShooterConstants.shootRPMRight;
   private final double RPMTolerance = CoralShooterConstants.shooterRPMTolerance;
+  private final double RPMDifferentialTolerance =
+      CoralShooterConstants.shooterRPMDifferentialTolerance;
 
   public CoralShooterRampUp() {
     mortar = RobotContainer.mortar;
@@ -52,8 +55,13 @@ public class CoralShooterRampUp extends CS_Command {
     double currentRPMRight = mortar.getShooterRPMRight();
 
     atSetpoint =
-        Math.abs(currentRPMLeft - desiredRPM) <= RPMTolerance
-            && Math.abs(currentRPMRight - desiredRPM) <= RPMTolerance;
+        Math.abs(currentRPMLeft - desiredRPMLeft) <= RPMTolerance
+            && Math.abs(currentRPMRight - desiredRPMLeft) <= RPMTolerance;
+
+    atSetpoint =
+        Math.abs(currentRPMLeft - desiredRPMLeft) <= RPMTolerance
+            && Math.abs(currentRPMRight - desiredRPMRight) <= RPMTolerance
+            && Math.abs(currentRPMLeft - currentRPMRight) <= RPMDifferentialTolerance;
 
     return atSetpoint;
   }

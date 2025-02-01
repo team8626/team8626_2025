@@ -6,12 +6,14 @@ import frc.robot.RobotConstants;
 public class CoralShooterConstants {
 
   // Tuned Values
-  public static final double shootRPM = 1275;
+  public static final double shootRPMLeft = 1275;
+  public static final double shootRPMRight = 1275;
   public static final double intakeRPM = -300;
   public static final double launcherShootSetpoint = -1.0;
   public static final double launcherIntakeSetpoint = 0.3;
 
   public static final double shooterRPMTolerance = 50;
+  public static final double shooterRPMDifferentialTolerance = 10;
   public static final double launchTimerSeconds = 0.2;
 
   // CoralShooter Constants

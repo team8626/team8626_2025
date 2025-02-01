@@ -23,18 +23,21 @@ import frc.robot.subsystems.CS_InterfaceBase;
 public class CoralShooter_SparkMax implements CoralShooterInterface, CS_InterfaceBase {
 
   private final SparkMax leftMotor;
-  private final SparkMax rightMotor;
-  private final SparkMax launchMotor;
-
   private final SparkMaxConfig leftConfig;
-  private final SparkMaxConfig rightConfig;
-  private final SparkMaxConfig launchConfig;
-
   private final SparkClosedLoopController leftController;
   private final RelativeEncoder leftEncoder;
-  private final SparkClosedLoopController launchController;
 
-  SimpleMotorFeedforward leftFF = new SimpleMotorFeedforward(gains.kS(), gains.kV(), gains.kA());
+  private final SparkMax rightMotor;
+  private final SparkMaxConfig rightConfig;
+  private final SparkClosedLoopController rightController;
+  private final RelativeEncoder rightEncoder;
+
+  private final SparkMax launchMotor;
+  private final SparkMaxConfig launchConfig;
+  private final SparkClosedLoopController launchController;
+  private final RelativeEncoder launchEncoder;
+
+  SimpleMotorFeedforward shooterFF = new SimpleMotorFeedforward(gains.kS(), gains.kV(), gains.kA());
 
   private DigitalInput loadedSensor = new DigitalInput(CoralShooterConstants.infraRedPort);
 
@@ -69,13 +72,32 @@ public class CoralShooter_SparkMax implements CoralShooterInterface, CS_Interfac
     leftEncoder = leftMotor.getEncoder();
     leftController.setReference(0, ControlType.kDutyCycle);
 
-    // Setup configuration for the right motor (follower)
+    // Setup configuration for the right motor
     rightConfig = new SparkMaxConfig();
-    rightConfig.follow(leftMotor, true);
+    rightConfig.inverted(true).idleMode(IdleMode.kCoast);
+
+    rightConfig
+        .encoder
+        .positionConversionFactor(1 / flywheelConfig.reduction())
+        .velocityConversionFactor(1 / flywheelConfig.reduction());
+
+    rightConfig
+        .closedLoop
+        .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+        // Set PID values for position control.
+        .p(CoralShooterConstants.gains.kP())
+        .i(CoralShooterConstants.gains.kI())
+        .d(CoralShooterConstants.gains.kD())
+        // .velocityFF(0.002)
+        .outputRange(-1, 1);
 
     rightMotor = new SparkMax(flywheelConfig.rightCANID(), MotorType.kBrushless);
     rightMotor.configure(
         rightConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+    rightController = rightMotor.getClosedLoopController();
+    rightEncoder = rightMotor.getEncoder();
+    rightController.setReference(0, ControlType.kDutyCycle);
 
     // Launcher Motor
     launchConfig = new SparkMaxConfig();
@@ -86,6 +108,7 @@ public class CoralShooter_SparkMax implements CoralShooterInterface, CS_Interfac
         launchConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     launchController = launchMotor.getClosedLoopController();
+    launchEncoder = launchMotor.getEncoder();
     launchController.setReference(0, ControlType.kDutyCycle);
   }
 
@@ -108,12 +131,19 @@ public class CoralShooter_SparkMax implements CoralShooterInterface, CS_Interfac
   }
 
   @Override
-  public void startShooter(double new_RPM) {
+  public void startShooter(double new_RPMLeft, double new_RPMRight) {
     leftController.setReference(
-        new_RPM,
+        new_RPMLeft,
         ControlType.kVelocity,
         ClosedLoopSlot.kSlot0,
-        leftFF.calculate(new_RPM),
+        shooterFF.calculate(new_RPMLeft),
+        ArbFFUnits.kVoltage);
+
+    rightController.setReference(
+        new_RPMRight,
+        ControlType.kVelocity,
+        ClosedLoopSlot.kSlot0,
+        shooterFF.calculate(new_RPMRight),
         ArbFFUnits.kVoltage);
 
     shooterIsEnabled = true;
@@ -122,17 +152,25 @@ public class CoralShooter_SparkMax implements CoralShooterInterface, CS_Interfac
   @Override
   public void stopShooter() {
     leftController.setReference(0, ControlType.kDutyCycle);
+    rightController.setReference(0, ControlType.kDutyCycle);
     shooterIsEnabled = false;
   }
 
   @Override
-  public void updateShooterRPM(double new_RPM) {
+  public void updateShooterRPM(double new_RPMLeft, double new_RPMRight) {
     if (shooterIsEnabled) {
       leftController.setReference(
-          new_RPM,
+          new_RPMLeft,
           ControlType.kVelocity,
           ClosedLoopSlot.kSlot0,
-          leftFF.calculate(new_RPM),
+          shooterFF.calculate(new_RPMLeft),
+          ArbFFUnits.kVoltage);
+
+      rightController.setReference(
+          new_RPMRight,
+          ControlType.kVelocity,
+          ClosedLoopSlot.kSlot0,
+          shooterFF.calculate(new_RPMRight),
           ArbFFUnits.kVoltage);
     }
   }
@@ -165,12 +203,12 @@ public class CoralShooter_SparkMax implements CoralShooterInterface, CS_Interfac
 
   @Override
   public double getShooterRPMRight() {
-    return leftEncoder.getVelocity();
+    return rightEncoder.getVelocity();
   }
 
   @Override
   public double getLauncherRPM() {
-    return leftEncoder.getVelocity();
+    return launchEncoder.getVelocity();
   }
 
   public double getLauncherSetpoint() {
@@ -185,11 +223,12 @@ public class CoralShooter_SparkMax implements CoralShooterInterface, CS_Interfac
   @Override
   public void setPID(double newkP, double newkI, double newkD) {
     leftConfig.closedLoop.p(newkP).i(newkI).d(newkD);
-    leftMotor.configure(leftConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-
     rightConfig.closedLoop.p(newkP).i(newkI).d(newkD);
-    rightMotor.configure(
-        rightConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+    leftMotor.configure(
+        leftConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+    leftMotor.configure(
+        rightConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
 
     printf("New PID: %f, %f, %f", newkP, newkI, newkD);
   }
