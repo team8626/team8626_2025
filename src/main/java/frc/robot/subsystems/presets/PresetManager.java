@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotConstants.UIConstants;
 import frc.robot.subsystems.CS_SubsystemBase;
-import frc.robot.subsystems.Dashboard.UpdateInterval;
 import frc.robot.subsystems.presets.Presets.Preset;
 import java.util.Optional;
 
@@ -21,8 +20,19 @@ public class PresetManager extends CS_SubsystemBase {
   private String uiSelectedIntakeSide = "UNKNOWN";
   private String uiSelectedREEFBranch = "UNKNOWN";
 
-  public PresetManager(UpdateInterval interval) {
-    super(interval);
+  // Singleton instance
+  private static PresetManager instance;
+
+  // Public method to provide access to the singleton instance
+  public static PresetManager getInstance() {
+    if (instance == null) {
+      instance = new PresetManager();
+    }
+    return instance;
+  }
+
+  private PresetManager() {
+    super();
   }
 
   @Override
@@ -155,18 +165,22 @@ public class PresetManager extends CS_SubsystemBase {
 
   @Override
   public void updateDashboard() {
-    robotPostPublisher.set(currentPreset.robotPose());
-    SmartDashboard.putString("Presets/Preset", currentPreset.Name());
-    SmartDashboard.putNumber("Presets/Elevator Height", currentPreset.elevatorHeightInches());
-    SmartDashboard.putNumber("Presets/Wrist Angle", currentPreset.WristAngleDegrees());
-    SmartDashboard.putNumber("Presets/Algae RPM", currentPreset.AlgaeRPM());
-    SmartDashboard.putNumber("Presets/Coral RPM", currentPreset.CoralRPM());
-    SmartDashboard.putNumber("Presets/Robot Pose X", currentPreset.robotPose().getX());
-    SmartDashboard.putNumber("Presets/Robot Pose Y", currentPreset.robotPose().getY());
+    if (this.currentPreset != null) {
+      robotPostPublisher.set(currentPreset.robotPose());
+      SmartDashboard.putString("Presets/Preset", currentPreset.Name());
+      SmartDashboard.putNumber("Presets/Elevator Height", currentPreset.elevatorHeightInches());
+      SmartDashboard.putNumber("Presets/Wrist Angle", currentPreset.WristAngleDegrees());
+      SmartDashboard.putNumber("Presets/Algae RPM", currentPreset.AlgaeRPM());
+      SmartDashboard.putNumber("Presets/Coral RPM", currentPreset.CoralRPM());
+      SmartDashboard.putNumber("Presets/Robot Pose X", currentPreset.robotPose().getX());
+      SmartDashboard.putNumber("Presets/Robot Pose Y", currentPreset.robotPose().getY());
+    }
+    updateUIData();
   }
 
   public void updateUIData() {
     SmartDashboard.putStringArray("Presets/UI/AllowedCORALLevels", UIConstants.allowedCORALLevels);
+
     // Set Alliance Color
     String alliance = "UNKNOWN";
     if (DriverStation.isFMSAttached()) {
@@ -183,21 +197,22 @@ public class PresetManager extends CS_SubsystemBase {
     SmartDashboard.putString("Presets/UI/AllianceColor", alliance);
 
     // Get Values from UI
-    String new_uiSelectedCORALLevel = SmartDashboard.getString("Presets/UI/SelectedCORALLevel", "UNKNOWN");
-    if(new_uiSelectedCORALLevel != uiSelectedCORALLevel) {
+    String new_uiSelectedCORALLevel =
+        SmartDashboard.getString("Presets/UI/SelectedCORALLevel", "UNKNOWN");
+    if (new_uiSelectedCORALLevel != uiSelectedCORALLevel) {
       uiSelectedCORALLevel = new_uiSelectedCORALLevel;
     }
 
-    String new_uiSelectedIntakeSide = SmartDashboard.getString("Presets/UI/SelectedIntakeSide", "UNKNOWN");
-    if(new_uiSelectedIntakeSide != uiSelectedIntakeSide) {
+    String new_uiSelectedIntakeSide =
+        SmartDashboard.getString("Presets/UI/SelectedIntakeSide", "UNKNOWN");
+    if (new_uiSelectedIntakeSide != uiSelectedIntakeSide) {
       uiSelectedIntakeSide = new_uiSelectedIntakeSide;
     }
 
-    String new_uiSelectedREEFBranch = SmartDashboard.getString("Presets/UI/SelectedREEFBranch", "UNKNOWN");
-    if(new_uiSelectedREEFBranch != uiSelectedREEFBranch) {
+    String new_uiSelectedREEFBranch =
+        SmartDashboard.getString("Presets/UI/SelectedREEFBranch", "UNKNOWN");
+    if (new_uiSelectedREEFBranch != uiSelectedREEFBranch) {
       uiSelectedREEFBranch = new_uiSelectedREEFBranch;
     }
-
-    
   }
 }
