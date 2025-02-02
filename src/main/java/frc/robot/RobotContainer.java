@@ -22,9 +22,12 @@ import frc.robot.commands.setters.units.CoralShooterLaunch;
 import frc.robot.commands.setters.units.ElevatorMoveDown;
 import frc.robot.commands.setters.units.ElevatorMoveUp;
 import frc.robot.commands.tuning.Tune_CoralShooter;
+<<<<<<< HEAD
 import frc.robot.subsystems.algaeshooter.AlgaeShooterSubsystem;
 import frc.robot.subsystems.algaeshooter.AlgaeShooter_Sim;
 import frc.robot.subsystems.algaeshooter.AlgaeShooter_SparkMax;
+=======
+>>>>>>> acd26a5 (feat: add Dashboard instance to RobotContainer)
 import frc.robot.subsystems.Dashboard;
 import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
 import frc.robot.subsystems.coralshooter.CoralShooter_Sim;
