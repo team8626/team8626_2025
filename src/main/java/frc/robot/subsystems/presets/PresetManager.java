@@ -202,7 +202,6 @@ public class PresetManager extends CS_SubsystemBase {
     if (new_uiSelectedCORALLevel != uiSelectedCORALLevel) {
       uiSelectedCORALLevel = new_uiSelectedCORALLevel;
     }
-å
     String new_uiSelectedIntakeSide =
         SmartDashboard.getString("Presets/UI/SelectedIntakeSide", "UNKNOWN");
     if (new_uiSelectedIntakeSide != uiSelectedIntakeSide) {
@@ -215,4 +214,4 @@ public class PresetManager extends CS_SubsystemBase {
       uiSelectedREEFBranch = new_uiSelectedREEFBranch;
     }
   }
-}å
+}
