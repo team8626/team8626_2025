@@ -4,9 +4,15 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.networktables.IntegerPublisher;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * The Dashboard class manages the registration and periodic updating of subsystems with different
@@ -32,12 +38,21 @@ public class Dashboard extends CS_SubsystemBase {
   private double m_shortOldTime = 0.0;
   private double m_longOldTime = 0.0;
 
+  // UI Information
+  private IntegerPublisher matchTimePublisher;
+  private String allianceColor = "UNKNOWN";
+
   /** Use assignment types for updateDashboard implementation. */
   public enum UpdateInterval {
     SHORT_INTERVAL,
     LONG_INTERVAL
   }
 
+  public Dashboard() {
+    // Initialize NetworkTables
+    var table = NetworkTableInstance.getDefault().getTable("Dashboard");
+    matchTimePublisher = table.getIntegerTopic("matchTime").publish();
+  }
   /**
    * Registers a subsystem with the specified update interval.
    *
@@ -98,15 +113,28 @@ public class Dashboard extends CS_SubsystemBase {
         }
       }
     }
+
+    // Update UI Data
+    updateUIData();
   }
 
-  @Override
-  public void initDashboard() {
-    // TODO Auto-generated method stub
-  }
+  public void updateUIData() {
+    // Set Alliance Color
+    if (DriverStation.isFMSAttached()) {
+      Optional<Alliance> ally = DriverStation.getAlliance();
+      if (ally.isPresent()) {
+        if (ally.get() == Alliance.Red) {
+          allianceColor = "RED";
+        }
+        if (ally.get() == Alliance.Blue) {
+          allianceColor = "BLUE";
+        }
+      }
+    } else {
+      allianceColor = "UNKNOWN";
+    }
 
-  @Override
-  public void updateDashboard() {
-    // TODO Auto-generated method stub
+    SmartDashboard.putString("Dashboard/AllianceColor", allianceColor);
+    matchTimePublisher.set((long) Math.ceil(Math.max(0.0, DriverStation.getMatchTime())));
   }
 }
