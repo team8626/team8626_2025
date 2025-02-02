@@ -46,7 +46,7 @@ public class RobotContainer {
   private final LEDManager ledManager = LEDManager.getInstance();
 
   // Instantiate the Preset manager
-  private final PresetManager preset = PresetManager.getInstance();
+  private final PresetManager presetManager = PresetManager.getInstance();
 
   //
   // ****************************************************************************************
