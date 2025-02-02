@@ -30,6 +30,7 @@ import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.elevator.Elevator_LinearSparkMax;
 import frc.robot.subsystems.elevator.Elevator_Simulation;
 import frc.robot.subsystems.ledManager.LEDManager;
+import frc.robot.subsystems.presets.PresetManager;
 import frc.utils.CS_ButtonBoxController;
 import frc.utils.CS_XboxController;
 import java.io.File;
@@ -43,6 +44,9 @@ public class RobotContainer {
 
   // Instantiate the LED manager
   private final LEDManager ledManager = LEDManager.getInstance();
+
+  // Instantiate the Preset manager
+  private final PresetManager preset = PresetManager.getInstance();
 
   //
   // ****************************************************************************************
