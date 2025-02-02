@@ -7,13 +7,10 @@ package frc.robot.subsystems.presets;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotConstants.UIConstants;
 import frc.robot.subsystems.CS_SubsystemBase;
 import frc.robot.subsystems.presets.Presets.Preset;
-import java.util.Optional;
 
 public class PresetManager extends CS_SubsystemBase {
   private String uiSelectedCORALLevel = "l1";
@@ -180,21 +177,6 @@ public class PresetManager extends CS_SubsystemBase {
 
   public void updateUIData() {
     SmartDashboard.putStringArray("Presets/UI/AllowedCORALLevels", UIConstants.allowedCORALLevels);
-
-    // Set Alliance Color
-    String alliance = "UNKNOWN";
-    if (DriverStation.isFMSAttached()) {
-      Optional<Alliance> ally = DriverStation.getAlliance();
-      if (ally.isPresent()) {
-        if (ally.get() == Alliance.Red) {
-          alliance = "RED";
-        }
-        if (ally.get() == Alliance.Blue) {
-          alliance = "BLUE";
-        }
-      }
-    }
-    SmartDashboard.putString("Presets/UI/AllianceColor", alliance);
 
     // Get Values from UI
     String new_uiSelectedCORALLevel =
