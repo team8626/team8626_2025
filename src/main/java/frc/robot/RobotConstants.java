@@ -60,9 +60,15 @@ public class RobotConstants {
   //     public static final AprilTagFieldLayout kTagLayout =
   //         AprilTagFields.kDefaultField.loadAprilTagLayoutField();
 
-  //     // The standard deviations of our vision estimated poses, which affect correction rate
-  //     // (Fake values. Experiment and determine estimation noise on an actual robot.)
-  //     public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
-  //     public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
-  //   }
+    // The standard deviations of our vision estimated poses, which affect correction rate
+    // (Fake values. Experiment and determine estimation noise on an actual robot.)
+  //   public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
+  //   public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
+  // }
+
+  // ****************************************************************************************
+  // UI Constants
+  public static class UIConstants {
+    public static final String[] allowedCORALLevels = {"L1", "L2", "L3", "L4"};
+  }
 }
