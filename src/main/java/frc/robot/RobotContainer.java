@@ -15,9 +15,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Commodore.CommodoreState;
 import frc.robot.RobotConstants.RobotType;
+import frc.robot.commands.setters.units.AlgaeShooterIntake;
+import frc.robot.commands.setters.units.AlgaeShooterLaunch;
 import frc.robot.commands.setters.units.CoralShooterIntake;
 import frc.robot.commands.setters.units.CoralShooterLaunch;
 import frc.robot.commands.tuning.Tune_CoralShooter;
+import frc.robot.subsystems.algaeshooter.AlgaeShooterSubsystem;
+import frc.robot.subsystems.algaeshooter.AlgaeShooter_Sim;
+import frc.robot.subsystems.algaeshooter.AlgaeShooter_SparkMax;
 import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
 import frc.robot.subsystems.coralshooter.CoralShooter_Sim;
 import frc.robot.subsystems.coralshooter.CoralShooter_SparkMax;
@@ -54,6 +59,7 @@ public class RobotContainer {
   public static DummySubsystem dummy = null;
   public static ElevatorSubsystem elevator = null;
   public static CoralShooterSubsystem mortar = null;
+  public static AlgaeShooterSubsystem algae501 = null;
 
   // Controllers
   private final CS_XboxController driverController =
@@ -90,10 +96,12 @@ public class RobotContainer {
         dummy = new DummySubsystem(new DummyIO_Specific1());
         elevator = new ElevatorSubsystem(new Elevator_Simulation());
         mortar = new CoralShooterSubsystem(new CoralShooter_Sim());
+        algae501 = new AlgaeShooterSubsystem(new AlgaeShooter_Sim());
 
         break;
       case DEVBOT:
         mortar = new CoralShooterSubsystem(new CoralShooter_SparkMax());
+        algae501 = new AlgaeShooterSubsystem(new AlgaeShooter_SparkMax());
         drivebase =
             new CS_DriveSubsystemIO_Swerve(
                 new File(Filesystem.getDeployDirectory(), "swerve_devbot"));
@@ -106,6 +114,7 @@ public class RobotContainer {
         dummy = new DummySubsystem(new DummyIO_Specific1());
         elevator = new ElevatorSubsystem(new Elevator_LinearSparkMax());
         mortar = new CoralShooterSubsystem(new CoralShooter_SparkMax());
+        algae501 = new AlgaeShooterSubsystem(new AlgaeShooter_SparkMax());
 
         break;
     }
@@ -159,6 +168,15 @@ public class RobotContainer {
     controller.btn_B.onTrue(
         new InstantCommand(
             () -> Commodore.setCommodoreState(CommodoreState.CORAL_SHOOT, true).withToggleState()));
+
+    controller.btn_X.onTrue(
+        new InstantCommand(
+            () ->
+                Commodore.setCommodoreState(CommodoreState.ALGAE_INTAKE, true).withToggleState()));
+
+    controller.btn_Y.onTrue(
+        new InstantCommand(
+            () -> Commodore.setCommodoreState(CommodoreState.ALGAE_SHOOT, true).withToggleState()));
   }
 
   private void configureOperatorBindings(CS_XboxController controller) {
@@ -189,6 +207,11 @@ public class RobotContainer {
     controller.btn_1.toggleOnTrue(new CoralShooterIntake());
     controller.btn_2.toggleOnTrue(new Tune_CoralShooter());
     controller.btn_3.toggleOnTrue(new CoralShooterLaunch());
+
+    controller.btn_4.toggleOnTrue(new AlgaeShooterIntake());
+    // controller.btn_5.toggleOnTrue(new Tune_AlgaeShooter());
+    controller.btn_6.toggleOnTrue(new AlgaeShooterLaunch());
+
     // controller.btn_4.toggleOnTrue(
     //     new FeedForwardCharacterization(
     //         mortar, mortar::runCharacterization, mortar::getCharacterizationVelocity));
