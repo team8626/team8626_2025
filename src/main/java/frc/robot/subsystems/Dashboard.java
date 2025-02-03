@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -37,6 +39,17 @@ public class Dashboard extends CS_SubsystemBase {
 
   private double m_shortOldTime = 0.0;
   private double m_longOldTime = 0.0;
+
+  public enum GamePieceState {
+    RAMPING_UP,
+    LAUNCHING,
+    INTAKING,
+    IDLE,
+    LOADED
+  }
+
+  private static GamePieceState coralState = GamePieceState.IDLE;
+  private static GamePieceState algaeState = GamePieceState.IDLE;
 
   // UI Information
   private IntegerPublisher matchTimePublisher;
@@ -136,5 +149,25 @@ public class Dashboard extends CS_SubsystemBase {
 
     SmartDashboard.putString("Dashboard/AllianceColor", allianceColor);
     matchTimePublisher.set((long) Math.ceil(Math.max(0.0, DriverStation.getMatchTime())));
+
+    // Game Pieces States
+    SmartDashboard.putString("Dashboard/CORAL State", coralState.toString());
+    SmartDashboard.putString("Dashboard/ALGAE State", algaeState.toString());
+  }
+
+  public static void setCoralState(GamePieceState new_state) {
+    coralState = new_state;
+  }
+
+  private static void setAlgaeState(GamePieceState new_state) {
+    algaeState = new_state;
+  }
+
+  public static Command getSetCoralStateCommand(GamePieceState new_state) {
+    return new InstantCommand(() -> Dashboard.setCoralState(new_state));
+  }
+
+  public static Command getSetAlgaeStateCommand(GamePieceState new_state) {
+    return new InstantCommand(() -> Dashboard.setAlgaeState(new_state));
   }
 }

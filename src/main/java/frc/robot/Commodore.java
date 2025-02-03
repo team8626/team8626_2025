@@ -49,9 +49,14 @@ public class Commodore extends CS_SubsystemBase {
     CORAL_SHOOT_RAMPINGUP,
     CORAL_SHOOT_LAUNCHING,
     CORAL_INTAKE,
-    CORAL_LOADED,
+
+    ALGAE_SHOOT,
+    ALGAE_SHOOT_RAMPINGUP,
+    ALGAE_SHOOT_LAUNCHING,
+    ALGAE_INTAKE,
 
     TUNE_CORALSHOOTER,
+    TUNE_ALGAESHOOTER,
 
     INTAKE,
     SHOOT
@@ -111,6 +116,7 @@ public class Commodore extends CS_SubsystemBase {
                   || (currentState == CommodoreState.CORAL_SHOOT_RAMPINGUP)))) {
         newState = CommodoreState.IDLE;
         override = true;
+        isToggleState = false;
       }
     }
 
@@ -127,6 +133,7 @@ public class Commodore extends CS_SubsystemBase {
       switch (newState) {
           // This is the resting state, robot is enabled, but not doing anything
         case IDLE:
+          isToggleState = false;
           toIdle();
           break;
 
@@ -141,11 +148,6 @@ public class Commodore extends CS_SubsystemBase {
           applyState(newState);
           break;
 
-          // Those cases are indicating the status of the subsystems
-        case CORAL_LOADED:
-          applyState(newState);
-          break;
-
           // Those cases are for launching commands
           // State will go to TRANSITION and then the command will update the state
         case CORAL_SHOOT:
@@ -153,13 +155,6 @@ public class Commodore extends CS_SubsystemBase {
           break;
         case CORAL_INTAKE:
           toCoralIntake();
-          break;
-
-        case INTAKE:
-          toIntake();
-          break;
-        case SHOOT:
-          toShoot();
           break;
 
           // Tuning States
@@ -184,13 +179,9 @@ public class Commodore extends CS_SubsystemBase {
   }
 
   public Commodore withToggleState() {
-    if (currentState == CommodoreState.TRANSITION) {
-      isToggleState = false;
-      // getInstance().println("------ TRANSITION, No Toggle");
-    } else {
-      isToggleState = true;
-      getInstance().println("------ (" + currentState.toString() + ") IT'S A TOGGLE");
-    }
+
+    isToggleState = true;
+
     return this;
   }
 
@@ -198,6 +189,11 @@ public class Commodore extends CS_SubsystemBase {
     if (newState != currentState) {
       pushLastState(currentState);
       currentState = newState;
+
+      if (newState == CommodoreState.IDLE) {
+        isToggleState = false;
+      }
+
       getInstance()
           .printf(
               "New State to %s %s(was %s)\n",
@@ -251,7 +247,7 @@ public class Commodore extends CS_SubsystemBase {
   }
 
   public static Command getSetStateCommand(CommodoreState state) {
-    SmartDashboard.putString("Commodore/Desired State", "Setting to: " + state.toString());
+    SmartDashboard.putString("Commodore/Desired State", state.toString());
 
     return new InstantCommand(() -> Commodore.applyState(state));
   }
@@ -265,6 +261,7 @@ public class Commodore extends CS_SubsystemBase {
   public void updateDashboard() {
     SmartDashboard.putString("Commodore/Last State", getLastState(0).toString());
     SmartDashboard.putString("Commodore/Current State", Commodore.currentState.toString());
+    SmartDashboard.putString("Commodore/isToggle", isToggleState.toString());
   }
 
   @Override
