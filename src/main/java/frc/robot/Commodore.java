@@ -51,7 +51,14 @@ public class Commodore extends CS_SubsystemBase {
     CORAL_INTAKE,
     CORAL_LOADED,
 
+    ALGAE_SHOOT,
+    ALGAE_SHOOT_RAMPINGUP,
+    ALGAE_SHOOT_LAUNCHING,
+    ALGAE_INTAKE,
+    ALGAE_LOADED,
+
     TUNE_CORALSHOOTER,
+    TUNE_ALGAESHOOTER,
 
     INTAKE,
     SHOOT
