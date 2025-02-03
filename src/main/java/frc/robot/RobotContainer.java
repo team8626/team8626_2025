@@ -19,6 +19,8 @@ import frc.robot.commands.setters.units.AlgaeShooterIntake;
 import frc.robot.commands.setters.units.AlgaeShooterLaunch;
 import frc.robot.commands.setters.units.CoralShooterIntake;
 import frc.robot.commands.setters.units.CoralShooterLaunch;
+import frc.robot.commands.setters.units.ElevatorMoveDown;
+import frc.robot.commands.setters.units.ElevatorMoveUp;
 import frc.robot.commands.tuning.Tune_CoralShooter;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterSubsystem;
 import frc.robot.subsystems.algaeshooter.AlgaeShooter_Sim;
@@ -35,6 +37,7 @@ import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.elevator.Elevator_LinearSparkMax;
 import frc.robot.subsystems.elevator.Elevator_Simulation;
 import frc.robot.subsystems.ledManager.LEDManager;
+import frc.robot.subsystems.presets.PresetManager;
 import frc.utils.CS_ButtonBoxController;
 import frc.utils.CS_XboxController;
 import java.io.File;
@@ -48,6 +51,9 @@ public class RobotContainer {
 
   // Instantiate the LED manager
   private final LEDManager ledManager = LEDManager.getInstance();
+
+  // Instantiate the Preset manager
+  private final PresetManager presetManager = PresetManager.getInstance();
 
   //
   // ****************************************************************************************
@@ -124,12 +130,13 @@ public class RobotContainer {
 
     // Configure the button bindings
     configureDriverBindings(driverController);
-    configureOperatorBindings(operatorController);
 
     if (!hasTuningEnabled()) {
       configureButtonBoxBindings(buttonBox);
+      configureOperatorBindings(operatorController);
     } else {
       configureTestButtonBoxBindings(buttonBox);
+      configureTestOperatorBindings(operatorController);
     }
 
     configureDefaultCommands();
@@ -160,11 +167,16 @@ public class RobotContainer {
   }
 
   private void configureDriverBindings(CS_XboxController controller) {
-    controller.btn_A.onTrue(
-        new InstantCommand(
-            () ->
-                Commodore.setCommodoreState(CommodoreState.CORAL_INTAKE, true).withToggleState()));
+    // controller.btn_A.onTrue(
+    //     new InstantCommand(
+    //         () ->
+    //             Commodore.setCommodoreState(CommodoreState.CORAL_INTAKE,
+    // true).withToggleState()));
 
+    // controller.btn_B.onTrue(
+    //     new InstantCommand(
+    //         () -> Commodore.setCommodoreState(CommodoreState.CORAL_SHOOT,
+    // true).withToggleState()));
     controller.btn_B.onTrue(
         new InstantCommand(
             () -> Commodore.setCommodoreState(CommodoreState.CORAL_SHOOT, true).withToggleState()));
@@ -182,6 +194,11 @@ public class RobotContainer {
   private void configureOperatorBindings(CS_XboxController controller) {
     // controller.btn_A.onTrue(
     //     new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.CORAL_SHOOT, true)));
+  }
+
+  private void configureTestOperatorBindings(CS_XboxController controller) {
+    controller.btn_A.onTrue(new ElevatorMoveUp());
+    controller.btn_Y.onTrue(new ElevatorMoveDown());
   }
 
   // ---------------------------------------- BUTTON BOX ------------------------------

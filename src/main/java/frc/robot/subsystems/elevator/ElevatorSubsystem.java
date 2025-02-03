@@ -18,16 +18,16 @@ public class ElevatorSubsystem extends CS_SubsystemBase {
   }
 
   // Calls to the elevator interface
-  public void stop() {
-    elevatorInterface.stopElevator();
+  public void move(double offsetInches) {
+    elevatorInterface.moveInches(offsetInches);
   }
 
-  public void setSpeed(double new_height) {
-    elevatorInterface.setElevatorSpeed(new_height);
+  public void setHeight(double heightInches) {
+    elevatorInterface.setHeightInches(heightInches);
   }
 
   public double getHeight() {
-    return elevatorInterface.getElevatorHeight();
+    return elevatorInterface.getHeightInches();
   }
 
   public void setkP(double new_value) {
@@ -97,7 +97,6 @@ public class ElevatorSubsystem extends CS_SubsystemBase {
 
   @Override
   public void simulationPeriodic() {
-    // TODO Auto-generated method stub
-
+    elevatorInterface.updateInputs(values);
   }
 }
