@@ -13,7 +13,7 @@ import frc.robot.subsystems.CS_SubsystemBase;
 import frc.robot.subsystems.presets.Presets.Preset;
 
 public class PresetManager extends CS_SubsystemBase {
-  private String uiSelectedCORALLevel = "UNKNOWN";
+  private String uiSelectedCORALLevel = "l1";
   private String uiSelectedIntakeSide = "UNKNOWN";
   private String uiSelectedREEFBranch = "UNKNOWN";
 
