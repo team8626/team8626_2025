@@ -25,6 +25,7 @@ import frc.robot.commands.tuning.Tune_CoralShooter;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterSubsystem;
 import frc.robot.subsystems.algaeshooter.AlgaeShooter_Sim;
 import frc.robot.subsystems.algaeshooter.AlgaeShooter_SparkMax;
+import frc.robot.subsystems.Dashboard;
 import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
 import frc.robot.subsystems.coralshooter.CoralShooter_Sim;
 import frc.robot.subsystems.coralshooter.CoralShooter_SparkMax;
@@ -45,6 +46,9 @@ import java.io.File;
 public class RobotContainer {
   // Singleton instance
   private static RobotContainer instance;
+
+  // Instantiate the Dashboard
+  private final Dashboard dashboard = new Dashboard();
 
   // Instantiate the Commodore running the robot state machine.
   private final Commodore commodore = Commodore.getInstance();

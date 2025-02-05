@@ -8,6 +8,8 @@ package frc.robot.commands.setters.units;
 
 import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
+import frc.robot.subsystems.Dashboard;
+import frc.robot.subsystems.Dashboard.GamePieceState;
 import frc.robot.subsystems.coralshooter.CoralShooterConstants;
 import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
 
@@ -28,6 +30,7 @@ public class CoralShooterRampUp extends CS_Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    Dashboard.setCoralState(GamePieceState.RAMPING_UP);
     mortar.startRampUp();
   }
 

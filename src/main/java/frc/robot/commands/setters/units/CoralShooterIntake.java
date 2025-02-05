@@ -8,6 +8,8 @@ package frc.robot.commands.setters.units;
 
 import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
+import frc.robot.subsystems.Dashboard;
+import frc.robot.subsystems.Dashboard.GamePieceState;
 import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
 
 public class CoralShooterIntake extends CS_Command {
@@ -24,6 +26,7 @@ public class CoralShooterIntake extends CS_Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    Dashboard.setCoralState(GamePieceState.INTAKING);
     mortar.startIntake();
   }
 
@@ -34,6 +37,11 @@ public class CoralShooterIntake extends CS_Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    if (mortar.isLoaded()) {
+      Dashboard.setCoralState(GamePieceState.LOADED);
+    } else {
+      Dashboard.setCoralState(GamePieceState.IDLE);
+    }
     mortar.stopAll();
   }
 
