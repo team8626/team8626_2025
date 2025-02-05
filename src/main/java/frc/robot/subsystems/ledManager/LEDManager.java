@@ -4,10 +4,16 @@
 
 package frc.robot.subsystems.ledManager;
 
+import static edu.wpi.first.units.Units.Centimeters;
+import static edu.wpi.first.units.Units.Second;
+import static edu.wpi.first.units.Units.Seconds;
+
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import edu.wpi.first.wpilibj.AddressableLEDBufferView;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -22,11 +28,13 @@ public class LEDManager extends CS_SubsystemBase {
 
   // Singleton instance
   private static LEDManager instance;
+  private static AddressableLEDBuffer LEDBuffer;
+  private static AddressableLED LEDs;
 
-  public static enum LedAmbienceMode {
-    RAINBOW,
-    OFF
-  }
+  private static AddressableLEDBufferView m_left;
+  private static AddressableLEDBufferView m_right;
+  private static AddressableLEDBufferView m_back_top;
+  private static AddressableLEDBufferView m_back_bottom;
 
   public static enum LedErrorMode {
     NO_ERROR,
@@ -39,30 +47,33 @@ public class LEDManager extends CS_SubsystemBase {
   }
 
   /** Creates a new LEDSubsystem. */
-  private static AddressableLED LEDs;
-
-  private static AddressableLEDBuffer buffer;
 
   // static LedMode mainMode = LedMode.OFF;
+
   static CommodoreState mainMode = CommodoreState.IDLE;
+
   static LedErrorMode errorMode = LedErrorMode.NO_ERROR;
-  static LedAmbienceMode ambienceMode = LedAmbienceMode.OFF;
 
   static Color currentColor[] = {Color.kHotPink, Color.kPink};
 
   private LEDManager() {
+
     super();
 
     LEDs = new AddressableLED(LEDConstants.kLEDPort);
-    buffer = new AddressableLEDBuffer(LEDConstants.kLEDStripLength);
-    LEDs.setLength(LEDConstants.kLEDStripLength);
-    LEDs.setData(buffer);
-    LEDs.start();
+    LEDBuffer = new AddressableLEDBuffer(LEDConstants.kLEDStripLength);
 
-    // Set the default modes
-    // setMode(LedMode.NOT_CONNECTED);
-    setAmbienceMode(LedAmbienceMode.OFF);
-    setErrorMode(LedErrorMode.NO_ERROR);
+    LEDs.setLength(LEDBuffer.getLength());
+
+    // TODO Use Constants instead of fixed values
+    m_left = LEDBuffer.createView(0, 59);
+    m_right = LEDBuffer.createView(60, 119).reversed();
+    m_back_bottom = LEDBuffer.createView(120, 129);
+    m_back_top = LEDBuffer.createView(130, 139);
+
+    // Apply the LED pattern to the data buffer
+    LEDs.setData(LEDBuffer);
+    LEDs.start();
   }
 
   // Public method to provide access to the singleton instance
@@ -72,16 +83,6 @@ public class LEDManager extends CS_SubsystemBase {
     }
     return instance;
   }
-
-  /**
-   * Set the mode of the Main LED sections
-   *
-   * @param newMode mode to set the LEDs to
-   */
-  // public static void setMode(LedMode newMode) {
-  //   mainMode = newMode;
-  //   updateMainLeds();
-  // }
 
   /**
    * Set the mode of the Error LED sections
@@ -94,23 +95,13 @@ public class LEDManager extends CS_SubsystemBase {
   }
 
   /**
-   * Set the mode of the Ambience LED section
-   *
-   * @param newAmbienceCode mode to set the ambience LEDs to
-   */
-  public static void setAmbienceMode(LedAmbienceMode newAmbienceCode) {
-    ambienceMode = newAmbienceCode;
-    updateAmbienceLeds();
-  }
-
-  /**
    * Set color of the complete LED Buffer to color
    *
    * @param color
    */
   private void setColor(LEDSection section, Color color) {
     for (int i = section.startId(); i <= section.endId(); i++) {
-      buffer.setLED(i, color);
+      LEDBuffer.setLED(i, color);
     }
   }
 
@@ -121,44 +112,37 @@ public class LEDManager extends CS_SubsystemBase {
     switch (mainMode) {
       case DISCONNECTED:
         currentColor = new Color[] {Color.kHotPink, Color.kPink};
-        breath(
-            LEDConstants.kSectionMain,
-            currentColor[0],
-            currentColor[1],
-            LEDConstants.breathDuration,
-            Timer.getFPGATimestamp());
+        breathe(currentColor).applyTo(m_left);
+        breathe(currentColor).applyTo(m_right);
         break;
 
       case DISABLED:
         currentColor = getAllianceColor();
-        // currentColor = new Color[] {Color.kGreen, Color.kGreenYellow};
-        breath(
-            LEDConstants.kSectionMain,
-            currentColor[0],
-            currentColor[1],
-            LEDConstants.breathDuration,
-            Timer.getFPGATimestamp());
+
+        breathe(currentColor).applyTo(m_left);
+        breathe(currentColor).applyTo(m_right);
         break;
 
       case IDLE:
         currentColor = getAllianceColor();
-        wave(LEDConstants.kSectionMain, currentColor[0], currentColor[1], 25, 2.0);
+
+        wave(currentColor).applyTo(m_left);
+        wave(currentColor).applyTo(m_right);
         break;
 
       case ESTOP:
         currentColor = new Color[] {Color.kGreen, Color.kGreenYellow};
-        breath(
-            LEDConstants.kSectionMain,
-            currentColor[0],
-            currentColor[1],
-            LEDConstants.breathDuration,
-            Timer.getFPGATimestamp());
+        // breathe(
+        //     LEDConstants.kSectionMain,
+        //     currentColor[0],
+        //     currentColor[1],
+        //     LEDConstants.breathDuration);
         break;
 
       case UNKNOWN:
       case TRANSITION:
       case SHOOT:
-        wave(LEDConstants.kSectionMain, Color.kGreen, Color.kBlack, 25, 2.0);
+        wave(Color.kGreen, Color.kBlack);
         break;
       case CORAL_SHOOT:
       case CORAL_SHOOT_RAMPINGUP:
@@ -169,37 +153,23 @@ public class LEDManager extends CS_SubsystemBase {
         break;
 
       case CORAL_INTAKE:
-        wave(LEDConstants.kSectionMain, Color.kAquamarine, Color.kBlack, 25, 2.0);
+        wave(Color.kAquamarine, Color.kBlack);
         break;
 
       case INTAKE:
-        wave(LEDConstants.kSectionMain, Color.kOrange, Color.kBlack, 25, 2.0);
+        wave(Color.kOrange, Color.kBlack);
         break;
 
       case TUNE_CORALSHOOTER:
         blink(LEDConstants.kSectionMain, Color.kOrange, 0.5);
         break;
 
-      case ERROR_CRITICAL:
-        pulse(LEDConstants.kSectionMain, Color.kYellowGreen, 0.5, 2.0);
-        break;
+        // case ERROR_CRITICAL:
+        //   pulse(LEDConstants.kSectionMain, Color.kYellowGreen, 0.5, 2.0);
+        //   break;
 
       default:
-        wave(LEDConstants.kSectionMain, currentColor[0], currentColor[1], 25, 2.0);
-        break;
-    }
-  }
-
-  /** Update LEDs based on current set state */
-  private static void updateAmbienceLeds() {
-    switch (ambienceMode) {
-      case OFF:
-        solid(LEDConstants.kSectionAmbience, Color.kBlack);
-        break;
-
-      case RAINBOW:
-      default:
-        rainbow(LEDConstants.kSectionAmbience, 25, 2.0);
+        wave(currentColor[0], currentColor[1]);
         break;
     }
   }
@@ -237,7 +207,7 @@ public class LEDManager extends CS_SubsystemBase {
 
   private static void solid(LEDSection section, Color c1) {
     for (int i = section.startId(); i <= section.endId(); i++) {
-      buffer.setLED(i, c1);
+      LEDBuffer.setLED(i, c1);
     }
   }
 
@@ -255,70 +225,28 @@ public class LEDManager extends CS_SubsystemBase {
     solid(section, new Color(red, green, blue));
   }
 
-  private static void breath(
-      LEDSection section, Color c1, Color c2, double duration, double timestamp) {
-    double x =
-        ((timestamp % LEDConstants.breathDuration) / LEDConstants.breathDuration) * 2.0 * Math.PI;
-    double ratio = (Math.sin(x) + 1.0) / 2.0;
-    double red = (c1.red * (1 - ratio)) + (c2.red * ratio);
-    double green = (c1.green * (1 - ratio)) + (c2.green * ratio);
-    double blue = (c1.blue * (1 - ratio)) + (c2.blue * ratio);
-    solid(section, new Color(red, green, blue));
+  private static LEDPattern breathe(Color... colors) {
+    LEDPattern new_pattern =
+        LEDPattern.gradient(LEDPattern.GradientType.kContinuous, colors)
+            .breathe(Seconds.of(2)); // TODO: Create a constant for duration
+    return new_pattern;
   }
 
-  /**
-   * Pulsing pattern of the LEDs
-   *
-   * @param c1 Color to be used
-   * @param d1 Duration of the pulsing cycle (in seconds)
-   * @param cycles Number of Pulses in each cycle
-   */
-  private static void pulse(LEDSection section, Color c1, double d1, double cycles) {
-    boolean on = ((Timer.getFPGATimestamp() % (d1 * 2 * cycles)) / (d1 * 2 * cycles)) > 0.5;
-    double red = 0, green = 0, blue = 0;
-
-    if (on) {
-      double x = (1 - ((Timer.getFPGATimestamp() % d1) / d1)) * Math.PI;
-      // double ratio = (Math.sin(x) + 1.0);
-      double ratio = 1 / x;
-
-      red = (c1.red * (1 - ratio));
-      green = (c1.green * (1 - ratio));
-      blue = (c1.blue * (1 - ratio));
-    }
-    solid(section, new Color(red, green, blue));
+  private static LEDPattern wave(Color... colors) {
+    LEDPattern new_pattern =
+        LEDPattern.gradient(LEDPattern.GradientType.kContinuous, colors)
+            .scrollAtAbsoluteSpeed(Centimeters.per(Second).of(12.5), LEDConstants.LedSpacing);
+    // TODO: Create a constant for duration
+    return new_pattern;
   }
 
-  /**
-   * Wave pattern of the LEDs
-   *
-   * @param section Section of the LEDs to be used
-   * @param c1 Primary color
-   * @param c2 Secondary color
-   * @param cycleLength number of LEDs in a cycle
-   * @param duration Duration of the cycle in seconds
-   */
-  private static void wave(
-      LEDSection section, Color c1, Color c2, double cycleLength, double duration) {
-    double x = (1 - ((Timer.getFPGATimestamp() % duration) / duration)) * 2.0 * Math.PI;
-    double xDiffPerLed = (2.0 * Math.PI) / cycleLength;
+  private static LEDPattern rainbow() {
 
-    for (int i = section.startId(); i <= section.endId(); i++) {
-      x += xDiffPerLed;
-      // if (i >= LEDConstants.kLEDLength){
-      double ratio = (Math.pow(Math.sin(x), LEDConstants.waveExponent) + 1.0) / 2.0;
-      if (Double.isNaN(ratio)) {
-        ratio = (-Math.pow(Math.sin(x + Math.PI), LEDConstants.waveExponent) + 1.0) / 2.0;
-      }
-      if (Double.isNaN(ratio)) {
-        ratio = 0.5;
-      }
-      double red = (c1.red * (1 - ratio)) + (c2.red * ratio);
-      double green = (c1.green * (1 - ratio)) + (c2.green * ratio);
-      double blue = (c1.blue * (1 - ratio)) + (c2.blue * ratio);
-      buffer.setLED(i, new Color(red, green, blue));
-      // LEDs.setData(buffer);
-    }
+    LEDPattern rainbow =
+        LEDPattern.rainbow(LEDConstants.rainbowSaturation, LEDConstants.rainbowValue)
+            .scrollAtAbsoluteSpeed(Centimeters.per(Second).of(12.5), LEDConstants.LedSpacing);
+
+    return rainbow;
   }
 
   /**
@@ -326,21 +254,7 @@ public class LEDManager extends CS_SubsystemBase {
    *
    * @param section Section of the LEDs to be used
    * @param cycleLength number of LEDs in a cycle
-   * @param duration Duration of the cycle in seconds
-   */
-  private static void rainbow(LEDSection section, double cycleLength, double duration) {
-    double x = (1 - ((Timer.getFPGATimestamp() / duration) % 1.0)) * 180.0;
-    double xDiffPerLed = 180.0 / cycleLength;
-    for (int i = section.startId(); i <= section.endId(); i++) {
-      x += xDiffPerLed;
-      x %= 180.0;
-      buffer.setHSV(i, (int) x, 255, 255);
-    }
-  }
-
-  /**
-   * Set color of the all Error LEDs
-   *
+   * @param duration Duration of the cycle in seconds /* * /** Set color of the all Error LEDs
    * @param color
    */
   private static void error(Color color) {
@@ -360,9 +274,9 @@ public class LEDManager extends CS_SubsystemBase {
     for (int j = 0; j < section.getIndexes().length; j++) {
       int ledIndex = section.getIndexes()[j];
       if (on) {
-        buffer.setLED(ledIndex, color);
+        LEDBuffer.setLED(ledIndex, color);
       } else {
-        buffer.setLED(ledIndex, Color.kBlack);
+        LEDBuffer.setLED(ledIndex, Color.kBlack);
       }
     }
   }
@@ -376,7 +290,7 @@ public class LEDManager extends CS_SubsystemBase {
   public static void errorSolid(errorSections section, Color color) {
     for (int j = 0; j < section.getIndexes().length; j++) {
       int ledIndex = section.getIndexes()[j];
-      buffer.setLED(ledIndex, color);
+      LEDBuffer.setLED(ledIndex, color);
     }
   }
 
@@ -412,10 +326,14 @@ public class LEDManager extends CS_SubsystemBase {
   public void CS_periodic() {
     // Update the LEDs
     updateMainLeds();
-    updateAmbienceLeds();
     updateErrorLeds();
 
-    LEDs.setData(buffer);
+    LEDs.setData(LEDBuffer);
+
+    // Update the buffer with the rainbow animation
+
+    // Set the LEDs
+    LEDs.setData(LEDBuffer);
   }
 
   // public Command setModeCommand(LedMode newMode) {
@@ -433,4 +351,9 @@ public class LEDManager extends CS_SubsystemBase {
 
   @Override
   public void updateDashboard() {}
+
+  //   public static void error(errorSections errorSections, Color color) {
+  // TODO Auto-generated method stub
+  //   throw new UnsupportedOperationException("Unimplemented method 'error'");
+  // }
 }

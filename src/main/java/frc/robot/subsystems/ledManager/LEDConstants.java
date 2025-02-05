@@ -1,5 +1,9 @@
 package frc.robot.subsystems.ledManager;
 
+import static edu.wpi.first.units.Units.Meters;
+
+import edu.wpi.first.units.measure.Distance;
+
 public class LEDConstants {
   public static final int kLEDStripLength = 143;
   public static final int kLEDPort = 9;
@@ -8,6 +12,8 @@ public class LEDConstants {
 
   public static final LEDSection kSectionMain = new LEDSection(0, 74);
   public static final LEDSection kSectionAmbience = new LEDSection(75, 142);
+
+  public static final Distance LedSpacing = Meters.of(1 / 144);
 
   public static enum errorSections {
     FRONT_RIGHT(0, new int[] {0, 1, 2, 3, 4}),
@@ -37,8 +43,8 @@ public class LEDConstants {
   public static final double strobeFastDuration = 0.1;
   public static final double strobeSlowDuration = 0.2;
   public static final double breathDuration = 2.0;
-  public static final double rainbowCycleLength = 25.0;
-  public static final double rainbowDuration = 0.25;
+  public static final int rainbowSaturation = 255;
+  public static final int rainbowValue = 128;
   public static final double waveExponent = 0.4;
   public static final double waveFastCycleLength = 25.0;
   public static final double waveFastDuration = 0.25;
