@@ -39,7 +39,7 @@ public class RobotConstants {
   //
   public static RobotType robotType = RobotType.DEVBOT;
   public static boolean tracesEnabled = true;
-  public static boolean tuningEnabled = false; // DO NO COMMIT WITH THIS ENABLED
+  public static boolean tuningEnabled = false; // DO NOT COMMIT WHILE ENABLED
 
   // Subsystems positions/translations for simulation in AdvantageScope
   // public static Translation2d intakeOffset = new Translation2d(Units.inchesToMeters(24),
@@ -51,7 +51,7 @@ public class RobotConstants {
   public static double FrameLength = Units.inchesToMeters(24);
 
   /** Defines position of the cameras on the robot. */
-  public static class Vision {
+  public static class Vision_2024 { // TODO: Can be removed?
     // April tag camera constants
     public static final String kATBackCameraName = "Arducam_AT002";
     public static final Transform3d kATRobotToBackCam =
@@ -73,5 +73,11 @@ public class RobotConstants {
     // (Fake values. Experiment and determine estimation noise on an actual robot.)
     public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
     public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
+  }
+
+  // ****************************************************************************************
+  // UI Constants
+  public static class UIConstants {
+    public static final String[] allowedCORALLevels = {"L1", "L4"};
   }
 }

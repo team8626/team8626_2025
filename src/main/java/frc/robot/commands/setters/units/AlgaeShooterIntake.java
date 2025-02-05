@@ -8,26 +8,23 @@ package frc.robot.commands.setters.units;
 
 import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
-import frc.robot.subsystems.Dashboard;
-import frc.robot.subsystems.Dashboard.GamePieceState;
-import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
+import frc.robot.subsystems.algaeshooter.AlgaeShooterSubsystem;
 
-public class CoralShooterIntake extends CS_Command {
-  private CoralShooterSubsystem mortar;
+public class AlgaeShooterIntake extends CS_Command {
+  private AlgaeShooterSubsystem algae501;
 
-  public CoralShooterIntake() {
-    mortar = RobotContainer.mortar;
+  public AlgaeShooterIntake() {
+    algae501 = RobotContainer.algae501;
 
-    addRequirements(mortar);
+    addRequirements(algae501);
 
-    this.setTAGString("CORALSHOOTER_INTAKE");
+    this.setTAGString("ALGAESHOOTER_INTAKE");
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    Dashboard.setCoralState(GamePieceState.INTAKING);
-    mortar.startIntake();
+    algae501.startIntake();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -37,17 +34,12 @@ public class CoralShooterIntake extends CS_Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    if (mortar.isLoaded()) {
-      Dashboard.setCoralState(GamePieceState.LOADED);
-    } else {
-      Dashboard.setCoralState(GamePieceState.IDLE);
-    }
-    mortar.stopAll();
+    algae501.stopAll();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return mortar.isLoaded();
+    return algae501.isLoaded();
   }
 }
