@@ -1,10 +1,10 @@
+package frc.robot;
+
 // Copyright (c) 2024 FRC 8626
 // http://github.com/team8626
 //
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
-
-package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -22,10 +22,10 @@ import frc.robot.commands.setters.units.CoralShooterLaunch;
 import frc.robot.commands.setters.units.ElevatorMoveDown;
 import frc.robot.commands.setters.units.ElevatorMoveUp;
 import frc.robot.commands.tuning.Tune_CoralShooter;
+import frc.robot.subsystems.Dashboard;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterSubsystem;
 import frc.robot.subsystems.algaeshooter.AlgaeShooter_Sim;
 import frc.robot.subsystems.algaeshooter.AlgaeShooter_SparkMax;
-import frc.robot.subsystems.Dashboard;
 import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
 import frc.robot.subsystems.coralshooter.CoralShooter_Sim;
 import frc.robot.subsystems.coralshooter.CoralShooter_SparkMax;
@@ -55,10 +55,8 @@ public class RobotContainer {
 
   // Instantiate the LED manager
   private final LEDManager ledManager = LEDManager.getInstance();
-
   // Instantiate the Preset manager
   private final PresetManager presetManager = PresetManager.getInstance();
-
   //
   // ****************************************************************************************
 
