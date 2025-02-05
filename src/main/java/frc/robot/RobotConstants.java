@@ -78,6 +78,10 @@ public class RobotConstants {
   // ****************************************************************************************
   // UI Constants
   public static class UIConstants {
+//<<<<<<< HEAD
     public static final String[] allowedCORALLevels = {"L1", "L4"};
+//=======
+//public static final String[] allowedCORALLevels = {"L1", "L2", "L3", "L4"};
+//>>>>>>> main
   }
 }
