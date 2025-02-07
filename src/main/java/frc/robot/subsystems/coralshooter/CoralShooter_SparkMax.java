@@ -74,7 +74,7 @@ public class CoralShooter_SparkMax implements CoralShooterInterface, CS_Interfac
 
     // Setup configuration for the right motor
     rightConfig = new SparkMaxConfig();
-    rightConfig.inverted(true).idleMode(IdleMode.kCoast);
+    rightConfig.inverted(false).idleMode(IdleMode.kCoast);
 
     rightConfig
         .encoder
@@ -101,7 +101,7 @@ public class CoralShooter_SparkMax implements CoralShooterInterface, CS_Interfac
 
     // Launcher Motor
     launchConfig = new SparkMaxConfig();
-    launchConfig.inverted(false);
+    launchConfig.inverted(true);
 
     launchMotor = new SparkMax(launcherConfig.leftCANID(), MotorType.kBrushless);
     launchMotor.configure(
@@ -133,10 +133,10 @@ public class CoralShooter_SparkMax implements CoralShooterInterface, CS_Interfac
   @Override
   public void startShooter(double new_RPMLeft, double new_RPMRight) {
     leftController.setReference(
-        new_RPMLeft,
+        -new_RPMLeft,
         ControlType.kVelocity,
         ClosedLoopSlot.kSlot0,
-        shooterFF.calculate(new_RPMLeft),
+        shooterFF.calculate(-new_RPMLeft),
         ArbFFUnits.kVoltage);
 
     rightController.setReference(
@@ -160,10 +160,10 @@ public class CoralShooter_SparkMax implements CoralShooterInterface, CS_Interfac
   public void updateShooterRPM(double new_RPMLeft, double new_RPMRight) {
     if (shooterIsEnabled) {
       leftController.setReference(
-          new_RPMLeft,
+          -new_RPMLeft,
           ControlType.kVelocity,
           ClosedLoopSlot.kSlot0,
-          shooterFF.calculate(new_RPMLeft),
+          shooterFF.calculate(-new_RPMLeft),
           ArbFFUnits.kVoltage);
 
       rightController.setReference(

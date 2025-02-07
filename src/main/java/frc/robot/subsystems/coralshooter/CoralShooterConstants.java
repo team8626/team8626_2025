@@ -35,12 +35,12 @@ public class CoralShooterConstants {
         case COMPBOT -> new FlywheelConfig(12, 2, (3.0 / 1.0), 2 * momentOfInertia, 6000.0);
         case DEVBOT -> new FlywheelConfig(12, 2, (3.0 / 1.0), 2 * momentOfInertia, 6000.0);
         case SIMBOT -> new FlywheelConfig(0, 0, (3.0 / 1.0), 2 * momentOfInertia, 6000.0);
-        default -> new FlywheelConfig(5, 4, (3.0 / 1.0), 2 * momentOfInertia, 6000.0);
+        default -> new FlywheelConfig(0, 0, (3.0 / 1.0), 2 * momentOfInertia, 6000.0);
       };
 
   // Launcher FLywheel Config
   public static final FlywheelConfig launcherConfig =
-      new FlywheelConfig(11, 0, (1.0 / 1.0), 2 * momentOfInertia, 6000.0);
+      new FlywheelConfig(5, 0, (1.0 / 1.0), 2 * momentOfInertia, 6000.0);
 
   // InfraRed Port (Sensor to check if the CORAL is loaded
   public static final int infraRedPort = 0; // DIO
