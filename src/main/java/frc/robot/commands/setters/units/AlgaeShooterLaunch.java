@@ -9,37 +9,33 @@ package frc.robot.commands.setters.units;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
-import frc.robot.subsystems.Dashboard;
-import frc.robot.subsystems.Dashboard.GamePieceState;
-import frc.robot.subsystems.coralshooter.CoralShooterConstants;
-import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
+import frc.robot.subsystems.algaeshooter.AlgaeShooterConstants;
+import frc.robot.subsystems.algaeshooter.AlgaeShooterSubsystem;
 
-public class CoralShooterLaunch extends CS_Command {
-  private CoralShooterSubsystem mortar;
+public class AlgaeShooterLaunch extends CS_Command {
+  private AlgaeShooterSubsystem algae501;
   private final Timer timer = new Timer();
 
-  public CoralShooterLaunch() {
-    mortar = RobotContainer.mortar;
+  public AlgaeShooterLaunch() {
+    algae501 = RobotContainer.algae501;
 
-    // Do not use mortar in requirements, this would cancel the Ramp-up Command!!!
-    // addRequirements(mortar);
+    // Do not use algae501 in requirements, this would cancel the Ramp-up Command!!!
+    // addRequirements(algae501);
 
-    this.setTAGString("CORALSHOOTER_LAUNCH");
+    this.setTAGString("ALGAESHOOTER_LAUNCH");
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    Dashboard.setCoralState(GamePieceState.LAUNCHING);
-
-    mortar.startLauncher(CoralShooterConstants.launcherShootSetpoint);
+    algae501.startLauncher(AlgaeShooterConstants.launcherShootSetpoint);
     timer.reset();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (!mortar.isLoaded()) {
+    if (!algae501.isLoaded()) {
       timer.start();
     }
   }
@@ -47,15 +43,13 @@ public class CoralShooterLaunch extends CS_Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    Dashboard.setCoralState(GamePieceState.IDLE);
-
-    mortar.stopLauncher();
+    algae501.stopLauncher();
     timer.stop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer.hasElapsed(CoralShooterConstants.launchTimerSeconds);
+    return timer.hasElapsed(AlgaeShooterConstants.launchTimerSeconds);
   }
 }

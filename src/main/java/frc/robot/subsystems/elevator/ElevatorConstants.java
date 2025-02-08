@@ -4,12 +4,21 @@ import edu.wpi.first.math.util.Units;
 
 public class ElevatorConstants {
 
+  // TODO: Add constants for the elevator
+  // Motor Constants
+  public static final int CANID = 1;
+
   // Elevator Constants
-  public static final double gearRatio = 15 / 1; // 15:1
+  public static final double gearRatio = 15.0 / 1; // TODO: Update to correct value
+  public static final double drumRadiusMeters =
+      Units.inchesToMeters(1); // TODO: Update to correct value
+  public static final double positionConversionFactor = 1.0; // TODO: Update to correct value
+  public static final double velocityConversionFactor = 1.0; // TODO: Update to correct value
   public static final double minHeightMeters = Units.inchesToMeters(0);
   public static final double maxHeightMeters = Units.inchesToMeters(60);
-  public static final double carriageMassKg = Units.lbsToKilograms(50);
-  public static final double drumRadiusMeters = Units.inchesToMeters(1);
+  public static final double carriageMassKg = Units.lbsToKilograms(1);
+  public static final double velocityMetersPerSecond = Units.inchesToMeters(30);
+  public static final double tolerance = Units.inchesToMeters(0.5);
 
   // PID Constants
   public static final double kP = 1.0;

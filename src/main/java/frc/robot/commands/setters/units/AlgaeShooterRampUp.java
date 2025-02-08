@@ -8,30 +8,27 @@ package frc.robot.commands.setters.units;
 
 import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
-import frc.robot.subsystems.Dashboard;
-import frc.robot.subsystems.Dashboard.GamePieceState;
-import frc.robot.subsystems.coralshooter.CoralShooterConstants;
-import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
+import frc.robot.subsystems.algaeshooter.AlgaeShooterConstants;
+import frc.robot.subsystems.algaeshooter.AlgaeShooterSubsystem;
 
-public class CoralShooterRampUp extends CS_Command {
-  private CoralShooterSubsystem mortar;
+public class AlgaeShooterRampUp extends CS_Command {
+  private AlgaeShooterSubsystem algae501;
 
-  private double desiredRPM = CoralShooterConstants.shootRPM;
-  private final double RPMTolerance = CoralShooterConstants.shooterRPMTolerance;
+  private double desiredRPM = AlgaeShooterConstants.shootRPM;
+  private final double RPMTolerance = AlgaeShooterConstants.shooterRPMTolerance;
 
-  public CoralShooterRampUp() {
-    mortar = RobotContainer.mortar;
+  public AlgaeShooterRampUp() {
+    algae501 = RobotContainer.algae501;
 
-    addRequirements(mortar);
+    addRequirements(algae501);
 
-    this.setTAGString("CORALSHOOTER_RAMPUP");
+    this.setTAGString("ALGAESHOOTER_RAMPUP");
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    Dashboard.setCoralState(GamePieceState.RAMPING_UP);
-    mortar.startRampUp();
+    algae501.startRampUp();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -42,7 +39,7 @@ public class CoralShooterRampUp extends CS_Command {
   @Override
   public void end(boolean interrupted) {
     if (interrupted) {
-      mortar.stopAll();
+      algae501.stopAll();
     }
   }
 
@@ -51,8 +48,8 @@ public class CoralShooterRampUp extends CS_Command {
   public boolean isFinished() {
     boolean atSetpoint = false;
 
-    double currentRPMLeft = mortar.getShooterRPMLeft();
-    double currentRPMRight = mortar.getShooterRPMRight();
+    double currentRPMLeft = algae501.getShooterRPMLeft();
+    double currentRPMRight = algae501.getShooterRPMRight();
 
     atSetpoint =
         Math.abs(currentRPMLeft - desiredRPM) <= RPMTolerance
