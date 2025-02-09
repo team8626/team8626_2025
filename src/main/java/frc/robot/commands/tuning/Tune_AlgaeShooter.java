@@ -4,33 +4,27 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.setters.units;
+package frc.robot.commands.tuning;
 
 import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
-import frc.robot.subsystems.Dashboard;
-import frc.robot.subsystems.Dashboard.GamePieceState;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterSubsystem;
 
-public class AlgaeShooterStop extends CS_Command {
+public class Tune_AlgaeShooter extends CS_Command {
   private AlgaeShooterSubsystem algae501;
 
-  public AlgaeShooterStop() {
-    // Use addRequirements() here to declare subsystem dependencies.
-    // For example: addRequirements(Robot.m_subsystem);
+  public Tune_AlgaeShooter() {
     algae501 = RobotContainer.algae501;
 
     addRequirements(algae501);
 
-    this.setTAGString("ALGAESHOOTER_STOP");
+    this.setTAGString("TUNE_ALGAESHOOTER");
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    algae501.stopShooter();
-    algae501.stopLauncher();
-    Dashboard.setAlgaeState(GamePieceState.IDLE);
+    algae501.startRampUp();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -39,11 +33,15 @@ public class AlgaeShooterStop extends CS_Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    if (interrupted) {
+      algae501.stopShooter();
+    }
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 }
