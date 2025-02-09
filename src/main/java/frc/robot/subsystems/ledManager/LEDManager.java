@@ -142,7 +142,6 @@ public class LEDManager extends CS_SubsystemBase {
         break;
 
       case IDLE:
-        // turn off lights
         LEDPattern new_pattern = LEDPattern.solid(Color.kBlack);
         new_pattern.applyTo(m_back_top);
         break;
@@ -168,24 +167,22 @@ public class LEDManager extends CS_SubsystemBase {
       case RAMPING_UP:
       case LAUNCHING:
         currentColor = new Color[] {Color.kAquamarine, Color.kBlack};
-        breatheFast(currentColor).applyTo(m_back_top);
+        breatheFast(currentColor).applyTo(m_back_bottom);
         break;
 
       case IDLE:
-        // turn off lights
         LEDPattern new_pattern = LEDPattern.solid(Color.kBlack);
-        new_pattern.applyTo(m_back_top);
+        new_pattern.applyTo(m_back_bottom);
         break;
 
       case INTAKING:
         currentColor = new Color[] {Color.kAquamarine, Color.kBlack};
-        breatheSlow(currentColor).applyTo(m_back_top);
+        breatheSlow(currentColor).applyTo(m_back_bottom);
         break;
 
       case LOADED:
         new_pattern = LEDPattern.solid(Color.kAquamarine);
-        new_pattern.applyTo(m_back_top);
-        // soild Coral lights
+        new_pattern.applyTo(m_back_bottom);
         break;
 
       default:
