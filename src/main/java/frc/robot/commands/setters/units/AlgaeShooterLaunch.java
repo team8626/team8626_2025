@@ -9,6 +9,8 @@ package frc.robot.commands.setters.units;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
+import frc.robot.subsystems.Dashboard;
+import frc.robot.subsystems.Dashboard.GamePieceState;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterConstants;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterSubsystem;
 
@@ -28,6 +30,8 @@ public class AlgaeShooterLaunch extends CS_Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    Dashboard.setAlgaeState(GamePieceState.LAUNCHING);
+
     algae501.startLauncher(AlgaeShooterConstants.launcherShootSetpoint);
     timer.reset();
   }
@@ -43,6 +47,8 @@ public class AlgaeShooterLaunch extends CS_Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    Dashboard.setAlgaeState(GamePieceState.IDLE);
+
     algae501.stopLauncher();
     timer.stop();
   }
