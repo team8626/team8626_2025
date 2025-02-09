@@ -14,6 +14,8 @@ import edu.wpi.first.wpilibj.AddressableLEDBufferView;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.LEDPattern;
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.RobotController.RadioLEDState;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.Commodore;
 import frc.robot.Commodore.CommodoreState;
@@ -206,6 +208,44 @@ public class LEDManager extends CS_SubsystemBase {
     }
   }
 
+  private static void updateStatusLEDs() {
+    // rsl light
+    boolean rsl = RobotController.getRSLState();
+    LEDBuffer1.setRGB(0, 0, rsl ? 255 : 0, 0);
+    LEDBuffer1.setRGB(1, 0, rsl ? 255 : 0, 0);
+    LEDBuffer2.setRGB(0, 0, rsl ? 255 : 0, 0);
+    LEDBuffer2.setRGB(1, 0, rsl ? 255 : 0, 0);
+    // brown out
+    boolean brownOut = RobotController.isBrownedOut();
+    LEDBuffer1.setRGB(2, brownOut ? 255 : 0, brownOut ? 0 : 255, 0);
+    LEDBuffer1.setRGB(3, brownOut ? 255 : 0, brownOut ? 0 : 255, 0);
+    LEDBuffer2.setRGB(2, brownOut ? 255 : 0, brownOut ? 0 : 255, 0);
+    LEDBuffer2.setRGB(3, brownOut ? 255 : 0, brownOut ? 0 : 255, 0);
+    // radio light
+    RadioLEDState radioState = RobotController.getRadioLEDState();
+    int r = 0, g = 0, b = 0;
+    switch (radioState) {
+      case kGreen:
+        g = 255;
+        break;
+      case kRed:
+        r = 255;
+        break;
+      case kOrange:
+        r = 255;
+        g = 165;
+        break;
+      case kOff:
+
+      default:
+        break;
+    }
+    LEDBuffer1.setRGB(4, r, g, b);
+    LEDBuffer1.setRGB(5, r, g, b);
+    LEDBuffer2.setRGB(4, r, g, b);
+    LEDBuffer2.setRGB(5, r, g, b);
+  }
+
   private static LEDPattern breatheFast(Color... colors) {
     LEDPattern new_pattern =
         LEDPattern.gradient(LEDPattern.GradientType.kContinuous, colors)
@@ -258,6 +298,7 @@ public class LEDManager extends CS_SubsystemBase {
     updateMainLeds();
     updateCoralLEDs();
     updateAlgaeLEDs();
+    updateStatusLEDs();
 
     LEDs1.setData(LEDBuffer1);
 

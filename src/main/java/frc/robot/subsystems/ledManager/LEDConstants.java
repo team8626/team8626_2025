@@ -12,9 +12,13 @@ public class LEDConstants {
 
   record LEDSection(int startId, int endId) {}
 
-  public static final LEDSection kLEDSectionLeft = new LEDSection(0, 99);
+  public static final LEDSection kLEDSectionStatusLeft = new LEDSection(0, 5);
 
-  public static final LEDSection kLEDSectionRight = new LEDSection(0, 99);
+  public static final LEDSection kLEDSectionStatusRight = new LEDSection(0, 5);
+
+  public static final LEDSection kLEDSectionLeft = new LEDSection(6, 99);
+
+  public static final LEDSection kLEDSectionRight = new LEDSection(6, 99);
 
   public static final LEDSection kLEDSectionCoral = new LEDSection(100, 124);
 
