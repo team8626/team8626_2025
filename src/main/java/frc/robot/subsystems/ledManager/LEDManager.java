@@ -25,9 +25,10 @@ public class LEDManager extends CS_SubsystemBase {
 
   // Singleton instance
   private static LEDManager instance;
-  private static AddressableLEDBuffer LEDBuffer;
-  private static AddressableLED LEDs;
-
+  private static AddressableLEDBuffer LEDBuffer1;
+  private static AddressableLED LEDs1;
+  private static AddressableLEDBuffer LEDBuffer2;
+  private static AddressableLED LEDs2;
   private static AddressableLEDBufferView m_left;
   private static AddressableLEDBufferView m_right;
   private static AddressableLEDBufferView m_back_top;
@@ -57,20 +58,35 @@ public class LEDManager extends CS_SubsystemBase {
 
     super();
 
-    LEDs = new AddressableLED(LEDConstants.kLEDPort);
-    LEDBuffer = new AddressableLEDBuffer(LEDConstants.kLEDStripLength);
+    LEDs1 = new AddressableLED(LEDConstants.kLEDPort1);
+    LEDBuffer1 = new AddressableLEDBuffer(LEDConstants.kLEDStripLength1);
 
-    LEDs.setLength(LEDBuffer.getLength());
+    LEDs1.setLength(LEDBuffer1.getLength());
+
+    LEDs2 = new AddressableLED(LEDConstants.kLEDPort2);
+    LEDBuffer2 = new AddressableLEDBuffer(LEDConstants.kLEDStripLength2);
+
+    LEDs2.setLength(LEDBuffer2.getLength());
 
     // TODO Use Constants instead of fixed values
-    m_left = LEDBuffer.createView(0, 59);
-    m_right = LEDBuffer.createView(60, 119).reversed();
-    m_back_bottom = LEDBuffer.createView(120, 129);
-    m_back_top = LEDBuffer.createView(130, 139);
+    m_left =
+        LEDBuffer1.createView(
+            LEDConstants.kLEDSectionLeft.startId(), LEDConstants.kLEDSectionLeft.endId());
+    m_right =
+        LEDBuffer2.createView(
+            LEDConstants.kLEDSectionRight.startId(), LEDConstants.kLEDSectionLeft.endId());
+    m_back_bottom =
+        LEDBuffer1.createView(
+            LEDConstants.kLEDSectionCoral.startId(), LEDConstants.kLEDSectionCoral.endId());
+    m_back_top =
+        LEDBuffer2.createView(
+            LEDConstants.kLEDSectionAlgae.startId(), LEDConstants.kLEDSectionAlgae.endId());
 
     // Apply the LED pattern to the data buffer
-    LEDs.setData(LEDBuffer);
-    LEDs.start();
+    LEDs1.setData(LEDBuffer1);
+    LEDs2.setData(LEDBuffer2);
+    LEDs1.start();
+    LEDs2.start();
   }
 
   // Public method to provide access to the singleton instance
@@ -243,12 +259,9 @@ public class LEDManager extends CS_SubsystemBase {
     updateCoralLEDs();
     updateAlgaeLEDs();
 
-    LEDs.setData(LEDBuffer);
+    LEDs1.setData(LEDBuffer1);
 
-    // Update the buffer with the rainbow animation
-
-    // Set the LEDs
-    LEDs.setData(LEDBuffer);
+    LEDs2.setData(LEDBuffer2);
   }
 
   //   public static void error(errorSections errorSections, Color color) {

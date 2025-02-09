@@ -5,10 +5,20 @@ import static edu.wpi.first.units.Units.Meters;
 import edu.wpi.first.units.measure.Distance;
 
 public class LEDConstants {
-  public static final int kLEDStripLength = 143;
-  public static final int kLEDPort = 9;
+  public static final int kLEDStripLength1 = 125;
+  public static final int kLEDPort1 = 8;
+  public static final int kLEDStripLength2 = 125;
+  public static final int kLEDPort2 = 9;
 
   record LEDSection(int startId, int endId) {}
+
+  public static final LEDSection kLEDSectionLeft = new LEDSection(0, 99);
+
+  public static final LEDSection kLEDSectionRight = new LEDSection(0, 99);
+
+  public static final LEDSection kLEDSectionCoral = new LEDSection(100, 124);
+
+  public static final LEDSection kLEDSectionAlgae = new LEDSection(100, 124);
 
   public static final Distance LedSpacing = Meters.of(1.0 / 144.0);
 
