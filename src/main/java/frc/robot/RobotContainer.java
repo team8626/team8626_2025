@@ -21,6 +21,7 @@ import frc.robot.commands.setters.units.CoralShooterIntake;
 import frc.robot.commands.setters.units.CoralShooterLaunch;
 import frc.robot.commands.setters.units.ElevatorMoveDown;
 import frc.robot.commands.setters.units.ElevatorMoveUp;
+import frc.robot.commands.tuning.Tune_AlgaeShooter;
 import frc.robot.commands.tuning.Tune_CoralShooter;
 import frc.robot.subsystems.Dashboard;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterSubsystem;
@@ -230,7 +231,7 @@ public class RobotContainer {
     controller.btn_3.toggleOnTrue(new CoralShooterLaunch());
 
     controller.btn_4.toggleOnTrue(new AlgaeShooterIntake());
-    // controller.btn_5.toggleOnTrue(new Tune_AlgaeShooter());
+    controller.btn_5.toggleOnTrue(new Tune_AlgaeShooter());
     controller.btn_6.toggleOnTrue(new AlgaeShooterLaunch());
 
     // controller.btn_4.toggleOnTrue(
