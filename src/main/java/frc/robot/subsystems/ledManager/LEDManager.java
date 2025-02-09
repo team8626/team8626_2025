@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.Commodore;
 import frc.robot.Commodore.CommodoreState;
 import frc.robot.subsystems.CS_SubsystemBase;
+import frc.robot.subsystems.Dashboard;
 import java.util.Optional;
 
 public class LEDManager extends CS_SubsystemBase {
@@ -85,16 +86,17 @@ public class LEDManager extends CS_SubsystemBase {
     mainMode = Commodore.getCurrentState();
 
     switch (mainMode) {
-      case DISCONNECTED:
+      case DISCONNECTED: // made a heart beat disconnected a white heart beat.
         currentColor = new Color[] {Color.kHotPink, Color.kPink};
-        breathe(currentColor).applyTo(m_left);
-        breathe(currentColor).applyTo(m_right);
+        breatheSlow(currentColor).applyTo(m_left);
+        breatheSlow(currentColor).applyTo(m_right);
         break;
 
       case DISABLED:
+        // heart beat alliance
         currentColor = getAllianceColor();
-        breathe(currentColor).applyTo(m_left);
-        breathe(currentColor).applyTo(m_right);
+        breatheSlow(currentColor).applyTo(m_left);
+        breatheSlow(currentColor).applyTo(m_right);
         break;
 
       case IDLE:
@@ -120,7 +122,8 @@ public class LEDManager extends CS_SubsystemBase {
         break;
 
       case TUNE_CORALSHOOTER:
-        breathe(Color.kOrange, Color.kYellow);
+        breatheSlow(Color.kCoral, Color.kBlack).applyTo(m_left);
+        breatheSlow(Color.kCoral, Color.kBlack).applyTo(m_right);
         break;
 
       default:
@@ -130,10 +133,77 @@ public class LEDManager extends CS_SubsystemBase {
     }
   }
 
-  private static LEDPattern breathe(Color... colors) {
+  private static void updateCoralLEDs() {
+    switch (Dashboard.getCoralState()) {
+      case RAMPING_UP:
+      case LAUNCHING:
+        currentColor = new Color[] {Color.kCoral, Color.kBlack};
+        breatheFast(currentColor).applyTo(m_back_top);
+        break;
+
+      case IDLE:
+        // turn off lights
+        LEDPattern new_pattern = LEDPattern.solid(Color.kBlack);
+        new_pattern.applyTo(m_back_top);
+        break;
+
+      case INTAKING:
+        currentColor = new Color[] {Color.kCoral, Color.kBlack};
+        breatheSlow(currentColor).applyTo(m_back_top);
+        break;
+
+      case LOADED:
+        new_pattern = LEDPattern.solid(Color.kCoral);
+        new_pattern.applyTo(m_back_top);
+        // soild Coral lights
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  private static void updateAlgaeLEDs() {
+    switch (Dashboard.getAlgaeState()) {
+      case RAMPING_UP:
+      case LAUNCHING:
+        currentColor = new Color[] {Color.kAquamarine, Color.kBlack};
+        breatheFast(currentColor).applyTo(m_back_top);
+        break;
+
+      case IDLE:
+        // turn off lights
+        LEDPattern new_pattern = LEDPattern.solid(Color.kBlack);
+        new_pattern.applyTo(m_back_top);
+        break;
+
+      case INTAKING:
+        currentColor = new Color[] {Color.kAquamarine, Color.kBlack};
+        breatheSlow(currentColor).applyTo(m_back_top);
+        break;
+
+      case LOADED:
+        new_pattern = LEDPattern.solid(Color.kAquamarine);
+        new_pattern.applyTo(m_back_top);
+        // soild Coral lights
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  private static LEDPattern breatheFast(Color... colors) {
     LEDPattern new_pattern =
         LEDPattern.gradient(LEDPattern.GradientType.kContinuous, colors)
-            .breathe(Seconds.of(2)); // TODO: Create a constant for duration
+            .breathe(Seconds.of(.2)); // TODO: Create a constant for duration
+    return new_pattern;
+  }
+
+  private static LEDPattern breatheSlow(Color... colors) {
+    LEDPattern new_pattern =
+        LEDPattern.gradient(LEDPattern.GradientType.kContinuous, colors)
+            .breathe(Seconds.of(0.8)); // TODO: Create a constant for duration
     return new_pattern;
   }
 
@@ -173,6 +243,8 @@ public class LEDManager extends CS_SubsystemBase {
   public void CS_periodic() {
     // Update the LEDs
     updateMainLeds();
+    updateCoralLEDs();
+    updateAlgaeLEDs();
 
     LEDs.setData(LEDBuffer);
 
@@ -181,12 +253,6 @@ public class LEDManager extends CS_SubsystemBase {
     // Set the LEDs
     LEDs.setData(LEDBuffer);
   }
-
-  @Override
-  public void initDashboard() {}
-
-  @Override
-  public void updateDashboard() {}
 
   //   public static void error(errorSections errorSections, Color color) {
   // TODO Auto-generated method stub
