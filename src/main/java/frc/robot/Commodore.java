@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.setters.Example_ToIntake;
 import frc.robot.commands.setters.Example_ToShoot;
 import frc.robot.commands.setters.groups.*;
+import frc.robot.commands.tuning.Tune_AlgaeShooter;
 import frc.robot.commands.tuning.Tune_CoralShooter;
 import frc.robot.subsystems.CS_SubsystemBase;
 import java.util.LinkedList;
@@ -157,9 +158,17 @@ public class Commodore extends CS_SubsystemBase {
         case CORAL_INTAKE:
           toCoralIntake();
           break;
-
+        case ALGAE_SHOOT:
+          toAlgaeShoot();
+          break;
+        case ALGAE_INTAKE:
+          toAlgaeIntake();
+          break;
           // Tuning States
         case TUNE_CORALSHOOTER:
+          tuneCoralShooter();
+          break;
+        case TUNE_ALGAESHOOTER:
           tuneCoralShooter();
           break;
 
@@ -301,5 +310,20 @@ public class Commodore extends CS_SubsystemBase {
   private static void tuneCoralShooter() {
     applyState(CommodoreState.TUNE_CORALSHOOTER);
     CommandScheduler.getInstance().schedule(new Tune_CoralShooter());
+  }
+
+  private static void toAlgaeShoot() {
+    applyState(CommodoreState.TRANSITION);
+    CommandScheduler.getInstance().schedule(new ToAlgaeShoot());
+  }
+
+  private static void toAlgaeIntake() {
+    applyState(CommodoreState.TRANSITION);
+    CommandScheduler.getInstance().schedule(new ToAlgaeIntake());
+  }
+
+  private static void tuneAlgaeShooter() {
+    applyState(CommodoreState.TUNE_ALGAESHOOTER);
+    CommandScheduler.getInstance().schedule(new Tune_AlgaeShooter());
   }
 }

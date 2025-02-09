@@ -8,6 +8,8 @@ package frc.robot.commands.setters.units;
 
 import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
+import frc.robot.subsystems.Dashboard;
+import frc.robot.subsystems.Dashboard.GamePieceState;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterConstants;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterSubsystem;
 
@@ -28,6 +30,7 @@ public class AlgaeShooterRampUp extends CS_Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    Dashboard.setAlgaeState(GamePieceState.RAMPING_UP);
     algae501.startRampUp();
   }
 
