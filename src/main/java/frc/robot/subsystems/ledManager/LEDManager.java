@@ -27,68 +27,42 @@ public class LEDManager extends CS_SubsystemBase {
 
   // Singleton instance
   private static LEDManager instance;
-  private static AddressableLEDBuffer LEDBuffer1;
-  private static AddressableLED LEDs1;
-  private static AddressableLEDBuffer LEDBuffer2;
-  private static AddressableLED LEDs2;
+  private static AddressableLED LEDs;
+  private static AddressableLEDBuffer LEDBuffer;
+
   private static AddressableLEDBufferView m_left;
   private static AddressableLEDBufferView m_right;
   private static AddressableLEDBufferView m_back_top;
   private static AddressableLEDBufferView m_back_bottom;
 
-  public static enum LedErrorMode {
-    NO_ERROR,
-    ERROR_CRITICAL,
-    ERROR_DRIVE_FL,
-    ERROR_DRIVE_FR,
-    ERROR_DRIVE_BL,
-    ERROR_DRIVE_BR,
-    ERROR_GIMME_LIGHT
-  }
-
-  /** Creates a new LEDSubsystem. */
-
-  // static LedMode mainMode = LedMode.OFF;
-
   static CommodoreState mainMode = CommodoreState.IDLE;
-
-  static LedErrorMode errorMode = LedErrorMode.NO_ERROR;
-
   static Color currentColor[] = {Color.kHotPink, Color.kPink};
 
   private LEDManager() {
 
     super();
 
-    LEDs1 = new AddressableLED(LEDConstants.kLEDPort1);
-    LEDBuffer1 = new AddressableLEDBuffer(LEDConstants.kLEDStripLength1);
+    LEDs = new AddressableLED(LEDConstants.kLEDPort);
+    LEDBuffer = new AddressableLEDBuffer(LEDConstants.kLEDStripLength);
+    LEDs.setLength(LEDBuffer.getLength());
 
-    LEDs1.setLength(LEDBuffer1.getLength());
-
-    LEDs2 = new AddressableLED(LEDConstants.kLEDPort2);
-    LEDBuffer2 = new AddressableLEDBuffer(LEDConstants.kLEDStripLength2);
-
-    LEDs2.setLength(LEDBuffer2.getLength());
-
-    // TODO Use Constants instead of fixed values
     m_left =
-        LEDBuffer1.createView(
+        LEDBuffer.createView(
             LEDConstants.kLEDSectionLeft.startId(), LEDConstants.kLEDSectionLeft.endId());
     m_right =
-        LEDBuffer2.createView(
-            LEDConstants.kLEDSectionRight.startId(), LEDConstants.kLEDSectionLeft.endId());
+        LEDBuffer.createView(
+                LEDConstants.kLEDSectionRight.startId(), LEDConstants.kLEDSectionRight.endId())
+            .reversed();
     m_back_bottom =
-        LEDBuffer1.createView(
+        LEDBuffer.createView(
             LEDConstants.kLEDSectionCoral.startId(), LEDConstants.kLEDSectionCoral.endId());
     m_back_top =
-        LEDBuffer2.createView(
+        LEDBuffer.createView(
             LEDConstants.kLEDSectionAlgae.startId(), LEDConstants.kLEDSectionAlgae.endId());
 
     // Apply the LED pattern to the data buffer
-    LEDs1.setData(LEDBuffer1);
-    LEDs2.setData(LEDBuffer2);
-    LEDs1.start();
-    LEDs2.start();
+    LEDs.setData(LEDBuffer);
+    LEDs.start();
   }
 
   // Public method to provide access to the singleton instance
@@ -211,16 +185,19 @@ public class LEDManager extends CS_SubsystemBase {
   private static void updateStatusLEDs() {
     // rsl light
     boolean rsl = RobotController.getRSLState();
-    LEDBuffer1.setRGB(0, 0, rsl ? 255 : 0, 0);
-    LEDBuffer1.setRGB(1, 0, rsl ? 255 : 0, 0);
-    LEDBuffer2.setRGB(0, 0, rsl ? 255 : 0, 0);
-    LEDBuffer2.setRGB(1, 0, rsl ? 255 : 0, 0);
+    int i = LEDConstants.kLEDSectionStatusLeft.startId();
+    int j = LEDConstants.kLEDSectionStatusRight.endId();
+
+    LEDBuffer.setRGB(i, 0, rsl ? 255 : 0, 0);
+    LEDBuffer.setRGB(i + 1, 0, rsl ? 255 : 0, 0);
+    LEDBuffer.setRGB(j, 0, rsl ? 255 : 0, 0);
+    LEDBuffer.setRGB(j - 1, 0, rsl ? 255 : 0, 0);
     // brown out
     boolean brownOut = RobotController.isBrownedOut();
-    LEDBuffer1.setRGB(2, brownOut ? 255 : 0, brownOut ? 0 : 255, 0);
-    LEDBuffer1.setRGB(3, brownOut ? 255 : 0, brownOut ? 0 : 255, 0);
-    LEDBuffer2.setRGB(2, brownOut ? 255 : 0, brownOut ? 0 : 255, 0);
-    LEDBuffer2.setRGB(3, brownOut ? 255 : 0, brownOut ? 0 : 255, 0);
+    LEDBuffer.setRGB(i + 2, brownOut ? 255 : 0, brownOut ? 0 : 255, 0);
+    LEDBuffer.setRGB(i + 3, brownOut ? 255 : 0, brownOut ? 0 : 255, 0);
+    LEDBuffer.setRGB(j - 2, brownOut ? 255 : 0, brownOut ? 0 : 255, 0);
+    LEDBuffer.setRGB(j - 3, brownOut ? 255 : 0, brownOut ? 0 : 255, 0);
     // radio light
     RadioLEDState radioState = RobotController.getRadioLEDState();
     int r = 0, g = 0, b = 0;
@@ -240,10 +217,10 @@ public class LEDManager extends CS_SubsystemBase {
       default:
         break;
     }
-    LEDBuffer1.setRGB(4, r, g, b);
-    LEDBuffer1.setRGB(5, r, g, b);
-    LEDBuffer2.setRGB(4, r, g, b);
-    LEDBuffer2.setRGB(5, r, g, b);
+    LEDBuffer.setRGB(i + 4, r, g, b);
+    LEDBuffer.setRGB(i + 5, r, g, b);
+    LEDBuffer.setRGB(j - 4, r, g, b);
+    LEDBuffer.setRGB(j - 5, r, g, b);
   }
 
   private static LEDPattern breatheFast(Color... colors) {
@@ -300,9 +277,7 @@ public class LEDManager extends CS_SubsystemBase {
     updateAlgaeLEDs();
     updateStatusLEDs();
 
-    LEDs1.setData(LEDBuffer1);
-
-    LEDs2.setData(LEDBuffer2);
+    LEDs.setData(LEDBuffer);
   }
 
   //   public static void error(errorSections errorSections, Color color) {
