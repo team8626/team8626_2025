@@ -14,42 +14,28 @@ import edu.wpi.first.wpilibj.AddressableLEDBufferView;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.LEDPattern;
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.RobotController.RadioLEDState;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.Commodore;
 import frc.robot.Commodore.CommodoreState;
 import frc.robot.subsystems.CS_SubsystemBase;
+import frc.robot.subsystems.Dashboard;
 import java.util.Optional;
 
 public class LEDManager extends CS_SubsystemBase {
 
   // Singleton instance
   private static LEDManager instance;
-  private static AddressableLEDBuffer LEDBuffer;
   private static AddressableLED LEDs;
+  private static AddressableLEDBuffer LEDBuffer;
 
   private static AddressableLEDBufferView m_left;
   private static AddressableLEDBufferView m_right;
   private static AddressableLEDBufferView m_back_top;
   private static AddressableLEDBufferView m_back_bottom;
 
-  public static enum LedErrorMode {
-    NO_ERROR,
-    ERROR_CRITICAL,
-    ERROR_DRIVE_FL,
-    ERROR_DRIVE_FR,
-    ERROR_DRIVE_BL,
-    ERROR_DRIVE_BR,
-    ERROR_GIMME_LIGHT
-  }
-
-  /** Creates a new LEDSubsystem. */
-
-  // static LedMode mainMode = LedMode.OFF;
-
   static CommodoreState mainMode = CommodoreState.IDLE;
-
-  static LedErrorMode errorMode = LedErrorMode.NO_ERROR;
-
   static Color currentColor[] = {Color.kHotPink, Color.kPink};
 
   private LEDManager() {
@@ -58,14 +44,21 @@ public class LEDManager extends CS_SubsystemBase {
 
     LEDs = new AddressableLED(LEDConstants.kLEDPort);
     LEDBuffer = new AddressableLEDBuffer(LEDConstants.kLEDStripLength);
-
     LEDs.setLength(LEDBuffer.getLength());
 
-    // TODO Use Constants instead of fixed values
-    m_left = LEDBuffer.createView(0, 59);
-    m_right = LEDBuffer.createView(60, 119).reversed();
-    m_back_bottom = LEDBuffer.createView(120, 129);
-    m_back_top = LEDBuffer.createView(130, 139);
+    m_left =
+        LEDBuffer.createView(
+            LEDConstants.kLEDSectionLeft.startId(), LEDConstants.kLEDSectionLeft.endId());
+    m_right =
+        LEDBuffer.createView(
+                LEDConstants.kLEDSectionRight.startId(), LEDConstants.kLEDSectionRight.endId())
+            .reversed();
+    m_back_bottom =
+        LEDBuffer.createView(
+            LEDConstants.kLEDSectionCoral.startId(), LEDConstants.kLEDSectionCoral.endId());
+    m_back_top =
+        LEDBuffer.createView(
+            LEDConstants.kLEDSectionAlgae.startId(), LEDConstants.kLEDSectionAlgae.endId());
 
     // Apply the LED pattern to the data buffer
     LEDs.setData(LEDBuffer);
@@ -85,16 +78,17 @@ public class LEDManager extends CS_SubsystemBase {
     mainMode = Commodore.getCurrentState();
 
     switch (mainMode) {
-      case DISCONNECTED:
+      case DISCONNECTED: // made a heart beat disconnected a white heart beat.
         currentColor = new Color[] {Color.kHotPink, Color.kPink};
-        breathe(currentColor).applyTo(m_left);
-        breathe(currentColor).applyTo(m_right);
+        breatheSlow(currentColor).applyTo(m_left);
+        breatheSlow(currentColor).applyTo(m_right);
         break;
 
       case DISABLED:
+        // heart beat alliance
         currentColor = getAllianceColor();
-        breathe(currentColor).applyTo(m_left);
-        breathe(currentColor).applyTo(m_right);
+        breatheSlow(currentColor).applyTo(m_left);
+        breatheSlow(currentColor).applyTo(m_right);
         break;
 
       case IDLE:
@@ -120,7 +114,8 @@ public class LEDManager extends CS_SubsystemBase {
         break;
 
       case TUNE_CORALSHOOTER:
-        breathe(Color.kOrange, Color.kYellow);
+        breatheSlow(Color.kCoral, Color.kBlack).applyTo(m_left);
+        breatheSlow(Color.kCoral, Color.kBlack).applyTo(m_right);
         break;
 
       default:
@@ -130,10 +125,115 @@ public class LEDManager extends CS_SubsystemBase {
     }
   }
 
-  private static LEDPattern breathe(Color... colors) {
+  private static void updateCoralLEDs() {
+    switch (Dashboard.getCoralState()) {
+      case RAMPING_UP:
+      case LAUNCHING:
+        currentColor = new Color[] {Color.kCoral, Color.kBlack};
+        breatheFast(currentColor).applyTo(m_back_top);
+        break;
+
+      case IDLE:
+        LEDPattern new_pattern = LEDPattern.solid(Color.kBlack);
+        new_pattern.applyTo(m_back_top);
+        break;
+
+      case INTAKING:
+        currentColor = new Color[] {Color.kCoral, Color.kBlack};
+        breatheSlow(currentColor).applyTo(m_back_top);
+        break;
+
+      case LOADED:
+        new_pattern = LEDPattern.solid(Color.kCoral);
+        new_pattern.applyTo(m_back_top);
+        // soild Coral lights
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  private static void updateAlgaeLEDs() {
+    switch (Dashboard.getAlgaeState()) {
+      case RAMPING_UP:
+      case LAUNCHING:
+        currentColor = new Color[] {Color.kAquamarine, Color.kBlack};
+        breatheFast(currentColor).applyTo(m_back_bottom);
+        break;
+
+      case IDLE:
+        LEDPattern new_pattern = LEDPattern.solid(Color.kBlack);
+        new_pattern.applyTo(m_back_bottom);
+        break;
+
+      case INTAKING:
+        currentColor = new Color[] {Color.kAquamarine, Color.kBlack};
+        breatheSlow(currentColor).applyTo(m_back_bottom);
+        break;
+
+      case LOADED:
+        new_pattern = LEDPattern.solid(Color.kAquamarine);
+        new_pattern.applyTo(m_back_bottom);
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  private static void updateStatusLEDs() {
+    // rsl light
+    boolean rsl = RobotController.getRSLState();
+    int i = LEDConstants.kLEDSectionStatusLeft.startId();
+    int j = LEDConstants.kLEDSectionStatusRight.endId();
+
+    LEDBuffer.setRGB(i, 0, rsl ? 255 : 0, 0);
+    LEDBuffer.setRGB(i + 1, 0, rsl ? 255 : 0, 0);
+    LEDBuffer.setRGB(j, 0, rsl ? 255 : 0, 0);
+    LEDBuffer.setRGB(j - 1, 0, rsl ? 255 : 0, 0);
+    // brown out
+    boolean brownOut = RobotController.isBrownedOut();
+    LEDBuffer.setRGB(i + 2, brownOut ? 255 : 0, brownOut ? 0 : 255, 0);
+    LEDBuffer.setRGB(i + 3, brownOut ? 255 : 0, brownOut ? 0 : 255, 0);
+    LEDBuffer.setRGB(j - 2, brownOut ? 255 : 0, brownOut ? 0 : 255, 0);
+    LEDBuffer.setRGB(j - 3, brownOut ? 255 : 0, brownOut ? 0 : 255, 0);
+    // radio light
+    RadioLEDState radioState = RobotController.getRadioLEDState();
+    int r = 0, g = 0, b = 0;
+    switch (radioState) {
+      case kGreen:
+        g = 255;
+        break;
+      case kRed:
+        r = 255;
+        break;
+      case kOrange:
+        r = 255;
+        g = 165;
+        break;
+      case kOff:
+
+      default:
+        break;
+    }
+    LEDBuffer.setRGB(i + 4, r, g, b);
+    LEDBuffer.setRGB(i + 5, r, g, b);
+    LEDBuffer.setRGB(j - 4, r, g, b);
+    LEDBuffer.setRGB(j - 5, r, g, b);
+  }
+
+  private static LEDPattern breatheFast(Color... colors) {
     LEDPattern new_pattern =
         LEDPattern.gradient(LEDPattern.GradientType.kContinuous, colors)
-            .breathe(Seconds.of(2)); // TODO: Create a constant for duration
+            .breathe(Seconds.of(.2)); // TODO: Create a constant for duration
+    return new_pattern;
+  }
+
+  private static LEDPattern breatheSlow(Color... colors) {
+    LEDPattern new_pattern =
+        LEDPattern.gradient(LEDPattern.GradientType.kContinuous, colors)
+            .breathe(Seconds.of(0.8)); // TODO: Create a constant for duration
     return new_pattern;
   }
 
@@ -173,20 +273,12 @@ public class LEDManager extends CS_SubsystemBase {
   public void CS_periodic() {
     // Update the LEDs
     updateMainLeds();
+    updateCoralLEDs();
+    updateAlgaeLEDs();
+    updateStatusLEDs();
 
-    LEDs.setData(LEDBuffer);
-
-    // Update the buffer with the rainbow animation
-
-    // Set the LEDs
     LEDs.setData(LEDBuffer);
   }
-
-  @Override
-  public void initDashboard() {}
-
-  @Override
-  public void updateDashboard() {}
 
   //   public static void error(errorSections errorSections, Color color) {
   // TODO Auto-generated method stub
