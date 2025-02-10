@@ -167,7 +167,7 @@ public class Dashboard extends CS_SubsystemBase {
     return algaeState;
   }
 
-  private static void setAlgaeState(GamePieceState new_state) {
+  public static void setAlgaeState(GamePieceState new_state) {
     algaeState = new_state;
   }
 

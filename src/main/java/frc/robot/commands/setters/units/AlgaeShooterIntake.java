@@ -8,13 +8,29 @@ package frc.robot.commands.setters.units;
 
 import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
+import frc.robot.subsystems.Dashboard;
+import frc.robot.subsystems.Dashboard.GamePieceState;
+import frc.robot.subsystems.algaeshooter.AlgaeShooterConstants;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterSubsystem;
+import java.util.function.DoubleSupplier;
 
 public class AlgaeShooterIntake extends CS_Command {
   private AlgaeShooterSubsystem algae501;
 
+  private DoubleSupplier desiredRPM;
+
   public AlgaeShooterIntake() {
     algae501 = RobotContainer.algae501;
+    desiredRPM = () -> AlgaeShooterConstants.intakeRPM;
+
+    addRequirements(algae501);
+
+    this.setTAGString("ALGAESHOOTER_INTAKE");
+  }
+
+  public AlgaeShooterIntake(DoubleSupplier newSpeed) {
+    algae501 = RobotContainer.algae501;
+    desiredRPM = newSpeed;
 
     addRequirements(algae501);
 
@@ -24,7 +40,8 @@ public class AlgaeShooterIntake extends CS_Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    algae501.startIntake();
+    Dashboard.setAlgaeState(GamePieceState.INTAKING);
+    algae501.startIntake(desiredRPM.getAsDouble());
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -34,6 +51,11 @@ public class AlgaeShooterIntake extends CS_Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    if (algae501.isLoaded()) {
+      Dashboard.setAlgaeState(GamePieceState.LOADED);
+    } else {
+      Dashboard.setAlgaeState(GamePieceState.IDLE);
+    }
     algae501.stopAll();
   }
 
