@@ -1,32 +1,20 @@
 package frc.robot.subsystems.climber;
 
 public interface ClimberInterface {
-  void startShooter(double new_RPM);
+  double getAngleDegrees();
 
-  void updateShooterRPM(double new_RPM);
+  void setAngleDegrees(double new_angle);
 
-  void stopShooter();
+  void startClimber(double new_RPM);
 
-  void startLauncher(double new_Setpoint);
+  void stopClimber();
 
-  void updateLauncherSetpoint(double new_Setpoint);
+  void updateClimberRPM(double new_RPM);
 
-  void stopLauncher();
-
-  boolean shooterIsLoaded();
-
-  double getShooterRPMLeft();
-
-  double getShooterRPMRight();
-
-  double getLauncherRPM();
-
-  double getLauncherSetpoint();
+  double getClimberRPM();
 
   /** Run flywheels at voltage */
-  default void runCharacterizationLeft(double input) {}
-
-  default void runCharacterizationRight(double input) {}
+  default void runCharacterization(double input) {}
 
   default void setPID(double kP, double kI, double kD) {}
 
@@ -35,24 +23,19 @@ public interface ClimberInterface {
   }
 
   public class ClimberValues {
-    protected boolean launchIsEnabled = false;
-    protected boolean shooterIsEnabled = false;
+    protected boolean climberIsEnabled = false;
 
-    protected double currentRPMLeft = 0; // RPM
-    protected double currentRPMRight = 0; // RPM
-    protected double currentRMPLauncher = 0; // RPM
-    protected double currentLauncherSetpoint = 0; // [-1;1]
+    protected double currentAngleDegrees = 0; // degrees
 
-    protected double ampsLeft = 0;
-    protected double ampsRight = 0;
-    protected double ampsLauncher = 0;
+    protected double amps = 0;
 
-    protected boolean isLoaded = false;
-    protected double desiredRPM = ClimberConstants.shootRPM;
+    //  protected double desiredAngle = ClimberConstants.shootRPM;
 
     protected double kP = 0.05;
     protected double kI = 0.0;
     protected double kD = 0.0;
     protected double FF = 0.0;
+
+    public double currentRPM;
   }
 }

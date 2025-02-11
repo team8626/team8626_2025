@@ -18,6 +18,8 @@ import frc.robot.RobotConstants.RobotType;
 import frc.robot.commands.setters.units.CoralShooterIntake;
 import frc.robot.commands.setters.units.CoralShooterLaunch;
 import frc.robot.commands.tuning.Tune_CoralShooter;
+import frc.robot.subsystems.climber.ClimberSubsystem;
+import frc.robot.subsystems.climber.Climber_SparkMax;
 import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
 import frc.robot.subsystems.coralshooter.CoralShooter_Sim;
 import frc.robot.subsystems.coralshooter.CoralShooter_SparkMax;
@@ -54,6 +56,7 @@ public class RobotContainer {
   public static DummySubsystem dummy = null;
   public static ElevatorSubsystem elevator = null;
   public static CoralShooterSubsystem mortar = null;
+  public static ClimberSubsystem climber = null;
 
   // Controllers
   private final CS_XboxController driverController =
@@ -90,10 +93,12 @@ public class RobotContainer {
         dummy = new DummySubsystem(new DummyIO_Specific1());
         elevator = new ElevatorSubsystem(new Elevator_Simulation());
         mortar = new CoralShooterSubsystem(new CoralShooter_Sim());
+        climber = new ClimberSubsystem(new Climber_SparkMax());
 
         break;
       case DEVBOT:
         mortar = new CoralShooterSubsystem(new CoralShooter_SparkMax());
+        climber = new ClimberSubsystem(new Climber_SparkMax());
         drivebase =
             new CS_DriveSubsystemIO_Swerve(
                 new File(Filesystem.getDeployDirectory(), "swerve_devbot"));
@@ -106,6 +111,7 @@ public class RobotContainer {
         dummy = new DummySubsystem(new DummyIO_Specific1());
         elevator = new ElevatorSubsystem(new Elevator_LinearSparkMax());
         mortar = new CoralShooterSubsystem(new CoralShooter_SparkMax());
+        climber = new ClimberSubsystem(new Climber_SparkMax());
 
         break;
     }

@@ -20,46 +20,28 @@ public class ClimberSubsystem extends CS_SubsystemBase {
 
   // Calls to the Climber interface
   public void startRampUp() {
-    climberInterface.startShooter(shootingRPM);
+    climberInterface.startClimber(shootingRPM);
   }
 
-  public void setShooterRPM(double new_RPM) {
+  public void setClimberRPM(double new_RPM) {
     shootingRPM = new_RPM;
-    climberInterface.updateShooterRPM(new_RPM);
+    climberInterface.updateClimberRPM(new_RPM);
   }
 
   public void startIntake() {
-    climberInterface.startShooter(ClimberConstants.intakeRPM);
-    climberInterface.startLauncher(ClimberConstants.launcherIntakeSetpoint);
+    climberInterface.startClimber(ClimberConstants.intakeRPM);
   }
 
-  public void startLauncher(double new_Setpoint) {
-    climberInterface.startLauncher(new_Setpoint);
-  }
-
-  public void stopShooter() {
-    climberInterface.stopShooter();
-  }
-
-  public void stopLauncher() {
-    climberInterface.stopLauncher();
+  public void stopClimber() {
+    climberInterface.stopClimber();
   }
 
   public void stopAll() {
-    climberInterface.stopShooter();
-    climberInterface.stopLauncher();
+    climberInterface.stopClimber();
   }
 
-  public double getShooterRPMLeft() {
-    return climberInterface.getShooterRPMLeft();
-  }
-
-  public double getShooterRPMRight() {
-    return climberInterface.getShooterRPMRight();
-  }
-
-  public boolean isLoaded() {
-    return climberInterface.shooterIsLoaded();
+  public double getClimberRPM() {
+    return climberInterface.getClimberRPM();
   }
 
   public void setPID(double newkP, double newkI, double newkD) {
@@ -112,37 +94,26 @@ public class ClimberSubsystem extends CS_SubsystemBase {
     values.kD = CS_Utils.updateFromSmartDashboard(newkD, values.kD, (value) -> setkD(value));
 
     // Update the SmartDashboard with the current state of the subsystem
-    SmartDashboard.putBoolean("Subsystem/Climber/Shooter", values.shooterIsEnabled);
-    SmartDashboard.putBoolean("Subsystem/Climber/Launcher", values.launchIsEnabled);
+    SmartDashboard.putBoolean("Subsystem/Climber/Climber", values.climberIsEnabled);
 
-    SmartDashboard.putNumber("Subsystem/Climber/Shooter RPM Left", values.currentRPMLeft);
-    SmartDashboard.putNumber("Subsystem/Climber/Shooter RPM Right", values.currentRPMRight);
-    SmartDashboard.putNumber(
-        "Subsystem/Climber/launcher RPM Right", values.currentRMPLauncher);
-    SmartDashboard.putNumber(
-        "Subsystem/Climber/Launcher Setpoint", values.currentLauncherSetpoint);
+    SmartDashboard.putNumber("Subsystem/Climber/Chooter RPM", values.currentRPM);
 
-    SmartDashboard.putNumber("Subsystem/Climber/Shooter Amps Left", values.ampsLeft);
-    SmartDashboard.putNumber("Subsystem/Climber/Shooter Amps Right", values.ampsRight);
-    SmartDashboard.putNumber("Subsystem/Climber/Launcher Amps", values.ampsLauncher);
-
-    SmartDashboard.putBoolean("Subsystem/Climber/isLoaded", values.isLoaded);
+    SmartDashboard.putNumber("Subsystem/Climber/Climber Amps", values.amps);
 
     double newRPM =
         SmartDashboard.getNumber("Subsystem/Climber/Shooting RPM", ClimberConstants.shootRPM);
     if (newRPM != shootingRPM) {
-      setShooterRPM(newRPM);
+      setClimberRPM(newRPM);
     }
     SmartDashboard.putNumber("Subsystem/Climber/Shooting RPM", shootingRPM);
   }
 
   // Characterization methods
   public void runCharacterization(double input) {
-    climberInterface.runCharacterizationLeft(input);
-    climberInterface.runCharacterizationRight(input);
+    climberInterface.runCharacterization(input);
   }
 
   public double getCharacterizationVelocity() {
-    return (values.currentRPMLeft + values.currentRPMRight) / 2.0;
+    return (values.currentRPM);
   }
 }
