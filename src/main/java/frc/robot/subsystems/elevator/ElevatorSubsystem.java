@@ -8,6 +8,7 @@ import frc.utils.CS_Utils;
 public class ElevatorSubsystem extends CS_SubsystemBase {
   private ElevatorInterface elevatorInterface;
   private ElevatorValues values;
+  private double desiredHeight = 0;
 
   public ElevatorSubsystem(ElevatorInterface subsystem_interface) {
     super();
@@ -23,6 +24,7 @@ public class ElevatorSubsystem extends CS_SubsystemBase {
   }
 
   public void setHeight(double heightInches) {
+    desiredHeight = heightInches;
     elevatorInterface.setHeightInches(heightInches);
   }
 
@@ -57,6 +59,7 @@ public class ElevatorSubsystem extends CS_SubsystemBase {
 
     // Using SmartDashboard to tune PIDs
     // --------------------------------------------------
+    SmartDashboard.putNumber("Subsystem/Elevator/DesiredHeight", desiredHeight);
     SmartDashboard.putNumber("Subsystem/Elevator/P Gain", ElevatorConstants.kP);
     SmartDashboard.putNumber("Subsystem/Elevator/D Gain", ElevatorConstants.kI);
     SmartDashboard.putNumber("Subsystem/Elevator/I Gain", ElevatorConstants.kD);
@@ -93,6 +96,12 @@ public class ElevatorSubsystem extends CS_SubsystemBase {
     // values.FF);
     // TODO Auto-generated method stub
 
+    // double newHeight = SmartDashboard.getNumber("Subsystem/Elevator/DesiredHeight", desiredHeight);
+    // if (newHeight != desiredHeight) {
+    //   desiredHeight = newHeight;
+    //   setHeight(newHeight);
+    // }
+    // SmartDashboard.putNumber("Subsystem/Elevator/DesiredHeight", desiredHeight);
   }
 
   @Override
