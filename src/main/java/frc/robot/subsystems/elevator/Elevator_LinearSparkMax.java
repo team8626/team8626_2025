@@ -7,6 +7,7 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.AlternateEncoderConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import frc.robot.subsystems.CS_InterfaceBase;
@@ -20,15 +21,23 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
   private final SparkMaxConfig config1;
   private final SparkClosedLoopController controller1;
   private final RelativeEncoder encoder1;
+  private final AlternateEncoderConfig encoderConfig1 = new AlternateEncoderConfig();
 
   private boolean is_enabled = false;
   private ElevatorState current_state = ElevatorState.STOPPED;
 
   public Elevator_LinearSparkMax() {
 
+    // Seup the encoder configuratiion
+    encoderConfig1
+        .setSparkMaxDataPortConfig()
+        .countsPerRevolution(8192) // RevRobotics Through Bore Encoder
+        .positionConversionFactor(ElevatorConstants.positionConversionFactor)
+        .velocityConversionFactor(ElevatorConstants.velocityConversionFactor);
+
     // Setup configuration for the motor
     config1 = new SparkMaxConfig();
-    config1.inverted(false).idleMode(IdleMode.kBrake);
+    config1.apply(encoderConfig1).inverted(false).idleMode(IdleMode.kBrake);
 
     // Create the motor and assign configuration
     motor1 = new SparkMax(ElevatorConstants.CANID, MotorType.kBrushless);
@@ -36,9 +45,6 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
 
     // Create the encoder
     encoder1 = motor1.getAlternateEncoder();
-    // encoder1.setPositionConversionFactor(ElevatorConstants.positionConversionFactor)
-    //  .setVelocityConversionFactor(ElevatorConstants.velocityConversionFactor);
-    // TODO: Set the position and velocity conversion factors for the encoder
 
     // Setup the controller
     controller1 = motor1.getClosedLoopController();
