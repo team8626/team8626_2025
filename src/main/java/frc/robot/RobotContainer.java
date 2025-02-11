@@ -37,7 +37,7 @@ import frc.robot.subsystems.dummy.DummyIO_Specific1;
 import frc.robot.subsystems.dummy.DummySubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.elevator.Elevator_LinearSparkMax;
-import frc.robot.subsystems.elevator.Elevator_Simulation;
+import frc.robot.subsystems.elevator.Elevator_SimulationRose;
 import frc.robot.subsystems.ledManager.LEDManager;
 import frc.robot.subsystems.presets.PresetManager;
 import frc.utils.CS_ButtonBoxController;
@@ -105,7 +105,7 @@ public class RobotContainer {
             new CS_DriveSubsystemIO_Swerve(
                 new File(Filesystem.getDeployDirectory(), "swerve_devbot"));
         dummy = new DummySubsystem(new DummyIO_Specific1());
-        elevator = new ElevatorSubsystem(new Elevator_Simulation());
+        elevator = new ElevatorSubsystem(new Elevator_SimulationRose());
         mortar = new CoralShooterSubsystem(new CoralShooter_Sim());
         algae501 = new AlgaeShooterSubsystem(new AlgaeShooter_Sim());
 
@@ -233,6 +233,9 @@ public class RobotContainer {
     controller.btn_4.toggleOnTrue(new AlgaeShooterIntake());
     controller.btn_5.toggleOnTrue(new Tune_AlgaeShooter());
     controller.btn_6.toggleOnTrue(new AlgaeShooterLaunch());
+
+    controller.btn_7.toggleOnTrue(new InstantCommand(() -> elevator.setHeight(3)));
+    controller.btn_8.toggleOnTrue(new InstantCommand(() -> elevator.setHeight(40)));
 
     // controller.btn_4.toggleOnTrue(
     //     new FeedForwardCharacterization(
