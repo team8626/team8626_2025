@@ -14,11 +14,10 @@ import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
 public class CoralShooterRampUp extends CS_Command {
   private CoralShooterSubsystem mortar;
 
-  private double desiredRPMLeft = CoralShooterConstants.shootRPMLeft;
-  private double desiredRPMRight = CoralShooterConstants.shootRPMRight;
-  private final double RPMTolerance = CoralShooterConstants.shooterRPMTolerance;
-  private final double RPMDifferentialTolerance =
-      CoralShooterConstants.shooterRPMDifferentialTolerance;
+  private double desiredRPMLeft = CoralShooterConstants.RPMShootLeft;
+  private double desiredRPMRight = CoralShooterConstants.RPMShoolLeft;
+  private final double RPMTolerance = CoralShooterConstants.RPMTolerance;
+  private final double RPMDifferentialTolerance = CoralShooterConstants.RPMDifferentialTolerance;
 
   public CoralShooterRampUp() {
     mortar = RobotContainer.mortar;

@@ -59,17 +59,17 @@ public class CoralShooter_Sim implements CoralShooterInterface, CS_InterfaceBase
     values.launchIsEnabled = launcherIsEnabled;
     values.shooterIsEnabled = shooterIsEnabled;
 
-    values.currentRPMLeft = getShooterRPMLeft();
-    values.currentRPMRight = getShooterRPMRight();
+    values.currentRPMLeft = getRPMLeft();
+    values.currentRPMRight = getRPMRight();
 
-    values.currentRMPLauncher = getLauncherRPM();
-    values.currentLauncherSetpoint = getLauncherSetpoint();
+    values.currentRMPLauncher = getRPMLauncher();
+    values.currentLauncherSetpoint = getSetpointLauncher();
 
     values.ampsLeft = leftSim.getCurrentDrawAmps();
     values.ampsRight = rightSim.getCurrentDrawAmps();
     values.ampsLauncher = launchSim.getCurrentDrawAmps();
 
-    values.isLoaded = shooterIsLoaded();
+    values.isLoaded = isLoaded();
   }
 
   @Override
@@ -82,12 +82,12 @@ public class CoralShooter_Sim implements CoralShooterInterface, CS_InterfaceBase
 
   @Override
   public void stopShooter() {
-    updateShooterRPM(0, 0);
+    updateRPMShooter(0, 0);
     shooterIsEnabled = false;
   }
 
   @Override
-  public void updateShooterRPM(double new_RPMLeft, double new_RPMRight) {
+  public void updateRPMShooter(double new_RPMLeft, double new_RPMRight) {
     if (shooterIsEnabled) {
       leftSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_RPMLeft));
       rightSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_RPMRight));
@@ -97,12 +97,12 @@ public class CoralShooter_Sim implements CoralShooterInterface, CS_InterfaceBase
 
   @Override
   public void stopLauncher() {
-    updateLauncherSetpoint(0);
+    updateSetpointLauncher(0);
     launcherIsEnabled = false;
   }
 
   @Override
-  public void updateLauncherSetpoint(double new_Setpoint) {
+  public void updateSetpointLauncher(double new_Setpoint) {
     currentLauncherSetpoint = new_Setpoint;
     if (launcherIsEnabled) {
       launchSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_Setpoint));
@@ -118,26 +118,26 @@ public class CoralShooter_Sim implements CoralShooterInterface, CS_InterfaceBase
   }
 
   @Override
-  public double getShooterRPMLeft() {
+  public double getRPMLeft() {
     return leftSim.getAngularVelocityRPM();
   }
 
   @Override
-  public double getShooterRPMRight() {
+  public double getRPMRight() {
     return rightSim.getAngularVelocityRPM();
   }
 
   @Override
-  public double getLauncherRPM() {
+  public double getRPMLauncher() {
     return launchSim.getAngularVelocityRPM();
   }
 
-  public double getLauncherSetpoint() {
+  public double getSetpointLauncher() {
     return currentLauncherSetpoint;
   }
 
   @Override
-  public boolean shooterIsLoaded() {
+  public boolean isLoaded() {
     return !loadedSensorSim.getValue();
   }
 

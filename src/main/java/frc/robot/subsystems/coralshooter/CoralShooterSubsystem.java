@@ -8,8 +8,8 @@ import frc.utils.CS_Utils;
 public class CoralShooterSubsystem extends CS_SubsystemBase {
   private CoralShooterInterface coralShooterInterface;
   private CoralShooterValues values;
-  private double shootingRPMLeft = CoralShooterConstants.shootRPMLeft;
-  private double shootingRPMRight = CoralShooterConstants.shootRPMRight;
+  private double shootingRPMLeft = CoralShooterConstants.RPMShootLeft;
+  private double shootingRPMRight = CoralShooterConstants.RPMShoolLeft;
 
   public CoralShooterSubsystem(CoralShooterInterface subsystem_interface) {
     super();
@@ -27,12 +27,12 @@ public class CoralShooterSubsystem extends CS_SubsystemBase {
   public void setShooterRPM(double new_RPMLeft, double new_RPMRight) {
     shootingRPMLeft = new_RPMLeft;
     shootingRPMRight = new_RPMRight;
-    coralShooterInterface.updateShooterRPM(new_RPMLeft, new_RPMRight);
+    coralShooterInterface.updateRPMShooter(new_RPMLeft, new_RPMRight);
   }
 
   public void startIntake() {
     coralShooterInterface.startShooter(
-        CoralShooterConstants.intakeRPM, CoralShooterConstants.intakeRPM);
+        CoralShooterConstants.RPMIntake, CoralShooterConstants.RPMIntake);
     coralShooterInterface.startLauncher(CoralShooterConstants.launcherIntakeSetpoint);
   }
 
@@ -54,15 +54,15 @@ public class CoralShooterSubsystem extends CS_SubsystemBase {
   }
 
   public double getShooterRPMLeft() {
-    return coralShooterInterface.getShooterRPMLeft();
+    return coralShooterInterface.getRPMLeft();
   }
 
   public double getShooterRPMRight() {
-    return coralShooterInterface.getShooterRPMRight();
+    return coralShooterInterface.getRPMRight();
   }
 
   public boolean isLoaded() {
-    return coralShooterInterface.shooterIsLoaded();
+    return coralShooterInterface.isLoaded();
   }
 
   public void setPID(double newkP, double newkI, double newkD) {
@@ -96,7 +96,7 @@ public class CoralShooterSubsystem extends CS_SubsystemBase {
     SmartDashboard.putNumber("Subsystem/CoralShooter/Gains/I", CoralShooterConstants.gains.kI());
     SmartDashboard.putNumber("Subsystem/CoralShooter/Gains/D", CoralShooterConstants.gains.kD());
 
-    SmartDashboard.putNumber("Subsystem/CoralShooter/Last Shot in (ms)", 0);
+    SmartDashboard.putNumber("Subsystem/CoralShooter/LastShotIn(ms)", 0);
   }
 
   @Override
@@ -118,33 +118,33 @@ public class CoralShooterSubsystem extends CS_SubsystemBase {
     SmartDashboard.putBoolean("Subsystem/CoralShooter/Shooter", values.shooterIsEnabled);
     SmartDashboard.putBoolean("Subsystem/CoralShooter/Launcher", values.launchIsEnabled);
 
-    SmartDashboard.putNumber("Subsystem/CoralShooter/CurrentRPM Left", values.currentRPMLeft);
-    SmartDashboard.putNumber("Subsystem/CoralShooter/CurrentRPM Right", values.currentRPMRight);
+    SmartDashboard.putNumber("Subsystem/CoralShooter/CurrentRPMLeft", values.currentRPMLeft);
+    SmartDashboard.putNumber("Subsystem/CoralShooter/CurrentRPMRight", values.currentRPMRight);
     SmartDashboard.putNumber(
-        "Subsystem/CoralShooter/CurrentRPM Launcher", values.currentRMPLauncher);
+        "Subsystem/CoralShooter/CurrentRPMLauncher", values.currentRMPLauncher);
     SmartDashboard.putNumber(
-        "Subsystem/CoralShooter/Launcher Setpoint", values.currentLauncherSetpoint);
+        "Subsystem/CoralShooter/LauncherSetpoint", values.currentLauncherSetpoint);
 
-    SmartDashboard.putNumber("Subsystem/CoralShooter/ShooterAmps Left", values.ampsLeft);
-    SmartDashboard.putNumber("Subsystem/CoralShooter/ShooterAmps Right", values.ampsRight);
+    SmartDashboard.putNumber("Subsystem/CoralShooter/ShooterAmpsLeft", values.ampsLeft);
+    SmartDashboard.putNumber("Subsystem/CoralShooter/ShooterAmpsRight", values.ampsRight);
     SmartDashboard.putNumber("Subsystem/CoralShooter/LauncherAmps", values.ampsLauncher);
 
-    SmartDashboard.putBoolean("Subsystem/CoralShooter/isLoaded", values.isLoaded);
+    SmartDashboard.putBoolean("Subsystem/CoralShooter/IsLoaded", values.isLoaded);
 
     double newRPMLeft =
         SmartDashboard.getNumber(
-            "Subsystem/CoralShooter/ShootingRPM Left", CoralShooterConstants.shootRPMLeft);
+            "Subsystem/CoralShooter/ShootingRPMLeft", CoralShooterConstants.RPMShootLeft);
     if (newRPMLeft != shootingRPMLeft) {
       setShooterRPM(newRPMLeft, shootingRPMRight);
     }
     double newRPMRight =
         SmartDashboard.getNumber(
-            "Subsystem/CoralShooter/ShootingRPM Right", CoralShooterConstants.shootRPMRight);
+            "Subsystem/CoralShooter/ShootingRPMRight", CoralShooterConstants.RPMShoolLeft);
     if (newRPMRight != shootingRPMRight) {
       setShooterRPM(shootingRPMLeft, newRPMRight);
     }
-    SmartDashboard.putNumber("Subsystem/CoralShooter/ShootingRPM Left", shootingRPMLeft);
-    SmartDashboard.putNumber("Subsystem/CoralShooter/ShootingRPM Right", shootingRPMRight);
+    SmartDashboard.putNumber("Subsystem/CoralShooter/ShootingRPMLeft", shootingRPMLeft);
+    SmartDashboard.putNumber("Subsystem/CoralShooter/ShootingRPMRight", shootingRPMRight);
   }
 
   // Characterization methods

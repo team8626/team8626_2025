@@ -3,25 +3,25 @@ package frc.robot.subsystems.coralshooter;
 public interface CoralShooterInterface {
   void startShooter(double new_RPM, double new_RPMRight);
 
-  void updateShooterRPM(double new_RPM, double new_RPMRight);
+  void updateRPMShooter(double new_RPM, double new_RPMRight);
 
   void stopShooter();
 
   void startLauncher(double new_Setpoint);
 
-  void updateLauncherSetpoint(double new_Setpoint);
+  void updateSetpointLauncher(double new_Setpoint);
 
   void stopLauncher();
 
-  boolean shooterIsLoaded();
+  boolean isLoaded();
 
-  double getShooterRPMLeft();
+  double getRPMLeft();
 
-  double getShooterRPMRight();
+  double getRPMRight();
 
-  double getLauncherRPM();
+  double getRPMLauncher();
 
-  double getLauncherSetpoint();
+  double getSetpointLauncher();
 
   /** Run flywheels at voltage */
   default void runCharacterizationLeft(double input) {}
@@ -48,8 +48,8 @@ public interface CoralShooterInterface {
     protected double ampsLauncher = 0;
 
     protected boolean isLoaded = false;
-    protected double desiredRPMLeft = CoralShooterConstants.shootRPMLeft;
-    protected double desiredRPMRight = CoralShooterConstants.shootRPMRight;
+    protected double desiredRPMLeft = CoralShooterConstants.RPMShootLeft;
+    protected double desiredRPMRight = CoralShooterConstants.RPMShoolLeft;
 
     protected double kP = 0.05;
     protected double kI = 0.0;
