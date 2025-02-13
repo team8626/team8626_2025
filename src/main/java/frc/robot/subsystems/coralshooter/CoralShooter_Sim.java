@@ -21,7 +21,7 @@ public class CoralShooter_Sim implements CoralShooterInterface, CS_InterfaceBase
   private FlywheelSim rightSim;
   private FlywheelSim launchSim;
 
-  private DigitalInput loadedSensor = new DigitalInput(CoralShooterConstants.infraRedPort);
+  private DigitalInput loadedSensor = new DigitalInput(CoralShooterConstants.lidarPort);
   private DIOSim loadedSensorSim = new DIOSim(loadedSensor);
 
   public CoralShooter_Sim() {

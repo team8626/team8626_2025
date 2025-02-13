@@ -36,8 +36,8 @@ public class CoralShooterConstants {
   public static final FlywheelConfig launcherConfig =
       new FlywheelConfig(3, 0, (1.0 / 1.0), 2 * momentOfInertia, 6000.0);
 
-  // InfraRed Port (Sensor to check if the CORAL is loaded
-  public static final int infraRedPort = 0; // DIO
+  // Lidar Port (Sensor to check if the CORAL is loaded)
+  public static final int lidarPort = 0; // DIO
 
   // PID Constants
   public static final Gains gains =
