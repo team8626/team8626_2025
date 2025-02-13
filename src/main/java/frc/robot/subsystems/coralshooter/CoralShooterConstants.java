@@ -6,14 +6,14 @@ import frc.robot.RobotConstants;
 public class CoralShooterConstants {
 
   // Tuned Values
-  public static final double shootRPMLeft = 1275;
-  public static final double shootRPMRight = 1275;
-  public static final double intakeRPM = -300;
+  public static final double RPMShootLeft = 1275;
+  public static final double RPMShoolLeft = 1275;
+  public static final double RPMIntake = -300;
   public static final double launcherShootSetpoint = -1.0;
   public static final double launcherIntakeSetpoint = 0.3;
 
-  public static final double shooterRPMTolerance = 50;
-  public static final double shooterRPMDifferentialTolerance = 10;
+  public static final double RPMTolerance = 50;
+  public static final double RPMDifferentialTolerance = 10;
   public static final double launchTimerSeconds = 0.2;
 
   // CoralShooter Constants
@@ -22,12 +22,6 @@ public class CoralShooterConstants {
   // private static final double stealthWheelMomentOfInertia = 0.5 * wheelMassKg * wheelRadiusMeters
   // * wheelRadiusMeters;
   private static final double momentOfInertia = 1;
-
-  // PID Constants
-  // public final static double kP = 1.0;
-  // public final static double kI = 0.0;
-  // public final static double kD = 0.0;
-  // public final static double FF = 0.0;
 
   // Flywheel Config
   public static final FlywheelConfig flywheelConfig =
@@ -40,7 +34,7 @@ public class CoralShooterConstants {
 
   // Launcher FLywheel Config
   public static final FlywheelConfig launcherConfig =
-      new FlywheelConfig(5, 0, (1.0 / 1.0), 2 * momentOfInertia, 6000.0);
+      new FlywheelConfig(3, 0, (1.0 / 1.0), 2 * momentOfInertia, 6000.0);
 
   // InfraRed Port (Sensor to check if the CORAL is loaded
   public static final int infraRedPort = 0; // DIO
@@ -57,8 +51,8 @@ public class CoralShooterConstants {
   public record Gains(double kP, double kI, double kD, double kS, double kV, double kA) {}
 
   public record FlywheelConfig(
-      int leftCANID,
-      int rightCANID,
+      int CANIdLeft,
+      int CANIdRight,
       double reduction,
       double momentOfInertia,
       double maxAcclerationRpmPerSec) {}
