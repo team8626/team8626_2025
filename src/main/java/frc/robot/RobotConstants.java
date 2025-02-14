@@ -1,9 +1,15 @@
 package frc.robot;
 
+import java.security.PublicKey;
+import java.util.Arrays;
+import java.util.List;
+
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -46,9 +52,17 @@ public class RobotConstants {
   // Units.inchesToMeters(0));
 
   /** Defines the robot's physical dimensions. */
-  public static double FrameWidth = Units.inchesToMeters(24);
+  public static double FrameWidth = Units.inchesToMeters(27);
+  public static double FrameLength = Units.inchesToMeters(27);
+  public static double bumperThickness = Units.inchesToMeters(3);
+  public static double robotCenterToEdge = Units.inchesToMeters(FrameLength+bumperThickness/2);
 
-  public static double FrameLength = Units.inchesToMeters(24);
+  private static double robotCenterOffsetX = FrameLength / 2.0 + bumperThickness;
+  private static double robotCenterOffsetY = FrameWidth / 2.0 + bumperThickness;
+  private static double robotCenterOffsetTheta = 0;
+  
+  public static Pose2d robotCenterOffset =
+      new Pose2d(Units.inchesToMeters(robotCenterOffsetX), Units.inchesToMeters(robotCenterOffsetY), Rotation2d.fromDegrees(robotCenterOffsetTheta));
 
   /** Defines position of the cameras on the robot. */
   public static class Vision_2024 { // TODO: Can be removed?
@@ -78,6 +92,9 @@ public class RobotConstants {
   // ****************************************************************************************
   // UI Constants
   public static class UIConstants {
-    public static final String[] allowedCORALLevels = {"L1", "L4"};
-  }
+    public static final List<String> allowedCORALLevels = Arrays.asList("L1", "L2", "L3", "L4");
+    public static final List<String> allowedIntakeSides = Arrays.asList("LEFT", "RIGHT");
+    public static final List<String> allowedREEFBranches = Arrays.asList("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"); 
+    public static final List<String> allowedAlgaePositions = Arrays.asList("AB", "CD", "EF", "GH", "IJ", "KL");
+}
 }

@@ -28,7 +28,6 @@ import java.util.Queue;
 public class Commodore extends CS_SubsystemBase {
   // Singleton instance
   private static Commodore instance;
-
   private static CommodoreState currentState = CommodoreState.UNKNOWN;
   private static Queue<CommodoreState> stateHistory;
 
@@ -60,7 +59,8 @@ public class Commodore extends CS_SubsystemBase {
     TUNE_ALGAESHOOTER,
 
     INTAKE,
-    SHOOT
+    SHOOT,
+    GO_TO_POSITION,
   }
 
   // Private Constructor to prevent instantiation

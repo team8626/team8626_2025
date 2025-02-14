@@ -5,20 +5,37 @@
 package frc.robot.subsystems.presets;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.FieldConstants;
+import frc.robot.RobotConstants;
 import frc.robot.RobotConstants.UIConstants;
 import frc.robot.subsystems.CS_SubsystemBase;
-import frc.robot.subsystems.presets.Presets.Preset;
+import frc.robot.subsystems.presets.Presets.CoralPreset;
+
+import static edu.wpi.first.units.Units.Rotation;
+
+import java.lang.reflect.Field;
 import java.util.Optional;
 
 public class PresetManager extends CS_SubsystemBase {
   private String uiSelectedCORALLevel = "L1";
   private String uiSelectedIntakeSide = "UNKNOWN";
   private String uiSelectedREEFBranch = "UNKNOWN";
+  private String uiSelectedAlgaePosition = "UNKNOWN";
+  private String uiCurrentCORALLevel = "L4";
+  private String uiCurrentIntakeSide = "UNKNOWN";
+  private String uiCurrentREEFBranch = "";
+  private String uiCurrentAlgaePosition = "UNKNOWN";
+  //private CoralPreset autoCoralPreset = new CoralPreset( "autoPreset", new Pose2d(), 0.0, false);
 
   // Singleton instance
   private static PresetManager instance;
@@ -37,10 +54,10 @@ public class PresetManager extends CS_SubsystemBase {
 
   @Override
   public void CS_periodic() {
-    // Implement the method here
+    updateUIData();
+    updatePreset();
   }
 
-  private Preset currentPreset;
   private StructPublisher<Pose2d> robotPostPublisher =
       NetworkTableInstance.getDefault()
           .getStructTopic("SmartDashboard/Presets/Pose2d", Pose2d.struct)
@@ -50,13 +67,13 @@ public class PresetManager extends CS_SubsystemBase {
   //   private static double m_angleAdjust = -7;
   //   private static double m_launchRPMTopMultiplier = 1;
 
-  public void set(Preset newPreset) {
-    currentPreset = newPreset;
-  }
+  // // public void set(Preset newPreset) {
+  //   currentPreset = newPreset;
+  // }
 
-  public Preset get() {
-    return currentPreset;
-  }
+  // public Preset get() {
+  //   return currentPreset;
+  // }
 
   //   public static Preset getAimAndShootPreset(Pose2d robotPose) {
 
@@ -165,23 +182,24 @@ public class PresetManager extends CS_SubsystemBase {
 
   @Override
   public void updateDashboard() {
-    if (this.currentPreset != null) {
-      robotPostPublisher.set(currentPreset.robotPose());
-      SmartDashboard.putString("Presets/Preset", currentPreset.Name());
-      SmartDashboard.putNumber("Presets/Elevator Height", currentPreset.elevatorHeightInches());
-      SmartDashboard.putNumber("Presets/Wrist Angle", currentPreset.WristAngleDegrees());
-      SmartDashboard.putNumber("Presets/Algae RPM", currentPreset.AlgaeRPM());
-      SmartDashboard.putNumber("Presets/Coral RPM", currentPreset.CoralRPM());
-      SmartDashboard.putNumber("Presets/Robot Pose X", currentPreset.robotPose().getX());
-      SmartDashboard.putNumber("Presets/Robot Pose Y", currentPreset.robotPose().getY());
-    }
-    updateUIData();
+    // if (this.currentPreset != null) {
+    //   robotPostPublisher.set(currentPreset.robotPose());
+    //   SmartDashboard.putString("Presets/Preset", currentPreset.Name());
+    //   SmartDashboard.putNumber("Presets/Elevator Height", currentPreset.elevatorHeightInches());
+    //   SmartDashboard.putNumber("Presets/Wrist Angle", currentPreset.WristAngleDegrees());
+    //   SmartDashboard.putNumber("Presets/Algae RPM", currentPreset.AlgaeRPM());
+    //   SmartDashboard.putNumber("Presets/Coral RPM", currentPreset.CoralRPM());
+    //   SmartDashboard.putNumber("Presets/Robot Pose X", currentPreset.robotPose().getX());
+    //   SmartDashboard.putNumber("Presets/Robot Pose Y", currentPreset.robotPose().getY());
+    // }
   }
 
   public void updateUIData() {
-    SmartDashboard.putStringArray("Presets/UI/AllowedCORALLevels", UIConstants.allowedCORALLevels);
+    // TODO Write this Function for the PresetManager
+    //SmartDashboard.putStringArray("Presets/UI/AllowedCORALLevels", UIConstants.allowedCORALLevels);
 
     // Set Alliance Color
+    // TODO Move this to the Dashboard subsystem
     String alliance = "UNKNOWN";
     if (DriverStation.isFMSAttached()) {
       Optional<Alliance> ally = DriverStation.getAlliance();
@@ -194,25 +212,80 @@ public class PresetManager extends CS_SubsystemBase {
         }
       }
     }
+
     SmartDashboard.putString("Presets/UI/AllianceColor", alliance);
 
     // Get Values from UI
-    String new_uiSelectedCORALLevel =
-        SmartDashboard.getString("Presets/UI/SelectedCORALLevel", "UNKNOWN");
-    if (new_uiSelectedCORALLevel != uiSelectedCORALLevel) {
-      uiSelectedCORALLevel = new_uiSelectedCORALLevel;
-    }
+    uiSelectedCORALLevel = SmartDashboard.getString("Presets/UI/SelectedCORALLevel", "UNKNOWN");
+    uiSelectedREEFBranch = SmartDashboard.getString("Presets/UI/SelectedREEFBranch", "UNKNOWN");
+    uiSelectedIntakeSide = SmartDashboard.getString("Presets/UI/SelectedIntakeSide", "UNKNOWN");
+    uiSelectedAlgaePosition =
+        SmartDashboard.getString("Presets/UI/SelectedAlgaePosition", "UNKNOWN");
+  }
 
-    String new_uiSelectedIntakeSide =
-        SmartDashboard.getString("Presets/UI/SelectedIntakeSide", "UNKNOWN");
-    if (new_uiSelectedIntakeSide != uiSelectedIntakeSide) {
-      uiSelectedIntakeSide = new_uiSelectedIntakeSide;
+  private void updatePreset(){
+    if ((!uiSelectedCORALLevel.equals(uiCurrentCORALLevel) && UIConstants.allowedCORALLevels.contains(uiSelectedCORALLevel))
+     || (!uiSelectedREEFBranch.equals(uiCurrentREEFBranch) && UIConstants.allowedREEFBranches.contains(uiSelectedREEFBranch))) {
+      // Insert a placeholder for creating a new preset
+      //autoCoralPreset.setRPM(1275.0);
+      //autoCoralPreset.setPose(new Pose2d());
     }
+  }
 
-    String new_uiSelectedREEFBranch =
-        SmartDashboard.getString("Presets/UI/SelectedREEFBranch", "UNKNOWN");
-    if (new_uiSelectedREEFBranch != uiSelectedREEFBranch) {
-      uiSelectedREEFBranch = new_uiSelectedREEFBranch;
+  private Pose2d getRobotPoseFromBranch(String branch){
+    double branchOffsetX = Units.inchesToMeters(14.75/2)*Math.cos(30);
+    double branchOffsetY = Units.inchesToMeters(14.75/2)*Math.sin(30);
+    Pose2d branchPose;
+    
+    switch (branch){
+      case "BranchA":
+        branchPose = FieldConstants.Reef.centerFaces[0].plus(new Transform2d(new Translation2d(branchOffsetX, branchOffsetY), Rotation2d.fromDegrees(30)));
+        break;
+      case "BranchB":
+        branchPose = FieldConstants.Reef.centerFaces[0].plus(new Transform2d(new Translation2d(branchOffsetX, branchOffsetY), Rotation2d.fromDegrees(30)));
+        break;
+      case "BranchC":
+        branchPose = FieldConstants.Reef.centerFaces[1].plus(new Transform2d(new Translation2d(branchOffsetX, branchOffsetY), Rotation2d.fromDegrees(30)));
+        break;
+      case "BranchD":
+        branchPose = FieldConstants.Reef.centerFaces[1].plus(new Transform2d(new Translation2d(branchOffsetX, branchOffsetY), Rotation2d.fromDegrees(30)));
+        break;
+      case "BranchE":
+        branchPose = FieldConstants.Reef.centerFaces[2].plus(new Transform2d(new Translation2d(branchOffsetX, branchOffsetY), Rotation2d.fromDegrees(30)));
+        break;
+      case "BranchF":
+        branchPose = FieldConstants.Reef.centerFaces[2].plus(new Transform2d(new Translation2d(branchOffsetX, branchOffsetY), Rotation2d.fromDegrees(30)));
+        break;
+      case "BranchG":
+        branchPose = FieldConstants.Reef.centerFaces[3].plus(new Transform2d(new Translation2d(branchOffsetX, branchOffsetY), Rotation2d.fromDegrees(30)));
+        break;
+      case "BranchH":
+        branchPose = FieldConstants.Reef.centerFaces[3].plus(new Transform2d(new Translation2d(branchOffsetX, branchOffsetY), Rotation2d.fromDegrees(30)));
+        break;
+      case "BranchI":
+        branchPose = FieldConstants.Reef.centerFaces[4].plus(new Transform2d(new Translation2d(branchOffsetX, branchOffsetY), Rotation2d.fromDegrees(30)));
+        break;
+      case "BranchJ":
+        branchPose = FieldConstants.Reef.centerFaces[4].plus(new Transform2d(new Translation2d(branchOffsetX, branchOffsetY), Rotation2d.fromDegrees(30)));
+        break;
+      case "BranchK":
+        branchPose = FieldConstants.Reef.centerFaces[5].plus(new Transform2d(new Translation2d(branchOffsetX, branchOffsetY), Rotation2d.fromDegrees(30)));
+        break; 
+      case "BranchL":
+        branchPose = FieldConstants.Reef.centerFaces[5].plus(new Transform2d(new Translation2d(branchOffsetX, branchOffsetY), Rotation2d.fromDegrees(30)));
+        break;
+      default:
+        throw new IllegalArgumentException("Unknown branch: " + branch);
     }
+    
+
+
+    //  Y Deepest Point -  Y Shallowest Point = dY
+    // X Deep Point - X Shallow Point = dX
+    
+
+    Pose2d retVal = new Pose2d();
+
+    return retVal;
   }
 }

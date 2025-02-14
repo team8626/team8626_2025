@@ -33,6 +33,18 @@
           "data": {
             "pathName": "RightPickupCoralA3"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "@ReefA3RightPickup"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RightPickupCoralA4"
+          }
         }
       ]
     }

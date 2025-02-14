@@ -256,6 +256,9 @@ public class RobotContainer {
     NamedCommands.registerCommand(
         "Intake",
         new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.INTAKE, true)));
+    NamedCommands.registerCommand(
+        "GoToPosition",
+        new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.GO_TO_POSITION, true)));
 
     // NamedCommands.registerCommand("Note1_Check", new Note1_Check());
     // NamedCommands.registerCommand("Note2_Check", new Note2_Check());
