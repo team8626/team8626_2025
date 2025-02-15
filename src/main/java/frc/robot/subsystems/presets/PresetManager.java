@@ -11,19 +11,12 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
-import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.FieldConstants;
-import frc.robot.RobotConstants;
 import frc.robot.RobotConstants.UIConstants;
 import frc.robot.subsystems.CS_SubsystemBase;
-import frc.robot.subsystems.presets.Presets.CoralPreset;
-
-import static edu.wpi.first.units.Units.Rotation;
-
-import java.lang.reflect.Field;
 import java.util.Optional;
 
 public class PresetManager extends CS_SubsystemBase {
@@ -35,7 +28,7 @@ public class PresetManager extends CS_SubsystemBase {
   private String uiCurrentIntakeSide = "UNKNOWN";
   private String uiCurrentREEFBranch = "";
   private String uiCurrentAlgaePosition = "UNKNOWN";
-  //private CoralPreset autoCoralPreset = new CoralPreset( "autoPreset", new Pose2d(), 0.0, false);
+  // private CoralPreset autoCoralPreset = new CoralPreset( "autoPreset", new Pose2d(), 0.0, false);
 
   // Singleton instance
   private static PresetManager instance;
@@ -196,7 +189,8 @@ public class PresetManager extends CS_SubsystemBase {
 
   public void updateUIData() {
     // TODO Write this Function for the PresetManager
-    //SmartDashboard.putStringArray("Presets/UI/AllowedCORALLevels", UIConstants.allowedCORALLevels);
+    // SmartDashboard.putStringArray("Presets/UI/AllowedCORALLevels",
+    // UIConstants.allowedCORALLevels);
 
     // Set Alliance Color
     // TODO Move this to the Dashboard subsystem
@@ -223,66 +217,101 @@ public class PresetManager extends CS_SubsystemBase {
         SmartDashboard.getString("Presets/UI/SelectedAlgaePosition", "UNKNOWN");
   }
 
-  private void updatePreset(){
-    if ((!uiSelectedCORALLevel.equals(uiCurrentCORALLevel) && UIConstants.allowedCORALLevels.contains(uiSelectedCORALLevel))
-     || (!uiSelectedREEFBranch.equals(uiCurrentREEFBranch) && UIConstants.allowedREEFBranches.contains(uiSelectedREEFBranch))) {
+  private void updatePreset() {
+    if ((!uiSelectedCORALLevel.equals(uiCurrentCORALLevel)
+            && UIConstants.allowedCORALLevels.contains(uiSelectedCORALLevel))
+        || (!uiSelectedREEFBranch.equals(uiCurrentREEFBranch)
+            && UIConstants.allowedREEFBranches.contains(uiSelectedREEFBranch))) {
       // Insert a placeholder for creating a new preset
-      //autoCoralPreset.setRPM(1275.0);
-      //autoCoralPreset.setPose(new Pose2d());
+      // autoCoralPreset.setRPM(1275.0);
+      // autoCoralPreset.setPose(new Pose2d());
     }
   }
 
-  private Pose2d getRobotPoseFromBranch(String branch){
-    double branchOffsetX = Units.inchesToMeters(14.75/2)*Math.cos(30);
-    double branchOffsetY = Units.inchesToMeters(14.75/2)*Math.sin(30);
+  private Pose2d getRobotPoseFromBranch(String branch) {
+    double branchOffsetX = Units.inchesToMeters(14.75 / 2) * Math.cos(30);
+    double branchOffsetY = Units.inchesToMeters(14.75 / 2) * Math.sin(30);
     Pose2d branchPose;
-    
-    switch (branch){
+
+    switch (branch) {
       case "BranchA":
-        branchPose = FieldConstants.Reef.centerFaces[0].plus(new Transform2d(new Translation2d(branchOffsetX, branchOffsetY), Rotation2d.fromDegrees(30)));
+        branchPose =
+            FieldConstants.Reef.centerFaces[0].plus(
+                new Transform2d(
+                    new Translation2d(branchOffsetX, branchOffsetY), Rotation2d.fromDegrees(30)));
         break;
       case "BranchB":
-        branchPose = FieldConstants.Reef.centerFaces[0].plus(new Transform2d(new Translation2d(branchOffsetX, branchOffsetY), Rotation2d.fromDegrees(30)));
+        branchPose =
+            FieldConstants.Reef.centerFaces[0].plus(
+                new Transform2d(
+                    new Translation2d(branchOffsetX, branchOffsetY), Rotation2d.fromDegrees(30)));
         break;
       case "BranchC":
-        branchPose = FieldConstants.Reef.centerFaces[1].plus(new Transform2d(new Translation2d(branchOffsetX, branchOffsetY), Rotation2d.fromDegrees(30)));
+        branchPose =
+            FieldConstants.Reef.centerFaces[1].plus(
+                new Transform2d(
+                    new Translation2d(branchOffsetX, branchOffsetY), Rotation2d.fromDegrees(30)));
         break;
       case "BranchD":
-        branchPose = FieldConstants.Reef.centerFaces[1].plus(new Transform2d(new Translation2d(branchOffsetX, branchOffsetY), Rotation2d.fromDegrees(30)));
+        branchPose =
+            FieldConstants.Reef.centerFaces[1].plus(
+                new Transform2d(
+                    new Translation2d(branchOffsetX, branchOffsetY), Rotation2d.fromDegrees(30)));
         break;
       case "BranchE":
-        branchPose = FieldConstants.Reef.centerFaces[2].plus(new Transform2d(new Translation2d(branchOffsetX, branchOffsetY), Rotation2d.fromDegrees(30)));
+        branchPose =
+            FieldConstants.Reef.centerFaces[2].plus(
+                new Transform2d(
+                    new Translation2d(branchOffsetX, branchOffsetY), Rotation2d.fromDegrees(30)));
         break;
       case "BranchF":
-        branchPose = FieldConstants.Reef.centerFaces[2].plus(new Transform2d(new Translation2d(branchOffsetX, branchOffsetY), Rotation2d.fromDegrees(30)));
+        branchPose =
+            FieldConstants.Reef.centerFaces[2].plus(
+                new Transform2d(
+                    new Translation2d(branchOffsetX, branchOffsetY), Rotation2d.fromDegrees(30)));
         break;
       case "BranchG":
-        branchPose = FieldConstants.Reef.centerFaces[3].plus(new Transform2d(new Translation2d(branchOffsetX, branchOffsetY), Rotation2d.fromDegrees(30)));
+        branchPose =
+            FieldConstants.Reef.centerFaces[3].plus(
+                new Transform2d(
+                    new Translation2d(branchOffsetX, branchOffsetY), Rotation2d.fromDegrees(30)));
         break;
       case "BranchH":
-        branchPose = FieldConstants.Reef.centerFaces[3].plus(new Transform2d(new Translation2d(branchOffsetX, branchOffsetY), Rotation2d.fromDegrees(30)));
+        branchPose =
+            FieldConstants.Reef.centerFaces[3].plus(
+                new Transform2d(
+                    new Translation2d(branchOffsetX, branchOffsetY), Rotation2d.fromDegrees(30)));
         break;
       case "BranchI":
-        branchPose = FieldConstants.Reef.centerFaces[4].plus(new Transform2d(new Translation2d(branchOffsetX, branchOffsetY), Rotation2d.fromDegrees(30)));
+        branchPose =
+            FieldConstants.Reef.centerFaces[4].plus(
+                new Transform2d(
+                    new Translation2d(branchOffsetX, branchOffsetY), Rotation2d.fromDegrees(30)));
         break;
       case "BranchJ":
-        branchPose = FieldConstants.Reef.centerFaces[4].plus(new Transform2d(new Translation2d(branchOffsetX, branchOffsetY), Rotation2d.fromDegrees(30)));
+        branchPose =
+            FieldConstants.Reef.centerFaces[4].plus(
+                new Transform2d(
+                    new Translation2d(branchOffsetX, branchOffsetY), Rotation2d.fromDegrees(30)));
         break;
       case "BranchK":
-        branchPose = FieldConstants.Reef.centerFaces[5].plus(new Transform2d(new Translation2d(branchOffsetX, branchOffsetY), Rotation2d.fromDegrees(30)));
-        break; 
+        branchPose =
+            FieldConstants.Reef.centerFaces[5].plus(
+                new Transform2d(
+                    new Translation2d(branchOffsetX, branchOffsetY), Rotation2d.fromDegrees(30)));
+        break;
       case "BranchL":
-        branchPose = FieldConstants.Reef.centerFaces[5].plus(new Transform2d(new Translation2d(branchOffsetX, branchOffsetY), Rotation2d.fromDegrees(30)));
+        branchPose =
+            FieldConstants.Reef.centerFaces[5].plus(
+                new Transform2d(
+                    new Translation2d(branchOffsetX, branchOffsetY), Rotation2d.fromDegrees(30)));
         break;
       default:
         throw new IllegalArgumentException("Unknown branch: " + branch);
     }
-    
-
 
     //  Y Deepest Point -  Y Shallowest Point = dY
     // X Deep Point - X Shallow Point = dX
-    
 
     Pose2d retVal = new Pose2d();
 

@@ -1,8 +1,6 @@
 package frc.robot.subsystems.presets;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import frc.robot.FieldConstants;
-import frc.robot.RobotConstants;
 
 public class Presets {
   // Will be finished later when we have Algae and Coral Locations Set
@@ -16,11 +14,11 @@ public class Presets {
   // public static final Preset kClimbPreset = new Preset("CLIMB PRESET", "EMPTY", 80, 0);
   // public static final Preset kClimbEnd = new Preset("CLIMB FINISH", "EMPTY", 198, 0);
 
-  public class CoralPreset{
+  public class CoralPreset {
     public String name = "'";
     public Pose2d robotPose = new Pose2d();
     public double coralRPM = 0;
-    public boolean isReady  = false;
+    public boolean isReady = false;
 
     public CoralPreset(String name, Pose2d robotPose, double coralRPM, boolean isReady) {
       this.name = name;
@@ -28,30 +26,33 @@ public class Presets {
       this.coralRPM = coralRPM;
       this.isReady = isReady;
     }
+
     public void setRPM(double newRPM) {
       // Set the RPM of the Coral Shooter
-      this.coralRPM = newRPM;          
+      this.coralRPM = newRPM;
     }
+
     public void setPose(Pose2d newPose) {
       // Set the Pose of the Robot
       this.robotPose = newPose;
     }
+
     public void setReady(boolean ready) {
       // Set the Ready State of the Preset
       this.isReady = ready;
     }
+
     public boolean isReady() {
       // Get the Ready State of the Preset
       return this.isReady;
     }
   }
 
-
-public record AlgaePreset(
-  String name,
-  Pose2d robotPose,
-  double elevatorHeightInches,
-  double wristAngleDegrees,
-  double algaeRPM, boolean isReady) {
-}
+  public record AlgaePreset(
+      String name,
+      Pose2d robotPose,
+      double elevatorHeightInches,
+      double wristAngleDegrees,
+      double algaeRPM,
+      boolean isReady) {}
 }
