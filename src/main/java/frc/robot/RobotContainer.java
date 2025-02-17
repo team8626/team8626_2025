@@ -27,6 +27,9 @@ import frc.robot.subsystems.Dashboard;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterSubsystem;
 import frc.robot.subsystems.algaeshooter.AlgaeShooter_Sim;
 import frc.robot.subsystems.algaeshooter.AlgaeShooter_SparkMax;
+import frc.robot.subsystems.climber.ClimberSubsystem;
+import frc.robot.subsystems.climber.Climber_Sim;
+import frc.robot.subsystems.climber.Climber_SparkMax;
 import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
 import frc.robot.subsystems.coralshooter.CoralShooter_Sim;
 import frc.robot.subsystems.coralshooter.CoralShooter_SparkMax;
@@ -74,6 +77,7 @@ public class RobotContainer {
   public static ElevatorSubsystem elevator = null;
   public static CoralShooterSubsystem mortar = null;
   public static AlgaeShooterSubsystem algae501 = null;
+  public static ClimberSubsystem climber = null;
 
   // Controllers
   private final CS_XboxController driverController =
@@ -110,12 +114,12 @@ public class RobotContainer {
         dummy = new DummySubsystem(new DummyIO_Specific1());
         elevator = new ElevatorSubsystem(new Elevator_SimulationRose());
         mortar = new CoralShooterSubsystem(new CoralShooter_Sim());
-        algae501 = new AlgaeShooterSubsystem(new AlgaeShooter_Sim());
 
         break;
       case DEVBOT:
         mortar = new CoralShooterSubsystem(new CoralShooter_SparkMax());
         algae501 = new AlgaeShooterSubsystem(new AlgaeShooter_SparkMax());
+        climber = new ClimberSubsystem(new Climber_SparkMax());
         drivebase =
             new CS_DriveSubsystemIO_Swerve(
                 new File(Filesystem.getDeployDirectory(), "swerve_devbot"));
@@ -129,6 +133,7 @@ public class RobotContainer {
         elevator = new ElevatorSubsystem(new Elevator_LinearSparkMax());
         mortar = new CoralShooterSubsystem(new CoralShooter_SparkMax());
         algae501 = new AlgaeShooterSubsystem(new AlgaeShooter_SparkMax());
+        climber = new ClimberSubsystem(new Climber_SparkMax());
 
         break;
     }
@@ -243,7 +248,8 @@ public class RobotContainer {
     // controller.btn_4.toggleOnTrue(
     //     new FeedForwardCharacterization(
     //         mortar, mortar::runCharacterization, mortar::getCharacterizationVelocity));
-
+    // controller.btn_8.toggleOnTrue(new InstantCommand(() -> climber.setAngleDegrees(90)));
+    // controller.btn_9.toggleOnTrue(new InstantCommand(() -> climber.setAngleDegrees(230)));
   }
 
   private void configureDefaultCommands() {
