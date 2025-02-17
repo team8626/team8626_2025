@@ -19,6 +19,7 @@ import frc.robot.commands.setters.units.CoralShooterIntake;
 import frc.robot.commands.setters.units.CoralShooterLaunch;
 import frc.robot.commands.tuning.Tune_CoralShooter;
 import frc.robot.subsystems.climber.ClimberSubsystem;
+import frc.robot.subsystems.climber.Climber_Sim;
 import frc.robot.subsystems.climber.Climber_SparkMax;
 import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
 import frc.robot.subsystems.coralshooter.CoralShooter_Sim;
@@ -93,7 +94,7 @@ public class RobotContainer {
         dummy = new DummySubsystem(new DummyIO_Specific1());
         elevator = new ElevatorSubsystem(new Elevator_Simulation());
         mortar = new CoralShooterSubsystem(new CoralShooter_Sim());
-        climber = new ClimberSubsystem(new Climber_SparkMax());
+        climber = new ClimberSubsystem(new Climber_Sim());
 
         break;
       case DEVBOT:
@@ -198,7 +199,8 @@ public class RobotContainer {
     // controller.btn_4.toggleOnTrue(
     //     new FeedForwardCharacterization(
     //         mortar, mortar::runCharacterization, mortar::getCharacterizationVelocity));
-
+    // controller.btn_8.toggleOnTrue(new InstantCommand(() -> climber.setAngleDegrees(90)));
+    // controller.btn_9.toggleOnTrue(new InstantCommand(() -> climber.setAngleDegrees(230)));
   }
 
   private void configureDefaultCommands() {

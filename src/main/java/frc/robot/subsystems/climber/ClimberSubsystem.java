@@ -8,7 +8,7 @@ import frc.utils.CS_Utils;
 public class ClimberSubsystem extends CS_SubsystemBase {
   private ClimberInterface climberInterface;
   private ClimberValues values;
-  private double shootingRPM = ClimberConstants.shootRPM;
+  private double desiredAngleDegrees = ClimberConstants.restAngleDegrees;
 
   public ClimberSubsystem(ClimberInterface subsystem_interface) {
     super();
@@ -18,30 +18,18 @@ public class ClimberSubsystem extends CS_SubsystemBase {
     println("Created");
   }
 
-  // Calls to the Climber interface
-  public void startRampUp() {
-    climberInterface.startClimber(shootingRPM);
+  public void setAngleDegrees(double new_angle) {
+    printf("Setting Angle to: %f deg", new_angle);
+    desiredAngleDegrees = new_angle;
+    climberInterface.setAngleDegrees(new_angle);
   }
 
-  public void setClimberRPM(double new_RPM) {
-    shootingRPM = new_RPM;
-    climberInterface.updateClimberRPM(new_RPM);
-  }
+  // public void stop() {
+  //   climberInterface.stop();
+  // }
 
-  public void startIntake() {
-    climberInterface.startClimber(ClimberConstants.intakeRPM);
-  }
-
-  public void stopClimber() {
-    climberInterface.stopClimber();
-  }
-
-  public void stopAll() {
-    climberInterface.stopClimber();
-  }
-
-  public double getClimberRPM() {
-    return climberInterface.getClimberRPM();
+  public double getAngleDegrees() {
+    return climberInterface.getAngleDegrees();
   }
 
   public void setPID(double newkP, double newkI, double newkD) {
@@ -74,8 +62,6 @@ public class ClimberSubsystem extends CS_SubsystemBase {
     SmartDashboard.putNumber("Subsystem/Climber/Gains/P", ClimberConstants.gains.kP());
     SmartDashboard.putNumber("Subsystem/Climber/Gains/I", ClimberConstants.gains.kI());
     SmartDashboard.putNumber("Subsystem/Climber/Gains/D", ClimberConstants.gains.kD());
-
-    SmartDashboard.putNumber("Subsystem/Climber/Last Shot in (ms)", 0);
   }
 
   @Override
@@ -85,7 +71,6 @@ public class ClimberSubsystem extends CS_SubsystemBase {
     double newkP = SmartDashboard.getNumber("Subsystem/Climber/Gains/P", values.kP);
     double newkI = SmartDashboard.getNumber("Subsystem/Climber/Gains/I", values.kI);
     double newkD = SmartDashboard.getNumber("Subsystem/Climber/Gains/D", values.kD);
-    // double newFF = SmartDashboard.getNumber("Subsystem/Climber/FF", values.FF);
 
     // Coefficients on SmartDashboard have changed, save new values to the PID controller
     // --------------------------------------------------
@@ -94,18 +79,17 @@ public class ClimberSubsystem extends CS_SubsystemBase {
     values.kD = CS_Utils.updateFromSmartDashboard(newkD, values.kD, (value) -> setkD(value));
 
     // Update the SmartDashboard with the current state of the subsystem
-    SmartDashboard.putBoolean("Subsystem/Climber/Climber", values.climberIsEnabled);
+    SmartDashboard.putBoolean("Subsystem/Climber/IsEnabled", values.climberIsEnabled);
+    SmartDashboard.putNumber("Subsystem/Climber/CurrentAngle", values.currentAngleDegrees);
+    SmartDashboard.putNumber("Subsystem/Climber/Amps", values.amps);
 
-    SmartDashboard.putNumber("Subsystem/Climber/Chooter RPM", values.currentRPM);
-
-    SmartDashboard.putNumber("Subsystem/Climber/Climber Amps", values.amps);
-
-    double newRPM =
-        SmartDashboard.getNumber("Subsystem/Climber/Shooting RPM", ClimberConstants.shootRPM);
-    if (newRPM != shootingRPM) {
-      setClimberRPM(newRPM);
-    }
-    SmartDashboard.putNumber("Subsystem/Climber/Shooting RPM", shootingRPM);
+    // double newAngle =
+    //     SmartDashboard.getNumber(
+    //         "Subsystem/Climber/DesiredAngle", ClimberConstants.restAngleDegrees);
+    // if (newAngle != desiredAngleDegrees) {
+    //   setAngleDegrees(newAngle);
+    // }
+    SmartDashboard.putNumber("Subsystem/Climber/DesiredAngle", desiredAngleDegrees);
   }
 
   // Characterization methods

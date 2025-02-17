@@ -5,13 +5,9 @@ public interface ClimberInterface {
 
   void setAngleDegrees(double new_angle);
 
-  void startClimber(double new_RPM);
+  // void start(double new_setpoint);
 
-  void stopClimber();
-
-  void updateClimberRPM(double new_RPM);
-
-  double getClimberRPM();
+  // void stop();
 
   /** Run flywheels at voltage */
   default void runCharacterization(double input) {}
@@ -24,9 +20,7 @@ public interface ClimberInterface {
 
   public class ClimberValues {
     protected boolean climberIsEnabled = false;
-
     protected double currentAngleDegrees = 0; // degrees
-
     protected double amps = 0;
 
     //  protected double desiredAngle = ClimberConstants.shootRPM;

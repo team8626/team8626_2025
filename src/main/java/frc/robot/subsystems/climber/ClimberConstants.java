@@ -1,48 +1,24 @@
 package frc.robot.subsystems.climber;
 
-import edu.wpi.first.math.util.Units;
 import frc.robot.RobotConstants;
 
 public class ClimberConstants {
 
-  // Tuned Values
-  public static final double shootRPM = 1275;
-  public static final double intakeRPM = -300;
-  public static final double launcherShootSetpoint = -1.0;
-  public static final double launcherIntakeSetpoint = 0.3;
+  // Climber Constants
+  public static final double minAngleDegrees = 0;
+  public static final double maxAngleDegrees = 270;
+  public static final double restAngleDegrees = 0;
+  public static final double positionConversionFactor = 360; // degrees
+  public static final double velocityConversionFactor = 360; // degrees per second
 
-  public static final double shooterRPMTolerance = 50;
-  public static final double launchTimerSeconds = 0.2;
-
-  // climber Constants
-  public static final double wheelRadiusMeters = Units.inchesToMeters(2);
-  public static final double wheelMassKg = Units.lbsToKilograms(0.03); // am-2647
-  // private static final double stealthWheelMomentOfInertia = 0.5 * wheelMassKg * wheelRadiusMeters
-  // * wheelRadiusMeters;
-  private static final double momentOfInertia = 1;
-
-  // PID Constants
-  // public final static double kP = 1.0;
-  // public final static double kI = 0.0;
-  // public final static double kD = 0.0;
-  // public final static double FF = 0.0;
-
-  // Flywheel Config
-  public static final FlywheelConfig flywheelConfig =
+  // Arm Config
+  public static final ArmConfig armConfig =
       switch (RobotConstants.robotType) {
-        case COMPBOT -> new FlywheelConfig(12, 2, (3.0 / 1.0), 2 * momentOfInertia, 6000.0);
-        case DEVBOT -> new FlywheelConfig(12, 2, (3.0 / 1.0), 2 * momentOfInertia, 6000.0);
-        case SIMBOT -> new FlywheelConfig(46, 47, (3.0 / 1.0), 2 * momentOfInertia, 6000.0);
-        default -> new FlywheelConfig(5, 4, (3.0 / 1.0), 2 * momentOfInertia, 6000.0);
+        case COMPBOT -> new ArmConfig(13, 12, (125 * 1.5) / 1);
+        case DEVBOT -> new ArmConfig(13, 12, (125 * 1.5) / 1);
+        case SIMBOT -> new ArmConfig(13, 12, (125 * 1.5) / 1);
+        default -> new ArmConfig(0, 12, (125 * 1.5) / 1);
       };
-
-  // Launcher FLywheel Config
-  public static final FlywheelConfig launcherConfig =
-      new FlywheelConfig(11, 0, (1.0 / 1.0), 2 * momentOfInertia, 6000.0);
-
-  // InfraRed Port (Sensor to check if the CORAL is loaded
-  // @NickCanCode YOU CHANGED THIS, NEEDED TO CHANGE THE PORT BECAUSE IT CONFLICTED W/ SMTH ELSE
-  public static final int infraRedPort = 1; // DIO
 
   // PID Constants
   public static final Gains gains =
@@ -55,10 +31,5 @@ public class ClimberConstants {
 
   public record Gains(double kP, double kI, double kD, double kS, double kV, double kA) {}
 
-  public record FlywheelConfig(
-      int leftCANID,
-      int rightCANID,
-      double reduction,
-      double momentOfInertia,
-      double maxAcclerationRpmPerSec) {}
+  public record ArmConfig(int CANID, double armLengthInches, double reduction) {}
 }

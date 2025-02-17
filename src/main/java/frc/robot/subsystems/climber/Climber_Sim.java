@@ -1,148 +1,62 @@
-// package frc.robot.subsystems.climber;
+package frc.robot.subsystems.climber;
 
-// import static frc.robot.subsystems.coralshooter.CoralShooterConstants.flywheelConfig;
+import static frc.robot.subsystems.climber.ClimberConstants.armConfig;
 
-// import edu.wpi.first.math.system.plant.DCMotor;
-// import edu.wpi.first.math.system.plant.LinearSystemId;
-// import edu.wpi.first.math.util.Units;
-// import edu.wpi.first.wpilibj.DigitalInput;
-// import edu.wpi.first.wpilibj.simulation.DIOSim;
-// import edu.wpi.first.wpilibj.simulation.FlywheelSim;
-// import frc.robot.subsystems.CS_InterfaceBase;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
+import frc.robot.subsystems.CS_InterfaceBase;
 
-// public class Climber_Sim implements ClimberInterface, CS_InterfaceBase {
+public class Climber_Sim implements ClimberInterface, CS_InterfaceBase {
 
-//   private boolean shooterIsEnabled = false;
-//   private boolean launcherIsEnabled = false;
+  private double goalDegrees;
+  // TODO: move these to contants
+  // Gearing is 25:1 then a 24:60
+  SingleJointedArmSim armSim =
+      new SingleJointedArmSim(
+          DCMotor.getNEO(1),
+          armConfig.reduction(),
+          0.07318977,
+          Units.inchesToMeters(armConfig.armLengthInches()),
+          Units.degreesToRadians(ClimberConstants.minAngleDegrees),
+          Units.degreesToRadians(ClimberConstants.maxAngleDegrees),
+          false,
+          Units.degreesToRadians(ClimberConstants.restAngleDegrees),
+          new double[0]);
 
-//   private double currentLauncherSetpoint = 0;
+  PIDController pidController = new PIDController(0.1, 0, 0);
 
-//   private FlywheelSim leftSim;
-//   private FlywheelSim rightSim;
-//   private FlywheelSim launchSim;
+  private boolean climberIsEnabled = false;
 
-//   private DigitalInput loadedSensor = new DigitalInput(ClimberConstants.infraRedPort);
-//   private DIOSim loadedSensorSim = new DIOSim(loadedSensor);
+  public Climber_Sim() {}
 
-//   public Climber_Sim() {
+  @Override
+  public void updateInputs(ClimberValues values) {
+    double output = this.pidController.calculate(Units.radiansToDegrees(armSim.getAngleRads()));
+    this.armSim.setInput(MathUtil.clamp(output, -13, 13)); // Clamping on Batttery Voltage
+    this.armSim.update(0.020);
 
-//     leftSim =
-//         new FlywheelSim(
-//             LinearSystemId.createFlywheelSystem(
-//                 DCMotor.getNEO(1),
-//                 4 * flywheelConfig.momentOfInertia(),
-//                 flywheelConfig.reduction()),
-//             DCMotor.getNEO(1),
-//             0.00363458292);
-//     rightSim =
-//         new FlywheelSim(
-//             LinearSystemId.createFlywheelSystem(
-//                 DCMotor.getNEO(1),
-//                 4 * flywheelConfig.momentOfInertia(),
-//                 flywheelConfig.reduction()),
-//             DCMotor.getNEO(1),
-//             0.00363458292);
-//     launchSim =
-//         new FlywheelSim(
-//             LinearSystemId.createFlywheelSystem(
-//                 DCMotor.getNEO(1), flywheelConfig.momentOfInertia(), flywheelConfig.reduction()),
-//             DCMotor.getNEO(1),
-//             0.00363458292);
-//   }
+    values.climberIsEnabled = climberIsEnabled;
+    values.currentAngleDegrees = getAngleDegrees();
+    values.amps = this.armSim.getCurrentDrawAmps();
+  }
 
-//   @Override
-//   public void updateInputs(ClimberValues values) {
-//     rightSim.update(0.02);
-//     leftSim.update(0.02);
-//     launchSim.update(0.02);
+  public double getAngleDegrees() {
+    return Units.radiansToDegrees(armSim.getAngleRads());
+  }
 
-//     values.launchIsEnabled = launcherIsEnabled;
-//     values.shooterIsEnabled = shooterIsEnabled;
+  // added to fix error at top of class (im hope this doesn't break anything)
+  @Override
+  public void setAngleDegrees(double new_angle) {
+    printf("New Angle %f", new_angle);
+    this.goalDegrees = new_angle;
+    this.pidController.setSetpoint(new_angle);
+  }
 
-//     values.currentRPMLeft = getShooterRPMLeft();
-//     values.currentRPMRight = getShooterRPMRight();
-
-//     values.currentRMPLauncher = getLauncherRPM();
-//     values.currentLauncherSetpoint = getLauncherSetpoint();
-
-//     values.ampsLeft = leftSim.getCurrentDrawAmps();
-//     values.ampsRight = rightSim.getCurrentDrawAmps();
-//     values.ampsLauncher = launchSim.getCurrentDrawAmps();
-
-//     values.isLoaded = shooterIsLoaded();
-//   }
-
-//   @Override
-//   public void startShooter(double new_RPM) {
-//     rightSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_RPM));
-//     leftSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_RPM));
-//     shooterIsEnabled = true;
-//     printf("Shooter RPM: %f", new_RPM);
-//   }
-
-//   @Override
-//   public void stopShooter() {
-//     updateShooterRPM(0);
-//     shooterIsEnabled = false;
-//   }
-
-//   @Override
-//   public void updateShooterRPM(double new_RPM) {
-//     if (shooterIsEnabled) {
-//       rightSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_RPM));
-//       leftSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_RPM));
-//       printf("Shooter RPM: %f", new_RPM);
-//     }
-//   }
-
-//   @Override
-//   public void stopLauncher() {
-//     updateLauncherSetpoint(0);
-//     launcherIsEnabled = false;
-//   }
-
-//   @Override
-//   public void updateLauncherSetpoint(double new_Setpoint) {
-//     currentLauncherSetpoint = new_Setpoint;
-//     if (launcherIsEnabled) {
-//       launchSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_Setpoint));
-//     }
-//     printf("Launcher Setpoint: %f", new_Setpoint);
-//   }
-
-//   @Override
-//   public void startLauncher(double new_Setpoint) {
-//     currentLauncherSetpoint = new_Setpoint;
-//     launcherIsEnabled = true;
-//     printf("Launcher Setpoint: %f", new_Setpoint);
-//   }
-
-//   @Override
-//   public double getShooterRPMLeft() {
-//     return leftSim.getAngularVelocityRPM();
-//   }
-
-//   @Override
-//   public double getShooterRPMRight() {
-//     return rightSim.getAngularVelocityRPM();
-//   }
-
-//   @Override
-//   public double getLauncherRPM() {
-//     return launchSim.getAngularVelocityRPM();
-//   }
-
-//   public double getLauncherSetpoint() {
-//     return currentLauncherSetpoint;
-//   }
-
-//   @Override
-//   public boolean shooterIsLoaded() {
-//     return !loadedSensorSim.getValue();
-//   }
-
-//   @Override
-//   public void setPID(double newkP, double newkI, double newkD) {
-//     printf("New PID: %f, %f, %f \n", newkP, newkI, newkD);
-//   }
-// }
+  @Override
+  public void setPID(double newkP, double newkI, double newkD) {
+    printf("New PID: %f, %f, %f \n", newkP, newkI, newkD);
+  }
+}
