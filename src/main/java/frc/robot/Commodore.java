@@ -16,8 +16,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.commands.setters.Example_ToIntake;
-import frc.robot.commands.setters.Example_ToShoot;
 import frc.robot.commands.setters.groups.*;
 import frc.robot.commands.tuning.Tune_AlgaeShooter;
 import frc.robot.commands.tuning.Tune_CoralShooter;
@@ -285,16 +283,6 @@ public class Commodore extends CS_SubsystemBase {
   private static void toIdle() {
     applyState(CommodoreState.TRANSITION);
     CommandScheduler.getInstance().schedule(new ToIdle());
-  }
-
-  private static void toIntake() {
-    applyState(CommodoreState.TRANSITION);
-    CommandScheduler.getInstance().schedule(new Example_ToIntake());
-  }
-
-  private static void toShoot() {
-    applyState(CommodoreState.TRANSITION);
-    CommandScheduler.getInstance().schedule(new Example_ToShoot());
   }
 
   private static void toCoralShoot() {

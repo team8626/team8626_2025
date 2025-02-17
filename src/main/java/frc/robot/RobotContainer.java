@@ -36,8 +36,6 @@ import frc.robot.subsystems.coralshooter.CoralShooter_SparkMax;
 import frc.robot.subsystems.drive.CS_DriveSubsystemIO;
 import frc.robot.subsystems.drive.CS_DriveSubsystemIO_Swerve;
 import frc.robot.subsystems.drive.CS_DriveSubsystemIO_Tank;
-import frc.robot.subsystems.dummy.DummyIO_Specific1;
-import frc.robot.subsystems.dummy.DummySubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.elevator.Elevator_LinearSparkMax;
 import frc.robot.subsystems.elevator.Elevator_SimulationRose;
@@ -73,7 +71,6 @@ public class RobotContainer {
   // private final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
   // private final ExampleCommand exampleCommand = new ExampleCommand(exampleSubsystem);
   public static CS_DriveSubsystemIO drivebase = null;
-  public static DummySubsystem dummy = null;
   public static ElevatorSubsystem elevator = null;
   public static CoralShooterSubsystem mortar = null;
   public static AlgaeShooterSubsystem algae501 = null;
@@ -102,7 +99,6 @@ public class RobotContainer {
         // elevator = new ElevatorArm();
         break;
       case DART:
-        dummy = new DummySubsystem(new DummyIO_Specific1());
         drivebase =
             new CS_DriveSubsystemIO_Swerve(
                 new File(Filesystem.getDeployDirectory(), "swerve_dart"));
@@ -111,25 +107,26 @@ public class RobotContainer {
         drivebase =
             new CS_DriveSubsystemIO_Swerve(
                 new File(Filesystem.getDeployDirectory(), "swerve_devbot"));
-        dummy = new DummySubsystem(new DummyIO_Specific1());
         elevator = new ElevatorSubsystem(new Elevator_SimulationRose());
+        algae501 = new AlgaeShooterSubsystem(new AlgaeShooter_Sim());
         mortar = new CoralShooterSubsystem(new CoralShooter_Sim());
+        climber = new ClimberSubsystem(new Climber_Sim());
 
         break;
       case DEVBOT:
-        mortar = new CoralShooterSubsystem(new CoralShooter_SparkMax());
-        algae501 = new AlgaeShooterSubsystem(new AlgaeShooter_SparkMax());
-        climber = new ClimberSubsystem(new Climber_SparkMax());
         drivebase =
             new CS_DriveSubsystemIO_Swerve(
                 new File(Filesystem.getDeployDirectory(), "swerve_devbot"));
+        mortar = new CoralShooterSubsystem(new CoralShooter_SparkMax());
+        elevator = new ElevatorSubsystem(new Elevator_LinearSparkMax());
+        algae501 = new AlgaeShooterSubsystem(new AlgaeShooter_SparkMax());
+        climber = new ClimberSubsystem(new Climber_SparkMax());
         break;
       case COMPBOT:
       default:
         drivebase =
             new CS_DriveSubsystemIO_Swerve(
                 new File(Filesystem.getDeployDirectory(), "swerve_devbot"));
-        dummy = new DummySubsystem(new DummyIO_Specific1());
         elevator = new ElevatorSubsystem(new Elevator_LinearSparkMax());
         mortar = new CoralShooterSubsystem(new CoralShooter_SparkMax());
         algae501 = new AlgaeShooterSubsystem(new AlgaeShooter_SparkMax());

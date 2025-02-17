@@ -96,7 +96,8 @@ public class ElevatorSubsystem extends CS_SubsystemBase {
     // values.FF);
     // TODO Auto-generated method stub
 
-    // double newHeight = SmartDashboard.getNumber("Subsystem/Elevator/DesiredHeight", desiredHeight);
+    // double newHeight = SmartDashboard.getNumber("Subsystem/Elevator/DesiredHeight",
+    // desiredHeight);
     // if (newHeight != desiredHeight) {
     //   desiredHeight = newHeight;
     //   setHeight(newHeight);
