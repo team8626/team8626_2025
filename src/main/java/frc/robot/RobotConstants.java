@@ -4,6 +4,7 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -39,7 +40,7 @@ public class RobotConstants {
   //
   public static RobotType robotType = RobotType.DEVBOT;
   public static boolean tracesEnabled = true;
-  public static boolean tuningEnabled = false; // DO NO COMMIT WITH THIS ENABLED
+  public static boolean tuningEnabled = false; // DO NOT COMMIT WHILE ENABLED
 
   // Subsystems positions/translations for simulation in AdvantageScope
   // public static Translation2d intakeOffset = new Translation2d(Units.inchesToMeters(24),
@@ -50,8 +51,58 @@ public class RobotConstants {
 
   public static double FrameLength = Units.inchesToMeters(24);
 
+  public static double FrameHeight = Units.inchesToMeters(6);
+
+  /** Offsets for Visualization * */
+  public static Pose3d mastPoseOffset =
+      new Pose3d(
+          Units.inchesToMeters(0),
+          Units.inchesToMeters(0),
+          Units.inchesToMeters(5),
+          new Rotation3d(
+              Units.degreesToRadians(0), Units.degreesToRadians(180), Units.degreesToRadians(270)));
+
+  public static Pose3d stage2PoseOffset =
+      new Pose3d(
+          0,
+          0,
+          Units.inchesToMeters(8.5),
+          new Rotation3d(
+              Units.degreesToRadians(0), Units.degreesToRadians(180), Units.degreesToRadians(270)));
+  public static Pose3d stage3PoseOffset =
+      new Pose3d(
+          0,
+          0,
+          Units.inchesToMeters(10),
+          new Rotation3d(
+              Units.degreesToRadians(0), Units.degreesToRadians(180), Units.degreesToRadians(270)));
+  public static Pose3d carriagePoseOffset =
+      new Pose3d(
+          0,
+          0,
+          Units.inchesToMeters(14.5),
+          new Rotation3d(
+              Units.degreesToRadians(0), Units.degreesToRadians(180), Units.degreesToRadians(270)));
+
+  public static Pose3d wristPoseOffset =
+      new Pose3d(
+          Units.inchesToMeters(2.5),
+          Units.inchesToMeters(-0.25),
+          Units.inchesToMeters(13),
+          new Rotation3d(
+              Units.degreesToRadians(0), Units.degreesToRadians(180), Units.degreesToRadians(270)));
+  public static Pose3d shooterPoseOffset =
+      new Pose3d(
+          Units.inchesToMeters(9),
+          Units.inchesToMeters(-0.25),
+          Units.inchesToMeters(15.6),
+          new Rotation3d(
+              Units.degreesToRadians(-90),
+              Units.degreesToRadians(180),
+              Units.degreesToRadians(270)));
+
   /** Defines position of the cameras on the robot. */
-  public static class Vision {
+  public static class Vision_2024 { // TODO: Can be removed?
     // April tag camera constants
     public static final String kATBackCameraName = "Arducam_AT002";
     public static final Transform3d kATRobotToBackCam =
@@ -73,5 +124,11 @@ public class RobotConstants {
     // (Fake values. Experiment and determine estimation noise on an actual robot.)
     public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
     public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
+  }
+
+  // ****************************************************************************************
+  // UI Constants
+  public static class UIConstants {
+    public static final String[] allowedCORALLevels = {"L1", "L4"};
   }
 }

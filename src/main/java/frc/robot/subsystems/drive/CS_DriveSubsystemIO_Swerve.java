@@ -7,6 +7,7 @@
 package frc.robot.subsystems.drive;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.OperatorConstants;
 import frc.utils.CS_XboxController;
@@ -36,5 +37,11 @@ public class CS_DriveSubsystemIO_Swerve extends SwerveSubsystem implements CS_Dr
             () -> -xboxController.getRightX());
 
     setDefaultCommand(driveCommand);
+  }
+
+  @Override
+  public Pose3d getPose3d() {
+    // TODO Auto-generated method stub
+    return new Pose3d(getPose());
   }
 }

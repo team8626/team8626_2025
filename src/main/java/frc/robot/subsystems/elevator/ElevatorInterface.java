@@ -28,7 +28,7 @@ public interface ElevatorInterface {
 
   public abstract void setElevatorSpeed(double new_speed);
 
-  public abstract double getElevatorHeight();
+  public abstract double getHeightInches();
 
   public abstract void setElevatorkP(double kP);
 
@@ -37,4 +37,8 @@ public interface ElevatorInterface {
   public abstract void setElevatorkD(double kD);
 
   public abstract void setElevatorFF(double ff);
+
+  public abstract void moveInches(double offsetInches);
+
+  public abstract void setHeightInches(double heightInches);
 }
