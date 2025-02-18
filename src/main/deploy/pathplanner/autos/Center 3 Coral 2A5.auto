@@ -1,0 +1,97 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CenterReefAlgaeA1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "DropOff"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Pickup"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "@ReefA1LeftPickup"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Event Marker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Event Marker"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LeftPickupCoralA5"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Event Marker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Event Marker"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "@ReefA5LeftPickup"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Event Marker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Event Marker"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LeftPickupCoralA5"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Event Marker"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

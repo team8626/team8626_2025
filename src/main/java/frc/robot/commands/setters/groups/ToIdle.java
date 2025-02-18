@@ -10,6 +10,8 @@ import frc.robot.Commodore;
 import frc.robot.Commodore.CommodoreState;
 import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
+import frc.robot.subsystems.Dashboard;
+import frc.robot.subsystems.Dashboard.GamePieceState;
 import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
 
 public class ToIdle extends CS_Command {
@@ -37,7 +39,7 @@ public class ToIdle extends CS_Command {
     Commodore.getSetStateCommand(CommodoreState.IDLE).schedule();
     // Check if subsystems are in a special state...
     if (mortar.isLoaded()) {
-      Commodore.getSetStateCommand(CommodoreState.CORAL_LOADED).schedule();
+      Dashboard.getSetCoralStateCommand(GamePieceState.LOADED).schedule();
     }
   }
 

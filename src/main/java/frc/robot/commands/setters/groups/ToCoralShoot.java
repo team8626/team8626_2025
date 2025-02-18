@@ -49,7 +49,7 @@ public class ToCoralShoot extends SequentialCommandGroup {
                   }
                 },
                 Commodore.getSetStateCommand(CommodoreState.IDLE)),
-            Commodore.getSetStateCommand(CommodoreState.IDLE),
+            new SequentialCommandGroup(Commodore.getSetStateCommand(CommodoreState.IDLE)),
             mortar::isLoaded));
   }
 }

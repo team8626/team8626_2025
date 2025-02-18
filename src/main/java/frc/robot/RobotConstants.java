@@ -1,5 +1,7 @@
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.util.Units;
 
 /**
@@ -30,7 +32,7 @@ public class RobotConstants {
   //
   public static RobotType robotType = RobotType.DEVBOT;
   public static boolean tracesEnabled = true;
-  public static boolean tuningEnabled = false; // DO NO COMMIT WITH THIS ENABLED
+  public static boolean tuningEnabled = false; // DO NOT COMMIT WHILE ENABLED
 
   // Subsystems positions/translations for simulation in AdvantageScope
   // public static Translation2d intakeOffset = new Translation2d(Units.inchesToMeters(24),
@@ -40,6 +42,13 @@ public class RobotConstants {
   public static double FrameWidth = Units.inchesToMeters(24);
 
   public static double FrameLength = Units.inchesToMeters(24);
+
+  public static Pose3d mastPoseOffset = new Pose3d(0, 0, 0, new Rotation3d());
+  public static Pose3d stage2PoseOffset = new Pose3d(0, 0, 0, new Rotation3d());
+  public static Pose3d stage3PoseOffset = new Pose3d(0, 0, 0, new Rotation3d());
+  public static Pose3d carriagePoseOffset = new Pose3d(0, 0, 0, new Rotation3d());
+  public static Pose3d wristPoseOffset = new Pose3d(0, 0, 0, new Rotation3d());
+  public static Pose3d shooterPoseOffset = new Pose3d(0, 0, 0, new Rotation3d());
 
   // /** Defines position of the cameras on the robot. */
   //   public static class Vision {
@@ -69,6 +78,6 @@ public class RobotConstants {
   // ****************************************************************************************
   // UI Constants
   public static class UIConstants {
-    public static final String[] allowedCORALLevels = {"L1", "L2", "L3", "L4"};
+    public static final String[] allowedCORALLevels = {"L1", "L4"};
   }
 }

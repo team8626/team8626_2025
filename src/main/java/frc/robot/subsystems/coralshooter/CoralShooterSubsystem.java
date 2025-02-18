@@ -193,12 +193,16 @@ public class CoralShooterSubsystem extends CS_SubsystemBase {
   public void runCharacterizationLeft(double input) {
     coralShooterInterface.runCharacterizationLeft(input);
   }
+
   public void runCharacterizationRight(double input) {
     coralShooterInterface.runCharacterizationRight(input);
   }
+
   public double getCharacterizationVelocityLeft() {
     return values.currentRPMLeft;
-  }  public double getCharacterizationVelocityRight() {
+  }
+
+  public double getCharacterizationVelocityRight() {
     return values.currentRPMRight;
   }
 }

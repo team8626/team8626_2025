@@ -8,6 +8,7 @@ import frc.utils.CS_Utils;
 public class ElevatorSubsystem extends CS_SubsystemBase {
   private ElevatorInterface elevatorInterface;
   private ElevatorValues values;
+  private double desiredHeight = 0;
 
   public ElevatorSubsystem(ElevatorInterface subsystem_interface) {
     super();
@@ -18,16 +19,17 @@ public class ElevatorSubsystem extends CS_SubsystemBase {
   }
 
   // Calls to the elevator interface
-  public void stop() {
-    elevatorInterface.stopElevator();
+  public void move(double offsetInches) {
+    elevatorInterface.moveInches(offsetInches);
   }
 
-  public void setSpeed(double new_height) {
-    elevatorInterface.setElevatorSpeed(new_height);
+  public void setHeight(double heightInches) {
+    desiredHeight = heightInches;
+    elevatorInterface.setHeightInches(heightInches);
   }
 
   public double getHeight() {
-    return elevatorInterface.getElevatorHeight();
+    return elevatorInterface.getHeightInches();
   }
 
   public void setkP(double new_value) {
@@ -57,6 +59,7 @@ public class ElevatorSubsystem extends CS_SubsystemBase {
 
     // Using SmartDashboard to tune PIDs
     // --------------------------------------------------
+    SmartDashboard.putNumber("Subsystem/Elevator/DesiredHeight", desiredHeight);
     SmartDashboard.putNumber("Subsystem/Elevator/P Gain", ElevatorConstants.kP);
     SmartDashboard.putNumber("Subsystem/Elevator/D Gain", ElevatorConstants.kI);
     SmartDashboard.putNumber("Subsystem/Elevator/I Gain", ElevatorConstants.kD);
@@ -93,11 +96,17 @@ public class ElevatorSubsystem extends CS_SubsystemBase {
     // values.FF);
     // TODO Auto-generated method stub
 
+    // double newHeight = SmartDashboard.getNumber("Subsystem/Elevator/DesiredHeight",
+    // desiredHeight);
+    // if (newHeight != desiredHeight) {
+    //   desiredHeight = newHeight;
+    //   setHeight(newHeight);
+    // }
+    // SmartDashboard.putNumber("Subsystem/Elevator/DesiredHeight", desiredHeight);
   }
 
   @Override
   public void simulationPeriodic() {
-    // TODO Auto-generated method stub
-
+    elevatorInterface.updateInputs(values);
   }
 }

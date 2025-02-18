@@ -15,22 +15,35 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Commodore.CommodoreState;
 import frc.robot.RobotConstants.RobotType;
+import frc.robot.commands.setters.units.AlgaeShooterIntake;
+import frc.robot.commands.setters.units.AlgaeShooterLaunch;
 import frc.robot.commands.setters.units.CoralShooterIntake;
 import frc.robot.commands.setters.units.CoralShooterLaunch;
+import frc.robot.commands.setters.units.ElevatorMoveDown;
+import frc.robot.commands.setters.units.ElevatorMoveUp;
+import frc.robot.commands.tuning.Tune_AlgaeShooter;
 import frc.robot.commands.tuning.Tune_CoralShooter;
+import frc.robot.subsystems.Dashboard;
+import frc.robot.subsystems.algaeshooter.AlgaeShooterSubsystem;
+import frc.robot.subsystems.algaeshooter.AlgaeShooter_Sim;
+import frc.robot.subsystems.algaeshooter.AlgaeShooter_SparkMax;
+import frc.robot.subsystems.climber.ClimberSubsystem;
+import frc.robot.subsystems.climber.Climber_Sim;
+import frc.robot.subsystems.climber.Climber_SparkMax;
 import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
 import frc.robot.subsystems.coralshooter.CoralShooter_Sim;
 import frc.robot.subsystems.coralshooter.CoralShooter_SparkMax;
 import frc.robot.subsystems.drive.CS_DriveSubsystemIO;
 import frc.robot.subsystems.drive.CS_DriveSubsystemIO_Swerve;
 import frc.robot.subsystems.drive.CS_DriveSubsystemIO_Tank;
-import frc.robot.subsystems.dummy.DummyIO_Specific1;
-import frc.robot.subsystems.dummy.DummySubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.elevator.Elevator_LinearSparkMax;
-import frc.robot.subsystems.elevator.Elevator_Simulation;
+import frc.robot.subsystems.elevator.Elevator_SimulationRose;
 import frc.robot.subsystems.ledManager.LEDManager;
 import frc.robot.subsystems.presets.PresetManager;
+import frc.robot.subsystems.wrist.WristSubsystem;
+import frc.robot.subsystems.wrist.Wrist_Sim;
+import frc.robot.subsystems.wrist.Wrist_SparkFlex;
 import frc.utils.CS_ButtonBoxController;
 import frc.utils.CS_XboxController;
 import java.io.File;
@@ -38,6 +51,9 @@ import java.io.File;
 public class RobotContainer {
   // Singleton instance
   private static RobotContainer instance;
+
+  // Instantiate the Dashboard
+  private final Dashboard dashboard = new Dashboard();
 
   // Instantiate the Commodore running the robot state machine.
   private final Commodore commodore = Commodore.getInstance();
@@ -55,9 +71,11 @@ public class RobotContainer {
   // private final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
   // private final ExampleCommand exampleCommand = new ExampleCommand(exampleSubsystem);
   public static CS_DriveSubsystemIO drivebase = null;
-  public static DummySubsystem dummy = null;
   public static ElevatorSubsystem elevator = null;
+  public static WristSubsystem wrist = null;
   public static CoralShooterSubsystem mortar = null;
+  public static AlgaeShooterSubsystem algae501 = null;
+  public static ClimberSubsystem climber = null;
 
   // Controllers
   private final CS_XboxController driverController =
@@ -82,7 +100,6 @@ public class RobotContainer {
         // elevator = new ElevatorArm();
         break;
       case DART:
-        dummy = new DummySubsystem(new DummyIO_Specific1());
         drivebase =
             new CS_DriveSubsystemIO_Swerve(
                 new File(Filesystem.getDeployDirectory(), "swerve_dart"));
@@ -91,25 +108,33 @@ public class RobotContainer {
         drivebase =
             new CS_DriveSubsystemIO_Swerve(
                 new File(Filesystem.getDeployDirectory(), "swerve_devbot"));
-        dummy = new DummySubsystem(new DummyIO_Specific1());
-        elevator = new ElevatorSubsystem(new Elevator_Simulation());
+        elevator = new ElevatorSubsystem(new Elevator_SimulationRose());
+        wrist = new WristSubsystem(new Wrist_Sim());
+        algae501 = new AlgaeShooterSubsystem(new AlgaeShooter_Sim());
         mortar = new CoralShooterSubsystem(new CoralShooter_Sim());
+        climber = new ClimberSubsystem(new Climber_Sim());
 
         break;
       case DEVBOT:
-        mortar = new CoralShooterSubsystem(new CoralShooter_SparkMax());
         drivebase =
             new CS_DriveSubsystemIO_Swerve(
                 new File(Filesystem.getDeployDirectory(), "swerve_devbot"));
+        mortar = new CoralShooterSubsystem(new CoralShooter_SparkMax());
+        elevator = new ElevatorSubsystem(new Elevator_LinearSparkMax());
+        wrist = new WristSubsystem(new Wrist_SparkFlex());
+        algae501 = new AlgaeShooterSubsystem(new AlgaeShooter_SparkMax());
+        climber = new ClimberSubsystem(new Climber_SparkMax());
         break;
       case COMPBOT:
       default:
         drivebase =
             new CS_DriveSubsystemIO_Swerve(
                 new File(Filesystem.getDeployDirectory(), "swerve_devbot"));
-        dummy = new DummySubsystem(new DummyIO_Specific1());
         elevator = new ElevatorSubsystem(new Elevator_LinearSparkMax());
+        wrist = new WristSubsystem(new Wrist_SparkFlex());
         mortar = new CoralShooterSubsystem(new CoralShooter_SparkMax());
+        algae501 = new AlgaeShooterSubsystem(new AlgaeShooter_SparkMax());
+        climber = new ClimberSubsystem(new Climber_SparkMax());
 
         break;
     }
@@ -119,12 +144,13 @@ public class RobotContainer {
 
     // Configure the button bindings
     configureDriverBindings(driverController);
-    configureOperatorBindings(operatorController);
 
     if (!hasTuningEnabled()) {
       configureButtonBoxBindings(buttonBox);
+      configureOperatorBindings(operatorController);
     } else {
       configureTestButtonBoxBindings(buttonBox);
+      configureTestOperatorBindings(operatorController);
     }
 
     configureDefaultCommands();
@@ -165,11 +191,28 @@ public class RobotContainer {
     //     new InstantCommand(
     //         () -> Commodore.setCommodoreState(CommodoreState.CORAL_SHOOT,
     // true).withToggleState()));
+    controller.btn_B.onTrue(
+        new InstantCommand(
+            () -> Commodore.setCommodoreState(CommodoreState.CORAL_SHOOT, true).withToggleState()));
+
+    controller.btn_X.onTrue(
+        new InstantCommand(
+            () ->
+                Commodore.setCommodoreState(CommodoreState.ALGAE_INTAKE, true).withToggleState()));
+
+    controller.btn_Y.onTrue(
+        new InstantCommand(
+            () -> Commodore.setCommodoreState(CommodoreState.ALGAE_SHOOT, true).withToggleState()));
   }
 
   private void configureOperatorBindings(CS_XboxController controller) {
     // controller.btn_A.onTrue(
     //     new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.CORAL_SHOOT, true)));
+  }
+
+  private void configureTestOperatorBindings(CS_XboxController controller) {
+    controller.btn_A.onTrue(new ElevatorMoveUp());
+    controller.btn_Y.onTrue(new ElevatorMoveDown());
   }
 
   // ---------------------------------------- BUTTON BOX ------------------------------
@@ -195,10 +238,23 @@ public class RobotContainer {
     controller.btn_1.toggleOnTrue(new CoralShooterIntake());
     controller.btn_2.toggleOnTrue(new Tune_CoralShooter());
     controller.btn_3.toggleOnTrue(new CoralShooterLaunch());
-    // controller.btn_4.toggleOnTrue(
+
+    controller.btn_4.toggleOnTrue(new AlgaeShooterIntake());
+    controller.btn_5.toggleOnTrue(new Tune_AlgaeShooter());
+    controller.btn_5.toggleOnTrue(new Tune_AlgaeShooter());
+    controller.btn_6.toggleOnTrue(new AlgaeShooterLaunch());
+    // controller.btn_7.toggleOnTrue(new InstantCommand(() -> elevator.setHeight(3)));
+    // controller.btn_8.toggleOnTrue(new InstantCommand(() -> elevator.setHeight(40)));
+
+    // controller.btn_7.toggleOnTrue(new InstantCommand(() -> climber.setAngleDegrees(90)));
+    // controller.btn_8.toggleOnTrue(new InstantCommand(() -> climber.setAngleDegrees(230)));
+
+    controller.btn_7.toggleOnTrue(new InstantCommand(() -> wrist.setAngleDegrees(90)));
+    controller.btn_8.toggleOnTrue(new InstantCommand(() -> wrist.setAngleDegrees(180)));
+
+    // controller.btn_9.toggleOnTrue(
     //     new FeedForwardCharacterization(
     //         mortar, mortar::runCharacterization, mortar::getCharacterizationVelocity));
-
   }
 
   private void configureDefaultCommands() {

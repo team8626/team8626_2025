@@ -1,0 +1,43 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CenterReefAlgaeA1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "@ReefA1LeftPickup"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LeftPickupCoralA6"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "@ReefA6LeftPickup"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LeftPickupCoralA5"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
