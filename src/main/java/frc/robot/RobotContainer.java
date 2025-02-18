@@ -244,8 +244,8 @@ public class RobotContainer {
 
     controller.btn_4.toggleOnTrue(new AlgaeShooterIntake());
     controller.btn_5.toggleOnTrue(new Tune_AlgaeShooter());
+    controller.btn_5.toggleOnTrue(new Tune_AlgaeShooter());
     controller.btn_6.toggleOnTrue(new AlgaeShooterLaunch());
-
     // controller.btn_7.toggleOnTrue(new InstantCommand(() -> elevator.setHeight(3)));
     // controller.btn_8.toggleOnTrue(new InstantCommand(() -> elevator.setHeight(40)));
 
@@ -258,7 +258,6 @@ public class RobotContainer {
     // controller.btn_9.toggleOnTrue(
     //     new FeedForwardCharacterization(
     //         mortar, mortar::runCharacterization, mortar::getCharacterizationVelocity));
-
   }
 
   private void configureDefaultCommands() {
