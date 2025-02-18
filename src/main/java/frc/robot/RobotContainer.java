@@ -41,6 +41,9 @@ import frc.robot.subsystems.elevator.Elevator_LinearSparkMax;
 import frc.robot.subsystems.elevator.Elevator_SimulationRose;
 import frc.robot.subsystems.ledManager.LEDManager;
 import frc.robot.subsystems.presets.PresetManager;
+import frc.robot.subsystems.wrist.WristSubsystem;
+import frc.robot.subsystems.wrist.Wrist_Sim;
+import frc.robot.subsystems.wrist.Wrist_SparkFlex;
 import frc.robot.vizualization.Visualization;
 import frc.utils.CS_ButtonBoxController;
 import frc.utils.CS_XboxController;
@@ -72,6 +75,7 @@ public class RobotContainer {
   // private final ExampleCommand exampleCommand = new ExampleCommand(exampleSubsystem);
   public static CS_DriveSubsystemIO drivebase = null;
   public static ElevatorSubsystem elevator = null;
+  public static WristSubsystem wrist = null;
   public static CoralShooterSubsystem mortar = null;
   public static AlgaeShooterSubsystem algae501 = null;
   public static ClimberSubsystem climber = null;
@@ -108,6 +112,7 @@ public class RobotContainer {
             new CS_DriveSubsystemIO_Swerve(
                 new File(Filesystem.getDeployDirectory(), "swerve_devbot"));
         elevator = new ElevatorSubsystem(new Elevator_SimulationRose());
+        wrist = new WristSubsystem(new Wrist_Sim());
         algae501 = new AlgaeShooterSubsystem(new AlgaeShooter_Sim());
         mortar = new CoralShooterSubsystem(new CoralShooter_Sim());
         climber = new ClimberSubsystem(new Climber_Sim());
@@ -119,6 +124,7 @@ public class RobotContainer {
                 new File(Filesystem.getDeployDirectory(), "swerve_devbot"));
         mortar = new CoralShooterSubsystem(new CoralShooter_SparkMax());
         elevator = new ElevatorSubsystem(new Elevator_LinearSparkMax());
+        wrist = new WristSubsystem(new Wrist_SparkFlex());
         algae501 = new AlgaeShooterSubsystem(new AlgaeShooter_SparkMax());
         climber = new ClimberSubsystem(new Climber_SparkMax());
         break;
@@ -128,6 +134,7 @@ public class RobotContainer {
             new CS_DriveSubsystemIO_Swerve(
                 new File(Filesystem.getDeployDirectory(), "swerve_devbot"));
         elevator = new ElevatorSubsystem(new Elevator_LinearSparkMax());
+        wrist = new WristSubsystem(new Wrist_SparkFlex());
         mortar = new CoralShooterSubsystem(new CoralShooter_SparkMax());
         algae501 = new AlgaeShooterSubsystem(new AlgaeShooter_SparkMax());
         climber = new ClimberSubsystem(new Climber_SparkMax());
@@ -239,14 +246,19 @@ public class RobotContainer {
     controller.btn_5.toggleOnTrue(new Tune_AlgaeShooter());
     controller.btn_6.toggleOnTrue(new AlgaeShooterLaunch());
 
-    controller.btn_7.toggleOnTrue(new InstantCommand(() -> elevator.setHeight(3)));
-    controller.btn_8.toggleOnTrue(new InstantCommand(() -> elevator.setHeight(40)));
+    // controller.btn_7.toggleOnTrue(new InstantCommand(() -> elevator.setHeight(3)));
+    // controller.btn_8.toggleOnTrue(new InstantCommand(() -> elevator.setHeight(40)));
 
-    // controller.btn_4.toggleOnTrue(
+    // controller.btn_7.toggleOnTrue(new InstantCommand(() -> climber.setAngleDegrees(90)));
+    // controller.btn_8.toggleOnTrue(new InstantCommand(() -> climber.setAngleDegrees(230)));
+
+    controller.btn_7.toggleOnTrue(new InstantCommand(() -> wrist.setAngleDegrees(90)));
+    controller.btn_8.toggleOnTrue(new InstantCommand(() -> wrist.setAngleDegrees(180)));
+
+    // controller.btn_9.toggleOnTrue(
     //     new FeedForwardCharacterization(
     //         mortar, mortar::runCharacterization, mortar::getCharacterizationVelocity));
-    // controller.btn_8.toggleOnTrue(new InstantCommand(() -> climber.setAngleDegrees(90)));
-    // controller.btn_9.toggleOnTrue(new InstantCommand(() -> climber.setAngleDegrees(230)));
+
   }
 
   private void configureDefaultCommands() {

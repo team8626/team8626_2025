@@ -15,13 +15,11 @@ public interface WristInterface {
   }
 
   public class WristValues {
-    protected boolean wristIsEnabled = false;
-
+    protected boolean isEnabled = false;
     protected double currentAngleDegrees = 0; // Degrees
-
     protected double amps = 0;
 
-    protected double desiredAngleDegrees = 0;
+    // protected double desiredAngleDegrees = 0;
 
     protected double kP = 0.05;
     protected double kI = 0.0;

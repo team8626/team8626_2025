@@ -1,206 +1,109 @@
-package frc.robot.subsystems.coralshooter;
+package frc.robot.subsystems.wrist;
 
-import static frc.robot.subsystems.coralshooter.CoralShooterConstants.flywheelConfig;
 import static frc.robot.subsystems.coralshooter.CoralShooterConstants.gains;
-import static frc.robot.subsystems.coralshooter.CoralShooterConstants.launcherConfig;
+import static frc.robot.subsystems.wrist.WristConstants.wristConfig;
 
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.ClosedLoopSlot;
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkClosedLoopController;
-import com.revrobotics.spark.SparkClosedLoopController.ArbFFUnits;
+import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.AbsoluteEncoderConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkFlexConfig;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.subsystems.CS_InterfaceBase;
+import frc.robot.subsystems.climber.ClimberConstants;
 
-public class Wrist_SparkFlex implements CoralShooterInterface, CS_InterfaceBase {
+public class Wrist_SparkFlex implements WristInterface, CS_InterfaceBase {
 
-  private final SparkMax leftMotor;
-  private final SparkMax rightMotor;
-  private final SparkMax launchMotor;
+  private SparkFlex motor;
+  private SparkFlexConfig config;
 
-  private final SparkMaxConfig leftConfig;
-  private final SparkMaxConfig rightConfig;
-  private final SparkMaxConfig launchConfig;
-
-  private final SparkClosedLoopController leftController;
-  private final RelativeEncoder leftEncoder;
-  private final SparkClosedLoopController launchController;
+  private final SparkClosedLoopController controller;
+  private AbsoluteEncoder encoder;
+  private final AbsoluteEncoderConfig encoderConfig = new AbsoluteEncoderConfig();
+  private double setPointDegrees;
 
   SimpleMotorFeedforward leftFF = new SimpleMotorFeedforward(gains.kS(), gains.kV(), gains.kA());
 
-  private DigitalInput loadedSensor = new DigitalInput(CoralShooterConstants.infraRedPort);
-
-  private boolean shooterIsEnabled = false;
-  private boolean launcherIsEnabled = false;
-  private double currentLauncherSetpoint = 0;
+  private boolean isEnabled = false;
 
   public Wrist_SparkFlex() {
-    // Setup configuration for the left motor
-    leftConfig = new SparkMaxConfig();
-    leftConfig.inverted(false).idleMode(IdleMode.kCoast);
+    // Setup configuration for the encoder
+    encoderConfig
+        .positionConversionFactor(ClimberConstants.positionConversionFactor)
+        .velocityConversionFactor(ClimberConstants.velocityConversionFactor);
 
-    leftConfig
-        .encoder
-        .positionConversionFactor(1 / flywheelConfig.reduction())
-        .velocityConversionFactor(1 / flywheelConfig.reduction());
+    // Setup configuration for the motor
+    config = new SparkFlexConfig();
 
-    leftConfig
+    config.inverted(false).idleMode(IdleMode.kBrake).smartCurrentLimit(40);
+
+    config
         .closedLoop
-        .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+        .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
         // Set PID values for position control.
-        .p(CoralShooterConstants.gains.kP())
-        .i(CoralShooterConstants.gains.kI())
-        .d(CoralShooterConstants.gains.kD())
-        // .velocityFF(0.002)
+        .p(ClimberConstants.gains.kP())
+        .i(ClimberConstants.gains.kI())
+        .d(ClimberConstants.gains.kD())
         .outputRange(-1, 1);
 
-    leftMotor = new SparkMax(flywheelConfig.leftCANID(), MotorType.kBrushless);
-    leftMotor.configure(leftConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    config.apply(encoderConfig);
 
-    leftController = leftMotor.getClosedLoopController();
-    leftEncoder = leftMotor.getEncoder();
-    leftController.setReference(0, ControlType.kDutyCycle);
+    motor = new SparkFlex(wristConfig.CANID(), MotorType.kBrushless);
+    motor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-    // Setup configuration for the right motor (follower)
-    rightConfig = new SparkMaxConfig();
-    rightConfig.follow(leftMotor, true);
+    encoder = motor.getAbsoluteEncoder();
 
-    rightMotor = new SparkMax(flywheelConfig.rightCANID(), MotorType.kBrushless);
-    rightMotor.configure(
-        rightConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-
-    // Launcher Motor
-    launchConfig = new SparkMaxConfig();
-    launchConfig.inverted(false);
-
-    launchMotor = new SparkMax(launcherConfig.leftCANID(), MotorType.kBrushless);
-    launchMotor.configure(
-        launchConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-
-    launchController = launchMotor.getClosedLoopController();
-    launchController.setReference(0, ControlType.kDutyCycle);
+    controller = motor.getClosedLoopController();
+    controller.setReference(0, ControlType.kDutyCycle);
   }
 
   @Override
-  public void updateInputs(CoralShooterValues values) {
-    values.launchIsEnabled = launcherIsEnabled;
-    values.shooterIsEnabled = shooterIsEnabled;
+  public void updateInputs(WristValues values) {
+    values.isEnabled = isEnabled;
+    values.currentAngleDegrees = getAngleDegrees();
+    values.amps = motor.getOutputCurrent();
 
-    values.currentRPMLeft = getShooterRPMLeft();
-    values.currentRPMRight = getShooterRPMRight();
-
-    values.currentRMPLauncher = getLauncherRPM();
-    values.currentLauncherSetpoint = getLauncherSetpoint();
-
-    values.ampsLeft = leftMotor.getOutputCurrent();
-    values.ampsRight = rightMotor.getOutputCurrent();
-    values.ampsLauncher = launchMotor.getOutputCurrent();
-
-    values.isLoaded = shooterIsLoaded();
+    controller.setReference(setPointDegrees, ControlType.kPosition);
   }
 
+  public double getAngleDegrees() {
+    return encoder.getPosition();
+  }
+
+  // added to fix error at top of class (im hope this doesn't break anything)
   @Override
-  public void startShooter(double new_RPM) {
-    leftController.setReference(
-        new_RPM,
-        ControlType.kVelocity,
-        ClosedLoopSlot.kSlot0,
-        leftFF.calculate(new_RPM),
-        ArbFFUnits.kVoltage);
-
-    shooterIsEnabled = true;
+  public void setAngleDegrees(double new_angle) {
+    setPointDegrees = new_angle;
   }
 
-  @Override
-  public void stopShooter() {
-    leftController.setReference(0, ControlType.kDutyCycle);
-    shooterIsEnabled = false;
-  }
+  // @Override
+  // public void start(double new_setpoint) {
+  //   controller.setReference(new_setpoint, ControlType.kDutyCycle);
+  //   isEnabled = true;
+  // }
 
-  @Override
-  public void updateShooterRPM(double new_RPM) {
-    if (shooterIsEnabled) {
-      leftController.setReference(
-          new_RPM,
-          ControlType.kVelocity,
-          ClosedLoopSlot.kSlot0,
-          leftFF.calculate(new_RPM),
-          ArbFFUnits.kVoltage);
-    }
-  }
-
-  @Override
-  public void stopLauncher() {
-    updateLauncherSetpoint(0);
-    launcherIsEnabled = false;
-  }
-
-  @Override
-  public void updateLauncherSetpoint(double new_Setpoint) {
-    currentLauncherSetpoint = new_Setpoint;
-    if (launcherIsEnabled) {
-      launchController.setReference(new_Setpoint, ControlType.kDutyCycle);
-    }
-  }
-
-  @Override
-  public void startLauncher(double new_Setpoint) {
-    currentLauncherSetpoint = new_Setpoint;
-    launchController.setReference(new_Setpoint, ControlType.kDutyCycle);
-    launcherIsEnabled = true;
-  }
-
-  @Override
-  public double getShooterRPMLeft() {
-    return leftEncoder.getVelocity();
-  }
-
-  @Override
-  public double getShooterRPMRight() {
-    return leftEncoder.getVelocity();
-  }
-
-  @Override
-  public double getLauncherRPM() {
-    return leftEncoder.getVelocity();
-  }
-
-  public double getLauncherSetpoint() {
-    return currentLauncherSetpoint;
-  }
-
-  @Override
-  public boolean shooterIsLoaded() {
-    return !loadedSensor.get();
-  }
+  // @Override
+  // public void stop() {
+  //   controller.setReference(0, ControlType.kDutyCycle);
+  //   isEnabled = false;
+  // }
 
   @Override
   public void setPID(double newkP, double newkI, double newkD) {
-    leftConfig.closedLoop.p(newkP).i(newkI).d(newkD);
-    leftMotor.configure(leftConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-
-    rightConfig.closedLoop.p(newkP).i(newkI).d(newkD);
-    rightMotor.configure(
-        rightConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    config.closedLoop.p(newkP).i(newkI).d(newkD);
+    motor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     printf("New PID: %f, %f, %f", newkP, newkI, newkD);
   }
 
   @Override
-  public void runCharacterizationLeft(double input) {
-    leftMotor.setVoltage(input);
-  }
-
-  @Override
-  public void runCharacterizationRight(double input) {
-    rightMotor.setVoltage(input);
+  public void runCharacterization(double input) {
+    motor.setVoltage(input);
   }
 }

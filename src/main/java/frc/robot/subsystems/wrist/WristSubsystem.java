@@ -21,6 +21,7 @@ public class WristSubsystem extends CS_SubsystemBase {
   // Calls to the wrist interface
 
   public void setAngleDegrees(double new_Angle) {
+    println("Setting angle to " + new_Angle);
     desiredAngleDegrees = new_Angle;
     wristInterface.setAngleDegrees(new_Angle);
   }
@@ -59,7 +60,6 @@ public class WristSubsystem extends CS_SubsystemBase {
     SmartDashboard.putNumber("Subsystem/Wrist/Gains/P", WristConstants.gains.kP());
     SmartDashboard.putNumber("Subsystem/Wrist/Gains/I", WristConstants.gains.kI());
     SmartDashboard.putNumber("Subsystem/Wrist/Gains/D", WristConstants.gains.kD());
-
   }
 
   @Override
@@ -77,19 +77,17 @@ public class WristSubsystem extends CS_SubsystemBase {
     values.kD = CS_Utils.updateFromSmartDashboard(newkD, values.kD, (value) -> setkD(value));
 
     // Update the SmartDashboard with the current state of the subsystem
-    SmartDashboard.putBoolean("Subsystem/Wrist/Enabled", values.wristIsEnabled);
-
+    SmartDashboard.putBoolean("Subsystem/Wrist/Enabled", values.isEnabled);
     SmartDashboard.putNumber("Subsystem/Wrist/currentAngleDegrees", values.currentAngleDegrees);
-    
     SmartDashboard.putNumber("Subsystem/Wrist/amps", values.amps);
 
-    double newAngle =
-        SmartDashboard.getNumber(
-            "Subsystem/Wrist/desiredAngleDegrees", WristConstants.defaultAngleDegrees);
-    if (newAngle != desiredAngleDegrees) {
-      setAngleDegrees(newAngle);
-    }
-    SmartDashboard.putNumber("Subsystem/Wrist/desiredAngleDegrees", desiredAngleDegrees);
+    //   double newAngle =
+    //       SmartDashboard.getNumber(
+    //           "Subsystem/Wrist/desiredAngleDegrees", WristConstants.defaultAngleDegrees);
+    //   if (newAngle != desiredAngleDegrees) {
+    //     setAngleDegrees(newAngle);
+    //   }
+    //   SmartDashboard.putNumber("Subsystem/Wrist/desiredAngleDegrees", desiredAngleDegrees);
   }
 
   // Characterization methods
