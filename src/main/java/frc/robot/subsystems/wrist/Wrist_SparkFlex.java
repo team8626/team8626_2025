@@ -1,6 +1,6 @@
 package frc.robot.subsystems.wrist;
 
-import static frc.robot.subsystems.coralshooter.CoralShooterConstants.gains;
+import static frc.robot.subsystems.wrist.WristConstants.gains;
 import static frc.robot.subsystems.wrist.WristConstants.wristConfig;
 
 import com.revrobotics.AbsoluteEncoder;

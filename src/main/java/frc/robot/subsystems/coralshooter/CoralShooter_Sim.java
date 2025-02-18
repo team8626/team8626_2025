@@ -21,7 +21,7 @@ public class CoralShooter_Sim implements CoralShooterInterface, CS_InterfaceBase
   private FlywheelSim rightSim;
   private FlywheelSim launchSim;
 
-  private DigitalInput loadedSensor = new DigitalInput(CoralShooterConstants.infraRedPort);
+  private DigitalInput loadedSensor = new DigitalInput(CoralShooterConstants.lidarPort);
   private DIOSim loadedSensorSim = new DIOSim(loadedSensor);
 
   public CoralShooter_Sim() {
@@ -59,50 +59,50 @@ public class CoralShooter_Sim implements CoralShooterInterface, CS_InterfaceBase
     values.launchIsEnabled = launcherIsEnabled;
     values.shooterIsEnabled = shooterIsEnabled;
 
-    values.currentRPMLeft = getShooterRPMLeft();
-    values.currentRPMRight = getShooterRPMRight();
+    values.currentRPMLeft = getRPMLeft();
+    values.currentRPMRight = getRPMRight();
 
-    values.currentRMPLauncher = getLauncherRPM();
-    values.currentLauncherSetpoint = getLauncherSetpoint();
+    values.currentRMPLauncher = getRPMLauncher();
+    values.currentLauncherSetpoint = getSetpointLauncher();
 
     values.ampsLeft = leftSim.getCurrentDrawAmps();
     values.ampsRight = rightSim.getCurrentDrawAmps();
     values.ampsLauncher = launchSim.getCurrentDrawAmps();
 
-    values.isLoaded = shooterIsLoaded();
+    values.isLoaded = isLoaded();
   }
 
   @Override
-  public void startShooter(double new_RPM) {
-    rightSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_RPM));
-    leftSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_RPM));
+  public void startShooter(double new_RPMLeft, double new_RPMRight) {
+    rightSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_RPMLeft));
+    leftSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_RPMRight));
     shooterIsEnabled = true;
-    printf("Shooter RPM: %f", new_RPM);
+    printf("Shooter RPM: %f / %f", new_RPMLeft, new_RPMRight);
   }
 
   @Override
   public void stopShooter() {
-    updateShooterRPM(0);
+    updateRPMShooter(0, 0);
     shooterIsEnabled = false;
   }
 
   @Override
-  public void updateShooterRPM(double new_RPM) {
+  public void updateRPMShooter(double new_RPMLeft, double new_RPMRight) {
     if (shooterIsEnabled) {
-      rightSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_RPM));
-      leftSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_RPM));
-      printf("Shooter RPM: %f", new_RPM);
+      leftSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_RPMLeft));
+      rightSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_RPMRight));
+      printf("Shooter RPM: %f / %f", new_RPMLeft, new_RPMRight);
     }
   }
 
   @Override
   public void stopLauncher() {
-    updateLauncherSetpoint(0);
+    updateSetpointLauncher(0);
     launcherIsEnabled = false;
   }
 
   @Override
-  public void updateLauncherSetpoint(double new_Setpoint) {
+  public void updateSetpointLauncher(double new_Setpoint) {
     currentLauncherSetpoint = new_Setpoint;
     if (launcherIsEnabled) {
       launchSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_Setpoint));
@@ -118,31 +118,36 @@ public class CoralShooter_Sim implements CoralShooterInterface, CS_InterfaceBase
   }
 
   @Override
-  public double getShooterRPMLeft() {
+  public double getRPMLeft() {
     return leftSim.getAngularVelocityRPM();
   }
 
   @Override
-  public double getShooterRPMRight() {
+  public double getRPMRight() {
     return rightSim.getAngularVelocityRPM();
   }
 
   @Override
-  public double getLauncherRPM() {
+  public double getRPMLauncher() {
     return launchSim.getAngularVelocityRPM();
   }
 
-  public double getLauncherSetpoint() {
+  public double getSetpointLauncher() {
     return currentLauncherSetpoint;
   }
 
   @Override
-  public boolean shooterIsLoaded() {
+  public boolean isLoaded() {
     return !loadedSensorSim.getValue();
   }
 
   @Override
-  public void setPID(double newkP, double newkI, double newkD) {
-    printf("New PID: %f, %f, %f \n", newkP, newkI, newkD);
+  public void setPIDLeft(double newkP, double newkI, double newkD) {
+    printf("New PID Left: %f, %f, %f \n", newkP, newkI, newkD);
+  }
+
+  @Override
+  public void setPIDRight(double newkP, double newkI, double newkD) {
+    printf("New PID Right: %f, %f, %f \n", newkP, newkI, newkD);
   }
 }

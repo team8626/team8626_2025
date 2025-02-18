@@ -44,7 +44,6 @@ import frc.robot.subsystems.presets.PresetManager;
 import frc.robot.subsystems.wrist.WristSubsystem;
 import frc.robot.subsystems.wrist.Wrist_Sim;
 import frc.robot.subsystems.wrist.Wrist_SparkFlex;
-import frc.robot.vizualization.Visualization;
 import frc.utils.CS_ButtonBoxController;
 import frc.utils.CS_XboxController;
 import java.io.File;
@@ -65,8 +64,6 @@ public class RobotContainer {
   // Instantiate the Preset manager
   private final PresetManager presetManager = PresetManager.getInstance();
 
-  // Visualization (AdvantageScope)
-  private final Visualization vizualization = new Visualization();
   //
   // ****************************************************************************************
 
