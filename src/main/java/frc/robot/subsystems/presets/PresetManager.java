@@ -20,7 +20,7 @@ import frc.robot.subsystems.CS_SubsystemBase;
 import java.util.Optional;
 
 public class PresetManager extends CS_SubsystemBase {
-  private String uiSelectedCORALLevel = "L1";
+  private String uiSelectedCORALLevel = "UNKNOWN";
   private String uiSelectedIntakeSide = "UNKNOWN";
   private String uiSelectedREEFBranch = "UNKNOWN";
   private String uiSelectedAlgaePosition = "UNKNOWN";
