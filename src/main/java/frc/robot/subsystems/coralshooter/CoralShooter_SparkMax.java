@@ -1,10 +1,9 @@
 package frc.robot.subsystems.coralshooter;
 
 import static frc.robot.subsystems.coralshooter.CoralShooterConstants.flywheelConfig;
-import static frc.robot.subsystems.coralshooter.CoralShooterConstants.gains;
+import static frc.robot.subsystems.coralshooter.CoralShooterConstants.gainsLeft;
 import static frc.robot.subsystems.coralshooter.CoralShooterConstants.launcherConfig;
 
-import com.revrobotics.AnalogInput;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase.ControlType;
@@ -38,7 +37,8 @@ public class CoralShooter_SparkMax implements CoralShooterInterface, CS_Interfac
   private final SparkClosedLoopController launchController;
   private final RelativeEncoder launchEncoder;
 
-  SimpleMotorFeedforward shooterFF = new SimpleMotorFeedforward(gains.kS(), gains.kV(), gains.kA());
+  SimpleMotorFeedforward shooterFF =
+      new SimpleMotorFeedforward(gainsLeft.kS(), gainsLeft.kV(), gainsLeft.kA());
 
   private DigitalInput loadedSensor = new DigitalInput(CoralShooterConstants.lidarPort);
 
@@ -60,9 +60,9 @@ public class CoralShooter_SparkMax implements CoralShooterInterface, CS_Interfac
         .closedLoop
         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
         // Set PID values for position control.
-        .p(CoralShooterConstants.gains.kP())
-        .i(CoralShooterConstants.gains.kI())
-        .d(CoralShooterConstants.gains.kD())
+        .p(CoralShooterConstants.gainsLeft.kP())
+        .i(CoralShooterConstants.gainsLeft.kI())
+        .d(CoralShooterConstants.gainsLeft.kD())
         // .velocityFF(0.002)
         .outputRange(-1, 1);
 
@@ -86,9 +86,9 @@ public class CoralShooter_SparkMax implements CoralShooterInterface, CS_Interfac
         .closedLoop
         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
         // Set PID values for position control.
-        .p(CoralShooterConstants.gains.kP())
-        .i(CoralShooterConstants.gains.kI())
-        .d(CoralShooterConstants.gains.kD())
+        .p(CoralShooterConstants.gainsLeft.kP())
+        .i(CoralShooterConstants.gainsLeft.kI())
+        .d(CoralShooterConstants.gainsLeft.kD())
         // .velocityFF(0.002)
         .outputRange(-1, 1);
 
@@ -222,16 +222,21 @@ public class CoralShooter_SparkMax implements CoralShooterInterface, CS_Interfac
   }
 
   @Override
-  public void setPID(double newkP, double newkI, double newkD) {
+  public void setPIDLeft(double newkP, double newkI, double newkD) {
     leftConfig.closedLoop.p(newkP).i(newkI).d(newkD);
-    rightConfig.closedLoop.p(newkP).i(newkI).d(newkD);
-
     leftMotor.configure(
         leftConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
-    leftMotor.configure(
+
+    printf("New PID Left: %f, %f, %f", newkP, newkI, newkD);
+  }
+
+  @Override
+  public void setPIDRight(double newkP, double newkI, double newkD) {
+    rightConfig.closedLoop.p(newkP).i(newkI).d(newkD);
+    rightMotor.configure(
         rightConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
 
-    printf("New PID: %f, %f, %f", newkP, newkI, newkD);
+    printf("New PID Right: %f, %f, %f", newkP, newkI, newkD);
   }
 
   @Override

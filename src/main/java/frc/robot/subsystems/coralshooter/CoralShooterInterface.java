@@ -28,7 +28,9 @@ public interface CoralShooterInterface {
 
   default void runCharacterizationRight(double input) {}
 
-  default void setPID(double kP, double kI, double kD) {}
+  default void setPIDLeft(double kP, double kI, double kD) {}
+
+  default void setPIDRight(double kP, double kI, double kD) {}
 
   default void updateInputs(CoralShooterValues values) {
     // Default implementation
@@ -51,9 +53,12 @@ public interface CoralShooterInterface {
     protected double desiredRPMLeft = CoralShooterConstants.RPMShootLeft;
     protected double desiredRPMRight = CoralShooterConstants.RPMShoolLeft;
 
-    protected double kP = 0.05;
-    protected double kI = 0.0;
-    protected double kD = 0.0;
-    protected double FF = 0.0;
+    protected double kPLeft = 0.05;
+    protected double kILeft = 0.0;
+    protected double kDLeft = 0.0;
+
+    protected double kPRight = 0.05;
+    protected double kIRight = 0.0;
+    protected double kDRight = 0.0;
   }
 }

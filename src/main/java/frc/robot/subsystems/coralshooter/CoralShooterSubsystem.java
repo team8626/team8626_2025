@@ -65,20 +65,36 @@ public class CoralShooterSubsystem extends CS_SubsystemBase {
     return coralShooterInterface.isLoaded();
   }
 
-  public void setPID(double newkP, double newkI, double newkD) {
-    coralShooterInterface.setPID(newkP, newkI, newkD);
+  public void setPIDLeft(double newkP, double newkI, double newkD) {
+    coralShooterInterface.setPIDLeft(newkP, newkI, newkD);
   }
 
-  public void setkP(double newkP) {
-    coralShooterInterface.setPID(newkP, values.kI, values.kD);
+  public void setkPLeft(double newkP) {
+    coralShooterInterface.setPIDLeft(newkP, values.kILeft, values.kDLeft);
   }
 
-  public void setkI(double newkI) {
-    coralShooterInterface.setPID(values.kP, newkI, values.kD);
+  public void setkILeft(double newkI) {
+    coralShooterInterface.setPIDLeft(values.kPLeft, newkI, values.kDLeft);
   }
 
-  public void setkD(double newkD) {
-    coralShooterInterface.setPID(values.kP, values.kI, newkD);
+  public void setkDLeft(double newkD) {
+    coralShooterInterface.setPIDLeft(values.kPLeft, values.kILeft, newkD);
+  }
+
+  public void setPIDRight(double newkP, double newkI, double newkD) {
+    coralShooterInterface.setPIDRight(newkP, newkI, newkD);
+  }
+
+  public void setkPRight(double newkP) {
+    coralShooterInterface.setPIDRight(newkP, values.kIRight, values.kDRight);
+  }
+
+  public void setkIRight(double newkI) {
+    coralShooterInterface.setPIDRight(values.kPRight, newkI, values.kDRight);
+  }
+
+  public void setkDRight(double newkD) {
+    coralShooterInterface.setPIDRight(values.kPRight, values.kIRight, newkD);
   }
 
   @Override
@@ -92,9 +108,18 @@ public class CoralShooterSubsystem extends CS_SubsystemBase {
 
     // Using SmartDashboard to tune PIDs
     // --------------------------------------------------
-    SmartDashboard.putNumber("Subsystem/CoralShooter/Gains/P", CoralShooterConstants.gains.kP());
-    SmartDashboard.putNumber("Subsystem/CoralShooter/Gains/I", CoralShooterConstants.gains.kI());
-    SmartDashboard.putNumber("Subsystem/CoralShooter/Gains/D", CoralShooterConstants.gains.kD());
+    SmartDashboard.putNumber(
+        "Subsystem/CoralShooter/Gains/P_Left", CoralShooterConstants.gainsLeft.kP());
+    SmartDashboard.putNumber(
+        "Subsystem/CoralShooter/Gains/I_Left", CoralShooterConstants.gainsLeft.kI());
+    SmartDashboard.putNumber(
+        "Subsystem/CoralShooter/Gains/D_Left", CoralShooterConstants.gainsLeft.kD());
+    SmartDashboard.putNumber(
+        "Subsystem/CoralShooter/Gains/P_Right", CoralShooterConstants.gainsRight.kP());
+    SmartDashboard.putNumber(
+        "Subsystem/CoralShooter/Gains/I_Right", CoralShooterConstants.gainsRight.kI());
+    SmartDashboard.putNumber(
+        "Subsystem/CoralShooter/Gains/D_Right", CoralShooterConstants.gainsRight.kD());
 
     SmartDashboard.putNumber("Subsystem/CoralShooter/LastShotIn(ms)", 0);
   }
@@ -103,16 +128,33 @@ public class CoralShooterSubsystem extends CS_SubsystemBase {
   public void updateDashboard() {
     // Using SmartDashboard to tune PIDs
     // --------------------------------------------------
-    double newkP = SmartDashboard.getNumber("Subsystem/CoralShooter/Gains/P", values.kP);
-    double newkI = SmartDashboard.getNumber("Subsystem/CoralShooter/Gains/I", values.kI);
-    double newkD = SmartDashboard.getNumber("Subsystem/CoralShooter/Gains/D", values.kD);
-    // double newFF = SmartDashboard.getNumber("Subsystem/CoralShooter/FF", values.FF);
+    double newkPLeft =
+        SmartDashboard.getNumber("Subsystem/CoralShooter/Gains/P_Left", values.kPLeft);
+    double newkILeft =
+        SmartDashboard.getNumber("Subsystem/CoralShooter/Gains/I_Left", values.kILeft);
+    double newkDLeft =
+        SmartDashboard.getNumber("Subsystem/CoralShooter/Gains/D_Left", values.kDLeft);
+    double newkPRight =
+        SmartDashboard.getNumber("Subsystem/CoralShooter/Gains/P_Left", values.kPRight);
+    double newkIRight =
+        SmartDashboard.getNumber("Subsystem/CoralShooter/Gains/I_Left", values.kIRight);
+    double newkDRight =
+        SmartDashboard.getNumber("Subsystem/CoralShooter/Gains/D_Left", values.kDRight);
 
     // Coefficients on SmartDashboard have changed, save new values to the PID controller
     // --------------------------------------------------
-    values.kP = CS_Utils.updateFromSmartDashboard(newkP, values.kP, (value) -> setkP(value));
-    values.kI = CS_Utils.updateFromSmartDashboard(newkI, values.kI, (value) -> setkI(value));
-    values.kD = CS_Utils.updateFromSmartDashboard(newkD, values.kD, (value) -> setkD(value));
+    values.kPLeft =
+        CS_Utils.updateFromSmartDashboard(newkPLeft, values.kPLeft, (value) -> setkPLeft(value));
+    values.kILeft =
+        CS_Utils.updateFromSmartDashboard(newkILeft, values.kILeft, (value) -> setkILeft(value));
+    values.kDLeft =
+        CS_Utils.updateFromSmartDashboard(newkDLeft, values.kDLeft, (value) -> setkDLeft(value));
+    values.kPRight =
+        CS_Utils.updateFromSmartDashboard(newkPRight, values.kPRight, (value) -> setkPRight(value));
+    values.kIRight =
+        CS_Utils.updateFromSmartDashboard(newkIRight, values.kIRight, (value) -> setkIRight(value));
+    values.kDRight =
+        CS_Utils.updateFromSmartDashboard(newkDRight, values.kDRight, (value) -> setkDRight(value));
 
     // Update the SmartDashboard with the current state of the subsystem
     SmartDashboard.putBoolean("Subsystem/CoralShooter/Shooter", values.shooterIsEnabled);
@@ -148,12 +190,15 @@ public class CoralShooterSubsystem extends CS_SubsystemBase {
   }
 
   // Characterization methods
-  public void runCharacterization(double input) {
+  public void runCharacterizationLeft(double input) {
     coralShooterInterface.runCharacterizationLeft(input);
+  }
+  public void runCharacterizationRight(double input) {
     coralShooterInterface.runCharacterizationRight(input);
   }
-
-  public double getCharacterizationVelocity() {
-    return (values.currentRPMLeft + values.currentRPMRight) / 2.0;
+  public double getCharacterizationVelocityLeft() {
+    return values.currentRPMLeft;
+  }  public double getCharacterizationVelocityRight() {
+    return values.currentRPMRight;
   }
 }

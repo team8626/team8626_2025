@@ -142,7 +142,12 @@ public class CoralShooter_Sim implements CoralShooterInterface, CS_InterfaceBase
   }
 
   @Override
-  public void setPID(double newkP, double newkI, double newkD) {
-    printf("New PID: %f, %f, %f \n", newkP, newkI, newkD);
+  public void setPIDLeft(double newkP, double newkI, double newkD) {
+    printf("New PID Left: %f, %f, %f \n", newkP, newkI, newkD);
+  }
+
+  @Override
+  public void setPIDRight(double newkP, double newkI, double newkD) {
+    printf("New PID Right: %f, %f, %f \n", newkP, newkI, newkD);
   }
 }
