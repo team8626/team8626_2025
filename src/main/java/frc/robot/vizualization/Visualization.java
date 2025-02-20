@@ -2,6 +2,8 @@ package frc.robot.vizualization;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.networktables.StructPublisher;
@@ -11,12 +13,12 @@ import frc.robot.subsystems.CS_SubsystemBase;
 
 public class Visualization extends CS_SubsystemBase {
   Pose3d robotPose = new Pose3d();
-  Pose3d mastPose = new Pose3d(0, 0, 0, new Rotation3d());
-  Pose3d stage2Pose = new Pose3d(0, 0, 0, new Rotation3d());
-  Pose3d stage3Pose = new Pose3d(0, 0, 0, new Rotation3d());
-  Pose3d carriagePose = new Pose3d(0, 0, 0, new Rotation3d());
-  Pose3d wristPose = new Pose3d(0, 0, 0, new Rotation3d());
-  Pose3d shooterPose = new Pose3d(0, 0, 0, new Rotation3d());
+  Pose3d mastPose = new Pose3d();
+  Pose3d stage2Pose = new Pose3d();
+  Pose3d stage3Pose = new Pose3d();
+  Pose3d carriagePose = new Pose3d();
+  Pose3d wristPose = new Pose3d();
+  Pose3d shooterPose = new Pose3d();
 
   StructPublisher<Pose3d> publisher =
       NetworkTableInstance.getDefault().getStructTopic("MyPose", Pose3d.struct).publish();
@@ -28,11 +30,42 @@ public class Visualization extends CS_SubsystemBase {
     robotPose = RobotContainer.drivebase.getPose3d();
 
     mastPose = RobotConstants.mastPoseOffset;
-    stage2Pose = RobotConstants.stage2PoseOffset;
-    stage3Pose = RobotConstants.stage3PoseOffset;
-    carriagePose = RobotConstants.carriagePoseOffset;
-    wristPose = RobotConstants.wristPoseOffset;
-    shooterPose = RobotConstants.shooterPoseOffset;
+    stage2Pose =
+        RobotConstants.stage2PoseOffset.plus(
+            new Transform3d(
+                0,
+                0,
+                -Units.inchesToMeters(RobotContainer.elevator.getHeight() * 0.33),
+                new Rotation3d()));
+    stage3Pose =
+        RobotConstants.stage3PoseOffset.plus(
+            new Transform3d(
+                0,
+                0,
+                -Units.inchesToMeters(RobotContainer.elevator.getHeight() * 0.67),
+                new Rotation3d()));
+    carriagePose =
+        RobotConstants.carriagePoseOffset.plus(
+            new Transform3d(
+                0,
+                0,
+                -Units.inchesToMeters(RobotContainer.elevator.getHeight()),
+                new Rotation3d()));
+    wristPose =
+        RobotConstants.wristPoseOffset.plus(
+            new Transform3d(
+                0,
+                0,
+                -Units.inchesToMeters(RobotContainer.elevator.getHeight()),
+                new Rotation3d()));
+    shooterPose =
+        RobotConstants.shooterPoseOffset.plus(
+            new Transform3d(
+                0,
+                0,
+                -Units.inchesToMeters(RobotContainer.elevator.getHeight()),
+                new Rotation3d(
+                    -Units.degreesToRadians(RobotContainer.wrist.getAngleDegrees() - 90), 0, 0)));
 
     publisher.set(robotPose);
     arrayPublisher.set(

@@ -16,12 +16,10 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Commodore.CommodoreState;
 import frc.robot.RobotConstants.RobotType;
 import frc.robot.commands.setters.units.AlgaeShooterIntake;
-import frc.robot.commands.setters.units.AlgaeShooterLaunch;
 import frc.robot.commands.setters.units.CoralShooterIntake;
 import frc.robot.commands.setters.units.CoralShooterLaunch;
 import frc.robot.commands.setters.units.ElevatorMoveDown;
 import frc.robot.commands.setters.units.ElevatorMoveUp;
-import frc.robot.commands.tuning.Tune_AlgaeShooter;
 import frc.robot.commands.tuning.Tune_CoralShooter;
 import frc.robot.subsystems.Dashboard;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterSubsystem;
@@ -44,6 +42,7 @@ import frc.robot.subsystems.presets.PresetManager;
 import frc.robot.subsystems.wrist.WristSubsystem;
 import frc.robot.subsystems.wrist.Wrist_Sim;
 import frc.robot.subsystems.wrist.Wrist_SparkFlex;
+import frc.robot.vizualization.Visualization;
 import frc.utils.CS_ButtonBoxController;
 import frc.utils.CS_XboxController;
 import java.io.File;
@@ -63,6 +62,9 @@ public class RobotContainer {
 
   // Instantiate the Preset manager
   private final PresetManager presetManager = PresetManager.getInstance();
+
+  // Vizualizaiton
+  private final Visualization visualization = new Visualization();
 
   //
   // ****************************************************************************************
@@ -240,17 +242,18 @@ public class RobotContainer {
     controller.btn_3.toggleOnTrue(new CoralShooterLaunch());
 
     controller.btn_4.toggleOnTrue(new AlgaeShooterIntake());
-    controller.btn_5.toggleOnTrue(new Tune_AlgaeShooter());
-    controller.btn_5.toggleOnTrue(new Tune_AlgaeShooter());
-    controller.btn_6.toggleOnTrue(new AlgaeShooterLaunch());
-    // controller.btn_7.toggleOnTrue(new InstantCommand(() -> elevator.setHeight(3)));
-    // controller.btn_8.toggleOnTrue(new InstantCommand(() -> elevator.setHeight(40)));
+    // controller.btn_5.toggleOnTrue(new Tune_AlgaeShooter());
+    // controller.btn_6.toggleOnTrue(new AlgaeShooterLaunch());
+    controller.btn_5.toggleOnTrue(new InstantCommand(() -> elevator.setHeight(8)));
+    controller.btn_6.toggleOnTrue(new InstantCommand(() -> elevator.setHeight(51)));
+    controller.btn_7.toggleOnTrue(new InstantCommand(() -> wrist.setAngleDegrees(0)));
+    controller.btn_8.toggleOnTrue(new InstantCommand(() -> wrist.setAngleDegrees(200)));
 
     // controller.btn_7.toggleOnTrue(new InstantCommand(() -> climber.setAngleDegrees(90)));
     // controller.btn_8.toggleOnTrue(new InstantCommand(() -> climber.setAngleDegrees(230)));
 
-    controller.btn_7.toggleOnTrue(new InstantCommand(() -> wrist.setAngleDegrees(90)));
-    controller.btn_8.toggleOnTrue(new InstantCommand(() -> wrist.setAngleDegrees(180)));
+    // controller.btn_7.toggleOnTrue(new InstantCommand(() -> wrist.setAngleDegrees(90)));
+    // controller.btn_8.toggleOnTrue(new InstantCommand(() -> wrist.setAngleDegrees(180)));
 
     // controller.btn_9.toggleOnTrue(
     //     new FeedForwardCharacterization(

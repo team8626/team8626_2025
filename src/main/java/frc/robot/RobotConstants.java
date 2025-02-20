@@ -59,12 +59,42 @@ public class RobotConstants {
           Units.inchesToMeters(robotCenterOffsetY),
           Rotation2d.fromDegrees(robotCenterOffsetTheta));
 
-  public static Pose3d mastPoseOffset = new Pose3d(0, 0, 0, new Rotation3d());
-  public static Pose3d stage2PoseOffset = new Pose3d(0, 0, 0, new Rotation3d());
-  public static Pose3d stage3PoseOffset = new Pose3d(0, 0, 0, new Rotation3d());
-  public static Pose3d carriagePoseOffset = new Pose3d(0, 0, 0, new Rotation3d());
-  public static Pose3d wristPoseOffset = new Pose3d(0, 0, 0, new Rotation3d());
-  public static Pose3d shooterPoseOffset = new Pose3d(0, 0, 0, new Rotation3d());
+  public static Pose3d mastPoseOffset =
+      new Pose3d(
+          0,
+          0,
+          Units.inchesToMeters(5),
+          new Rotation3d(Units.degreesToRadians(180), 0, Units.degreesToRadians(90)));
+  public static Pose3d stage2PoseOffset =
+      new Pose3d(
+          0,
+          0,
+          Units.inchesToMeters(6),
+          new Rotation3d(Units.degreesToRadians(180), 0, Units.degreesToRadians(90)));
+  public static Pose3d stage3PoseOffset =
+      new Pose3d(
+          0,
+          0,
+          Units.inchesToMeters(5),
+          new Rotation3d(Units.degreesToRadians(180), 0, Units.degreesToRadians(90)));
+  public static Pose3d carriagePoseOffset =
+      new Pose3d(
+          0,
+          0,
+          Units.inchesToMeters(4),
+          new Rotation3d(Units.degreesToRadians(180), 0, Units.degreesToRadians(90)));
+  public static Pose3d wristPoseOffset =
+      new Pose3d(
+          Units.inchesToMeters(2.5),
+          Units.inchesToMeters(-0.5),
+          Units.inchesToMeters(5.5),
+          new Rotation3d(Units.degreesToRadians(180), 0, Units.degreesToRadians(90)));
+  public static Pose3d shooterPoseOffset =
+      new Pose3d(
+          Units.inchesToMeters(2.5 + 6.5),
+          Units.inchesToMeters(-0.5),
+          Units.inchesToMeters(5.5 + 2.626886),
+          new Rotation3d(Units.degreesToRadians(180), 0, Units.degreesToRadians(90)));
 
   // /** Defines position of the cameras on the robot. */
   //   public static class Vision {
