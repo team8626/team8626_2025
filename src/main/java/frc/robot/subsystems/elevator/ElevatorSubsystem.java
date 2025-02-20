@@ -15,6 +15,7 @@ public class ElevatorSubsystem extends CS_SubsystemBase {
 
     this.elevatorInterface = subsystem_interface;
     values = new ElevatorValues();
+    this.setHeight(ElevatorConstants.minHeightMeters);
     println("Created");
   }
 

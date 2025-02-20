@@ -32,7 +32,7 @@ public class RobotConstants {
   //
   public static RobotType robotType = RobotType.DEVBOT;
   public static boolean tracesEnabled = true;
-  public static boolean tuningEnabled = false; // DO NOT COMMIT WHILE ENABLED
+  public static boolean tuningEnabled = true; // DO NOT COMMIT WHILE ENABLED
 
   // Subsystems positions/translations for simulation in AdvantageScope
   // public static Translation2d intakeOffset = new Translation2d(Units.inchesToMeters(24),
@@ -43,12 +43,42 @@ public class RobotConstants {
 
   public static double FrameLength = Units.inchesToMeters(24);
 
-  public static Pose3d mastPoseOffset = new Pose3d(0, 0, 0, new Rotation3d());
-  public static Pose3d stage2PoseOffset = new Pose3d(0, 0, 0, new Rotation3d());
-  public static Pose3d stage3PoseOffset = new Pose3d(0, 0, 0, new Rotation3d());
-  public static Pose3d carriagePoseOffset = new Pose3d(0, 0, 0, new Rotation3d());
-  public static Pose3d wristPoseOffset = new Pose3d(0, 0, 0, new Rotation3d());
-  public static Pose3d shooterPoseOffset = new Pose3d(0, 0, 0, new Rotation3d());
+  public static Pose3d mastPoseOffset =
+      new Pose3d(
+          0,
+          0,
+          Units.inchesToMeters(5),
+          new Rotation3d(Units.degreesToRadians(180), 0, Units.degreesToRadians(90)));
+  public static Pose3d stage2PoseOffset =
+      new Pose3d(
+          0,
+          0,
+          Units.inchesToMeters(6),
+          new Rotation3d(Units.degreesToRadians(180), 0, Units.degreesToRadians(90)));
+  public static Pose3d stage3PoseOffset =
+      new Pose3d(
+          0,
+          0,
+          Units.inchesToMeters(5),
+          new Rotation3d(Units.degreesToRadians(180), 0, Units.degreesToRadians(90)));
+  public static Pose3d carriagePoseOffset =
+      new Pose3d(
+          0,
+          0,
+          Units.inchesToMeters(4),
+          new Rotation3d(Units.degreesToRadians(180), 0, Units.degreesToRadians(90)));
+  public static Pose3d wristPoseOffset =
+      new Pose3d(
+          Units.inchesToMeters(2.5),
+          Units.inchesToMeters(-0.5),
+          Units.inchesToMeters(5.5),
+          new Rotation3d(Units.degreesToRadians(180), 0, Units.degreesToRadians(90)));
+  public static Pose3d shooterPoseOffset =
+      new Pose3d(
+          Units.inchesToMeters(2.5 + 6.5),
+          Units.inchesToMeters(-0.5),
+          Units.inchesToMeters(5.5 + 2.626886),
+          new Rotation3d(Units.degreesToRadians(180), 0, Units.degreesToRadians(90)));
 
   // /** Defines position of the cameras on the robot. */
   //   public static class Vision {
