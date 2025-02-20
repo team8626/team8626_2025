@@ -1,18 +1,9 @@
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.Matrix;
-import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.math.numbers.N1;
-import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import java.util.Arrays;
 import java.util.List;
@@ -113,20 +104,15 @@ public class RobotConstants {
   //         new Transform3d(
   //             new Translation3d(-0.222275, -0.276124, 0.251296),
   //             new Rotation3d(0, Units.degreesToRadians(-30), Units.degreesToRadians(167.04746)));
-  public static Pose2d robotCenterOffset =
-      new Pose2d(
-          Units.inchesToMeters(robotCenterOffsetX),
-          Units.inchesToMeters(robotCenterOffsetY),
-          Rotation2d.fromDegrees(robotCenterOffsetTheta));
 
   /** Defines position of the cameras on the robot. */
-  public static class Vision_2024 { // TODO: Can be removed?
-    // April tag camera constants
-    public static final String kATBackCameraName = "Arducam_AT002";
-    public static final Transform3d kATRobotToBackCam =
-        new Transform3d(
-            new Translation3d(-0.222275, -0.276124, 0.251296),
-            new Rotation3d(0, Units.degreesToRadians(-30), Units.degreesToRadians(167.04746)));
+  // public static class Vision_2024 { // TODO: Can be removed?
+  //   // April tag camera constants
+  //   public static final String kATBackCameraName = "Arducam_AT002";
+  //   public static final Transform3d kATRobotToBackCam =
+  //       new Transform3d(
+  //           new Translation3d(-0.222275, -0.276124, 0.251296),
+  //           new Rotation3d(0, Units.degreesToRadians(-30), Units.degreesToRadians(167.04746)));
 
   //     public static final String kATFrontCameraName = "Arducam_AT001";
   //     public static final Transform3d kATRobotToFrontCam =
