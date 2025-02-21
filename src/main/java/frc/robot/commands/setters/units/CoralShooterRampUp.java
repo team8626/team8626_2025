@@ -12,12 +12,13 @@ import frc.robot.subsystems.Dashboard;
 import frc.robot.subsystems.Dashboard.GamePieceState;
 import frc.robot.subsystems.coralshooter.CoralShooterConstants;
 import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
+import java.util.function.DoubleSupplier;
 
 public class CoralShooterRampUp extends CS_Command {
   private CoralShooterSubsystem mortar;
 
   private double desiredRPMLeft = CoralShooterConstants.RPMShootLeft;
-  private double desiredRPMRight = CoralShooterConstants.RPMShoolLeft;
+  private double desiredRPMRight = CoralShooterConstants.RPMShootRight;
   private final double RPMTolerance = CoralShooterConstants.RPMTolerance;
   private final double RPMDifferentialTolerance = CoralShooterConstants.RPMDifferentialTolerance;
 
@@ -26,6 +27,28 @@ public class CoralShooterRampUp extends CS_Command {
 
     addRequirements(mortar);
 
+    this.desiredRPMLeft = CoralShooterConstants.RPMShootLeft;
+    this.desiredRPMRight = CoralShooterConstants.RPMShootRight;
+    this.setTAGString("CORALSHOOTER_RAMPUP");
+  }
+
+  public CoralShooterRampUp(DoubleSupplier desiredRPMLeft, DoubleSupplier desiredRPMRight) {
+    mortar = RobotContainer.mortar;
+
+    addRequirements(mortar);
+
+    this.desiredRPMLeft = desiredRPMLeft.getAsDouble();
+    this.desiredRPMRight = desiredRPMRight.getAsDouble();
+    this.setTAGString("CORALSHOOTER_RAMPUP");
+  }
+
+  public CoralShooterRampUp(DoubleSupplier desiredRPM) {
+    mortar = RobotContainer.mortar;
+
+    addRequirements(mortar);
+
+    this.desiredRPMLeft = desiredRPM.getAsDouble();
+    this.desiredRPMRight = desiredRPM.getAsDouble();
     this.setTAGString("CORALSHOOTER_RAMPUP");
   }
 

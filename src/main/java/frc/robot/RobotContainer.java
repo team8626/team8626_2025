@@ -183,11 +183,23 @@ public class RobotContainer {
   }
 
   private void configureDriverBindings(CS_XboxController controller) {
-    // controller.btn_A.onTrue(
-    //     new InstantCommand(
-    //         () ->
-    //             Commodore.setCommodoreState(CommodoreState.CORAL_INTAKE,
-    // true).withToggleState()));
+    controller.btn_LeftBumper.onTrue(
+        new InstantCommand(
+            () ->
+                Commodore.setCommodoreState(CommodoreState.ALGAE_INTAKE, true).withToggleState()));
+
+    controller.btn_LeftTrigger.onTrue(
+        new InstantCommand(
+            () -> Commodore.setCommodoreState(CommodoreState.ALGAE_SHOOT, true).withToggleState()));
+
+    controller.btn_RightBumper.onTrue(
+        new InstantCommand(
+            () ->
+                Commodore.setCommodoreState(CommodoreState.CORAL_INTAKE, true).withToggleState()));
+
+    controller.btn_RightTrigger.onTrue(
+        new InstantCommand(
+            () -> Commodore.setCommodoreState(CommodoreState.CORAL_SHOOT, true).withToggleState()));
 
     // controller.btn_B.onTrue(
     //     new InstantCommand(

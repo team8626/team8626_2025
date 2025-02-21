@@ -17,6 +17,7 @@ import frc.robot.commands.setters.units.CoralShooterLaunch;
 import frc.robot.commands.setters.units.CoralShooterRampUp;
 import frc.robot.commands.setters.units.CoralShooterStop;
 import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
+import frc.robot.subsystems.presets.PresetManager;
 
 public class ToCoralShoot extends SequentialCommandGroup {
   private final Timer timer = new Timer();
@@ -29,7 +30,9 @@ public class ToCoralShoot extends SequentialCommandGroup {
         new ConditionalCommand(
             new SequentialCommandGroup(
                 Commodore.getSetStateCommand(CommodoreState.CORAL_SHOOT_RAMPINGUP),
-                new CoralShooterRampUp() {
+                new CoralShooterRampUp(
+                    () -> PresetManager.getCoralPreset().getRPMLeft(),
+                    () -> PresetManager.getCoralPreset().getRPMRight()) {
                   @Override
                   public void initialize() {
                     super.initialize();

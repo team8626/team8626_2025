@@ -12,6 +12,7 @@ import frc.robot.subsystems.Dashboard;
 import frc.robot.subsystems.Dashboard.GamePieceState;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterConstants;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterSubsystem;
+import java.util.function.DoubleSupplier;
 
 public class AlgaeShooterRampUp extends CS_Command {
   private AlgaeShooterSubsystem algae501;
@@ -24,9 +25,18 @@ public class AlgaeShooterRampUp extends CS_Command {
 
     addRequirements(algae501);
 
+    this.desiredRPM = AlgaeShooterConstants.shootRPM;
     this.setTAGString("ALGAESHOOTER_RAMPUP");
   }
 
+  public AlgaeShooterRampUp(DoubleSupplier newRPM) {
+    algae501 = RobotContainer.algae501;
+
+    addRequirements(algae501);
+
+    this.desiredRPM = newRPM.getAsDouble();
+    this.setTAGString("ALGAESHOOTER_RAMPUP");
+  }
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {

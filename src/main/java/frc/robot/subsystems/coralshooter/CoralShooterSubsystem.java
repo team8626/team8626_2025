@@ -9,7 +9,7 @@ public class CoralShooterSubsystem extends CS_SubsystemBase {
   private CoralShooterInterface coralShooterInterface;
   private CoralShooterValues values;
   private double shootingRPMLeft = CoralShooterConstants.RPMShootLeft;
-  private double shootingRPMRight = CoralShooterConstants.RPMShoolLeft;
+  private double shootingRPMRight = CoralShooterConstants.RPMShootRight;
 
   public CoralShooterSubsystem(CoralShooterInterface subsystem_interface) {
     super();
@@ -181,7 +181,7 @@ public class CoralShooterSubsystem extends CS_SubsystemBase {
     }
     double newRPMRight =
         SmartDashboard.getNumber(
-            "Subsystem/CoralShooter/ShootingRPMRight", CoralShooterConstants.RPMShoolLeft);
+            "Subsystem/CoralShooter/ShootingRPMRight", CoralShooterConstants.RPMShootRight);
     if (newRPMRight != shootingRPMRight) {
       setShooterRPM(shootingRPMLeft, newRPMRight);
     }

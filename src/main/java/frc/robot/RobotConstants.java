@@ -38,19 +38,23 @@ public class RobotConstants {
   public static boolean tracesEnabled = true;
   public static boolean tuningEnabled = false; // DO NOT COMMIT WHILE ENABLED
 
+  public static boolean disableHAL = false;
+
   // Subsystems positions/translations for simulation in AdvantageScope
   // public static Translation2d intakeOffset = new Translation2d(Units.inchesToMeters(24),
   // Units.inchesToMeters(0));
 
   /** Defines the robot's physical dimensions. */
-  public static double FrameWidth = Units.inchesToMeters(27);
+  public static double FrameWidthInches = 27;
 
-  public static double FrameLength = Units.inchesToMeters(27);
-  public static double bumperThickness = Units.inchesToMeters(3);
-  public static double robotCenterToEdge = Units.inchesToMeters(FrameLength + bumperThickness / 2);
+  public static double FrameLengthInches = 27;
+  public static double bumperThicknessInches = 3;
 
-  private static double robotCenterOffsetX = FrameLength / 2.0 + bumperThickness;
-  private static double robotCenterOffsetY = FrameWidth / 2.0 + bumperThickness;
+  //   public static double robotCenterToEdge = Units.inchesToMeters(FrameLength + bumperThickness /
+  // 2);
+
+  private static double robotCenterOffsetX = FrameLengthInches / 2.0 + bumperThicknessInches;
+  private static double robotCenterOffsetY = FrameWidthInches / 2.0 + bumperThicknessInches;
   private static double robotCenterOffsetTheta = 0;
 
   public static Pose2d robotCenterOffset =
@@ -133,9 +137,9 @@ public class RobotConstants {
   // ****************************************************************************************
   // UI Constants
   public static class UIConstants {
-    public static final List<String> allowedCORALLevels = Arrays.asList("L1", "L2", "L3", "L4");
+    public static final List<String> allowedCoralLevels = Arrays.asList("L1", "L2", "L3", "L4");
     public static final List<String> allowedIntakeSides = Arrays.asList("LEFT", "RIGHT");
-    public static final List<String> allowedREEFBranches =
+    public static final List<String> allowedCoralBranches =
         Arrays.asList("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L");
     public static final List<String> allowedAlgaePositions =
         Arrays.asList("AB", "CD", "EF", "GH", "IJ", "KL");
