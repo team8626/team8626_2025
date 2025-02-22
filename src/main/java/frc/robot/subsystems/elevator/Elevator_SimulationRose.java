@@ -7,7 +7,7 @@ import frc.robot.subsystems.elevator.ElevatorConstants.ElevatorStates.ElevatorSt
 public class Elevator_SimulationRose implements ElevatorInterface, CS_InterfaceBase {
 
   private boolean is_enabled = false;
-  private ElevatorState current_state = ElevatorState.STOPPED;
+  private ElevatorState current_state = ElevatorState.IDLE;
   private double desiredHeight = 0;
   private double currentHeight = 0;
 

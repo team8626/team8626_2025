@@ -9,7 +9,7 @@ import frc.robot.subsystems.elevator.ElevatorConstants.ElevatorStates.ElevatorSt
 public class Elevator_Simulation implements ElevatorInterface, CS_InterfaceBase {
 
   private boolean is_enabled = false;
-  private ElevatorState current_state = ElevatorState.STOPPED;
+  private ElevatorState current_state = ElevatorState.IDLE;
   private ElevatorSim elevator;
   private DCMotor elevatorGearbox = DCMotor.getNEO(1);
 
