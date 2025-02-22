@@ -29,7 +29,6 @@ public class WristConstants {
   public static final WristConfig wristConfig =
       switch (RobotConstants.robotType) {
         case COMPBOT -> new WristConfig(4, gearBoxRatio, Units.inchesToMeters(9.5));
-        case DEVBOT -> new WristConfig(4, gearBoxRatio, Units.inchesToMeters(9.5));
         case SIMBOT -> new WristConfig(4, gearBoxRatio, Units.inchesToMeters(9.5));
         default -> new WristConfig(0, gearBoxRatio, Units.inchesToMeters(9.5));
       };
@@ -38,7 +37,6 @@ public class WristConstants {
   public static final Gains gains =
       switch (RobotConstants.robotType) {
         case COMPBOT -> new Gains(0.0001, 0.0, 0.0, 0.12, 0.00635, 0);
-        case DEVBOT -> new Gains(0.0001, 0.0, 0.0, 0.12, 0.00635, 0.0);
         case SIMBOT -> new Gains(0.05, 0.0, 0.0, 0.12, 0.00635, 0.0);
         default -> new Gains(0.05, 0.0, 0.0, 0.12, 0.00635, 0.0);
       };

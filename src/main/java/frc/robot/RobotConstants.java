@@ -22,15 +22,14 @@ public class RobotConstants {
     SIMBOT, /* Simulation Robot*/
     KITBOT, /* Kitbot running on WC Drive*/
     DART, /* 2024 Competition Robor*/
-    DEVBOT, /* 2025 Development Robot*/
-    COMPBOT /* Placeholder for 2025 Competition Robot*/;
+    COMPBOT /* 2025 Competition Robot*/;
   }
 
   // ****************************************************************************************
   // Change robot type here if needed
   // Possible options: SIMBOT, KITBOT, DART, DEVBOT, COMPBOT
   //
-  public static RobotType robotType = RobotType.DEVBOT;
+  public static RobotType robotType = RobotType.COMPBOT;
   public static boolean tracesEnabled = true;
   public static boolean tuningEnabled = false; // DO NOT COMMIT WHILE ENABLED
 

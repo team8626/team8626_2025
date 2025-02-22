@@ -15,7 +15,6 @@ public class ClimberConstants {
   public static final ArmConfig armConfig =
       switch (RobotConstants.robotType) {
         case COMPBOT -> new ArmConfig(13, 12, (125 * 1.5) / 1);
-        case DEVBOT -> new ArmConfig(13, 12, (125 * 1.5) / 1);
         case SIMBOT -> new ArmConfig(13, 12, (125 * 1.5) / 1);
         default -> new ArmConfig(0, 12, (125 * 1.5) / 1);
       };
@@ -24,7 +23,6 @@ public class ClimberConstants {
   public static final Gains gains =
       switch (RobotConstants.robotType) {
         case COMPBOT -> new Gains(0.0001, 0.0, 0.0, 0.12, 0.00635, 0);
-        case DEVBOT -> new Gains(0.0001, 0.0, 0.0, 0.12, 0.00635, 0.0);
         case SIMBOT -> new Gains(0.05, 0.0, 0.0, 0.12, 0.00635, 0.0);
         default -> new Gains(0.05, 0.0, 0.0, 0.12, 0.00635, 0.0);
       };

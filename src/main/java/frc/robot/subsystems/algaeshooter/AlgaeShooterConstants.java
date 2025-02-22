@@ -31,7 +31,6 @@ public class AlgaeShooterConstants {
   public static final FlywheelConfig flywheelConfig =
       switch (RobotConstants.robotType) {
         case COMPBOT -> new FlywheelConfig(12, 2, (3.0 / 1.0), 2 * momentOfInertia, 6000.0);
-        case DEVBOT -> new FlywheelConfig(12, 2, (3.0 / 1.0), 2 * momentOfInertia, 6000.0);
         case SIMBOT -> new FlywheelConfig(0, 0, (3.0 / 1.0), 2 * momentOfInertia, 6000.0);
         default -> new FlywheelConfig(5, 4, (3.0 / 1.0), 2 * momentOfInertia, 6000.0);
       };
@@ -47,7 +46,6 @@ public class AlgaeShooterConstants {
   public static final Gains gains =
       switch (RobotConstants.robotType) {
         case COMPBOT -> new Gains(0.0001, 0.0, 0.0, 0.12, 0.00635, 0);
-        case DEVBOT -> new Gains(0.0001, 0.0, 0.0, 0.12, 0.00635, 0.0);
         case SIMBOT -> new Gains(0.05, 0.0, 0.0, 0.12, 0.00635, 0.0);
         default -> new Gains(0.05, 0.0, 0.0, 0.12, 0.00635, 0.0);
       };
