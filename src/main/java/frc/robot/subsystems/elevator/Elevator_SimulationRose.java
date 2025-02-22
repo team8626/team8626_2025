@@ -1,7 +1,6 @@
 package frc.robot.subsystems.elevator;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.CS_InterfaceBase;
 import frc.robot.subsystems.elevator.ElevatorConstants.ElevatorStates.ElevatorState;
 
@@ -16,9 +15,7 @@ public class Elevator_SimulationRose implements ElevatorInterface, CS_InterfaceB
 
   private void updateRoseSim() {
     MathUtil.clamp(
-        currentHeight,
-        Units.metersToInches(ElevatorConstants.minHeightMeters),
-        Units.metersToInches(ElevatorConstants.maxHeightMeters));
+        currentHeight, ElevatorConstants.minHeightInches, ElevatorConstants.maxHeightInches);
     if (currentHeight < desiredHeight) {
       currentHeight += 0.25;
     } else if (currentHeight > desiredHeight) {
@@ -29,29 +26,15 @@ public class Elevator_SimulationRose implements ElevatorInterface, CS_InterfaceB
   @Override
   public void updateInputs(ElevatorValues values) {
     updateRoseSim();
-    values.current_height = getHeightInches();
+    values.currentHeight = getHeightInches();
     values.state = current_state;
-    values.is_enabled = is_enabled;
+    values.isEnabled = is_enabled;
   }
-
-  @Override
-  public void stopElevator() {
-    setElevatorSpeed(0);
-  }
-
-  @Override
-  public void setElevatorSpeed(double new_speed) {}
 
   @Override
   public double getHeightInches() {
     return (currentHeight);
   }
-  /**
-   * Move the elevator by offset
-   *
-   * @param offsetInches
-   */
-  public void moveInches(double offsetInches) {}
 
   @Override
   public void setElevatorkP(double new_value) {
@@ -66,11 +49,6 @@ public class Elevator_SimulationRose implements ElevatorInterface, CS_InterfaceB
   @Override
   public void setElevatorkD(double new_value) {
     printf("New kD: %f\n", new_value);
-  }
-
-  @Override
-  public void setElevatorFF(double new_value) {
-    printf("New FF: %f\n", new_value);
   }
 
   @Override
