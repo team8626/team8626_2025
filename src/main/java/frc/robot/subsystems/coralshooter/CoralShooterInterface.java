@@ -1,5 +1,8 @@
 package frc.robot.subsystems.coralshooter;
 
+import static frc.robot.subsystems.coralshooter.CoralShooterConstants.gainsLeft;
+import static frc.robot.subsystems.coralshooter.CoralShooterConstants.gainsRight;
+
 public interface CoralShooterInterface {
   void startShooter(double new_RPM, double new_RPMRight);
 
@@ -53,12 +56,12 @@ public interface CoralShooterInterface {
     protected double desiredRPMLeft = CoralShooterConstants.RPMShootLeft;
     protected double desiredRPMRight = CoralShooterConstants.RPMShoolLeft;
 
-    protected double kPLeft = 0.05;
-    protected double kILeft = 0.0;
-    protected double kDLeft = 0.0;
+    protected double kPLeft = gainsLeft.kP();
+    protected double kILeft = gainsLeft.kI();
+    protected double kDLeft = gainsLeft.kD();
 
-    protected double kPRight = 0.05;
-    protected double kIRight = 0.0;
-    protected double kDRight = 0.0;
+    protected double kPRight = gainsRight.kP();
+    protected double kIRight = gainsRight.kI();
+    protected double kDRight = gainsRight.kD();
   }
 }

@@ -18,8 +18,6 @@ import frc.robot.RobotConstants.RobotType;
 import frc.robot.commands.setters.units.AlgaeShooterIntake;
 import frc.robot.commands.setters.units.CoralShooterIntake;
 import frc.robot.commands.setters.units.CoralShooterLaunch;
-import frc.robot.commands.setters.units.ElevatorMoveDown;
-import frc.robot.commands.setters.units.ElevatorMoveUp;
 import frc.robot.commands.tuning.Tune_CoralShooter;
 import frc.robot.subsystems.Dashboard;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterSubsystem;
@@ -63,8 +61,8 @@ public class RobotContainer {
   // Instantiate the Preset manager
   private final PresetManager presetManager = PresetManager.getInstance();
 
-  // Vizualizaiton
-  private final Visualization visualization = new Visualization();
+  // Vizualizaiton (Only in Simulation)
+  private Visualization visualization = null;
 
   //
   // ****************************************************************************************
@@ -115,17 +113,8 @@ public class RobotContainer {
         algae501 = new AlgaeShooterSubsystem(new AlgaeShooter_Sim());
         mortar = new CoralShooterSubsystem(new CoralShooter_Sim());
         climber = new ClimberSubsystem(new Climber_Sim());
+        // visualization = Visualization.getInstance();
 
-        break;
-      case DEVBOT:
-        drivebase =
-            new CS_DriveSubsystemIO_Swerve(
-                new File(Filesystem.getDeployDirectory(), "swerve_devbot"));
-        mortar = new CoralShooterSubsystem(new CoralShooter_SparkMax());
-        elevator = new ElevatorSubsystem(new Elevator_LinearSparkMax());
-        wrist = new WristSubsystem(new Wrist_SparkFlex());
-        algae501 = new AlgaeShooterSubsystem(new AlgaeShooter_SparkMax());
-        climber = new ClimberSubsystem(new Climber_SparkMax());
         break;
       case COMPBOT:
       default:
@@ -193,18 +182,24 @@ public class RobotContainer {
     //     new InstantCommand(
     //         () -> Commodore.setCommodoreState(CommodoreState.CORAL_SHOOT,
     // true).withToggleState()));
-    controller.btn_B.onTrue(
-        new InstantCommand(
-            () -> Commodore.setCommodoreState(CommodoreState.CORAL_SHOOT, true).withToggleState()));
+    controller.btn_A.onTrue(new InstantCommand(() -> elevator.setHeight(0)));
 
-    controller.btn_X.onTrue(
-        new InstantCommand(
-            () ->
-                Commodore.setCommodoreState(CommodoreState.ALGAE_INTAKE, true).withToggleState()));
+    controller.btn_B.onTrue(new InstantCommand(() -> elevator.setHeight(18)));
 
-    controller.btn_Y.onTrue(
-        new InstantCommand(
-            () -> Commodore.setCommodoreState(CommodoreState.ALGAE_SHOOT, true).withToggleState()));
+    controller.btn_Y.onTrue(new InstantCommand(() -> elevator.setHeight(32)));
+
+    controller.btn_X.onTrue(new InstantCommand(() -> elevator.setHeight(51)));
+
+    // controller.btn_X.onTrue(
+    //     new InstantCommand(
+    //         () ->
+    //             Commodore.setCommodoreState(CommodoreState.ALGAE_INTAKE,
+    // true).withToggleState()));
+
+    // controller.btn_Y.onTrue(
+    //     new InstantCommand(
+    //         () -> Commodore.setCommodoreState(CommodoreState.ALGAE_SHOOT,
+    // true).withToggleState()));
   }
 
   private void configureOperatorBindings(CS_XboxController controller) {
@@ -212,10 +207,7 @@ public class RobotContainer {
     //     new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.CORAL_SHOOT, true)));
   }
 
-  private void configureTestOperatorBindings(CS_XboxController controller) {
-    controller.btn_A.onTrue(new ElevatorMoveUp());
-    controller.btn_Y.onTrue(new ElevatorMoveDown());
-  }
+  private void configureTestOperatorBindings(CS_XboxController controller) {}
 
   // ---------------------------------------- BUTTON BOX ------------------------------
   //
@@ -273,10 +265,11 @@ public class RobotContainer {
     NamedCommands.registerCommand(
         "Idle", new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.IDLE, true)));
     NamedCommands.registerCommand(
-        "Shoot", new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.SHOOT, true)));
+        "Shoot",
+        new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.CORAL_SHOOT, true)));
     NamedCommands.registerCommand(
         "Intake",
-        new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.INTAKE, true)));
+        new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.CORAL_INTAKE, true)));
 
     // NamedCommands.registerCommand("Note1_Check", new Note1_Check());
     // NamedCommands.registerCommand("Note2_Check", new Note2_Check());
@@ -313,7 +306,7 @@ public class RobotContainer {
     System.out.printf(
         "### %-76s ###\n", "Debug        : " + (hasTracesEnabled() ? "ENABLED" : "DISABLED"));
     System.out.printf(
-        "### %-76s ###\n", "Tuning        : " + (hasTuningEnabled() ? "ENABLED" : "DISABLED"));
+        "### %-76s ###\n", "Tuning       : " + (hasTuningEnabled() ? "ENABLED" : "DISABLED"));
     System.out.println(
         "###                                                                              ###");
     System.out.printf("### %-76s ###\n", "Repository   : " + BuildConstants.MAVEN_NAME);

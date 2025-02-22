@@ -58,8 +58,9 @@ public class Commodore extends CS_SubsystemBase {
     TUNE_CORALSHOOTER,
     TUNE_ALGAESHOOTER,
 
-    INTAKE,
-    SHOOT
+    CLIMB_PREP,
+    CLIMB_READY,
+    CLIMB_NOW
   }
 
   // Private Constructor to prevent instantiation
