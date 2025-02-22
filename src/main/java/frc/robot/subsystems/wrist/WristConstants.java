@@ -6,8 +6,9 @@ import frc.robot.RobotConstants;
 public class WristConstants {
 
   public static final double minAngleDegrees = 0;
-  public static final double maxAngleDegrees = 270;
+  public static final double maxAngleDegrees = 200;
   public static final double defaultAngleDegrees = 0; // TODO get a good value
+  public static final double toleranceDegrees = 2;
 
   public static final double inputGear = 16;
   public static final double stageOneInput = 56;

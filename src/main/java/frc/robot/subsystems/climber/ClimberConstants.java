@@ -11,6 +11,8 @@ public class ClimberConstants {
   public static final double positionConversionFactor = 360; // degrees
   public static final double velocityConversionFactor = 360; // degrees per second
 
+  public static final double toleranceDegrees = 5;
+
   // Arm Config
   public static final ArmConfig armConfig =
       switch (RobotConstants.robotType) {
