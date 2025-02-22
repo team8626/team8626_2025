@@ -1,5 +1,7 @@
 package frc.robot.subsystems.elevator;
 
+import static frc.robot.subsystems.elevator.ElevatorConstants.gains;
+
 import frc.robot.subsystems.elevator.ElevatorConstants.ElevatorStates.ElevatorState;
 
 /**
@@ -13,22 +15,20 @@ public interface ElevatorInterface {
 
   public static class ElevatorValues {
     protected ElevatorState state = ElevatorState.STOPPED;
-    protected boolean is_enabled = false;
-    protected double current_height = 0; // Inches
+    protected boolean isEnabled = false;
+    protected double currentHeight = 0; // Inches
+    protected double desiredHeight = 0; // Inches
 
-    protected double kP = ElevatorConstants.kP;
-    protected double kI = ElevatorConstants.kI;
-    protected double kD = ElevatorConstants.kD;
-    protected double FF = ElevatorConstants.FF;
+    protected double kP = gains.kP();
+    protected double kI = gains.kI();
+    protected double kD = gains.kD();
   }
 
   public default void updateInputs(ElevatorValues values) {}
 
-  public abstract void stopElevator();
-
-  public abstract void setElevatorSpeed(double new_speed);
-
   public abstract double getHeightInches();
+
+  public abstract void setHeightInches(double heightInches);
 
   public abstract void setElevatorkP(double kP);
 
@@ -36,9 +36,5 @@ public interface ElevatorInterface {
 
   public abstract void setElevatorkD(double kD);
 
-  public abstract void setElevatorFF(double ff);
-
-  public abstract void moveInches(double offsetInches);
-
-  public abstract void setHeightInches(double heightInches);
+  public default void runCharacterization(double input) {}
 }
