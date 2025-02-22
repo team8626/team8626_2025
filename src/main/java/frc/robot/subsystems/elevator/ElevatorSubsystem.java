@@ -64,6 +64,8 @@ public class ElevatorSubsystem extends CS_SubsystemBase {
     SmartDashboard.putBoolean("Subsystem/Elevator/Enabled", values.isEnabled);
     SmartDashboard.putString("Subsystem/Elevator/State", values.state.getString());
     SmartDashboard.putNumber("Subsystem/Elevator/Height", values.currentHeight);
+    SmartDashboard.putNumber("Subsystem/Elevator/Amps", values.amps);
+    SmartDashboard.putNumber("Subsystem/Elevator/Temperature", values.temperature);
 
     // SmartDashboard.putNumber("Subsystem/Elevator/P Gain", ElevatorConstants.kP);
     // SmartDashboard.putNumber("Subsystem/Elevator/D Gain", ElevatorConstants.kI);

@@ -14,10 +14,12 @@ import frc.robot.subsystems.elevator.ElevatorConstants.ElevatorStates.ElevatorSt
 public interface ElevatorInterface {
 
   public static class ElevatorValues {
-    protected ElevatorState state = ElevatorState.STOPPED;
+    protected ElevatorState state = ElevatorState.IDLE;
     protected boolean isEnabled = false;
     protected double currentHeight = 0; // Inches
     protected double desiredHeight = 0; // Inches
+    protected double amps = 0; // Amps
+    protected double temperature = 0; // Celsius
 
     protected double kP = gains.kP();
     protected double kI = gains.kI();

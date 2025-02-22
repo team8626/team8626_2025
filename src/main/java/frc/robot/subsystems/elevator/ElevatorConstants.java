@@ -23,7 +23,10 @@ public class ElevatorConstants {
 
   public static final double carriageMassKg = Units.lbsToKilograms(1);
   public static final double velocityMetersPerSecond = Units.inchesToMeters(30);
-  public static final double tolerance = Units.inchesToMeters(0.5);
+
+  public static final double maxVelocityInchesPerSec = 40;
+  public static final double maxAccelerationInchesPerSec2 = 20;
+  public static final double toleranceInches = 0.25;
 
   // PID Constants
   // public static final double kP = 0.5;
@@ -42,7 +45,8 @@ public class ElevatorConstants {
   // Elevator states
   public class ElevatorStates {
     public static enum ElevatorState {
-      STOPPED("idle"),
+      IDLE("idle"),
+      HOLDING("holding"),
       MOVINGUP("moving up"),
       MOVINGDOWN("moving up");
 

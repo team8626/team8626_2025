@@ -29,7 +29,6 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
   // private final AlternateEncoderConfig encoderConfig = new AlternateEncoderConfig();
 
   private boolean isEnabled = false;
-  private ElevatorState currentState = ElevatorState.STOPPED;
 
   public Elevator_LinearSparkMax() {
 
@@ -68,10 +67,17 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
         .closedLoop
         .feedbackSensor(FeedbackSensor.kAlternateOrExternalEncoder)
         .positionWrappingEnabled(false)
-        .p(gains.kP())
-        .i(gains.kI())
-        .d(gains.kD())
-        .outputRange(-.4, .4);
+        .p(gains.kP(), ClosedLoopSlot.kSlot1)
+        .i(gains.kI(), ClosedLoopSlot.kSlot1)
+        .d(gains.kD(), ClosedLoopSlot.kSlot1)
+        .outputRange(-.4, .4, ClosedLoopSlot.kSlot1);
+
+    motorConfig
+        .closedLoop
+        .maxMotion
+        .maxAcceleration(ElevatorConstants.maxAccelerationInchesPerSec2, ClosedLoopSlot.kSlot1)
+        .maxVelocity(ElevatorConstants.maxVelocityInchesPerSec, ClosedLoopSlot.kSlot1)
+        .allowedClosedLoopError(ElevatorConstants.toleranceInches, ClosedLoopSlot.kSlot1);
 
     // motorConfig
     //     .signals
@@ -102,10 +108,25 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
 
     values.currentHeight = getElevatorHeight();
     values.desiredHeight = desiredHeight;
-    values.state = currentState;
+    values.amps = motor.getOutputCurrent();
+    values.temperature = motor.getMotorTemperature();
     values.isEnabled = isEnabled;
 
-    controller.setReference(desiredHeight, ControlType.kPosition, ClosedLoopSlot.kSlot0);
+    if (encoder.getVelocity() > 0) {
+      values.state = ElevatorState.MOVINGUP;
+      values.isEnabled = true;
+    } else if (encoder.getVelocity() < 0) {
+      values.state = ElevatorState.MOVINGDOWN;
+      values.isEnabled = true;
+    } else if (motor.getOutputCurrent() > 0) {
+      values.state = ElevatorState.HOLDING;
+      values.isEnabled = false;
+    } else {
+      values.state = ElevatorState.IDLE;
+      values.isEnabled = false;
+    }
+
+    controller.setReference(desiredHeight, ControlType.kPosition, ClosedLoopSlot.kSlot1);
   }
 
   private double getElevatorHeight() {
