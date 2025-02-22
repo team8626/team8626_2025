@@ -81,10 +81,8 @@ public class LEDManager extends CS_SubsystemBase {
     switch (mainMode) {
       case DISCONNECTED: // made a heart beat disconnected a white heart beat.
         currentColor = new Color[] {Color.kHotPink, Color.kPink};
-        // breatheSlow(currentColor).applyTo(m_left);
-        // breatheSlow(currentColor).applyTo(m_right);
-        progressrainbow().applyTo(m_left);
-        rainbow().applyTo(m_right);
+        breatheSlow(currentColor).applyTo(m_left);
+        breatheSlow(currentColor).applyTo(m_right);
         break;
 
       case DISABLED:
