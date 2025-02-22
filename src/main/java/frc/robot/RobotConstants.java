@@ -32,6 +32,7 @@ public class RobotConstants {
   public static RobotType robotType = RobotType.COMPBOT;
   public static boolean tracesEnabled = true;
   public static boolean tuningEnabled = false; // DO NOT COMMIT WHILE ENABLED
+  public static boolean disableHAL = false;
 
   // Subsystems positions/translations for simulation in AdvantageScope
   // public static Translation2d intakeOffset = new Translation2d(Units.inchesToMeters(24),
