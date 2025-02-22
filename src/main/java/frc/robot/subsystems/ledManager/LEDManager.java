@@ -21,6 +21,7 @@ import frc.robot.Commodore;
 import frc.robot.Commodore.CommodoreState;
 import frc.robot.subsystems.CS_SubsystemBase;
 import frc.robot.subsystems.Dashboard;
+import java.util.Map;
 import java.util.Optional;
 
 public class LEDManager extends CS_SubsystemBase {
@@ -80,8 +81,10 @@ public class LEDManager extends CS_SubsystemBase {
     switch (mainMode) {
       case DISCONNECTED: // made a heart beat disconnected a white heart beat.
         currentColor = new Color[] {Color.kHotPink, Color.kPink};
-        breatheSlow(currentColor).applyTo(m_left);
-        breatheSlow(currentColor).applyTo(m_right);
+        // breatheSlow(currentColor).applyTo(m_left);
+        // breatheSlow(currentColor).applyTo(m_right);
+        progressrainbow().applyTo(m_left);
+        rainbow().applyTo(m_right);
         break;
 
       case DISABLED:
@@ -99,18 +102,6 @@ public class LEDManager extends CS_SubsystemBase {
 
       case ESTOP:
         currentColor = new Color[] {Color.kGreen, Color.kGreenYellow};
-        // breathe(
-        //     LEDConstants.kSectionMain,
-        //     currentColor[0],
-        //     currentColor[1],
-        //     LEDConstants.breathDuration);
-        break;
-
-      case UNKNOWN:
-      case TRANSITION:
-      case SHOOT:
-        wave(Color.kGreen, Color.kBlack).applyTo(m_left);
-        wave(Color.kGreen, Color.kBlack).applyTo(m_right);
         break;
 
       case TUNE_CORALSHOOTER:
@@ -118,6 +109,28 @@ public class LEDManager extends CS_SubsystemBase {
         breatheSlow(Color.kCoral, Color.kBlack).applyTo(m_right);
         break;
 
+      case TUNE_ALGAESHOOTER:
+        breatheSlow(Color.kAquamarine, Color.kBlack).applyTo(m_left);
+        breatheSlow(Color.kAquamarine, Color.kBlack).applyTo(m_right);
+        break;
+
+      case CLIMB_PREP:
+        progressrainbow().applyTo(m_left);
+        progressrainbow().applyTo(m_right);
+        break;
+
+      case CLIMB_READY:
+        rainbow().blink(Seconds.of(1)).applyTo(m_left);
+        rainbow().blink(Seconds.of(1)).applyTo(m_right);
+        break;
+
+      case CLIMB_NOW:
+        rainbow().applyTo(m_left);
+        rainbow().applyTo(m_right);
+        break;
+
+      case UNKNOWN:
+      case TRANSITION:
       default:
         wave(currentColor).applyTo(m_left);
         wave(currentColor).applyTo(m_right);
@@ -251,6 +264,22 @@ public class LEDManager extends CS_SubsystemBase {
             .scrollAtAbsoluteSpeed(Centimeters.per(Second).of(12.5), LEDConstants.LedSpacing);
 
     return rainbow;
+  }
+
+  private static LEDPattern progressrainbow() {
+    Map<Double, Color> maskSteps = Map.of(0.0, Color.kWhite, 0.2, Color.kBlack);
+
+    LEDPattern base = LEDPattern.rainbow(255, 255);
+    LEDPattern mask =
+        LEDPattern.steps(maskSteps)
+            .scrollAtAbsoluteSpeed(Centimeters.per(Second).of(12.5), LEDConstants.LedSpacing);
+
+    // LEDPattern new_pattern =
+    //     LEDPattern.rainbow(LEDConstants.rainbowSaturation, LEDConstants.rainbowValue)
+    //         .scrollAtAbsoluteSpeed(Centimeters.per(Second).of(12.5), LEDConstants.LedSpacing);
+    // return new_pattern;
+
+    return base.mask(mask);
   }
 
   private static Color[] getAllianceColor() {

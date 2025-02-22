@@ -20,5 +20,5 @@ public class LEDConstants {
   public static final Distance LedSpacing = Meters.of(1.0 / 144.0);
 
   public static final int rainbowSaturation = 255;
-  public static final int rainbowValue = 128;
+  public static final int rainbowValue = 255;
 }
