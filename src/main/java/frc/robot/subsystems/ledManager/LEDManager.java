@@ -188,10 +188,10 @@ public class LEDManager extends CS_SubsystemBase {
     int i = LEDConstants.kLEDSectionStatusLeft.startId();
     int j = LEDConstants.kLEDSectionStatusRight.endId();
 
-    LEDBuffer.setRGB(i, 0, rsl ? 255 : 0, 0);
-    LEDBuffer.setRGB(i + 1, 0, rsl ? 255 : 0, 0);
-    LEDBuffer.setRGB(j, 0, rsl ? 255 : 0, 0);
-    LEDBuffer.setRGB(j - 1, 0, rsl ? 255 : 0, 0);
+    LEDBuffer.setRGB(i, rsl ? 255 : 0, rsl ? 40 : 0, 0);
+    LEDBuffer.setRGB(i + 1, rsl ? 255 : 0, rsl ? 40 : 0, 0);
+    LEDBuffer.setRGB(j, rsl ? 255 : 0, rsl ? 40 : 0, 0);
+    LEDBuffer.setRGB(j - 1, rsl ? 255 : 0, rsl ? 40 : 0, 0);
     // brown out
     boolean brownOut = RobotController.isBrownedOut();
     LEDBuffer.setRGB(i + 2, brownOut ? 255 : 0, brownOut ? 0 : 255, 0);

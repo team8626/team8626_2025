@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.RobotContainer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -127,6 +128,22 @@ public class Dashboard extends CS_SubsystemBase {
       }
     }
 
+    // Get Subsystem Steady States
+    // (Could be a preloaded piece or a reboot...)
+    if (coralState == GamePieceState.IDLE || coralState == GamePieceState.LOADED) {
+      if (RobotContainer.mortar != null && RobotContainer.mortar.isLoaded()) {
+        coralState = GamePieceState.LOADED;
+      } else {
+        coralState = GamePieceState.IDLE;
+      }
+    }
+    if (algaeState == GamePieceState.IDLE || algaeState == GamePieceState.LOADED) {
+      if (RobotContainer.algae501 != null && RobotContainer.algae501.isLoaded()) {
+        algaeState = GamePieceState.LOADED;
+      } else {
+        algaeState = GamePieceState.IDLE;
+      }
+    }
     // Update UI Data
     updateUIData();
   }
