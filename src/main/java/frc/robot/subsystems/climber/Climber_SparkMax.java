@@ -36,17 +36,20 @@ public class Climber_SparkMax implements ClimberInterface, CS_InterfaceBase {
   public Climber_SparkMax() {
     // Setup configuration for the encoder
     encoderConfig
+        .inverted(false)
         .positionConversionFactor(ClimberConstants.positionConversionFactor)
         .velocityConversionFactor(ClimberConstants.velocityConversionFactor);
 
     // Setup configuration for the motor
     config = new SparkMaxConfig();
 
-    config.inverted(false).idleMode(IdleMode.kBrake).smartCurrentLimit(40);
+    config.inverted(true).idleMode(IdleMode.kBrake).smartCurrentLimit(40);
 
     config
         .closedLoop
         .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
+        .positionWrappingEnabled(true)
+        .positionWrappingInputRange(0, 360)
         // Set PID values for position control.
         .p(ClimberConstants.gains.kP())
         .i(ClimberConstants.gains.kI())
@@ -69,6 +72,7 @@ public class Climber_SparkMax implements ClimberInterface, CS_InterfaceBase {
     values.climberIsEnabled = climberIsEnabled;
     values.currentAngleDegrees = getAngleDegrees();
     values.amps = motor.getOutputCurrent();
+    values.desiredAngleDegrees = setPointDegrees;
 
     controller.setReference(setPointDegrees, ControlType.kPosition);
   }

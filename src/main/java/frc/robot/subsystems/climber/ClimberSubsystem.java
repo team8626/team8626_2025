@@ -82,6 +82,7 @@ public class ClimberSubsystem extends CS_SubsystemBase {
     SmartDashboard.putBoolean("Subsystem/Climber/IsEnabled", values.climberIsEnabled);
     SmartDashboard.putNumber("Subsystem/Climber/CurrentAngle", values.currentAngleDegrees);
     SmartDashboard.putNumber("Subsystem/Climber/Amps", values.amps);
+    SmartDashboard.putNumber("Subsystem/Climber/DesiredAngleDegrees", values.desiredAngleDegrees);
 
     // double newAngle =
     //     SmartDashboard.getNumber(

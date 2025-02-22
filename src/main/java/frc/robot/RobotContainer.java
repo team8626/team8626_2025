@@ -182,13 +182,21 @@ public class RobotContainer {
     //     new InstantCommand(
     //         () -> Commodore.setCommodoreState(CommodoreState.CORAL_SHOOT,
     // true).withToggleState()));
-    controller.btn_A.onTrue(new InstantCommand(() -> elevator.setHeight(0)));
+    controller.btn_A.onTrue(new InstantCommand(() -> climber.setAngleDegrees(0)));
 
-    controller.btn_B.onTrue(new InstantCommand(() -> elevator.setHeight(18)));
+    controller.btn_B.onTrue(new InstantCommand(() -> climber.setAngleDegrees(90)));
 
-    controller.btn_Y.onTrue(new InstantCommand(() -> elevator.setHeight(32)));
+    controller.btn_Y.onTrue(new InstantCommand(() -> climber.setAngleDegrees(180)));
 
-    controller.btn_X.onTrue(new InstantCommand(() -> elevator.setHeight(51)));
+    controller.btn_X.onTrue(new InstantCommand(() -> climber.setAngleDegrees(220)));
+
+    // controller.btn_A.onTrue(new InstantCommand(() -> elevator.setHeight(0)));
+
+    // controller.btn_B.onTrue(new InstantCommand(() -> elevator.setHeight(18)));
+
+    // controller.btn_Y.onTrue(new InstantCommand(() -> elevator.setHeight(32)));
+
+    // controller.btn_X.onTrue(new InstantCommand(() -> elevator.setHeight(51)));
 
     // controller.btn_X.onTrue(
     //     new InstantCommand(
