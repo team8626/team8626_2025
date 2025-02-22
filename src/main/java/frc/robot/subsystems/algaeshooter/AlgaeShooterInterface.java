@@ -1,5 +1,7 @@
 package frc.robot.subsystems.algaeshooter;
 
+import static frc.robot.subsystems.algaeshooter.AlgaeShooterConstants.gains;
+
 public interface AlgaeShooterInterface {
   void startShooter(double new_RPM);
 
@@ -50,9 +52,8 @@ public interface AlgaeShooterInterface {
     protected boolean isLoaded = false;
     protected double desiredRPM = AlgaeShooterConstants.shootRPM;
 
-    protected double kP = 0.05;
-    protected double kI = 0.0;
-    protected double kD = 0.0;
-    protected double FF = 0.0;
+    protected double kP = gains.kP();
+    protected double kI = gains.kI();
+    protected double kD = gains.kD();
   }
 }

@@ -28,11 +28,6 @@ public class ElevatorConstants {
   public static final double maxAccelerationInchesPerSec2 = 20;
   public static final double toleranceInches = 0.25;
 
-  // PID Constants
-  // public static final double kP = 0.5;
-  // public static final double kI = 0.0;
-  // public static final double kD = 0.0;
-  // public static final double FF = 0.0;
   public static final Gains gains =
       switch (RobotConstants.robotType) {
         case COMPBOT -> new Gains(0.5, 0.0, 0.0, 0.12, 0.00635, 0);
