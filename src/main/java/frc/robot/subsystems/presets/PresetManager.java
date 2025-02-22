@@ -8,6 +8,8 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StringSubscriber;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -29,6 +31,23 @@ public class PresetManager extends CS_SubsystemBase {
   private String uiCurrentIntakeSide = "----";
   private String uiCurrentCoralBranch = "-";
   private String uiCurrentAlgaeFace = "--";
+
+  private final StringSubscriber coralBranchSub =
+      NetworkTableInstance.getDefault()
+          .getStringTopic("SmartDashboard/Presets/UI/SelectedCoralBranch")
+          .subscribe("-");
+  private final StringSubscriber coralLevelSub =
+      NetworkTableInstance.getDefault()
+          .getStringTopic("SmartDashboard/Presets/UI/SelectedCoralLevel")
+          .subscribe("L4");
+  private final StringSubscriber algaeFaceSub =
+      NetworkTableInstance.getDefault()
+          .getStringTopic("SmartDashboard/Presets/UI/SelectedAlgaeFace")
+          .subscribe("--");
+  private final StringSubscriber intakeSideSub =
+      NetworkTableInstance.getDefault()
+          .getStringTopic("SmartDashboard/Presets/UI/SelectedIntakeSide")
+          .subscribe("----");
 
   // private CoralPreset autoCoralPreset = new CoralPreset( "autoPreset", new Pose2d(), 0.0, false);
 
@@ -217,14 +236,6 @@ public class PresetManager extends CS_SubsystemBase {
     SmartDashboard.putString("Presets/UI/SelectedAlgaeFace", "");
     SmartDashboard.putString("Presets/UI/SelectedIntakeSide", "");
 
-    // println("Getting Values " + SmartDashboard.getString("Presets/UI/SelectedCoralLevel",
-    // "???"));
-    // println("               " + SmartDashboard.getString("Presets/UI/SelectedCoralBranch",
-    // "???"));
-    // println("               " + SmartDashboard.getString("Presets/UI/SelectedAlgaeFace", "???"));
-    // println("               " + SmartDashboard.getString("Presets/UI/SelectedIntakeSide",
-    // "???"));
-
     SmartDashboard.putStringArray(
         "Presets/UI/AllowedCoralLevels", UIConstants.allowedCoralLevels.toArray(new String[0]));
     SmartDashboard.putStringArray(
@@ -258,19 +269,29 @@ public class PresetManager extends CS_SubsystemBase {
     // Get Values from UI
     this.uiSelectedCoralLevel =
         SmartDashboard.getString("Presets/UI/SelectedCoralLevel", "UNKNOWN");
-    this.uiSelectedCoralBranch =
-        SmartDashboard.getString("Presets/UI/SelectedCoralBranch", "UNKNOWN");
+    // this.uiSelectedCoralBranch =
+    //     SmartDashboard.getString("Presets/UI/SelectedCoralBranch", "UNKNOWN");
 
     this.uiSelectedAlgaeFace = SmartDashboard.getString("Presets/UI/SelectedAlgaeFace", "UNKNOWN");
     this.uiSelectedIntakeSide =
         SmartDashboard.getString("Presets/UI/SelectedIntakeSide", "UNKNOWN");
+
+    this.uiSelectedCoralBranch = coralBranchSub.get();
+    this.uiSelectedCoralLevel = coralLevelSub.get();
+    this.uiSelectedAlgaeFace = algaeFaceSub.get();
+    this.uiSelectedIntakeSide = intakeSideSub.get();
+
+    // println("Getting Values " + uiSelectedCoralLevel);
+    // println("               " + uiSelectedCoralBranch);
+    // println("               " + uiSelectedAlgaeFace);
+    // println("               " + uiSelectedIntakeSide);
   }
 
   private void updatePreset() {
     // New Selected Value for CORAL (Branch or Level)
     // Compute the new robot preset.
-    uiSelectedCoralLevel = "L1";
-    uiSelectedCoralBranch = "F";
+    // uiSelectedCoralLevel = "L1";
+    // uiSelectedCoralBranch = "F";
 
     if ((!uiSelectedCoralLevel.equals(this.uiCurrentCoralLevel)
             && UIConstants.allowedCoralLevels.contains(uiSelectedCoralLevel))
