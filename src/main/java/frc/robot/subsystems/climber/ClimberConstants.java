@@ -5,11 +5,11 @@ import frc.robot.RobotConstants;
 public class ClimberConstants {
 
   // Climber Constants
-  public static final double minAngleDegrees = 0;
-  public static final double maxAngleDegrees = 270;
+  public static final double minAngleDegrees = 14;
+  public static final double maxAngleDegrees = 220;
   public static final double restAngleDegrees = 0;
   public static final double positionConversionFactor = 360; // degrees
-  public static final double velocityConversionFactor = 360; // degrees per second
+  public static final double velocityConversionFactor = 360 / 60; // degrees per second
 
   public static final double toleranceDegrees = 5;
 

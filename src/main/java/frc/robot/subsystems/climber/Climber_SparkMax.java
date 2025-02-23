@@ -14,6 +14,7 @@ import com.revrobotics.spark.config.AbsoluteEncoderConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import frc.robot.subsystems.CS_InterfaceBase;
 
@@ -26,7 +27,7 @@ public class Climber_SparkMax implements ClimberInterface, CS_InterfaceBase {
   private final SparkClosedLoopController controller;
   private AbsoluteEncoder encoder;
   private final AbsoluteEncoderConfig encoderConfig = new AbsoluteEncoderConfig();
-  private double setPointDegrees;
+  private double setPointDegrees = ClimberConstants.minAngleDegrees;
 
   // done by ai, idk if it works, but it makes public Climber_SparkMax() not throw an error
   SimpleMotorFeedforward FF = new SimpleMotorFeedforward(gains.kS(), gains.kV(), gains.kA());
@@ -48,13 +49,20 @@ public class Climber_SparkMax implements ClimberInterface, CS_InterfaceBase {
     config
         .closedLoop
         .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
-        .positionWrappingEnabled(true)
-        .positionWrappingInputRange(0, 360)
+        .positionWrappingEnabled(false)
+        // .positionWrappingInputRange(0, 360)
         // Set PID values for position control.
         .p(ClimberConstants.gains.kP())
         .i(ClimberConstants.gains.kI())
         .d(ClimberConstants.gains.kD())
         .outputRange(-1, 1);
+
+    config
+        .softLimit
+        .reverseSoftLimitEnabled(true)
+        .reverseSoftLimit(ClimberConstants.minAngleDegrees)
+        .forwardSoftLimitEnabled(true)
+        .forwardSoftLimit(ClimberConstants.maxAngleDegrees);
 
     config.apply(encoderConfig);
 
@@ -85,19 +93,10 @@ public class Climber_SparkMax implements ClimberInterface, CS_InterfaceBase {
   @Override
   public void setAngleDegrees(double new_angle) {
     setPointDegrees = new_angle;
+    setPointDegrees =
+        MathUtil.clamp(
+            new_angle, ClimberConstants.minAngleDegrees, ClimberConstants.maxAngleDegrees);
   }
-
-  // @Override
-  // public void start(double new_setpoint) {
-  //   controller.setReference(new_setpoint, ControlType.kDutyCycle);
-  //   climberIsEnabled = true;
-  // }
-
-  // @Override
-  // public void stop() {
-  //   controller.setReference(0, ControlType.kDutyCycle);
-  //   climberIsEnabled = false;
-  // }
 
   @Override
   public void setPID(double newkP, double newkI, double newkD) {
