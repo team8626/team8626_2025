@@ -14,7 +14,7 @@ public class CoralShooterConstants {
 
   public static final double RPMTolerance = 50;
   public static final double RPMDifferentialTolerance = 10;
-  public static final double launchTimerSeconds = 0.2;
+  public static final double launchTimerSeconds = 0.2; // TODO: Tune this
 
   // CoralShooter Constants
   public static final double wheelRadiusMeters = Units.inchesToMeters(2);
