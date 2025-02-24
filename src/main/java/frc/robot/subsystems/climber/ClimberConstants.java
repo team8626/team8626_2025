@@ -11,6 +11,8 @@ public class ClimberConstants {
   public static final double positionConversionFactor = 360; // degrees
   public static final double velocityConversionFactor = 360 / 60; // degrees per second
 
+  public static final int maxCurrent = 30; // Amps
+
   public static final double toleranceDegrees = 5;
 
   // Arm Config

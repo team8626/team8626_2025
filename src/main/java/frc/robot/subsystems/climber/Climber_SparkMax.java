@@ -1,7 +1,6 @@
 package frc.robot.subsystems.climber;
 
 import static frc.robot.subsystems.climber.ClimberConstants.armConfig;
-import static frc.robot.subsystems.climber.ClimberConstants.gains;
 
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.spark.SparkBase.ControlType;
@@ -15,7 +14,6 @@ import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import frc.robot.subsystems.CS_InterfaceBase;
 
 public class Climber_SparkMax implements ClimberInterface, CS_InterfaceBase {
@@ -30,7 +28,7 @@ public class Climber_SparkMax implements ClimberInterface, CS_InterfaceBase {
   private double setPointDegrees = ClimberConstants.minAngleDegrees;
 
   // done by ai, idk if it works, but it makes public Climber_SparkMax() not throw an error
-  SimpleMotorFeedforward FF = new SimpleMotorFeedforward(gains.kS(), gains.kV(), gains.kA());
+  // SimpleMotorFeedforward FF = new SimpleMotorFeedforward(gains.kS(), gains.kV(), gains.kA());
 
   private boolean climberIsEnabled = false;
 
@@ -44,7 +42,7 @@ public class Climber_SparkMax implements ClimberInterface, CS_InterfaceBase {
     // Setup configuration for the motor
     config = new SparkMaxConfig();
 
-    config.inverted(true).idleMode(IdleMode.kBrake).smartCurrentLimit(40);
+    config.inverted(true).idleMode(IdleMode.kBrake).smartCurrentLimit(ClimberConstants.maxCurrent);
 
     config
         .closedLoop
