@@ -20,15 +20,32 @@
         "rotations": [
             { 
             "axis": "x", 
-            "degrees": 0},
+            "degrees": -13.4678342},
             { 
             "axis": "y", 
-            "degrees": 0},
+            "degrees": -20},
             { 
             "axis": "z", 
-            "degrees": 0}
+            "degrees": 236.65589}
         ],
-        "position": [0, 0, 0],
+        "position": [-0.294805, 0.280851, 0.237332],
+        "resolution": [640, 480],
+        "fov": 120
+      },
+      {
+        "name": "BackRight",
+        "rotations": [
+            { 
+            "axis": "x", 
+            "degrees": 13.4678342},
+            { 
+            "axis": "y", 
+            "degrees": -20},
+            { 
+            "axis": "z", 
+            "degrees": 123.34411}
+        ],
+        "position": [-0.294805, -0.280851, 0.237332],
         "resolution": [640, 480],
         "fov": 120
       }
