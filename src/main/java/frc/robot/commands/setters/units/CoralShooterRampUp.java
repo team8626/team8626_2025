@@ -17,7 +17,7 @@ public class CoralShooterRampUp extends CS_Command {
   private CoralShooterSubsystem mortar;
 
   private double desiredRPMLeft = CoralShooterConstants.RPMShootLeft;
-  private double desiredRPMRight = CoralShooterConstants.RPMShoolLeft;
+  private double desiredRPMRight = CoralShooterConstants.RPMShootRight;
   private final double RPMTolerance = CoralShooterConstants.RPMTolerance;
   private final double RPMDifferentialTolerance = CoralShooterConstants.RPMDifferentialTolerance;
 
@@ -56,15 +56,10 @@ public class CoralShooterRampUp extends CS_Command {
     double currentRPMLeft = mortar.getShooterRPMLeft();
     double currentRPMRight = mortar.getShooterRPMRight();
 
-    // atSetpoint =
-    //     Math.abs(currentRPMLeft - desiredRPMLeft) <= RPMTolerance
-    //         && Math.abs(currentRPMRight - desiredRPMLeft) <= RPMTolerance;
-
+    // TODO: Add RPMDifferentialTolerance check when needed
     atSetpoint =
         Math.abs(currentRPMLeft - desiredRPMLeft) <= RPMTolerance
-            && Math.abs(currentRPMRight - desiredRPMRight) <= RPMTolerance
-            && Math.abs(currentRPMLeft - currentRPMRight) <= RPMDifferentialTolerance;
-
+            && Math.abs(currentRPMRight - desiredRPMRight) <= RPMTolerance;
     return atSetpoint;
   }
 }
