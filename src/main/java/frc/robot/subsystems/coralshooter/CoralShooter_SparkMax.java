@@ -40,7 +40,7 @@ public class CoralShooter_SparkMax implements CoralShooterInterface, CS_Interfac
 
   SimpleMotorFeedforward shooterFFLeft =
       new SimpleMotorFeedforward(gainsLeft.kS(), gainsLeft.kV(), gainsLeft.kA());
-      SimpleMotorFeedforward shooterFFRight =
+  SimpleMotorFeedforward shooterFFRight =
       new SimpleMotorFeedforward(gainsRight.kS(), gainsRight.kV(), gainsRight.kA());
 
   private DigitalInput loadedSensor = new DigitalInput(CoralShooterConstants.lidarPort);

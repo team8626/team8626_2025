@@ -19,7 +19,6 @@ public class ElevatorConstants {
   public static final double minHeightInches = 7;
   public static final double maxHeightInches = 50;
   public static final double initHeightInches = 7;
-  
 
   public static final int maxCurrent = 30; // Amps
 
@@ -32,7 +31,7 @@ public class ElevatorConstants {
 
   public static final Gains gains =
       switch (RobotConstants.robotType) {
-        case COMPBOT -> new Gains(0.5, 0.0, 0.0, 0.43, 3.07,0.04);
+        case COMPBOT -> new Gains(0.5, 0.0, 0.0, 0.43, 3.07, 0.04);
         case SIMBOT -> new Gains(0.5, 0.0, 0.0, 0.43, 3.07, 0.04);
         default -> new Gains(0.05, 0.0, 0.0, 0.43, 3.07, 0.04);
       };
