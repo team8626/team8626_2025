@@ -137,10 +137,11 @@ public class LEDManager extends CS_SubsystemBase {
   }
 
   private static void updateCoralLEDs() {
+    Color color = new Color(255, 63, 13);
     switch (Dashboard.getCoralState()) {
       case RAMPING_UP:
       case LAUNCHING:
-        currentColor = new Color[] {Color.kCoral, Color.kBlack};
+        currentColor = new Color[] {color, Color.kBlack};
         breatheFast(currentColor).applyTo(m_back_top);
         break;
 
@@ -150,14 +151,13 @@ public class LEDManager extends CS_SubsystemBase {
         break;
 
       case INTAKING:
-        currentColor = new Color[] {Color.kCoral, Color.kBlack};
+        currentColor = new Color[] {color, Color.kBlack};
         breatheSlow(currentColor).applyTo(m_back_top);
         break;
 
       case LOADED:
-        new_pattern = LEDPattern.solid(Color.kCoral);
+        new_pattern = LEDPattern.solid(color);
         new_pattern.applyTo(m_back_top);
-        // soild Coral lights
         break;
 
       default:
@@ -166,10 +166,12 @@ public class LEDManager extends CS_SubsystemBase {
   }
 
   private static void updateAlgaeLEDs() {
+    Color color = new Color(25, 175, 25);
+
     switch (Dashboard.getAlgaeState()) {
       case RAMPING_UP:
       case LAUNCHING:
-        currentColor = new Color[] {Color.kAquamarine, Color.kBlack};
+        currentColor = new Color[] {color, Color.kBlack};
         breatheFast(currentColor).applyTo(m_back_bottom);
         break;
 
@@ -179,12 +181,12 @@ public class LEDManager extends CS_SubsystemBase {
         break;
 
       case INTAKING:
-        currentColor = new Color[] {Color.kAquamarine, Color.kBlack};
+        currentColor = new Color[] {color, Color.kBlack};
         breatheSlow(currentColor).applyTo(m_back_bottom);
         break;
 
       case LOADED:
-        new_pattern = LEDPattern.solid(Color.kAquamarine);
+        new_pattern = LEDPattern.solid(color);
         new_pattern.applyTo(m_back_bottom);
         break;
 

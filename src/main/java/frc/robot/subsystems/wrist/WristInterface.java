@@ -20,6 +20,7 @@ public interface WristInterface {
     protected boolean isEnabled = false;
     protected double currentAngleDegrees = 0; // Degrees
     protected double amps = 0;
+    protected double desiredAngleDegrees = 0; // degrees
 
     // protected double desiredAngleDegrees = 0;
 

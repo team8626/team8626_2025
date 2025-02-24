@@ -24,6 +24,7 @@ public interface ClimberInterface {
     protected boolean climberIsEnabled = false;
     protected double currentAngleDegrees = 0; // degrees
     protected double amps = 0;
+    protected double desiredAngleDegrees = 0; // degrees
 
     //  protected double desiredAngle = ClimberConstants.shootRPM;
 

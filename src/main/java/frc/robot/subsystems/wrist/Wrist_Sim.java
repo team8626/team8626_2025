@@ -23,7 +23,7 @@ public class Wrist_Sim implements WristInterface, CS_InterfaceBase {
           Units.degreesToRadians(WristConstants.minAngleDegrees),
           Units.degreesToRadians(WristConstants.maxAngleDegrees),
           false,
-          Units.degreesToRadians(WristConstants.defaultAngleDegrees),
+          Units.degreesToRadians(WristConstants.restAngleDegrees),
           new double[0]);
 
   PIDController pidController = new PIDController(0.1, 0, 0);

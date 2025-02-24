@@ -54,7 +54,7 @@ public interface CoralShooterInterface {
 
     protected boolean isLoaded = false;
     protected double desiredRPMLeft = CoralShooterConstants.RPMShootLeft;
-    protected double desiredRPMRight = CoralShooterConstants.RPMShoolLeft;
+    protected double desiredRPMRight = CoralShooterConstants.RPMShootRight;
 
     protected double kPLeft = gainsLeft.kP();
     protected double kILeft = gainsLeft.kI();

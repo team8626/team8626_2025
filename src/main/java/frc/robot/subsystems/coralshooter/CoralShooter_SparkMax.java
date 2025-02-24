@@ -2,6 +2,7 @@ package frc.robot.subsystems.coralshooter;
 
 import static frc.robot.subsystems.coralshooter.CoralShooterConstants.flywheelConfig;
 import static frc.robot.subsystems.coralshooter.CoralShooterConstants.gainsLeft;
+import static frc.robot.subsystems.coralshooter.CoralShooterConstants.gainsRight;
 import static frc.robot.subsystems.coralshooter.CoralShooterConstants.launcherConfig;
 
 import com.revrobotics.RelativeEncoder;
@@ -37,8 +38,10 @@ public class CoralShooter_SparkMax implements CoralShooterInterface, CS_Interfac
   private final SparkClosedLoopController launchController;
   private final RelativeEncoder launchEncoder;
 
-  SimpleMotorFeedforward shooterFF =
+  SimpleMotorFeedforward shooterFFLeft =
       new SimpleMotorFeedforward(gainsLeft.kS(), gainsLeft.kV(), gainsLeft.kA());
+      SimpleMotorFeedforward shooterFFRight =
+      new SimpleMotorFeedforward(gainsRight.kS(), gainsRight.kV(), gainsRight.kA());
 
   private DigitalInput loadedSensor = new DigitalInput(CoralShooterConstants.lidarPort);
 
@@ -137,14 +140,14 @@ public class CoralShooter_SparkMax implements CoralShooterInterface, CS_Interfac
         -new_RPMLeft,
         ControlType.kVelocity,
         ClosedLoopSlot.kSlot0,
-        shooterFF.calculate(-new_RPMLeft),
+        shooterFFLeft.calculate(-new_RPMLeft),
         ArbFFUnits.kVoltage);
 
     rightController.setReference(
         new_RPMRight,
         ControlType.kVelocity,
         ClosedLoopSlot.kSlot0,
-        shooterFF.calculate(new_RPMRight),
+        shooterFFRight.calculate(new_RPMRight),
         ArbFFUnits.kVoltage);
 
     shooterIsEnabled = true;
@@ -164,14 +167,14 @@ public class CoralShooter_SparkMax implements CoralShooterInterface, CS_Interfac
           -new_RPMLeft,
           ControlType.kVelocity,
           ClosedLoopSlot.kSlot0,
-          shooterFF.calculate(-new_RPMLeft),
+          shooterFFLeft.calculate(-new_RPMLeft),
           ArbFFUnits.kVoltage);
 
       rightController.setReference(
           new_RPMRight,
           ControlType.kVelocity,
           ClosedLoopSlot.kSlot0,
-          shooterFF.calculate(new_RPMRight),
+          shooterFFRight.calculate(new_RPMRight),
           ArbFFUnits.kVoltage);
     }
   }

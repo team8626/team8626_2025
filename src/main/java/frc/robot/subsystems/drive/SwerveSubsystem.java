@@ -61,7 +61,7 @@ public class SwerveSubsystem extends CS_SubsystemBase {
   private final AprilTagFieldLayout aprilTagFieldLayout =
       AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
   /** Enable vision odometry updates while driving. */
-  private final boolean visionDriveTest = false;
+  private final boolean visionDriveTest = true;
   /** PhotonVision class to keep an accurate odometry. */
   private Vision vision;
 

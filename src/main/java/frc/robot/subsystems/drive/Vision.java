@@ -18,7 +18,9 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTablesJNI;
+import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -46,6 +48,8 @@ import swervelib.telemetry.SwerveDriveTelemetry;
  * https://gitlab.com/ironclad_code/ironclad-2024/-/blob/master/src/main/java/frc/robot/vision/Vision.java?ref_type=heads
  */
 public class Vision {
+  StructPublisher<Pose2d> posePublisher =
+      NetworkTableInstance.getDefault().getStructTopic("EstPose", Pose2d.struct).publish();
 
   /** April Tag Field Layout of the year. */
   public static final AprilTagFieldLayout fieldLayout =
@@ -122,6 +126,9 @@ public class Vision {
       Optional<EstimatedRobotPose> poseEst = getEstimatedGlobalPose(camera);
       if (poseEst.isPresent()) {
         var pose = poseEst.get();
+
+        posePublisher.set(getEstimatedGlobalPose(camera).get().estimatedPose.toPose2d());
+
         swerveDrive.addVisionMeasurement(
             pose.estimatedPose.toPose2d(), pose.timestampSeconds, camera.curStdDevs);
       }
@@ -279,41 +286,29 @@ public class Vision {
 
   /** Camera Enum to select each camera */
   enum Cameras {
-    // /** Left Camera */
-    // LEFT_CAM(
-    //     "left",
-    //     new Rotation3d(0, Math.toRadians(-24.094), Math.toRadians(30)),
-    //     new Translation3d(
-    //         Units.inchesToMeters(12.056), Units.inchesToMeters(10.981),
-    // Units.inchesToMeters(8.44)),
-    //     VecBuilder.fill(4, 4, 8),
-    //     VecBuilder.fill(0.5, 0.5, 1)),
-    // /** Right Camera */
-    // RIGHT_CAM(
-    //     "right",
-    //     new Rotation3d(0, Math.toRadians(-24.094), Math.toRadians(-30)),
-    //     new Translation3d(
-    //         Units.inchesToMeters(12.056),
-    //         Units.inchesToMeters(-10.981),
-    //         Units.inchesToMeters(8.44)),
-    //     VecBuilder.fill(4, 4, 8),
-    //     VecBuilder.fill(0.5, 0.5, 1)),
-    // /** Center Camera */
-    // CENTER_CAM(
-    //     "center",
-    //     new Rotation3d(0, Units.degreesToRadians(18), 0),
-    //     new Translation3d(
-    //         Units.inchesToMeters(-4.628),
-    //         Units.inchesToMeters(-10.687),
-    //         Units.inchesToMeters(16.129)),
-    //     VecBuilder.fill(4, 4, 8),
-    //     VecBuilder.fill(0.5, 0.5, 1));
 
     /** Dart - Back Camera */
-    DART_BACK_CAM(
+    // DART_BACK_CAM(
+    //     "Arducam_AT002",
+    //     new Rotation3d(0, Units.degreesToRadians(-30), Units.degreesToRadians(167.04746)),
+    //     new Translation3d(-0.222275, -0.276124, 0.251296),
+    //     VecBuilder.fill(4, 4, 8),
+    //     VecBuilder.fill(0.5, 0.5, 1)),
+
+    Arducam_AT001(
+        "Arducam_AT001",
+        // new Rotation3d(26.033445, Units.degreesToRadians(-20),
+        // Units.degreesToRadians(143.308536)),
+        new Rotation3d(13.4678342, Units.degreesToRadians(-20), Units.degreesToRadians(123.34411)),
+        new Translation3d(-0.294805, -0.280851, 0.237332),
+        VecBuilder.fill(4, 4, 8),
+        VecBuilder.fill(0.5, 0.5, 1)),
+    Arducam_AT002(
         "Arducam_AT002",
-        new Rotation3d(0, Units.degreesToRadians(-30), Units.degreesToRadians(167.04746)),
-        new Translation3d(-0.222275, -0.276124, 0.251296),
+        // new Rotation3d(-26.033445, Units.degreesToRadians(-20),
+        // Units.degreesToRadians(216.691464)),
+        new Rotation3d(-13.4678342, Units.degreesToRadians(-20), Units.degreesToRadians(236.65589)),
+        new Translation3d(-0.294805, 0.280851, 0.237332),
         VecBuilder.fill(4, 4, 8),
         VecBuilder.fill(0.5, 0.5, 1));
 
