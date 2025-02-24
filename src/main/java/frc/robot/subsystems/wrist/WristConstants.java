@@ -6,9 +6,16 @@ import frc.robot.RobotConstants;
 public class WristConstants {
 
   public static final double minAngleDegrees = 0;
-  public static final double maxAngleDegrees = 270;
-  public static final double defaultAngleDegrees = 0; // TODO get a good value
+  public static final double maxAngleDegrees = 200;
+  public static final double restAngleDegrees = 0;
+  public static final double positionConversionFactor = 360; // degrees
+  public static final double velocityConversionFactor = 360 / 60; // degrees per second
 
+  public static final int maxCurrent = 30; // Amps
+
+  public static final double toleranceDegrees = 2;
+
+  // Gear box ratio
   public static final double inputGear = 16;
   public static final double stageOneInput = 56;
   public static final double stageOneOutput = 45;
@@ -29,7 +36,6 @@ public class WristConstants {
   public static final WristConfig wristConfig =
       switch (RobotConstants.robotType) {
         case COMPBOT -> new WristConfig(4, gearBoxRatio, Units.inchesToMeters(9.5));
-        case DEVBOT -> new WristConfig(4, gearBoxRatio, Units.inchesToMeters(9.5));
         case SIMBOT -> new WristConfig(4, gearBoxRatio, Units.inchesToMeters(9.5));
         default -> new WristConfig(0, gearBoxRatio, Units.inchesToMeters(9.5));
       };
@@ -37,8 +43,7 @@ public class WristConstants {
   // PID Constants
   public static final Gains gains =
       switch (RobotConstants.robotType) {
-        case COMPBOT -> new Gains(0.0001, 0.0, 0.0, 0.12, 0.00635, 0);
-        case DEVBOT -> new Gains(0.0001, 0.0, 0.0, 0.12, 0.00635, 0.0);
+        case COMPBOT -> new Gains(0.01, 0.0, 0.0, 0.12, 0.00635, 0);
         case SIMBOT -> new Gains(0.05, 0.0, 0.0, 0.12, 0.00635, 0.0);
         default -> new Gains(0.05, 0.0, 0.0, 0.12, 0.00635, 0.0);
       };

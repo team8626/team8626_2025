@@ -26,18 +26,16 @@ public class RobotConstants {
     SIMBOT, /* Simulation Robot*/
     KITBOT, /* Kitbot running on WC Drive*/
     DART, /* 2024 Competition Robor*/
-    DEVBOT, /* 2025 Development Robot*/
-    COMPBOT /* Placeholder for 2025 Competition Robot*/;
+    COMPBOT /* 2025 Competition Robot*/;
   }
 
   // ****************************************************************************************
   // Change robot type here if needed
   // Possible options: SIMBOT, KITBOT, DART, DEVBOT, COMPBOT
   //
-  public static RobotType robotType = RobotType.DEVBOT;
+  public static RobotType robotType = RobotType.COMPBOT;
   public static boolean tracesEnabled = true;
   public static boolean tuningEnabled = false; // DO NOT COMMIT WHILE ENABLED
-
   public static boolean disableHAL = false;
 
   // Subsystems positions/translations for simulation in AdvantageScope
@@ -62,6 +60,15 @@ public class RobotConstants {
           Units.inchesToMeters(robotCenterOffsetX),
           Units.inchesToMeters(robotCenterOffsetY),
           Rotation2d.fromDegrees(robotCenterOffsetTheta));
+
+  // /** Defines position of the cameras on the robot. */
+  //   public static class Vision {
+  //     // April tag camera constants
+  //     public static final String kATBackCameraName = "Arducam_AT002";
+  //     public static final Transform3d kATRobotToBackCam =
+  //         new Transform3d(
+  //             new Translation3d(-0.222275, -0.276124, 0.251296),
+  //             new Rotation3d(0, Units.degreesToRadians(-30), Units.degreesToRadians(167.04746)));
 
   public static Pose3d mastPoseOffset =
       new Pose3d(
@@ -108,15 +115,6 @@ public class RobotConstants {
   //         new Transform3d(
   //             new Translation3d(-0.222275, -0.276124, 0.251296),
   //             new Rotation3d(0, Units.degreesToRadians(-30), Units.degreesToRadians(167.04746)));
-
-  /** Defines position of the cameras on the robot. */
-  // public static class Vision_2024 { // TODO: Can be removed?
-  //   // April tag camera constants
-  //   public static final String kATBackCameraName = "Arducam_AT002";
-  //   public static final Transform3d kATRobotToBackCam =
-  //       new Transform3d(
-  //           new Translation3d(-0.222275, -0.276124, 0.251296),
-  //           new Rotation3d(0, Units.degreesToRadians(-30), Units.degreesToRadians(167.04746)));
 
   //     public static final String kATFrontCameraName = "Arducam_AT001";
   //     public static final Transform3d kATRobotToFrontCam =

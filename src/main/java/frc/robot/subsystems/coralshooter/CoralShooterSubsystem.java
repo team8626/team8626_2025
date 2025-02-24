@@ -135,11 +135,11 @@ public class CoralShooterSubsystem extends CS_SubsystemBase {
     double newkDLeft =
         SmartDashboard.getNumber("Subsystem/CoralShooter/Gains/D_Left", values.kDLeft);
     double newkPRight =
-        SmartDashboard.getNumber("Subsystem/CoralShooter/Gains/P_Left", values.kPRight);
+        SmartDashboard.getNumber("Subsystem/CoralShooter/Gains/P_Right", values.kPRight);
     double newkIRight =
-        SmartDashboard.getNumber("Subsystem/CoralShooter/Gains/I_Left", values.kIRight);
+        SmartDashboard.getNumber("Subsystem/CoralShooter/Gains/I_Right", values.kIRight);
     double newkDRight =
-        SmartDashboard.getNumber("Subsystem/CoralShooter/Gains/D_Left", values.kDRight);
+        SmartDashboard.getNumber("Subsystem/CoralShooter/Gains/D_Right", values.kDRight);
 
     // Coefficients on SmartDashboard have changed, save new values to the PID controller
     // --------------------------------------------------
@@ -178,12 +178,14 @@ public class CoralShooterSubsystem extends CS_SubsystemBase {
             "Subsystem/CoralShooter/ShootingRPMLeft", CoralShooterConstants.RPMShootLeft);
     if (newRPMLeft != shootingRPMLeft) {
       setShooterRPM(newRPMLeft, shootingRPMRight);
+      shootingRPMLeft = newRPMLeft;
     }
     double newRPMRight =
         SmartDashboard.getNumber(
             "Subsystem/CoralShooter/ShootingRPMRight", CoralShooterConstants.RPMShootRight);
     if (newRPMRight != shootingRPMRight) {
       setShooterRPM(shootingRPMLeft, newRPMRight);
+      shootingRPMRight = newRPMRight;
     }
     SmartDashboard.putNumber("Subsystem/CoralShooter/ShootingRPMLeft", shootingRPMLeft);
     SmartDashboard.putNumber("Subsystem/CoralShooter/ShootingRPMRight", shootingRPMRight);

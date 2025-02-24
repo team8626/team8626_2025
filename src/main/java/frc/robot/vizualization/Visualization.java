@@ -25,6 +25,21 @@ public class Visualization extends CS_SubsystemBase {
   StructArrayPublisher<Pose3d> arrayPublisher =
       NetworkTableInstance.getDefault().getStructArrayTopic("MyPoseArray", Pose3d.struct).publish();
 
+  // Singleton instance
+  private static Visualization instance;
+
+  // Public method to provide access to the singleton instance
+  public static Visualization getInstance() {
+    if (instance == null) {
+      instance = new Visualization();
+    }
+    return instance;
+  }
+
+  private Visualization() {
+    super();
+  }
+
   @Override
   public void CS_periodic() {
     robotPose = RobotContainer.drivebase.getPose3d();

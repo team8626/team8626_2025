@@ -9,7 +9,7 @@ import frc.robot.subsystems.elevator.ElevatorConstants.ElevatorStates.ElevatorSt
 public class Elevator_Simulation implements ElevatorInterface, CS_InterfaceBase {
 
   private boolean is_enabled = false;
-  private ElevatorState current_state = ElevatorState.STOPPED;
+  private ElevatorState current_state = ElevatorState.IDLE;
   private ElevatorSim elevator;
   private DCMotor elevatorGearbox = DCMotor.getNEO(1);
 
@@ -20,9 +20,9 @@ public class Elevator_Simulation implements ElevatorInterface, CS_InterfaceBase 
             elevatorGearbox,
             ElevatorConstants.gearRatio,
             ElevatorConstants.carriageMassKg,
-            ElevatorConstants.drumRadiusMeters,
-            ElevatorConstants.minHeightMeters,
-            ElevatorConstants.maxHeightMeters,
+            Units.inchesToMeters(ElevatorConstants.drumRadiusInches),
+            Units.inchesToMeters(ElevatorConstants.minHeightInches),
+            Units.inchesToMeters(ElevatorConstants.maxHeightInches),
             true,
             0.0,
             new double[] {0.0, 0.01});
@@ -31,27 +31,9 @@ public class Elevator_Simulation implements ElevatorInterface, CS_InterfaceBase 
   @Override
   public void updateInputs(ElevatorValues values) {
     elevator.update(0.02);
-    values.current_height = getHeightInches();
+    values.currentHeight = getHeightInches();
     values.state = current_state;
-    values.is_enabled = is_enabled;
-  }
-
-  @Override
-  public void stopElevator() {
-    setElevatorSpeed(0);
-  }
-
-  @Override
-  public void setElevatorSpeed(double new_speed) {
-    elevator.setInput(new_speed);
-    if (new_speed > 0) {
-      current_state = ElevatorState.MOVINGUP;
-    } else if (new_speed < 0) {
-      current_state = ElevatorState.MOVINGDOWN;
-    } else {
-      current_state = ElevatorState.STOPPED;
-    }
-    is_enabled = (new_speed != 0);
+    values.isEnabled = is_enabled;
   }
 
   @Override
@@ -84,11 +66,6 @@ public class Elevator_Simulation implements ElevatorInterface, CS_InterfaceBase 
   @Override
   public void setElevatorkD(double new_value) {
     printf("New kD: %f\n", new_value);
-  }
-
-  @Override
-  public void setElevatorFF(double new_value) {
-    printf("New FF: %f\n", new_value);
   }
 
   @Override

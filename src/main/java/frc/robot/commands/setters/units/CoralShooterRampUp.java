@@ -27,28 +27,16 @@ public class CoralShooterRampUp extends CS_Command {
 
     addRequirements(mortar);
 
-    this.desiredRPMLeft = CoralShooterConstants.RPMShootLeft;
-    this.desiredRPMRight = CoralShooterConstants.RPMShootRight;
     this.setTAGString("CORALSHOOTER_RAMPUP");
   }
 
-  public CoralShooterRampUp(DoubleSupplier desiredRPMLeft, DoubleSupplier desiredRPMRight) {
+  public CoralShooterRampUp(DoubleSupplier new_RPMLeft, DoubleSupplier new_RPMRight) {
     mortar = RobotContainer.mortar;
+    desiredRPMLeft = new_RPMLeft.getAsDouble();
+    desiredRPMRight = new_RPMRight.getAsDouble();
 
     addRequirements(mortar);
 
-    this.desiredRPMLeft = desiredRPMLeft.getAsDouble();
-    this.desiredRPMRight = desiredRPMRight.getAsDouble();
-    this.setTAGString("CORALSHOOTER_RAMPUP");
-  }
-
-  public CoralShooterRampUp(DoubleSupplier desiredRPM) {
-    mortar = RobotContainer.mortar;
-
-    addRequirements(mortar);
-
-    this.desiredRPMLeft = desiredRPM.getAsDouble();
-    this.desiredRPMRight = desiredRPM.getAsDouble();
     this.setTAGString("CORALSHOOTER_RAMPUP");
   }
 
@@ -79,15 +67,10 @@ public class CoralShooterRampUp extends CS_Command {
     double currentRPMLeft = mortar.getShooterRPMLeft();
     double currentRPMRight = mortar.getShooterRPMRight();
 
+    // TODO: Add RPMDifferentialTolerance check when needed
     atSetpoint =
         Math.abs(currentRPMLeft - desiredRPMLeft) <= RPMTolerance
-            && Math.abs(currentRPMRight - desiredRPMLeft) <= RPMTolerance;
-
-    atSetpoint =
-        Math.abs(currentRPMLeft - desiredRPMLeft) <= RPMTolerance
-            && Math.abs(currentRPMRight - desiredRPMRight) <= RPMTolerance
-            && Math.abs(currentRPMLeft - currentRPMRight) <= RPMDifferentialTolerance;
-
+            && Math.abs(currentRPMRight - desiredRPMRight) <= RPMTolerance;
     return atSetpoint;
   }
 }

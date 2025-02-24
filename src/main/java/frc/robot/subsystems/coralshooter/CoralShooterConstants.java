@@ -14,7 +14,7 @@ public class CoralShooterConstants {
 
   public static final double RPMTolerance = 50;
   public static final double RPMDifferentialTolerance = 10;
-  public static final double launchTimerSeconds = 0.2;
+  public static final double launchTimerSeconds = 0.2; // TODO: Tune this
 
   // CoralShooter Constants
   public static final double wheelRadiusMeters = Units.inchesToMeters(2);
@@ -27,8 +27,7 @@ public class CoralShooterConstants {
   public static final FlywheelConfig flywheelConfig =
       switch (RobotConstants.robotType) {
         case COMPBOT -> new FlywheelConfig(12, 2, (3.0 / 1.0), 2 * momentOfInertia, 6000.0);
-        case DEVBOT -> new FlywheelConfig(12, 2, (3.0 / 1.0), 2 * momentOfInertia, 6000.0);
-        case SIMBOT -> new FlywheelConfig(0, 0, (3.0 / 1.0), 2 * momentOfInertia, 6000.0);
+        case SIMBOT -> new FlywheelConfig(12, 2, (3.0 / 1.0), 2 * momentOfInertia, 6000.0);
         default -> new FlywheelConfig(0, 0, (3.0 / 1.0), 2 * momentOfInertia, 6000.0);
       };
 
@@ -42,15 +41,13 @@ public class CoralShooterConstants {
   // PID Constants
   public static final Gains gainsLeft =
       switch (RobotConstants.robotType) {
-        case COMPBOT -> new Gains(0.0001, 0.0, 0.0, 0.12, 0.00635, 0);
-        case DEVBOT -> new Gains(0.0001, 0.0, 0.0, 0.12, 0.00635, 0.0);
+        case COMPBOT -> new Gains(0.0001, 0.0, 0.0, 0.10133, 0.00612, 0);
         case SIMBOT -> new Gains(0.05, 0.0, 0.0, 0.12, 0.00635, 0.0);
         default -> new Gains(0.05, 0.0, 0.0, 0.12, 0.00635, 0.0);
       };
   public static final Gains gainsRight =
       switch (RobotConstants.robotType) {
-        case COMPBOT -> new Gains(0.0001, 0.0, 0.0, 0.12, 0.00635, 0);
-        case DEVBOT -> new Gains(0.0001, 0.0, 0.0, 0.12, 0.00635, 0.0);
+        case COMPBOT -> new Gains(0.0001, 0.0, 0.0, 0.11083, 0.00608, 0);
         case SIMBOT -> new Gains(0.05, 0.0, 0.0, 0.12, 0.00635, 0.0);
         default -> new Gains(0.05, 0.0, 0.0, 0.12, 0.00635, 0.0);
       };

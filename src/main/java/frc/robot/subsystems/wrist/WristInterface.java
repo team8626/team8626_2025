@@ -1,5 +1,7 @@
 package frc.robot.subsystems.wrist;
 
+import static frc.robot.subsystems.wrist.WristConstants.gains;
+
 public interface WristInterface {
   void setAngleDegrees(double new_Angle);
 
@@ -18,12 +20,12 @@ public interface WristInterface {
     protected boolean isEnabled = false;
     protected double currentAngleDegrees = 0; // Degrees
     protected double amps = 0;
+    protected double desiredAngleDegrees = 0; // degrees
 
     // protected double desiredAngleDegrees = 0;
 
-    protected double kP = 0.05;
-    protected double kI = 0.0;
-    protected double kD = 0.0;
-    protected double FF = 0.0;
+    protected double kP = gains.kP();
+    protected double kI = gains.kI();
+    protected double kD = gains.kD();
   }
 }

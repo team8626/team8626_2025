@@ -13,13 +13,13 @@ import edu.wpi.first.networktables.StringSubscriber;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.FieldConstants.CoralObjective;
-import frc.robot.FieldConstants.Reef;
-import frc.robot.FieldConstants.ReefLevel;
 import frc.robot.RobotConstants;
 import frc.robot.RobotConstants.UIConstants;
 import frc.robot.subsystems.CS_SubsystemBase;
 import java.util.Optional;
+import org.littletonrobotics.frc2025.FieldConstants.CoralObjective;
+import org.littletonrobotics.frc2025.FieldConstants.Reef;
+import org.littletonrobotics.frc2025.FieldConstants.ReefLevel;
 
 public class PresetManager extends CS_SubsystemBase {
   private String uiSelectedCoralLevel = "";

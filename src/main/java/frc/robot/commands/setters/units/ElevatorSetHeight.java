@@ -22,13 +22,12 @@ public class ElevatorSetHeight extends CS_Command {
 
     addRequirements(elevator);
 
-    this.setTAGString("ELEVATOR_MOVEUP");
+    this.setTAGString("ELEVATOR_SETHEIGHT");
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    printf("ElevatorMoveUp:initialize() - Setting Height - Current: %f, (%f)\n");
     elevator.setHeight(height.getAsDouble());
   }
 
@@ -47,7 +46,7 @@ public class ElevatorSetHeight extends CS_Command {
 
     double current_height = elevator.getHeight();
 
-    if (Math.abs(current_height - height.getAsDouble()) <= ElevatorConstants.tolerance) {
+    if (Math.abs(current_height - height.getAsDouble()) <= ElevatorConstants.toleranceInches) {
       retVal = true;
     }
     return retVal;

@@ -8,27 +8,27 @@ package frc.robot.commands.setters.units;
 
 import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
-import frc.robot.subsystems.elevator.ElevatorSubsystem;
+import frc.robot.subsystems.wrist.WristConstants;
+import frc.robot.subsystems.wrist.WristSubsystem;
+import java.util.function.DoubleSupplier;
 
-public class ElevatorMoveUp extends CS_Command {
-  private ElevatorSubsystem elevator;
-  private double previousHeight = 0;
-  private double offset = 0.5;
+public class WristSetAngle extends CS_Command {
+  private WristSubsystem wrist;
+  private DoubleSupplier angle;
 
-  public ElevatorMoveUp() {
-    elevator = RobotContainer.elevator;
+  public WristSetAngle(DoubleSupplier newAngle) {
+    wrist = RobotContainer.wrist;
+    angle = newAngle;
 
-    addRequirements(elevator);
+    addRequirements(wrist);
 
-    this.setTAGString("ELEVATOR_MOVEUP");
+    this.setTAGString("WRIST_SETANGLE");
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    printf("ElevatorMoveUp:initialize() - Moving Up - Current: %f, (%f)\n", previousHeight, offset);
-    previousHeight = elevator.getHeight();
-    elevator.move(offset);
+    wrist.setAngleDegrees(angle.getAsDouble());
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -43,9 +43,10 @@ public class ElevatorMoveUp extends CS_Command {
   @Override
   public boolean isFinished() {
     boolean retVal = false;
-    // printf("Current Height: %f\n", elevator.getHeight());
 
-    if (elevator.getHeight() > previousHeight + offset) {
+    double currentAngle = wrist.getAngleDegrees();
+
+    if (Math.abs(currentAngle - angle.getAsDouble()) <= WristConstants.toleranceDegrees) {
       retVal = true;
     }
     return retVal;

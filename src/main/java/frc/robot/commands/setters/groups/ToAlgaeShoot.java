@@ -17,7 +17,6 @@ import frc.robot.commands.setters.units.AlgaeShooterLaunch;
 import frc.robot.commands.setters.units.AlgaeShooterRampUp;
 import frc.robot.commands.setters.units.AlgaeShooterStop;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterSubsystem;
-import frc.robot.subsystems.presets.PresetManager;
 
 public class ToAlgaeShoot extends SequentialCommandGroup {
   private final Timer timer = new Timer();
@@ -30,7 +29,7 @@ public class ToAlgaeShoot extends SequentialCommandGroup {
         new ConditionalCommand(
             new SequentialCommandGroup(
                 Commodore.getSetStateCommand(CommodoreState.ALGAE_SHOOT_RAMPINGUP),
-                new AlgaeShooterRampUp(() -> PresetManager.getAlgaePreset().getRPM()) {
+                new AlgaeShooterRampUp() {
                   @Override
                   public void initialize() {
                     super.initialize();

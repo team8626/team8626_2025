@@ -8,7 +8,6 @@ import frc.utils.CS_Utils;
 public class WristSubsystem extends CS_SubsystemBase {
   private WristInterface wristInterface;
   private WristValues values;
-  private double desiredAngleDegrees = WristConstants.defaultAngleDegrees;
 
   public WristSubsystem(WristInterface subsystem_interface) {
     super();
@@ -22,7 +21,6 @@ public class WristSubsystem extends CS_SubsystemBase {
 
   public void setAngleDegrees(double new_Angle) {
     println("Setting angle to " + new_Angle);
-    desiredAngleDegrees = new_Angle;
     wristInterface.setAngleDegrees(new_Angle);
   }
 
@@ -80,6 +78,7 @@ public class WristSubsystem extends CS_SubsystemBase {
     SmartDashboard.putBoolean("Subsystem/Wrist/Enabled", values.isEnabled);
     SmartDashboard.putNumber("Subsystem/Wrist/currentAngleDegrees", values.currentAngleDegrees);
     SmartDashboard.putNumber("Subsystem/Wrist/amps", values.amps);
+    SmartDashboard.putNumber("Subsystem/Wrist/DesiredAngleDegrees", values.desiredAngleDegrees);
 
     //   double newAngle =
     //       SmartDashboard.getNumber(

@@ -8,29 +8,27 @@ package frc.robot.commands.setters.units;
 
 import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
-import frc.robot.subsystems.elevator.ElevatorSubsystem;
+import frc.robot.subsystems.climber.ClimberConstants;
+import frc.robot.subsystems.climber.ClimberSubsystem;
+import java.util.function.DoubleSupplier;
 
-public class ElevatorMoveDown extends CS_Command {
-  private ElevatorSubsystem elevator;
-  private double previousHeight = 0;
-  private double offset = 0.5;
+public class ClimberSetAngle extends CS_Command {
+  private ClimberSubsystem climber;
+  private DoubleSupplier angle;
 
-  public ElevatorMoveDown() {
-    elevator = RobotContainer.elevator;
+  public ClimberSetAngle(DoubleSupplier newAngle) {
+    climber = RobotContainer.climber;
+    angle = newAngle;
 
-    addRequirements(elevator);
+    addRequirements(climber);
 
-    this.setTAGString("ELEVATOR_MOVEDOWN");
+    this.setTAGString("WRIST_SETANGLE");
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    previousHeight = elevator.getHeight();
-    elevator.move(-1 * offset);
-    printf(
-        "ElevatorMoveDown:initialize() - Moving Down - Current: %f, (%f)\n",
-        previousHeight, offset);
+    climber.setAngleDegrees(angle.getAsDouble());
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -46,7 +44,9 @@ public class ElevatorMoveDown extends CS_Command {
   public boolean isFinished() {
     boolean retVal = false;
 
-    if (elevator.getHeight() < (previousHeight - offset)) {
+    double currentAngle = climber.getAngleDegrees();
+
+    if (Math.abs(currentAngle - angle.getAsDouble()) <= ClimberConstants.toleranceDegrees) {
       retVal = true;
     }
     return retVal;
