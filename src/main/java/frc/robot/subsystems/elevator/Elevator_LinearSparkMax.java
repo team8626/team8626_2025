@@ -16,7 +16,6 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import frc.robot.subsystems.CS_InterfaceBase;
 import frc.robot.subsystems.elevator.ElevatorConstants.ElevatorStates.ElevatorState;
 
@@ -30,8 +29,7 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
   private final SparkClosedLoopController controller;
   private final RelativeEncoder encoder;
 
-  ElevatorFeedforward elevatorFF =
-      new ElevatorFeedforward(gains.kS(), gains.kV(), gains.kA());
+  ElevatorFeedforward elevatorFF = new ElevatorFeedforward(gains.kS(), gains.kV(), gains.kA());
 
   private boolean isEnabled = false;
 
@@ -106,7 +104,6 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
     controller = motor.getClosedLoopController();
     controller.setReference(0, ControlType.kDutyCycle);
     desiredHeight = ElevatorConstants.initHeightInches;
-
   }
 
   @Override
@@ -135,11 +132,12 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
     // controller.setReference(desiredHeight, ControlType.kPosition, ClosedLoopSlot.kSlot1);
 
     controller.setReference(
-      desiredHeight,
+        desiredHeight,
         ControlType.kPosition,
         ClosedLoopSlot.kSlot1,
         elevatorFF.calculate(desiredHeight),
-        ArbFFUnits.kVoltage);  }
+        ArbFFUnits.kVoltage);
+  }
 
   private double getElevatorHeight() {
     return encoder.getPosition();
