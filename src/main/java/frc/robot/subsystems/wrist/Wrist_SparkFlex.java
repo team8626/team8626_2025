@@ -1,6 +1,5 @@
 package frc.robot.subsystems.wrist;
 
-import static frc.robot.subsystems.wrist.WristConstants.gains;
 import static frc.robot.subsystems.wrist.WristConstants.wristConfig;
 
 import com.revrobotics.AbsoluteEncoder;
@@ -14,9 +13,8 @@ import com.revrobotics.spark.config.AbsoluteEncoderConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.MathUtil;
 import frc.robot.subsystems.CS_InterfaceBase;
-import frc.robot.subsystems.climber.ClimberConstants;
 
 public class Wrist_SparkFlex implements WristInterface, CS_InterfaceBase {
 
@@ -26,31 +24,33 @@ public class Wrist_SparkFlex implements WristInterface, CS_InterfaceBase {
   private final SparkClosedLoopController controller;
   private AbsoluteEncoder encoder;
   private final AbsoluteEncoderConfig encoderConfig = new AbsoluteEncoderConfig();
-  private double setPointDegrees;
+  private double desiredAngleDegree;
 
-  SimpleMotorFeedforward leftFF = new SimpleMotorFeedforward(gains.kS(), gains.kV(), gains.kA());
+  // SimpleMotorFeedforward leftFF = new SimpleMotorFeedforward(gains.kS(), gains.kV(), gains.kA());
 
   private boolean isEnabled = false;
 
   public Wrist_SparkFlex() {
     // Setup configuration for the encoder
     encoderConfig
-        .positionConversionFactor(ClimberConstants.positionConversionFactor)
-        .velocityConversionFactor(ClimberConstants.velocityConversionFactor);
+        .inverted(false)
+        .positionConversionFactor(WristConstants.positionConversionFactor)
+        .velocityConversionFactor(WristConstants.velocityConversionFactor);
 
     // Setup configuration for the motor
     config = new SparkFlexConfig();
 
-    config.inverted(false).idleMode(IdleMode.kBrake).smartCurrentLimit(40);
+    config.inverted(true).idleMode(IdleMode.kBrake).smartCurrentLimit(WristConstants.maxCurrent);
 
     config
         .closedLoop
         .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
         // Set PID values for position control.
-        .p(ClimberConstants.gains.kP())
-        .i(ClimberConstants.gains.kI())
-        .d(ClimberConstants.gains.kD())
-        .outputRange(-1, 1);
+        .p(WristConstants.gains.kP())
+        .i(WristConstants.gains.kI())
+        .d(WristConstants.gains.kD())
+        .outputRange(-1, 1)
+        .positionWrappingEnabled(false);
 
     config.apply(encoderConfig);
 
@@ -68,8 +68,9 @@ public class Wrist_SparkFlex implements WristInterface, CS_InterfaceBase {
     values.isEnabled = isEnabled;
     values.currentAngleDegrees = getAngleDegrees();
     values.amps = motor.getOutputCurrent();
+    values.desiredAngleDegrees = this.desiredAngleDegree;
 
-    controller.setReference(setPointDegrees, ControlType.kPosition);
+    controller.setReference(desiredAngleDegree, ControlType.kPosition);
   }
 
   public double getAngleDegrees() {
@@ -79,20 +80,9 @@ public class Wrist_SparkFlex implements WristInterface, CS_InterfaceBase {
   // added to fix error at top of class (im hope this doesn't break anything)
   @Override
   public void setAngleDegrees(double new_angle) {
-    setPointDegrees = new_angle;
+    desiredAngleDegree =
+        MathUtil.clamp(new_angle, WristConstants.minAngleDegrees, WristConstants.maxAngleDegrees);
   }
-
-  // @Override
-  // public void start(double new_setpoint) {
-  //   controller.setReference(new_setpoint, ControlType.kDutyCycle);
-  //   isEnabled = true;
-  // }
-
-  // @Override
-  // public void stop() {
-  //   controller.setReference(0, ControlType.kDutyCycle);
-  //   isEnabled = false;
-  // }
 
   @Override
   public void setPID(double newkP, double newkI, double newkD) {
