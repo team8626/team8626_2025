@@ -7,7 +7,7 @@ public class CoralShooterConstants {
 
   // Tuned Values
   public static final double RPMShootLeft = 1275;
-  public static final double RPMShoolLeft = 1275;
+  public static final double RPMShootRight = 1275;
   public static final double RPMIntake = -300;
   public static final double launcherShootSetpoint = -1.0;
   public static final double launcherIntakeSetpoint = 0.3;
@@ -41,13 +41,13 @@ public class CoralShooterConstants {
   // PID Constants
   public static final Gains gainsLeft =
       switch (RobotConstants.robotType) {
-        case COMPBOT -> new Gains(0.0001, 0.0, 0.0, 0.12, 0.00635, 0);
+        case COMPBOT -> new Gains(0.0001, 0.0, 0.0, 0.10133, 0.00612, 0);
         case SIMBOT -> new Gains(0.05, 0.0, 0.0, 0.12, 0.00635, 0.0);
         default -> new Gains(0.05, 0.0, 0.0, 0.12, 0.00635, 0.0);
       };
   public static final Gains gainsRight =
       switch (RobotConstants.robotType) {
-        case COMPBOT -> new Gains(0.0001, 0.0, 0.0, 0.12, 0.00635, 0);
+        case COMPBOT -> new Gains(0.0001, 0.0, 0.0, 0.11083, 0.00608, 0);
         case SIMBOT -> new Gains(0.05, 0.0, 0.0, 0.12, 0.00635, 0.0);
         default -> new Gains(0.05, 0.0, 0.0, 0.12, 0.00635, 0.0);
       };
