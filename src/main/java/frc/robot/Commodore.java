@@ -60,7 +60,8 @@ public class Commodore extends CS_SubsystemBase {
 
     CLIMB_PREP,
     CLIMB_READY,
-    CLIMB_NOW
+    CLIMB_NOW,
+    GO_TO_POSITION
   }
 
   // Private Constructor to prevent instantiation
@@ -114,7 +115,11 @@ public class Commodore extends CS_SubsystemBase {
           // If we are in a CORAL_SHOOT_* state, we can toggle to IDLE
           || ((newState == CommodoreState.CORAL_SHOOT)
               && ((currentState == CommodoreState.CORAL_SHOOT_LAUNCHING)
-                  || (currentState == CommodoreState.CORAL_SHOOT_RAMPINGUP)))) {
+                  || (currentState == CommodoreState.CORAL_SHOOT_RAMPINGUP)))
+          // If we are in a ALGAE_SHOOT* state, we can toggle to IDLE
+          || ((newState == CommodoreState.ALGAE_SHOOT)
+              && ((currentState == CommodoreState.ALGAE_SHOOT_LAUNCHING)
+                  || (currentState == CommodoreState.ALGAE_SHOOT_RAMPINGUP)))) {
         newState = CommodoreState.IDLE;
         override = true;
         isToggleState = false;

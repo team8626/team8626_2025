@@ -12,6 +12,7 @@ import frc.robot.subsystems.Dashboard;
 import frc.robot.subsystems.Dashboard.GamePieceState;
 import frc.robot.subsystems.coralshooter.CoralShooterConstants;
 import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
+import java.util.function.DoubleSupplier;
 
 public class CoralShooterRampUp extends CS_Command {
   private CoralShooterSubsystem mortar;
@@ -23,6 +24,16 @@ public class CoralShooterRampUp extends CS_Command {
 
   public CoralShooterRampUp() {
     mortar = RobotContainer.mortar;
+
+    addRequirements(mortar);
+
+    this.setTAGString("CORALSHOOTER_RAMPUP");
+  }
+
+  public CoralShooterRampUp(DoubleSupplier new_RPMLeft, DoubleSupplier new_RPMRight) {
+    mortar = RobotContainer.mortar;
+    desiredRPMLeft = new_RPMLeft.getAsDouble();
+    desiredRPMRight = new_RPMRight.getAsDouble();
 
     addRequirements(mortar);
 

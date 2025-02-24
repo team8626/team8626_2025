@@ -1,8 +1,12 @@
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.util.Units;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Contains various field dimensions and useful reference points. Dimensions are in meters, and sets
@@ -39,9 +43,32 @@ public class RobotConstants {
   // Units.inchesToMeters(0));
 
   /** Defines the robot's physical dimensions. */
-  public static double FrameWidth = Units.inchesToMeters(24);
+  public static double FrameWidthInches = 27;
 
-  public static double FrameLength = Units.inchesToMeters(24);
+  public static double FrameLengthInches = 27;
+  public static double bumperThicknessInches = 3;
+
+  //   public static double robotCenterToEdge = Units.inchesToMeters(FrameLength + bumperThickness /
+  // 2);
+
+  private static double robotCenterOffsetX = FrameLengthInches / 2.0 + bumperThicknessInches;
+  private static double robotCenterOffsetY = FrameWidthInches / 2.0 + bumperThicknessInches;
+  private static double robotCenterOffsetTheta = 0;
+
+  public static Pose2d robotCenterOffset =
+      new Pose2d(
+          Units.inchesToMeters(robotCenterOffsetX),
+          Units.inchesToMeters(robotCenterOffsetY),
+          Rotation2d.fromDegrees(robotCenterOffsetTheta));
+
+  // /** Defines position of the cameras on the robot. */
+  //   public static class Vision {
+  //     // April tag camera constants
+  //     public static final String kATBackCameraName = "Arducam_AT002";
+  //     public static final Transform3d kATRobotToBackCam =
+  //         new Transform3d(
+  //             new Translation3d(-0.222275, -0.276124, 0.251296),
+  //             new Rotation3d(0, Units.degreesToRadians(-30), Units.degreesToRadians(167.04746)));
 
   public static Pose3d mastPoseOffset =
       new Pose3d(
@@ -108,6 +135,11 @@ public class RobotConstants {
   // ****************************************************************************************
   // UI Constants
   public static class UIConstants {
-    public static final String[] allowedCORALLevels = {"L1", "L4"};
+    public static final List<String> allowedCoralLevels = Arrays.asList("L1", "L2", "L3", "L4");
+    public static final List<String> allowedIntakeSides = Arrays.asList("LEFT", "RIGHT");
+    public static final List<String> allowedCoralBranches =
+        Arrays.asList("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L");
+    public static final List<String> allowedAlgaePositions =
+        Arrays.asList("AB", "CD", "EF", "GH", "IJ", "KL");
   }
 }
