@@ -170,4 +170,14 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
         MathUtil.clamp(
             new_heightInches, ElevatorConstants.minHeightInches, ElevatorConstants.maxHeightInches);
   }
+
+  @Override
+  public void goUp(double offsetInches) {
+    desiredHeight += offsetInches;
+  }
+
+  @Override
+  public void goDown(double offsetInches) {
+    desiredHeight -= offsetInches;
+  }
 }

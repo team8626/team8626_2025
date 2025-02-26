@@ -30,6 +30,10 @@ public interface ElevatorInterface {
 
   public abstract double getHeightInches();
 
+  public abstract void goUp(double offsetInches);
+
+  public abstract void goDown(double offsetInches);
+
   public abstract void setHeightInches(double heightInches);
 
   public abstract void setElevatorkP(double kP);

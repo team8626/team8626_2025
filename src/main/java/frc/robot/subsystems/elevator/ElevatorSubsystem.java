@@ -100,4 +100,12 @@ public class ElevatorSubsystem extends CS_SubsystemBase {
   public double getCharacterization() {
     return values.currentHeight;
   }
+
+  public void goUp(double offsetInches) {
+    elevatorInterface.goUp(offsetInches);
+  }
+
+  public void goDown(double offsetInches) {
+    elevatorInterface.goDown(offsetInches);
+  }
 }

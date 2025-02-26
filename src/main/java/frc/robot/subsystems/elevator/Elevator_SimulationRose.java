@@ -56,4 +56,16 @@ public class Elevator_SimulationRose implements ElevatorInterface, CS_InterfaceB
     desiredHeight = heightInches;
     println("Setting height to: " + heightInches);
   }
+
+  @Override
+  public void goUp(double offsetInches) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'goUp'");
+  }
+
+  @Override
+  public void goDown(double offsetInches) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'goDown'");
+  }
 }
