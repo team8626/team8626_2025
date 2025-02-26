@@ -98,4 +98,14 @@ public class Wrist_SparkFlex implements WristInterface, CS_InterfaceBase {
   public void runCharacterization(double input) {
     motor.setVoltage(input);
   }
+
+  @Override
+  public void goUp(double offsetDegrees) {
+    desiredAngleDegree += offsetDegrees;
+  }
+
+  @Override
+  public void goDown(double offsetDegrees) {
+    desiredAngleDegree -= offsetDegrees;
+  }
 }

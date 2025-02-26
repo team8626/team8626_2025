@@ -58,4 +58,16 @@ public class Wrist_Sim implements WristInterface, CS_InterfaceBase {
   public void setPID(double newkP, double newkI, double newkD) {
     printf("New PID: %f, %f, %f \n", newkP, newkI, newkD);
   }
+
+  @Override
+  public void goUp(double offsetDegrees) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'goUp' in Simulation");
+  }
+
+  @Override
+  public void goDown(double offsetDegrees) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'goDown' in Simulation");
+  }
 }

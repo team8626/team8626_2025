@@ -7,6 +7,10 @@ public interface WristInterface {
 
   double getAngleDegrees();
 
+  void goUp(double offsetDegrees);
+
+  void goDown(double offsetDegrees);
+
   /** Run arm pivot at voltage */
   default void runCharacterization(double input) {}
 

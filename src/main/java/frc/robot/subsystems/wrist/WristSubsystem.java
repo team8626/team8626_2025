@@ -44,6 +44,14 @@ public class WristSubsystem extends CS_SubsystemBase {
     wristInterface.setPID(values.kP, values.kI, newkD);
   }
 
+  public void goUp(double offsetDegrees) {
+    wristInterface.goUp(offsetDegrees);
+  }
+
+  public void goDown(double offsetDegrees) {
+    wristInterface.goDown(offsetDegrees);
+  }
+
   @Override
   public void CS_periodic() {
     wristInterface.updateInputs(values);
