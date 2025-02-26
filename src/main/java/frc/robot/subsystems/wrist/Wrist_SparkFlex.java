@@ -33,14 +33,14 @@ public class Wrist_SparkFlex implements WristInterface, CS_InterfaceBase {
   public Wrist_SparkFlex() {
     // Setup configuration for the encoder
     encoderConfig
-        .inverted(false)
+        .inverted(true)
         .positionConversionFactor(WristConstants.positionConversionFactor)
         .velocityConversionFactor(WristConstants.velocityConversionFactor);
 
     // Setup configuration for the motor
     config = new SparkFlexConfig();
 
-    config.inverted(true).idleMode(IdleMode.kBrake).smartCurrentLimit(WristConstants.maxCurrent);
+    config.inverted(false).idleMode(IdleMode.kBrake).smartCurrentLimit(WristConstants.maxCurrent);
 
     config
         .closedLoop
@@ -49,18 +49,19 @@ public class Wrist_SparkFlex implements WristInterface, CS_InterfaceBase {
         .p(WristConstants.gains.kP())
         .i(WristConstants.gains.kI())
         .d(WristConstants.gains.kD())
-        .outputRange(-1, 1)
+        .outputRange(-1, .2)
         .positionWrappingEnabled(false);
 
     config.apply(encoderConfig);
 
     motor = new SparkFlex(wristConfig.CANID(), MotorType.kBrushless);
-    motor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    motor.configure(config, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
 
     encoder = motor.getAbsoluteEncoder();
 
     controller = motor.getClosedLoopController();
     controller.setReference(0, ControlType.kDutyCycle);
+    desiredAngleDegree = WristConstants.restAngleDegrees;
   }
 
   @Override
@@ -69,6 +70,7 @@ public class Wrist_SparkFlex implements WristInterface, CS_InterfaceBase {
     values.currentAngleDegrees = getAngleDegrees();
     values.amps = motor.getOutputCurrent();
     values.desiredAngleDegrees = this.desiredAngleDegree;
+    values.appliedOutput = motor.getAppliedOutput();
 
     controller.setReference(desiredAngleDegree, ControlType.kPosition);
   }

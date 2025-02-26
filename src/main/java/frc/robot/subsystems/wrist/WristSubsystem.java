@@ -78,7 +78,8 @@ public class WristSubsystem extends CS_SubsystemBase {
     SmartDashboard.putBoolean("Subsystem/Wrist/Enabled", values.isEnabled);
     SmartDashboard.putNumber("Subsystem/Wrist/currentAngleDegrees", values.currentAngleDegrees);
     SmartDashboard.putNumber("Subsystem/Wrist/amps", values.amps);
-    SmartDashboard.putNumber("Subsystem/Wrist/DesiredAngleDegrees", values.desiredAngleDegrees);
+    SmartDashboard.putNumber("Subsystem/Wrist/desiredAngleDegrees", values.desiredAngleDegrees);
+    SmartDashboard.putNumber("Subsystem/Wrist/appliedOutput", values.appliedOutput);
 
     //   double newAngle =
     //       SmartDashboard.getNumber(
