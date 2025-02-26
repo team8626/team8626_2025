@@ -14,7 +14,7 @@ public class AlgaeShooterConstants {
   public static final int maxCurrent = 30; // Amps
 
   public static final double shooterRPMTolerance = 50;
-  public static final double launchTimerSeconds = 0.2;
+  public static final double launchTimerSeconds = 0.5;
 
   // AlgaeShooter Constants
   public static final double wheelRadiusMeters = Units.inchesToMeters(2);
@@ -26,9 +26,9 @@ public class AlgaeShooterConstants {
   // Flywheel Config
   public static final FlywheelConfig flywheelConfig =
       switch (RobotConstants.robotType) {
-        case COMPBOT -> new FlywheelConfig(9, 10, (3.0 / 1.0), 2 * momentOfInertia, 6000.0);
-        case SIMBOT -> new FlywheelConfig(9, 10, (3.0 / 1.0), 2 * momentOfInertia, 6000.0);
-        default -> new FlywheelConfig(0, 0, (3.0 / 1.0), 2 * momentOfInertia, 6000.0);
+        case COMPBOT -> new FlywheelConfig(9, 10, (36 / 24), 2 * momentOfInertia, 6000.0);
+        case SIMBOT -> new FlywheelConfig(9, 10, (36 / 24), 2 * momentOfInertia, 6000.0);
+        default -> new FlywheelConfig(0, 0, (36 / 24), 2 * momentOfInertia, 6000.0);
       };
 
   // Launcher FLywheel Config
