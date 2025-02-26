@@ -6,12 +6,16 @@
 
 package frc.robot.subsystems.drive;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.OperatorConstants;
 import frc.utils.CS_XboxController;
 import java.io.File;
+import java.util.function.Supplier;
 
 public class CS_DriveSubsystemIO_Swerve extends SwerveSubsystem implements CS_DriveSubsystemIO {
 
@@ -40,8 +44,31 @@ public class CS_DriveSubsystemIO_Swerve extends SwerveSubsystem implements CS_Dr
   }
 
   @Override
-  public Pose3d getPose3d() {
-    // TODO Auto-generated method stub
-    return new Pose3d(getPose());
+  public Command driveToPose(Supplier<Pose2d> newPoseSupplier) {
+    printf("Driving to Pose: %s", newPoseSupplier.get());
+    return super.driveToPose(newPoseSupplier.get());
+  }
+
+  /**
+   * Use PathPlanner Path finding to go to a point on the field.
+   *
+   * @param pose Target {@link Pose2d} to go to.
+   * @return PathFinding command
+   */
+  public Command driveToPose2(Pose2d pose) {
+    // Create the constraints to use while pathfinding
+    PathConstraints constraints =
+        new PathConstraints(
+            swerveDrive.getMaximumChassisVelocity(),
+            4.0,
+            swerveDrive.getMaximumChassisAngularVelocity(),
+            Units.degreesToRadians(720));
+
+    // Since AutoBuilder is configured, we can use it to build pathfinding commands
+    return AutoBuilder.pathfindToPose(
+        pose,
+        constraints,
+        edu.wpi.first.units.Units.MetersPerSecond.of(0) // Goal end velocity in meters/sec
+        );
   }
 }
