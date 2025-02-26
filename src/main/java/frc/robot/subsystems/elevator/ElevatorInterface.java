@@ -16,6 +16,7 @@ public interface ElevatorInterface {
   public static class ElevatorValues {
     protected ElevatorState state = ElevatorState.IDLE;
     protected boolean isEnabled = false;
+    protected boolean isZeroed = false;
     protected double currentHeight = 0; // Inches
     protected double desiredHeight = 0; // Inches
     protected double amps = 0; // Amps

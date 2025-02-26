@@ -2,6 +2,8 @@ package frc.robot.subsystems.elevator;
 
 import static frc.robot.subsystems.elevator.ElevatorConstants.gains;
 
+import javax.security.auth.callback.ConfirmationCallback;
+
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase.ControlType;
@@ -32,6 +34,9 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
   ElevatorFeedforward elevatorFF = new ElevatorFeedforward(gains.kS(), gains.kV(), gains.kA());
 
   private boolean isEnabled = false;
+  private boolean isZeroed = false;
+  private boolean isZeroing = false;
+
 
   public Elevator_LinearSparkMax() {
 
@@ -103,17 +108,21 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
     // Setup the controller
     controller = motor.getClosedLoopController();
     controller.setReference(0, ControlType.kDutyCycle);
-    desiredHeight = ElevatorConstants.initHeightInches;
+
+    // Zero the elvator
+    this.reset();
   }
 
   @Override
   public void updateInputs(ElevatorValues values) {
 
-    values.currentHeight = getElevatorHeight();
-    values.desiredHeight = desiredHeight;
-    values.amps = motor.getOutputCurrent();
-    values.temperature = motor.getMotorTemperature();
-    values.isEnabled = isEnabled;
+
+    values.currentHeight = this.getElevatorHeight();
+    values.desiredHeight = this.desiredHeight;
+    values.amps = this.motor.getOutputCurrent();
+    values.temperature = this.motor.getMotorTemperature();
+    values.isEnabled = this.isEnabled;
+    values.isZeroed = this.isZeroed;
 
     if (encoder.getVelocity() > 0) {
       values.state = ElevatorState.MOVINGUP;
@@ -130,17 +139,37 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
     }
 
     // controller.setReference(desiredHeight, ControlType.kPosition, ClosedLoopSlot.kSlot1);
-
+    if(this.isZeroed){
     controller.setReference(
         desiredHeight,
         ControlType.kPosition,
         ClosedLoopSlot.kSlot1,
         elevatorFF.calculate(desiredHeight),
         ArbFFUnits.kVoltage);
+    } else {
+      if(this.isZeroing){
+        if(this.motor.getOutputCurrent() > 30){
+          controller.setReference(0, ControlType.kDutyCycle);
+          this.isZeroed = true;
+          this.isZeroing = false;
+          this.desiredHeight = ElevatorConstants.initHeightInches;
+        }
+      } else {
+        // Not Zeroed and not Zeroing yet...
+        this.reset();
+      }
+    }
   }
 
   private double getElevatorHeight() {
     return encoder.getPosition();
+  }
+
+  // Zero the elevator by srunning it reverse until it hits the bottom ---Gently---
+  private void reset(){
+    this.isZeroed = false;
+    this.isZeroing = true;
+    controller.setReference(-.25, ControlType.kDutyCycle);
   }
 
   @Override
