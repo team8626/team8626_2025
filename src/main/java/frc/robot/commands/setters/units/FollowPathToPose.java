@@ -3,46 +3,37 @@ package frc.robot.commands.setters.units;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
 import frc.robot.subsystems.drive.CS_DriveSubsystem;
 import java.util.function.Supplier;
 
-/**
- * @deprecated This class is obsolete and scheduled for removal.
- */
-@Deprecated
-public class DriveToPose extends CS_Command {
+public class FollowPathToPose extends CS_Command {
   private Supplier<Pose2d> poseSupplier;
   private CS_DriveSubsystem drivebase;
 
-  Pose2d targetPose;
-  PathConstraints constraints;
-  Command pathfindingCommand;
+  private Pose2d targetPose;
+  private PathConstraints constraints;
+  private Command pathfindingCommand;
 
-  public DriveToPose(Supplier<Pose2d> poseSupplier) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    // For example: addRequirements(Robot.m_subsystem);
+  public FollowPathToPose(Supplier<Pose2d> poseSupplier) {
     drivebase = RobotContainer.drivebase;
     this.poseSupplier = poseSupplier;
 
     // addRequirements(drive);
 
-    this.setTAGString("DRIVETOPOSE");
+    this.setTAGString("FOLLOWPATHTOPOSE");
   }
 
   @Override
   public void initialize() {
-    // drive.driveToPose(poseSupplier).schedule();
     targetPose = poseSupplier.get();
 
-    // Create the constraints to use while pathfinding
     constraints =
-        new PathConstraints(5.0, 4.0, Units.degreesToRadians(360), Units.degreesToRadians(360));
+        new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI); // The constraints for this path.
+    // constraints = PathConstraints.unlimitedConstraints(12.0); // You can also use unlimited
 
-    // Since AutoBuilder is configured, we can use it to build pathfinding commands
     pathfindingCommand = AutoBuilder.pathfindToPose(targetPose, constraints, 0.0);
     pathfindingCommand.schedule();
   }

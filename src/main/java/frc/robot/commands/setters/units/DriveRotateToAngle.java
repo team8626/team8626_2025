@@ -12,8 +12,10 @@ import frc.robot.commands.CS_Command;
 import frc.robot.subsystems.drive.CS_DriveSubsystem;
 import java.util.function.Supplier;
 
-// TODO: This is UNUSED. Remove if not needed.
-
+/**
+ * @deprecated This class is obsolete and scheduled for removal.
+ */
+@Deprecated
 public class DriveRotateToAngle extends CS_Command {
   private Supplier<Pose2d> poseSupplier;
   private CS_DriveSubsystem drivebase;
