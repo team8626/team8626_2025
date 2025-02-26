@@ -2,8 +2,6 @@ package frc.robot.subsystems.elevator;
 
 import static frc.robot.subsystems.elevator.ElevatorConstants.gains;
 
-import javax.security.auth.callback.ConfirmationCallback;
-
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase.ControlType;
@@ -36,7 +34,6 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
   private boolean isEnabled = false;
   private boolean isZeroed = false;
   private boolean isZeroing = false;
-
 
   public Elevator_LinearSparkMax() {
 
@@ -116,7 +113,6 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
   @Override
   public void updateInputs(ElevatorValues values) {
 
-
     values.currentHeight = this.getElevatorHeight();
     values.desiredHeight = this.desiredHeight;
     values.amps = this.motor.getOutputCurrent();
@@ -139,16 +135,16 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
     }
 
     // controller.setReference(desiredHeight, ControlType.kPosition, ClosedLoopSlot.kSlot1);
-    if(this.isZeroed){
-    controller.setReference(
-        desiredHeight,
-        ControlType.kPosition,
-        ClosedLoopSlot.kSlot1,
-        elevatorFF.calculate(desiredHeight),
-        ArbFFUnits.kVoltage);
+    if (this.isZeroed) {
+      controller.setReference(
+          desiredHeight,
+          ControlType.kPosition,
+          ClosedLoopSlot.kSlot1,
+          elevatorFF.calculate(desiredHeight),
+          ArbFFUnits.kVoltage);
     } else {
-      if(this.isZeroing){
-        if(this.motor.getOutputCurrent() > 30){
+      if (this.isZeroing) {
+        if (this.motor.getOutputCurrent() > 30) {
           controller.setReference(0, ControlType.kDutyCycle);
           this.isZeroed = true;
           this.isZeroing = false;
@@ -166,7 +162,7 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
   }
 
   // Zero the elevator by srunning it reverse until it hits the bottom ---Gently---
-  private void reset(){
+  private void reset() {
     this.isZeroed = false;
     this.isZeroing = true;
     controller.setReference(-.25, ControlType.kDutyCycle);
