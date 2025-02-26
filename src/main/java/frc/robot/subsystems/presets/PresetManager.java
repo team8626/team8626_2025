@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.BooleanSubscriber;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StringSubscriber;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -16,10 +17,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotConstants;
 import frc.robot.RobotConstants.UIConstants;
 import frc.robot.subsystems.CS_SubsystemBase;
+import frc.robot.subsystems.presets.AlgaePreset.AlgaeLevelPreset;
+import frc.robot.subsystems.presets.AlgaePreset.AlgaePosition;
 import java.util.Optional;
 import org.littletonrobotics.frc2025.FieldConstants.CoralObjective;
 import org.littletonrobotics.frc2025.FieldConstants.Reef;
 import org.littletonrobotics.frc2025.FieldConstants.ReefLevel;
+import org.littletonrobotics.frc2025.util.AllianceFlipUtil;
 
 public class PresetManager extends CS_SubsystemBase {
   private String uiSelectedCoralLevel = "";
@@ -31,6 +35,7 @@ public class PresetManager extends CS_SubsystemBase {
   private String uiCurrentIntakeSide = "----";
   private String uiCurrentCoralBranch = "-";
   private String uiCurrentAlgaeFace = "--";
+  private static boolean uiCurrentUseDtp = true;
 
   private final StringSubscriber coralBranchSub =
       NetworkTableInstance.getDefault()
@@ -48,13 +53,17 @@ public class PresetManager extends CS_SubsystemBase {
       NetworkTableInstance.getDefault()
           .getStringTopic("SmartDashboard/Presets/UI/SelectedIntakeSide")
           .subscribe("----");
+  private final BooleanSubscriber dtpEnabledSub =
+      NetworkTableInstance.getDefault()
+          .getBooleanTopic("SmartDashboard/Presets/UI/SelectedDTPEnabled")
+          .subscribe(true);
 
   // private CoralPreset autoCoralPreset = new CoralPreset( "autoPreset", new Pose2d(), 0.0, false);
 
   private static CoralPreset currentCoralPreset =
       new CoralPreset("autoPreset", new Pose2d(), 0.0, 0.0, false);
   private static AlgaePreset currentAlgaePreset =
-      new AlgaePreset("autoPreset", new Pose2d(), 0.0, 0.0, 0.0, false);
+      new AlgaePreset("autoPreset", new Pose2d(), AlgaeLevelPreset.FLOOR, false);
 
   // Singleton instance
   private static PresetManager instance;
@@ -69,28 +78,6 @@ public class PresetManager extends CS_SubsystemBase {
 
   private PresetManager() {
     super();
-
-    // Display Reef Poses
-
-    // for(int i = 0 ; i<12 ; i++){
-
-    //   printf("Banch: %f ; %f",
-    //   FieldConstants.Reef.branchPositions[i].fillRight().get3dPose.getX(),
-    //   FieldConstants.Reef.branchPositions[i].fillRight().get3dPose.getY() );
-    // }
-    // int i = 0;
-    // for (var tree : FieldConstants.Reef.branchPositions) {
-
-    //   // Map<frc.robot.FieldConstants.ReefHeight, Pose3d> branch = new HashMap();
-    //   // for(branch : )
-    //   // double x = tree.get("L1").getX();
-    //   // double y = tree.get("L1").getY();
-    //   printf("Branch %c: %f, %f", 65 + i + 11, 0.0, 0.0);
-    //   printf("%s", tree.get("L1").toString());
-    //   i++;
-    // }
-
-    //
   }
 
   @Override
@@ -101,29 +88,26 @@ public class PresetManager extends CS_SubsystemBase {
 
   // Return the current presets
   public static CoralPreset getCoralPreset() {
+    // TODO: Return null if not ready or have an isCoralPresetReady() method
     return currentCoralPreset;
   }
 
   public static AlgaePreset getAlgaePreset() {
+    // TODO: Return null if not ready or have an isAlgaePresetReady() method
     return currentAlgaePreset;
   }
 
-  // private StructPublisher<Pose2d> robotPostPublisher =
-  //     NetworkTableInstance.getDefault()
-  //         .getStructTopic("SmartDashboard/Presets/Pose2d", Pose2d.struct)
-  //         .publish();
+  public static boolean usingDtp() {
+    return uiCurrentUseDtp;
+  }
 
-  //   private static double m_ooomf = 3; // m.s-1
-  //   private static double m_angleAdjust = -7;
-  //   private static double m_launchRPMTopMultiplier = 1;
+  public static boolean isCoralPresetReady() {
+    return currentCoralPreset.isReady();
+  }
 
-  // // public void set(Preset newPreset) {
-  //   currentPreset = newPreset;
-  // }
-
-  // public Preset get() {
-  //   return currentPreset;
-  // }
+  public static boolean isAlgaePresetReady() {
+    return currentAlgaePreset.isReady();
+  }
 
   //   public static Preset getAimAndShootPreset(Pose2d robotPose) {
 
@@ -267,32 +251,17 @@ public class PresetManager extends CS_SubsystemBase {
     SmartDashboard.putString("Presets/UI/AllianceColor", alliance);
 
     // Get Values from UI
-    this.uiSelectedCoralLevel =
-        SmartDashboard.getString("Presets/UI/SelectedCoralLevel", "UNKNOWN");
-    // this.uiSelectedCoralBranch =
-    //     SmartDashboard.getString("Presets/UI/SelectedCoralBranch", "UNKNOWN");
-
-    this.uiSelectedAlgaeFace = SmartDashboard.getString("Presets/UI/SelectedAlgaeFace", "UNKNOWN");
-    this.uiSelectedIntakeSide =
-        SmartDashboard.getString("Presets/UI/SelectedIntakeSide", "UNKNOWN");
-
     this.uiSelectedCoralBranch = coralBranchSub.get();
     this.uiSelectedCoralLevel = coralLevelSub.get();
     this.uiSelectedAlgaeFace = algaeFaceSub.get();
     this.uiSelectedIntakeSide = intakeSideSub.get();
-
-    // println("Getting Values " + uiSelectedCoralLevel);
-    // println("               " + uiSelectedCoralBranch);
-    // println("               " + uiSelectedAlgaeFace);
-    // println("               " + uiSelectedIntakeSide);
+    this.uiCurrentUseDtp = dtpEnabledSub.get();
   }
 
+  // Update the Presets based on the UI Data
   private void updatePreset() {
-    // New Selected Value for CORAL (Branch or Level)
-    // Compute the new robot preset.
-    // uiSelectedCoralLevel = "L1";
-    // uiSelectedCoralBranch = "F";
-
+    // New Coral Level or Branch
+    // Compute the new position ands shooting parameters
     if ((!uiSelectedCoralLevel.equals(this.uiCurrentCoralLevel)
             && UIConstants.allowedCoralLevels.contains(uiSelectedCoralLevel))
         || (!uiSelectedCoralBranch.equals(this.uiCurrentCoralBranch)
@@ -314,23 +283,22 @@ public class PresetManager extends CS_SubsystemBase {
                       + Units.inchesToMeters(1.625), //  1.625 for Branch inset to face distance...
                   0,
                   branchPose.getRotation()));
-
-      printf(
-          "Transform: %f, %f, %f",
-          RobotConstants.robotCenterOffset.getX(), 0.0, robotPose.getRotation().getDegrees());
       printf(
           "New Coral Pose - x: %3f, y: %3f, theta: %3f",
-          robotPose.getX(), robotPose.getY(), robotPose.getRotation().getDegrees());
+          robotPose.getX(), robotPose.getY(), branchPose.getRotation().getDegrees());
 
-      currentCoralPreset.setPose(robotPose);
-      // TODO: Set Coral Level
+      currentCoralPreset.setPose(
+          AllianceFlipUtil.apply(
+              new Pose2d(robotPose.getX(), robotPose.getY(), branchPose.getRotation())));
+
+      currentCoralPreset.setLevelPreset(CoralLevelPreset.valueOf(uiCurrentCoralLevel));
+      currentCoralPreset.setReady(true);
     } else {
-      // No new data or no valid data (to be handled)
+      // No new data or no valid data
     }
 
-    // New Selected Value for ALGAE (Face)
-    uiSelectedAlgaeFace = "IJ";
-
+    // New Algae Position
+    // Compute the new position ands shooting parameters
     if (!uiSelectedAlgaeFace.equals(this.uiCurrentAlgaeFace)
         && UIConstants.allowedAlgaePositions.contains(uiSelectedAlgaeFace)) {
 
@@ -350,23 +318,19 @@ public class PresetManager extends CS_SubsystemBase {
               robotPose.getX(),
               robotPose.getY(),
               new Rotation2d(facePose.getRotation().getRadians()));
-      //     facePose.transformBy(
-      //         new Transform2d(RobotConstants.robotCenterOffset.getX(), 0,
-      // facePose.getRotation()));
-
-      // new Transform2d(
-      //   RobotConstants.robotCenterOffset.getX(), 0, (facePose.getRotation()))
-
-      //   ) = robotPose.rotateBy(new Rotation2d(Math.PI));
 
       printf(
           "New Algae Pose - x: %3f, y: %3f, theta: %3f",
           goodRobotPose.getX(), goodRobotPose.getY(), goodRobotPose.getRotation().getDegrees());
 
-      currentAlgaePreset.setPose(goodRobotPose);
-      // TODO: Set Algae Level
+      currentAlgaePreset.setPose(
+          AllianceFlipUtil.apply(
+              new Pose2d(goodRobotPose.getX(), goodRobotPose.getY(), facePose.getRotation())));
+
+      currentAlgaePreset.setPosition(AlgaePosition.valueOf(uiSelectedAlgaeFace));
+      currentAlgaePreset.setReady(true);
     } else {
-      // No new data or no valid data (to be handled)
+      // No new data or no valid data
     }
   }
 
