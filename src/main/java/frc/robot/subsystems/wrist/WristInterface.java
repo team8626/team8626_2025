@@ -26,6 +26,7 @@ public interface WristInterface {
     protected double amps = 0;
     protected double desiredAngleDegrees = 0; // degrees
     protected double appliedOutput = 0;
+    protected double temperature = 0; // Celsius
 
     // protected double desiredAngleDegrees = 0;
 

@@ -71,6 +71,7 @@ public class Wrist_SparkFlex implements WristInterface, CS_InterfaceBase {
     values.amps = motor.getOutputCurrent();
     values.desiredAngleDegrees = this.desiredAngleDegree;
     values.appliedOutput = motor.getAppliedOutput();
+    values.temperature = motor.getMotorTemperature();
 
     controller.setReference(desiredAngleDegree, ControlType.kPosition);
   }
