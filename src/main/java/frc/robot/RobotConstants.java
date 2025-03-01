@@ -135,7 +135,7 @@ public class RobotConstants {
   // ****************************************************************************************
   // UI Constants
   public static class UIConstants {
-    public static final List<String> allowedCoralLevels = Arrays.asList("L1", "L2", "L3", "L4");
+    public static final List<String> allowedCoralLevels = Arrays.asList("L1", "L4");
     public static final List<String> allowedIntakeSides = Arrays.asList("LEFT", "RIGHT");
     public static final List<String> allowedCoralBranches =
         Arrays.asList("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L");

@@ -313,7 +313,8 @@ public class Commodore extends CS_SubsystemBase {
 
   private static void toAlgaeIntake() {
     applyState(CommodoreState.TRANSITION);
-    CommandScheduler.getInstance().schedule(new ToAlgaeIntake());
+    // TODO : Implement the ToAlgaeIntake command
+    // CommandScheduler.getInstance().schedule(new ToAlgaeIntake());
   }
 
   private static void tuneAlgaeShooter() {

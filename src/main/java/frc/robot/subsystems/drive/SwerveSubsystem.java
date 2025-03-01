@@ -56,7 +56,7 @@ import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 public class SwerveSubsystem extends CS_SubsystemBase {
 
   /** Swerve drive object. */
-  private final SwerveDrive swerveDrive;
+  protected final SwerveDrive swerveDrive;
   /** AprilTag field layout. */
   private final AprilTagFieldLayout aprilTagFieldLayout =
       AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);

@@ -73,4 +73,16 @@ public class Elevator_Simulation implements ElevatorInterface, CS_InterfaceBase 
     elevator.setState(
         Units.inchesToMeters(heightInches), ElevatorConstants.velocityMetersPerSecond);
   }
+
+  @Override
+  public void goUp(double offsetInches) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'goUp'");
+  }
+
+  @Override
+  public void goDown(double offsetInches) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'goDown'");
+  }
 }

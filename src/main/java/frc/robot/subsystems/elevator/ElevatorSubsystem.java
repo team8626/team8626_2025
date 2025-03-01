@@ -52,9 +52,9 @@ public class ElevatorSubsystem extends CS_SubsystemBase {
 
     // Using SmartDashboard to tune PIDs
     // --------------------------------------------------
-    SmartDashboard.putNumber("Subsystem/Elevator/P Gain", gains.kP());
-    SmartDashboard.putNumber("Subsystem/Elevator/D Gain", gains.kI());
-    SmartDashboard.putNumber("Subsystem/Elevator/I Gain", gains.kD());
+    SmartDashboard.putNumber("Subsystem/Elevator/Gains/P", gains.kP());
+    SmartDashboard.putNumber("Subsystem/Elevator/Gains/I", gains.kI());
+    SmartDashboard.putNumber("Subsystem/Elevator/Gains/D", gains.kD());
   }
 
   @Override
@@ -64,18 +64,19 @@ public class ElevatorSubsystem extends CS_SubsystemBase {
     SmartDashboard.putBoolean("Subsystem/Elevator/Enabled", values.isEnabled);
     SmartDashboard.putString("Subsystem/Elevator/State", values.state.getString());
     SmartDashboard.putNumber("Subsystem/Elevator/Height", values.currentHeight);
-    SmartDashboard.putNumber("Subsystem/Elevator/Amps", values.amps);
-    SmartDashboard.putNumber("Subsystem/Elevator/Temperature", values.temperature);
-
-    // SmartDashboard.putNumber("Subsystem/Elevator/P Gain", ElevatorConstants.kP);
-    // SmartDashboard.putNumber("Subsystem/Elevator/D Gain", ElevatorConstants.kI);
-    // SmartDashboard.putNumber("Subsystem/Elevator/I Gain", ElevatorConstants.kD);
+    SmartDashboard.putNumber("Subsystem/Elevator/AmpsLeft", values.ampsLeft);
+    SmartDashboard.putNumber("Subsystem/Elevator/AmpsRight", values.ampsRight);
+    SmartDashboard.putNumber("Subsystem/Elevator/AppliedOutputLeft", values.appliedOutputLeft);
+    SmartDashboard.putNumber("Subsystem/Elevator/AppliedOutputRight", values.appliedOutputRight);
+    SmartDashboard.putNumber("Subsystem/Elevator/TemperatureLeft", values.temperatureLeft);
+    SmartDashboard.putNumber("Subsystem/Elevator/TemperatureRight", values.temperatureRight);
+    SmartDashboard.putBoolean("Subsystem/Elevator/IsZeroed", values.isZeroed);
 
     // Using SmartDashboard to tune PIDs
     // --------------------------------------------------
-    double newkP = SmartDashboard.getNumber("Subsystem/Elevator/P Gain", values.kP);
-    double newkI = SmartDashboard.getNumber("Subsystem/Elevator/I Gain", values.kI);
-    double newkD = SmartDashboard.getNumber("Subsystem/Elevator/D Gain", values.kD);
+    double newkP = SmartDashboard.getNumber("Subsystem/Elevator/Gains/P", values.kP);
+    double newkI = SmartDashboard.getNumber("Subsystem/Elevator/Gains/I", values.kI);
+    double newkD = SmartDashboard.getNumber("Subsystem/Elevator/Gains/D", values.kD);
 
     // Coefficients on SmartDashboard have changed, save new values to the PID controller
     // --------------------------------------------------
@@ -99,5 +100,13 @@ public class ElevatorSubsystem extends CS_SubsystemBase {
 
   public double getCharacterization() {
     return values.currentHeight;
+  }
+
+  public void goUp(double offsetInches) {
+    elevatorInterface.goUp(offsetInches);
+  }
+
+  public void goDown(double offsetInches) {
+    elevatorInterface.goDown(offsetInches);
   }
 }

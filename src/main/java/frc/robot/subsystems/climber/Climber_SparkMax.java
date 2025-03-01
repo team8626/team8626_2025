@@ -25,7 +25,7 @@ public class Climber_SparkMax implements ClimberInterface, CS_InterfaceBase {
   private final SparkClosedLoopController controller;
   private AbsoluteEncoder encoder;
   private final AbsoluteEncoderConfig encoderConfig = new AbsoluteEncoderConfig();
-  private double setPointDegrees = ClimberConstants.minAngleDegrees;
+  private double desiredAngleDegrees = ClimberConstants.minAngleDegrees;
 
   // done by ai, idk if it works, but it makes public Climber_SparkMax() not throw an error
   // SimpleMotorFeedforward FF = new SimpleMotorFeedforward(gains.kS(), gains.kV(), gains.kA());
@@ -78,9 +78,9 @@ public class Climber_SparkMax implements ClimberInterface, CS_InterfaceBase {
     values.climberIsEnabled = climberIsEnabled;
     values.currentAngleDegrees = getAngleDegrees();
     values.amps = motor.getOutputCurrent();
-    values.desiredAngleDegrees = setPointDegrees;
+    values.desiredAngleDegrees = desiredAngleDegrees;
 
-    controller.setReference(setPointDegrees, ControlType.kPosition);
+    controller.setReference(desiredAngleDegrees, ControlType.kPosition);
   }
 
   public double getAngleDegrees() {
@@ -90,8 +90,8 @@ public class Climber_SparkMax implements ClimberInterface, CS_InterfaceBase {
   // added to fix error at top of class (im hope this doesn't break anything)
   @Override
   public void setAngleDegrees(double new_angle) {
-    setPointDegrees = new_angle;
-    setPointDegrees =
+    desiredAngleDegrees = new_angle;
+    desiredAngleDegrees =
         MathUtil.clamp(
             new_angle, ClimberConstants.minAngleDegrees, ClimberConstants.maxAngleDegrees);
   }
