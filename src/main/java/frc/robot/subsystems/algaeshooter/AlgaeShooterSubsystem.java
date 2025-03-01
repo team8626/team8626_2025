@@ -20,7 +20,7 @@ public class AlgaeShooterSubsystem extends CS_SubsystemBase {
 
   // Calls to the algaeShooter interface
   public void startRampUp() {
-    algaeShooterInterface.startLauncher(AlgaeShooterConstants.launcherIntakeSetpoint);
+    // algaeShooterInterface.startLauncher(AlgaeShooterConstants.launcherIntakeSetpoint);
     algaeShooterInterface.startShooter(shootingRPM);
   }
 

@@ -23,21 +23,26 @@ import frc.robot.subsystems.CS_InterfaceBase;
 public class AlgaeShooter_SparkMax implements AlgaeShooterInterface, CS_InterfaceBase {
 
   private final SparkMax leftMotor;
-  private final SparkMax rightMotor;
-  private final SparkMax launchMotor;
-
   private final SparkMaxConfig leftConfig;
-  private final SparkMaxConfig rightConfig;
-  private final SparkMaxConfig launchConfig;
-
   private final SparkClosedLoopController leftController;
   private final RelativeEncoder leftEncoder;
-  private final SparkClosedLoopController launchController;
 
-  SimpleMotorFeedforward leftFF = new SimpleMotorFeedforward(gains.kS(), gains.kV(), gains.kA());
+  private final SparkMax rightMotor;
+  private final SparkMaxConfig rightConfig;
+  private final SparkClosedLoopController rightController;
+  private final RelativeEncoder rightEncoder;
+
+  private final SparkMax launchMotor;
+  private final SparkMaxConfig launchConfig;
+  private final SparkClosedLoopController launchController;
+  private final RelativeEncoder launchEncoder;
+
+  SimpleMotorFeedforward shooterFFLeft =
+      new SimpleMotorFeedforward(gains.kS(), gains.kV(), gains.kA());
+  SimpleMotorFeedforward shooterFFRight =
+      new SimpleMotorFeedforward(gains.kS(), gains.kV(), gains.kA());
 
   private SparkLimitSwitch loadedSensor;
-  // private DigitalInput loadedSensor = new DigitalInput(AlgaeShooterConstants.infraRedPort);
 
   private boolean shooterIsEnabled = false;
   private boolean launcherIsEnabled = false;
@@ -46,10 +51,7 @@ public class AlgaeShooter_SparkMax implements AlgaeShooterInterface, CS_Interfac
   public AlgaeShooter_SparkMax() {
     // Setup configuration for the left motor
     leftConfig = new SparkMaxConfig();
-    leftConfig
-        .inverted(true)
-        .idleMode(IdleMode.kCoast)
-        .smartCurrentLimit(AlgaeShooterConstants.maxCurrent);
+    leftConfig.inverted(true).idleMode(IdleMode.kCoast);
 
     leftConfig
         .encoder
@@ -66,31 +68,55 @@ public class AlgaeShooter_SparkMax implements AlgaeShooterInterface, CS_Interfac
         // .velocityFF(0.002)
         .outputRange(-1, 1);
 
-    leftMotor = new SparkMax(flywheelConfig.leftCANID(), MotorType.kBrushless);
+    leftMotor = new SparkMax(flywheelConfig.CANIdLeft(), MotorType.kBrushless);
     leftMotor.configure(leftConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     leftController = leftMotor.getClosedLoopController();
     leftEncoder = leftMotor.getEncoder();
     leftController.setReference(0, ControlType.kDutyCycle);
 
-    // Setup configuration for the right motor (follower)
+    // Setup configuration for the right motor
     rightConfig = new SparkMaxConfig();
-    rightConfig.follow(leftMotor, true);
+    rightConfig.inverted(false).idleMode(IdleMode.kCoast);
 
-    rightMotor = new SparkMax(flywheelConfig.rightCANID(), MotorType.kBrushless);
+    leftConfig
+        .encoder
+        .positionConversionFactor(1 / flywheelConfig.reduction())
+        .velocityConversionFactor(1 / flywheelConfig.reduction());
+
+    rightConfig
+        .encoder
+        .positionConversionFactor(1 / flywheelConfig.reduction())
+        .velocityConversionFactor(1 / flywheelConfig.reduction());
+
+    rightConfig
+        .closedLoop
+        .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+        // Set PID values for position control.
+        .p(AlgaeShooterConstants.gains.kP())
+        .i(AlgaeShooterConstants.gains.kI())
+        .d(AlgaeShooterConstants.gains.kD())
+        // .velocityFF(0.002)
+        .outputRange(-1, 1);
+
+    rightMotor = new SparkMax(flywheelConfig.CANIdRight(), MotorType.kBrushless);
     rightMotor.configure(
         rightConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+    rightController = rightMotor.getClosedLoopController();
+    rightEncoder = rightMotor.getEncoder();
+    rightController.setReference(0, ControlType.kDutyCycle);
 
     // Launcher Motor
     launchConfig = new SparkMaxConfig();
     launchConfig.inverted(true).smartCurrentLimit(AlgaeShooterConstants.maxCurrent);
-    ;
 
-    launchMotor = new SparkMax(launcherConfig.leftCANID(), MotorType.kBrushless);
+    launchMotor = new SparkMax(launcherConfig.CANIdLeft(), MotorType.kBrushless);
     launchMotor.configure(
         launchConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     launchController = launchMotor.getClosedLoopController();
+    launchEncoder = launchMotor.getEncoder();
     launchController.setReference(0, ControlType.kDutyCycle);
 
     loadedSensor = launchMotor.getForwardLimitSwitch();
@@ -120,7 +146,14 @@ public class AlgaeShooter_SparkMax implements AlgaeShooterInterface, CS_Interfac
         new_RPM,
         ControlType.kVelocity,
         ClosedLoopSlot.kSlot0,
-        leftFF.calculate(new_RPM),
+        shooterFFLeft.calculate(new_RPM),
+        ArbFFUnits.kVoltage);
+
+    rightController.setReference(
+        new_RPM,
+        ControlType.kVelocity,
+        ClosedLoopSlot.kSlot0,
+        shooterFFRight.calculate(new_RPM),
         ArbFFUnits.kVoltage);
 
     shooterIsEnabled = true;
@@ -139,7 +172,14 @@ public class AlgaeShooter_SparkMax implements AlgaeShooterInterface, CS_Interfac
           new_RPM,
           ControlType.kVelocity,
           ClosedLoopSlot.kSlot0,
-          leftFF.calculate(new_RPM),
+          shooterFFLeft.calculate(new_RPM),
+          ArbFFUnits.kVoltage);
+
+      rightController.setReference(
+          new_RPM,
+          ControlType.kVelocity,
+          ClosedLoopSlot.kSlot0,
+          shooterFFRight.calculate(new_RPM),
           ArbFFUnits.kVoltage);
     }
   }
@@ -177,7 +217,7 @@ public class AlgaeShooter_SparkMax implements AlgaeShooterInterface, CS_Interfac
 
   @Override
   public double getLauncherRPM() {
-    return leftEncoder.getVelocity();
+    return rightEncoder.getVelocity();
   }
 
   public double getLauncherSetpoint() {

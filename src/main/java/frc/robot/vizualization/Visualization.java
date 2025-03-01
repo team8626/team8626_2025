@@ -80,7 +80,7 @@ public class Visualization extends CS_SubsystemBase {
                 0,
                 -Units.inchesToMeters(RobotContainer.elevator.getHeight()),
                 new Rotation3d(
-                    -Units.degreesToRadians(RobotContainer.wrist.getAngleDegrees() - 90), 0, 0)));
+                    Units.degreesToRadians(RobotContainer.wrist.getAngleDegrees() - 180), 0, 0)));
 
     publisher.set(robotPose);
     arrayPublisher.set(

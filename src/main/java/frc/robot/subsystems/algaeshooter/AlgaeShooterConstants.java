@@ -49,8 +49,8 @@ public class AlgaeShooterConstants {
   public record Gains(double kP, double kI, double kD, double kS, double kV, double kA) {}
 
   public record FlywheelConfig(
-      int leftCANID,
-      int rightCANID,
+      int CANIdLeft,
+      int CANIdRight,
       double reduction,
       double momentOfInertia,
       double maxAcclerationRpmPerSec) {}
