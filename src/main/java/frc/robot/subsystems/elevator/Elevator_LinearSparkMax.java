@@ -29,7 +29,7 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
   private final SparkMax motorLeft;
   private final SparkMaxConfig motorRightConfig;
   private final SparkMaxConfig motorLeftConfig;
-  private final SparkClosedLoopController controller;
+  private final SparkClosedLoopController controllerRight;
   private final RelativeEncoder encoder;
 
   ElevatorFeedforward elevatorFF = new ElevatorFeedforward(gains.kS(), gains.kV(), gains.kA());
@@ -61,7 +61,7 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
         .p(gains.kP(), ClosedLoopSlot.kSlot1)
         .i(gains.kI(), ClosedLoopSlot.kSlot1)
         .d(gains.kD(), ClosedLoopSlot.kSlot1)
-        .outputRange(-.4, .4, ClosedLoopSlot.kSlot1);
+        .outputRange(-.6, .3, ClosedLoopSlot.kSlot1);
 
     motorRightConfig
         .closedLoop
@@ -79,7 +79,7 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
     motorLeftConfig = new SparkMaxConfig();
     motorLeftConfig
         .idleMode(IdleMode.kBrake)
-        .follow(motorRight, true)
+        .follow(motorRight, false)
         .smartCurrentLimit(ElevatorConstants.maxCurrent);
 
     motorLeft = new SparkMax(motorConfig.CANIdLeft(), MotorType.kBrushless);
@@ -91,8 +91,8 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
     encoder.setPosition(ElevatorConstants.minHeightInches);
 
     // Setup the controller
-    controller = motorRight.getClosedLoopController();
-    controller.setReference(0, ControlType.kDutyCycle);
+    controllerRight = motorRight.getClosedLoopController();
+    controllerRight.setReference(0, ControlType.kDutyCycle);
 
     // Zero the elvator
     this.reset();
@@ -128,7 +128,7 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
 
     // controller.setReference(desiredHeight, ControlType.kPosition, ClosedLoopSlot.kSlot1);
     if (this.isZeroed) {
-      controller.setReference(
+      controllerRight.setReference(
           desiredHeightInches,
           ControlType.kPosition,
           ClosedLoopSlot.kSlot1,
@@ -137,7 +137,8 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
     } else {
       if (this.isZeroing) {
         if (this.motorRight.getOutputCurrent() > 30) {
-          controller.setReference(0, ControlType.kDutyCycle);
+          controllerRight.setReference(0, ControlType.kDutyCycle);
+
           this.isZeroed = true;
           this.isZeroing = false;
           this.desiredHeightInches = ElevatorConstants.initHeightInches;
@@ -157,7 +158,7 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
   private void reset() {
     this.isZeroed = false;
     this.isZeroing = true;
-    controller.setReference(-.25, ControlType.kDutyCycle);
+    controllerRight.setReference(-.25, ControlType.kDutyCycle);
   }
 
   @Override
