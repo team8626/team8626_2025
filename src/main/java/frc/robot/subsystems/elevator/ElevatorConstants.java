@@ -4,10 +4,6 @@ import edu.wpi.first.math.util.Units;
 import frc.robot.RobotConstants;
 
 public class ElevatorConstants {
-
-  // Motor Constants
-  public static final int CANID = 1;
-
   // Elevator Constants
   public static final double gearRatio = 12.0 / 1;
   public static final double drumRadiusInches = 1.41 / 2;
@@ -20,14 +16,21 @@ public class ElevatorConstants {
   public static final double maxHeightInches = 50;
   public static final double initHeightInches = 7;
 
-  public static final int maxCurrent = 30; // Amps
+  public static final int maxCurrent = 60; // Amps
 
-  public static final double carriageMassKg = Units.lbsToKilograms(1);
+  public static final double carriageMassKg = Units.lbsToKilograms(20);
   public static final double velocityMetersPerSecond = Units.inchesToMeters(30);
 
   public static final double maxVelocityInchesPerSec = 40;
   public static final double maxAccelerationInchesPerSec2 = 20;
   public static final double toleranceInches = 0.25;
+
+  public static final MotorConfig motorConfig =
+      switch (RobotConstants.robotType) {
+        case COMPBOT -> new MotorConfig(13, 1);
+        case SIMBOT -> new MotorConfig(13, 1);
+        default -> new MotorConfig(13, 1);
+      };
 
   public static final Gains gains =
       switch (RobotConstants.robotType) {
@@ -37,6 +40,8 @@ public class ElevatorConstants {
       };
 
   public record Gains(double kP, double kI, double kD, double kS, double kV, double kA) {}
+
+  public record MotorConfig(int CANIdLeft, int CANIdRight) {}
 
   // Elevator states
   public class ElevatorStates {

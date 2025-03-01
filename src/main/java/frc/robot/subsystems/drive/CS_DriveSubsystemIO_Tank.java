@@ -7,10 +7,12 @@
 package frc.robot.subsystems.drive;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.OperatorConstants;
 import frc.utils.CS_XboxController;
+import java.util.function.Supplier;
 
 public class CS_DriveSubsystemIO_Tank extends TankSubsystem implements CS_DriveSubsystemIO {
 
@@ -37,8 +39,18 @@ public class CS_DriveSubsystemIO_Tank extends TankSubsystem implements CS_DriveS
   }
 
   @Override
-  public Pose3d getPose3d() {
+  public Pose2d getPose() {
+    return new Pose2d();
+  }
+
+  @Override
+  public Command driveToPose(Supplier<Pose2d> newPoseSupplier) {
+    throw new UnsupportedOperationException("Unimplemented method 'driveToPose' for TankDrive");
+  }
+
+  @Override
+  public void drive(ChassisSpeeds velocity) {
     // TODO Auto-generated method stub
-    return new Pose3d();
+    throw new UnsupportedOperationException("Unimplemented method 'drive' for TankDrive");
   }
 }

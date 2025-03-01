@@ -14,19 +14,33 @@ import frc.robot.Commodore.CommodoreState;
 import frc.robot.RobotContainer;
 import frc.robot.commands.setters.units.AlgaeShooterIntake;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterSubsystem;
+import frc.robot.subsystems.presets.Presets;
+import java.util.function.DoubleSupplier;
 
 public class ToAlgaeIntake extends SequentialCommandGroup {
+  private AlgaeShooterSubsystem algae501;
+  private DoubleSupplier rpmSupplier = null;
+
+  public ToAlgaeIntake(DoubleSupplier newRMP) {
+    this.algae501 = RobotContainer.algae501;
+    rpmSupplier = newRMP;
+    buildCommandGroup();
+  }
 
   public ToAlgaeIntake() {
-    AlgaeShooterSubsystem algae501 = RobotContainer.algae501;
-
+    this.algae501 = RobotContainer.algae501;
     System.out.println("[Cmd: TOALGAEINTAKE]");
 
+    rpmSupplier = () -> Presets.ALGAE_FLOOR.getRPM();
+    buildCommandGroup();
+  }
+
+  private void buildCommandGroup() {
     addCommands(
         new ConditionalCommand(
             new SequentialCommandGroup(
                 Commodore.getSetStateCommand(CommodoreState.ALGAE_INTAKE),
-                new AlgaeShooterIntake()),
+                new AlgaeShooterIntake(rpmSupplier)),
             new InstantCommand(), // empty command
             () -> !algae501.isLoaded()),
         new ConditionalCommand(

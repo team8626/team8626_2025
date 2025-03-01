@@ -15,12 +15,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Commodore.CommodoreState;
 import frc.robot.RobotConstants.RobotType;
-import frc.robot.commands.setters.groups.ToCoralShoot;
 import frc.robot.commands.setters.units.AlgaeShooterIntake;
 import frc.robot.commands.setters.units.AlgaeShooterLaunch;
 import frc.robot.commands.setters.units.CoralShooterIntake;
 import frc.robot.commands.setters.units.CoralShooterLaunch;
-import frc.robot.commands.setters.units.CoralShooterRampUp;
 import frc.robot.commands.tuning.Tune_AlgaeShooter;
 import frc.robot.commands.tuning.Tune_CoralShooter;
 import frc.robot.subsystems.Dashboard;
@@ -28,12 +26,10 @@ import frc.robot.subsystems.algaeshooter.AlgaeShooterSubsystem;
 import frc.robot.subsystems.algaeshooter.AlgaeShooter_Sim;
 import frc.robot.subsystems.algaeshooter.AlgaeShooter_SparkMax;
 import frc.robot.subsystems.climber.ClimberSubsystem;
-import frc.robot.subsystems.climber.Climber_Sim;
-import frc.robot.subsystems.climber.Climber_SparkMax;
 import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
 import frc.robot.subsystems.coralshooter.CoralShooter_Sim;
 import frc.robot.subsystems.coralshooter.CoralShooter_SparkMax;
-import frc.robot.subsystems.drive.CS_DriveSubsystemIO;
+import frc.robot.subsystems.drive.CS_DriveSubsystem;
 import frc.robot.subsystems.drive.CS_DriveSubsystemIO_Swerve;
 import frc.robot.subsystems.drive.CS_DriveSubsystemIO_Tank;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
@@ -75,7 +71,7 @@ public class RobotContainer {
   // Define subsystems and commands here
   // private final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
   // private final ExampleCommand exampleCommand = new ExampleCommand(exampleSubsystem);
-  public static CS_DriveSubsystemIO drivebase = null;
+  public static CS_DriveSubsystem drivebase = null;
   public static ElevatorSubsystem elevator = null;
   public static WristSubsystem wrist = null;
   public static CoralShooterSubsystem mortar = null;
@@ -101,36 +97,38 @@ public class RobotContainer {
 
     switch (RobotConstants.robotType) {
       case KITBOT:
-        drivebase = new CS_DriveSubsystemIO_Tank();
+        drivebase = new CS_DriveSubsystem(new CS_DriveSubsystemIO_Tank());
         // elevator = new ElevatorArm();
         break;
       case DART:
         drivebase =
-            new CS_DriveSubsystemIO_Swerve(
-                new File(Filesystem.getDeployDirectory(), "swerve_dart"));
+            new CS_DriveSubsystem(
+                new CS_DriveSubsystemIO_Swerve(
+                    new File(Filesystem.getDeployDirectory(), "swerve_dart")));
         break;
       case SIMBOT:
         drivebase =
-            new CS_DriveSubsystemIO_Swerve(
-                new File(Filesystem.getDeployDirectory(), "swerve_devbot"));
+            new CS_DriveSubsystem(
+                new CS_DriveSubsystemIO_Swerve(
+                    new File(Filesystem.getDeployDirectory(), "swerve_devbot")));
+
         elevator = new ElevatorSubsystem(new Elevator_SimulationRose());
         wrist = new WristSubsystem(new Wrist_Sim());
         algae501 = new AlgaeShooterSubsystem(new AlgaeShooter_Sim());
         mortar = new CoralShooterSubsystem(new CoralShooter_Sim());
-        climber = new ClimberSubsystem(new Climber_Sim());
         // visualization = Visualization.getInstance();
 
         break;
       case COMPBOT:
       default:
         drivebase =
-            new CS_DriveSubsystemIO_Swerve(
-                new File(Filesystem.getDeployDirectory(), "swerve_devbot"));
+            new CS_DriveSubsystem(
+                new CS_DriveSubsystemIO_Swerve(
+                    new File(Filesystem.getDeployDirectory(), "swerve_devbot")));
         elevator = new ElevatorSubsystem(new Elevator_LinearSparkMax());
         wrist = new WristSubsystem(new Wrist_SparkFlex());
         mortar = new CoralShooterSubsystem(new CoralShooter_SparkMax());
         algae501 = new AlgaeShooterSubsystem(new AlgaeShooter_SparkMax());
-        climber = new ClimberSubsystem(new Climber_SparkMax());
 
         break;
     }
@@ -177,6 +175,29 @@ public class RobotContainer {
   }
 
   private void configureDriverBindings(CS_XboxController controller) {
+    // controller.btn_LeftTrigger.toggleOnTrue(new ToPathAndDeAlgae());
+    // controller.btn_A.toggleOnTrue(new ToPathAndDeAlgae());
+    // controller.btn_LeftBumper.onTrue(
+    //     new InstantCommand(
+    //         () -> Commodore.setCommodoreState(CommodoreState.ALGAE_SHOOT,
+    // true).withToggleState()));
+
+    controller.btn_RightBumper.onTrue(
+        new InstantCommand(
+            () ->
+                Commodore.setCommodoreState(CommodoreState.CORAL_INTAKE, true).withToggleState()));
+    controller.btn_RightTrigger.onTrue(
+        new InstantCommand(
+            () -> Commodore.setCommodoreState(CommodoreState.CORAL_SHOOT, true).withToggleState()));
+
+    controller.btn_LeftBumper.onTrue(
+        new InstantCommand(
+            () ->
+                Commodore.setCommodoreState(CommodoreState.ALGAE_INTAKE, true).withToggleState()));
+    controller.btn_LeftTrigger.onTrue(
+        new InstantCommand(
+            () -> Commodore.setCommodoreState(CommodoreState.ALGAE_SHOOT, true).withToggleState()));
+
     // controller.btn_A.onTrue(
     //     new InstantCommand(
     //         () ->
@@ -188,11 +209,16 @@ public class RobotContainer {
     //         () -> Commodore.setCommodoreState(CommodoreState.CORAL_SHOOT,
     // true).withToggleState()));
 
-    // Wrist Test
-    // controller.btn_A.onTrue(new InstantCommand(() -> wrist.setAngleDegrees(0)));
-    // controller.btn_B.onTrue(new InstantCommand(() -> wrist.setAngleDegrees(45)));
-    // controller.btn_Y.onTrue(new InstantCommand(() -> wrist.setAngleDegrees(90)));
-    // controller.btn_X.onTrue(new InstantCommand(() -> wrist.setAngleDegrees(180)));
+    // // Wrist Test
+    // controller.btn_A.onTrue(new InstantCommand(() -> wrist.setAngleDegrees(90)));
+    // controller.btn_B.onTrue(new InstantCommand(() -> wrist.setAngleDegrees(180)));
+    // controller.btn_Y.onTrue(new InstantCommand(() -> wrist.setAngleDegrees(220)));
+    // controller.btn_West.onTrue(new InstantCommand(() -> wrist.setAngleDegrees(120)));
+    // controller.btn_North.onTrue(new InstantCommand(() -> wrist.setAngleDegrees(90)));
+    // controller.btn_East.onTrue(new InstantCommand(() -> wrist.setAngleDegrees(180)));
+    // controller.btn_South.onTrue(new InstantCommand(() -> wrist.setAngleDegrees(200)));
+
+    // controller.btn_X.onTrue(new InstantCommand(() -> wrist.setAngleDegrees(220)));
 
     // Elevator Test
     // controller.btn_A.onTrue(new InstantCommand(() -> elevator.setHeight(7)));
@@ -201,18 +227,27 @@ public class RobotContainer {
     // controller.btn_X.onTrue(new InstantCommand(() -> elevator.setHeight(50)));
 
     // Algae Shooter Test
-    // controller.btn_A.toggleOnTrue(new AlgaeShooterIntake());
-    // controller.btn_B.toggleOnTrue(new Tune_AlgaeShooter());
-    // controller.btn_Y.toggleOnTrue(new AlgaeShooterLaunch());
+    controller.btn_A.toggleOnTrue(new AlgaeShooterIntake());
+    controller.btn_B.toggleOnTrue(new Tune_AlgaeShooter());
+    controller.btn_Y.toggleOnTrue(new AlgaeShooterLaunch());
     // controller.btn_X.toggleOnTrue(
     //     new FeedForwardCharacterization(
     //         algae501, algae501::runCharacterization, algae501::getCharacterizationVelocity));
 
     // Coral Shooter Test
-    controller.btn_A.toggleOnTrue(new CoralShooterIntake());
-    controller.btn_B.toggleOnTrue(new CoralShooterRampUp());
-    controller.btn_Y.toggleOnTrue(new CoralShooterLaunch());
-    controller.btn_X.toggleOnTrue(new ToCoralShoot());
+    // controller.btn_A.toggleOnTrue(new CoralShooterIntake());
+    // controller.btn_B.toggleOnTrue(new CoralShooterRampUp());
+    // controller.btn_Y.toggleOnTrue(new CoralShooterLaunch());
+    // controller.btn_X.toggleOnTrue(new ToCoralShoot());
+
+    // Drive to Pose Test
+    // controller.btn_North.onTrue(new ToPathAndCoralShoot());
+    // controller.btn_South.onTrue(new ToPathAndDeAlgae());
+
+    // controller.btn_B.toggleOnTrue(new ToDriveAndGetAlgae());
+
+    // new CoralDriveShootToPreset(() -> PresetManager.getCoralPreset().getPose()));
+
     // controller.btn_X.toggleOnTrue(
     //     new FeedForwardCharacterization(
     //         mortar, mortar::runCharacterizationLeft, mortar::getCharacterizationVelocityLeft));
@@ -236,6 +271,18 @@ public class RobotContainer {
   private void configureOperatorBindings(CS_XboxController controller) {
     // controller.btn_A.onTrue(
     //     new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.CORAL_SHOOT, true)));
+    // controller.btn_A.toggleOnTrue(new ToPathAndDeAlgaefy());
+
+    controller.btn_North.onTrue(new InstantCommand(() -> elevator.goUp(1.0)));
+    controller.btn_South.onTrue(new InstantCommand(() -> elevator.goDown(1.0)));
+
+    controller.btn_West.onTrue(new InstantCommand(() -> wrist.goUp(5.0)));
+    controller.btn_East.onTrue(new InstantCommand(() -> wrist.goDown(5.0)));
+
+    controller.btn_A.onTrue(new InstantCommand(() -> elevator.setHeight(10.0)));
+    controller.btn_B.onTrue(new InstantCommand(() -> elevator.setHeight(28.0)));
+    controller.btn_Y.onTrue(new InstantCommand(() -> elevator.setHeight(40.0)));
+    controller.btn_X.onTrue(new InstantCommand(() -> elevator.setHeight(51.0)));
   }
 
   private void configureTestOperatorBindings(CS_XboxController controller) {}

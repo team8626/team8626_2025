@@ -5,13 +5,13 @@ import frc.robot.RobotConstants;
 
 public class WristConstants {
 
-  public static final double minAngleDegrees = 0;
-  public static final double maxAngleDegrees = 200;
-  public static final double restAngleDegrees = 0;
+  public static final double minAngleDegrees = 90;
+  public static final double maxAngleDegrees = 235;
+  public static final double restAngleDegrees = 75;
   public static final double positionConversionFactor = 360; // degrees
   public static final double velocityConversionFactor = 360 / 60; // degrees per second
 
-  public static final int maxCurrent = 30; // Amps
+  public static final int maxCurrent = 40; // Amps
 
   public static final double toleranceDegrees = 2;
 
@@ -43,8 +43,8 @@ public class WristConstants {
   // PID Constants
   public static final Gains gains =
       switch (RobotConstants.robotType) {
-        case COMPBOT -> new Gains(0.01, 0.0, 0.0, 0.12, 0.00635, 0);
-        case SIMBOT -> new Gains(0.05, 0.0, 0.0, 0.12, 0.00635, 0.0);
+        case COMPBOT -> new Gains(0.0165, 0.0, 0.0, 0.12, 0.00635, 0);
+        case SIMBOT -> new Gains(0.0165, 0.0, 0.0, 0.12, 0.00635, 0.0);
         default -> new Gains(0.05, 0.0, 0.0, 0.12, 0.00635, 0.0);
       };
 

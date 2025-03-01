@@ -12,9 +12,10 @@ public class CoralShooterConstants {
   public static final double launcherShootSetpoint = -1.0;
   public static final double launcherIntakeSetpoint = 0.3;
 
-  public static final double RPMTolerance = 50;
+  public static final double RPMTolerance = 20;
   public static final double RPMDifferentialTolerance = 10;
   public static final double launchTimerSeconds = 0.2; // TODO: Tune this
+  public static final double shooterTimerSeconds = 0.2; // TODO: Tune this
 
   // CoralShooter Constants
   public static final double wheelRadiusMeters = Units.inchesToMeters(2);

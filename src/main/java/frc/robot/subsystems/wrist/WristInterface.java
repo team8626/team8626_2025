@@ -7,6 +7,10 @@ public interface WristInterface {
 
   double getAngleDegrees();
 
+  void goUp(double offsetDegrees);
+
+  void goDown(double offsetDegrees);
+
   /** Run arm pivot at voltage */
   default void runCharacterization(double input) {}
 
@@ -21,6 +25,8 @@ public interface WristInterface {
     protected double currentAngleDegrees = 0; // Degrees
     protected double amps = 0;
     protected double desiredAngleDegrees = 0; // degrees
+    protected double appliedOutput = 0;
+    protected double temperature = 0; // Celsius
 
     // protected double desiredAngleDegrees = 0;
 

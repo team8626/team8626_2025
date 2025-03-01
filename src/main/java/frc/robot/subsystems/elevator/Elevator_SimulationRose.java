@@ -8,25 +8,29 @@ public class Elevator_SimulationRose implements ElevatorInterface, CS_InterfaceB
 
   private boolean is_enabled = false;
   private ElevatorState current_state = ElevatorState.IDLE;
-  private double desiredHeight = 0;
+  private double desiredHeightInches = 0;
   private double currentHeight = 0;
 
   public Elevator_SimulationRose() {}
 
   private void updateRoseSim() {
-    MathUtil.clamp(
-        currentHeight, ElevatorConstants.minHeightInches, ElevatorConstants.maxHeightInches);
-    if (currentHeight < desiredHeight) {
-      currentHeight += 0.25;
-    } else if (currentHeight > desiredHeight) {
-      currentHeight -= 0.25;
+    if (currentHeight < desiredHeightInches) {
+      currentHeight += 0.5;
+    } else if (currentHeight > desiredHeightInches) {
+      currentHeight -= 0.5;
     }
+    desiredHeightInches =
+        MathUtil.clamp(
+            desiredHeightInches,
+            ElevatorConstants.minHeightInches,
+            ElevatorConstants.maxHeightInches);
   }
 
   @Override
   public void updateInputs(ElevatorValues values) {
     updateRoseSim();
     values.currentHeight = getHeightInches();
+    values.desiredHeight = desiredHeightInches;
     values.state = current_state;
     values.isEnabled = is_enabled;
   }
@@ -53,7 +57,17 @@ public class Elevator_SimulationRose implements ElevatorInterface, CS_InterfaceB
 
   @Override
   public void setHeightInches(double heightInches) {
-    desiredHeight = heightInches;
+    desiredHeightInches = heightInches;
     println("Setting height to: " + heightInches);
+  }
+
+  @Override
+  public void goUp(double offsetInches) {
+    desiredHeightInches += offsetInches;
+  }
+
+  @Override
+  public void goDown(double offsetInches) {
+    desiredHeightInches -= offsetInches;
   }
 }

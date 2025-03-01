@@ -42,7 +42,7 @@ public class Visualization extends CS_SubsystemBase {
 
   @Override
   public void CS_periodic() {
-    robotPose = RobotContainer.drivebase.getPose3d();
+    robotPose = new Pose3d(RobotContainer.drivebase.getPose2d());
 
     mastPose = RobotConstants.mastPoseOffset;
     stage2Pose =
@@ -80,7 +80,7 @@ public class Visualization extends CS_SubsystemBase {
                 0,
                 -Units.inchesToMeters(RobotContainer.elevator.getHeight()),
                 new Rotation3d(
-                    -Units.degreesToRadians(RobotContainer.wrist.getAngleDegrees() - 90), 0, 0)));
+                    Units.degreesToRadians(RobotContainer.wrist.getAngleDegrees() - 180), 0, 0)));
 
     publisher.set(robotPose);
     arrayPublisher.set(

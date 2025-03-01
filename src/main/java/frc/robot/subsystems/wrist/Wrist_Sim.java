@@ -11,7 +11,7 @@ import frc.robot.subsystems.CS_InterfaceBase;
 
 public class Wrist_Sim implements WristInterface, CS_InterfaceBase {
 
-  private double goalDegrees;
+  private double desiredAngleDegree = WristConstants.restAngleDegrees;
   // TODO: move these to contants
   // Gearing is 25:1 then a 24:60
   SingleJointedArmSim armSim =
@@ -34,12 +34,17 @@ public class Wrist_Sim implements WristInterface, CS_InterfaceBase {
 
   @Override
   public void updateInputs(WristValues values) {
+    desiredAngleDegree =
+        MathUtil.clamp(
+            desiredAngleDegree, WristConstants.minAngleDegrees, WristConstants.maxAngleDegrees);
+    this.pidController.setSetpoint(this.desiredAngleDegree);
     double output = this.pidController.calculate(Units.radiansToDegrees(armSim.getAngleRads()));
     this.armSim.setInput(MathUtil.clamp(output, -13, 13)); // Clamping on Batttery Voltage
     this.armSim.update(0.020);
 
     values.isEnabled = climberIsEnabled;
     values.currentAngleDegrees = getAngleDegrees();
+    values.desiredAngleDegrees = this.desiredAngleDegree;
     values.amps = this.armSim.getCurrentDrawAmps();
   }
 
@@ -49,13 +54,22 @@ public class Wrist_Sim implements WristInterface, CS_InterfaceBase {
 
   @Override
   public void setAngleDegrees(double new_angle) {
-    printf("New Angle %f", new_angle);
-    this.goalDegrees = new_angle;
-    this.pidController.setSetpoint(new_angle);
+    this.desiredAngleDegree = new_angle;
+    printf("New Angle %f", desiredAngleDegree);
   }
 
   @Override
   public void setPID(double newkP, double newkI, double newkD) {
     printf("New PID: %f, %f, %f \n", newkP, newkI, newkD);
+  }
+
+  @Override
+  public void goUp(double offsetDegrees) {
+    desiredAngleDegree -= offsetDegrees;
+  }
+
+  @Override
+  public void goDown(double offsetDegrees) {
+    desiredAngleDegree += offsetDegrees;
   }
 }

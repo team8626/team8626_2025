@@ -6,11 +6,18 @@
 
 package frc.robot.subsystems.drive;
 
-import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.utils.CS_XboxController;
+import java.util.function.Supplier;
 
 public interface CS_DriveSubsystemIO {
   public void setDefaultCommand(CS_XboxController xboxController);
 
-  public Pose3d getPose3d();
+  public Command driveToPose(Supplier<Pose2d> poseSupplier);
+
+  public Pose2d getPose();
+
+  public void drive(ChassisSpeeds velocity);
 }

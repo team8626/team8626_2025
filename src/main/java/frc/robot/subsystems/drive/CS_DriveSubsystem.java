@@ -1,6 +1,9 @@
 package frc.robot.subsystems.drive;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.subsystems.CS_SubsystemBase;
+import frc.utils.CS_XboxController;
 import java.io.File;
 
 // public class CS_SwerveSubsystem extends SwerveSubsystem  implements CS_SwerveSubsystemIO{
@@ -18,21 +21,22 @@ public class CS_DriveSubsystem extends CS_SubsystemBase {
     // super(directory);
   }
 
-  @Override
-  public void initDashboard() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'initDashboard'");
+  public void setDefaultCommand(CS_XboxController xboxController) {
+    subsystemInterface.setDefaultCommand(xboxController);
+  }
+
+  public void driveToPose() {
+    subsystemInterface.driveToPose(null);
+  }
+
+  public Pose2d getPose2d() {
+    return subsystemInterface.getPose();
+  }
+
+  public void drive(ChassisSpeeds velocity) {
+    subsystemInterface.drive(velocity);
   }
 
   @Override
-  public void updateDashboard() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'updateDashboard'");
-  }
-
-  @Override
-  public void CS_periodic() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'CS_periodic'");
-  }
+  public void CS_periodic() {}
 }
