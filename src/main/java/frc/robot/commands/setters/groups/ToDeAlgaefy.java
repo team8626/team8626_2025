@@ -7,17 +7,24 @@
 package frc.robot.commands.setters.groups;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.robot.commands.setters.units.ElevatorSetHeight;
 import frc.robot.commands.setters.units.WristSetAngle;
 import frc.robot.subsystems.presets.AlgaePreset;
 import java.util.function.Supplier;
 
-public class ToDeAlgae extends ParallelCommandGroup {
-  public ToDeAlgae(Supplier<AlgaePreset> presetSupplier) {
+public class ToDeAlgaefy extends ParallelCommandGroup {
+
+  public ToDeAlgaefy(Supplier<AlgaePreset> presetSupplier) {
     System.out.println("[Cmd: TODEALGAE]");
 
     addCommands(
         new ParallelCommandGroup(
+            new PrintCommand(
+                "-------------------------\nStarting DeAlgaefy - "
+                    + presetSupplier.get().getElevatorHeightInches()
+                    + " /  "
+                    + presetSupplier.get().getWristAngleDegrees()),
             new ElevatorSetHeight(() -> presetSupplier.get().getElevatorHeightInches()),
             new WristSetAngle(() -> presetSupplier.get().getWristAngleDegrees())),
         new ToAlgaeIntake(() -> presetSupplier.get().getRPM()));
