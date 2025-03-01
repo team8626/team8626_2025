@@ -17,8 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotConstants;
 import frc.robot.RobotConstants.UIConstants;
 import frc.robot.subsystems.CS_SubsystemBase;
-import frc.robot.subsystems.presets.AlgaePreset.AlgaeLevelPreset;
-import frc.robot.subsystems.presets.AlgaePreset.AlgaePosition;
+// import frc.robot.subsystems.presets.AlgaePreset.AlgaeLevelPreset;
 import java.util.Optional;
 import org.littletonrobotics.frc2025.FieldConstants.CoralObjective;
 import org.littletonrobotics.frc2025.FieldConstants.Reef;
@@ -35,7 +34,7 @@ public class PresetManager extends CS_SubsystemBase {
   private String uiCurrentIntakeSide = "----";
   private String uiCurrentCoralBranch = "-";
   private String uiCurrentAlgaeFace = "--";
-  private static boolean uiCurrentUseDtp = true;
+  private boolean uiCurrentUseDtp = UIConstants.defaultUseDtp;
 
   private final StringSubscriber coralBranchSub =
       NetworkTableInstance.getDefault()
@@ -44,7 +43,7 @@ public class PresetManager extends CS_SubsystemBase {
   private final StringSubscriber coralLevelSub =
       NetworkTableInstance.getDefault()
           .getStringTopic("SmartDashboard/Presets/UI/SelectedCoralLevel")
-          .subscribe("L4");
+          .subscribe(UIConstants.defaultCoralLevel);
   private final StringSubscriber algaeFaceSub =
       NetworkTableInstance.getDefault()
           .getStringTopic("SmartDashboard/Presets/UI/SelectedAlgaeFace")
@@ -56,14 +55,15 @@ public class PresetManager extends CS_SubsystemBase {
   private final BooleanSubscriber dtpEnabledSub =
       NetworkTableInstance.getDefault()
           .getBooleanTopic("SmartDashboard/Presets/UI/SelectedDTPEnabled")
-          .subscribe(true);
+          .subscribe(UIConstants.defaultUseDtp);
 
-  // private CoralPreset autoCoralPreset = new CoralPreset( "autoPreset", new Pose2d(), 0.0, false);
+  // private final StringPublisher coralLevelPub =
+  // NetworkTableInstance.getDefault().getStringTopic("SmartDashboard/Presets/UI/SelectedCoralLevel");
+  // // NetworkTableInstance.getDefault()
+  //     .getStringTopic("SmartDashboard/Presets/UI/SelectedCoralLevel");
 
-  private static CoralPreset currentCoralPreset =
-      new CoralPreset("autoPreset", new Pose2d(), 0.0, 0.0, false);
-  private static AlgaePreset currentAlgaePreset =
-      new AlgaePreset("autoPreset", new Pose2d(), AlgaeLevelPreset.FLOOR, false);
+  private static CoralPreset currentCoralPreset = new CoralPreset("autoPreset");
+  private static AlgaePreset currentAlgaePreset = new AlgaePreset("autoPreset");
 
   // Singleton instance
   private static PresetManager instance;
@@ -98,7 +98,9 @@ public class PresetManager extends CS_SubsystemBase {
   }
 
   public static boolean usingDtp() {
-    return uiCurrentUseDtp;
+    // return uiCurrentUseDtp;
+    // TODO: Implement this method
+    return false;
   }
 
   public static boolean isCoralPresetReady() {
@@ -215,10 +217,12 @@ public class PresetManager extends CS_SubsystemBase {
   public void initDashboard() {
     println("Initializing PresetManager Dashboard");
 
-    SmartDashboard.putString("Presets/UI/SelectedCoralLevel", "");
+    SmartDashboard.putString(
+        "Presets/UI/SelectedCoralLevel", "STARTING"); // TODO UIConstants.defaultCoralLevel
     SmartDashboard.putString("Presets/UI/SelectedCoralBranch", "");
     SmartDashboard.putString("Presets/UI/SelectedAlgaeFace", "");
     SmartDashboard.putString("Presets/UI/SelectedIntakeSide", "");
+    SmartDashboard.putBoolean("Presets/UI/SelectedDTPEnabled", UIConstants.defaultUseDtp);
 
     SmartDashboard.putStringArray(
         "Presets/UI/AllowedCoralLevels", UIConstants.allowedCoralLevels.toArray(new String[0]));
@@ -291,7 +295,7 @@ public class PresetManager extends CS_SubsystemBase {
           AllianceFlipUtil.apply(
               new Pose2d(robotPose.getX(), robotPose.getY(), branchPose.getRotation())));
 
-      currentCoralPreset.setLevelPreset(CoralLevelPreset.valueOf(uiCurrentCoralLevel));
+      currentCoralPreset.setSubsystems(CoralLevelPreset.valueOf(uiCurrentCoralLevel));
       currentCoralPreset.setReady(true);
     } else {
       // No new data or no valid data
@@ -302,7 +306,24 @@ public class PresetManager extends CS_SubsystemBase {
     if (!uiSelectedAlgaeFace.equals(this.uiCurrentAlgaeFace)
         && UIConstants.allowedAlgaePositions.contains(uiSelectedAlgaeFace)) {
 
-      printf("Updating Algae Presets - %s", uiSelectedAlgaeFace);
+      // printf("Updating Algae Presets - %s", uiSelectedAlgaeFace);
+      // // SmartDashboard.putString("Presets/UI/SelectedCoralLevel", "L3");
+      // String[] abc = {"L1", "L2", "L3", "L4"};
+
+      // // Initialize the Networktable publishers
+      // NetworkTableInstance nt = NetworkTableInstance.getDefault();
+      // NetworkTable stateTable = nt.getTable("/SmartDashboard/Presets/UI");
+      // StringPublisher levelPublisher = stateTable.getStringTopic("SelectedCoralLevel").publish();
+
+      // // Select a random value from the array
+      // String[] someLevels = {"L1", "L2", "L3", "L4"};
+      // Random random = new Random();
+      // String randomCoralLevel = someLevels[random.nextInt(someLevels.length)];
+
+      // SmartDashboard.putStringArray("Presets/UI/AllowedCoralLevels", abc);
+      // // SmartDashboard.putString("Presets/UI/SelectedCoralLevel", randomCoralLevel);
+      // levelPublisher.set(randomCoralLevel);
+      // SmartDashboard.putString("Presets/UI/RobotCoralLevel", randomCoralLevel);
 
       this.uiCurrentAlgaeFace = uiSelectedAlgaeFace;
 
@@ -327,7 +348,7 @@ public class PresetManager extends CS_SubsystemBase {
           AllianceFlipUtil.apply(
               new Pose2d(goodRobotPose.getX(), goodRobotPose.getY(), facePose.getRotation())));
 
-      currentAlgaePreset.setPosition(AlgaePosition.valueOf(uiSelectedAlgaeFace));
+      currentAlgaePreset.setSubsystems(uiSelectedAlgaeFace);
       currentAlgaePreset.setReady(true);
     } else {
       // No new data or no valid data
