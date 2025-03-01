@@ -5,44 +5,71 @@ import java.util.function.Supplier;
 
 public class AlgaePreset {
   private Supplier<Pose2d> robotPoseSupplier;
-  private AlgaeLevelPreset subsystemsPresets;
+  // private AlgaeLevelPreset subsystemsPresets;
+  private double elevatorHeightInches;
+  private double wristAngleDegrees;
+  private double RPM;
   private boolean isReady = false;
+  private String name;
 
-  /**
-   * Create a new Algae Preset
-   *
-   * @param robotPose
-   * @param subsystemsPresets
-   * @param isReady
-   */
+  public AlgaePreset(String name) {
+    this.name = name;
+    this.isReady = false;
+  }
+
   public AlgaePreset(
-      String name, Pose2d robotPose, AlgaeLevelPreset subsystemsPresets, boolean isReady) {
-    this.robotPoseSupplier = () -> robotPose;
-    this.subsystemsPresets = subsystemsPresets;
-    this.isReady = isReady;
+      String name, double elevatorHeightInches, double wristAngleDegrees, double RPM) {
+    this.name = name;
+    this.elevatorHeightInches = elevatorHeightInches;
+    this.wristAngleDegrees = wristAngleDegrees;
+    this.RPM = RPM;
+
+    this.isReady = true;
   }
 
   public void setPose(Pose2d newPose) {
     // Set the Pose of the Robot
     this.robotPoseSupplier = () -> newPose;
     System.out.printf(
-        "Algae Pose Set to - x: %3f, y: %3f, theta: %3f",
+        "[ALGAE PRESET] New Pose Set to - x: %3f, y: %3f, theta: %3f",
         robotPoseSupplier.get().getX(),
         robotPoseSupplier.get().getY(),
         robotPoseSupplier.get().getRotation().getDegrees());
   }
 
-  public void setPosition(AlgaePosition newPosition) {
-    // Set the Position of the Algae Shooter
-    subsystemsPresets = newPosition.level();
-  }
+  public void setSubsystems(String newPositionName) {
+    switch (newPositionName) {
+      case "AB":
+      case "EF":
+      case "IJ":
+        this.elevatorHeightInches = Presets.ALGAE_HIGH.getElevatorHeightInches();
+        this.wristAngleDegrees = Presets.ALGAE_HIGH.getWristAngleDegrees();
+        this.RPM = Presets.ALGAE_HIGH.getRPM();
+        break;
+      case "CD":
+      case "GH":
+      case "KL":
+        this.elevatorHeightInches = Presets.ALGAE_LOW.getElevatorHeightInches();
+        this.wristAngleDegrees = Presets.ALGAE_LOW.getWristAngleDegrees();
+        this.RPM = Presets.ALGAE_LOW.getRPM();
+        break;
+      case "PROCESSOR":
+        this.elevatorHeightInches = 8;
+        this.wristAngleDegrees = 190;
+        this.RPM = 1000;
+        break;
+      case "FLOOR":
+      default:
+        this.elevatorHeightInches = 8;
+        this.wristAngleDegrees = 200;
+        this.RPM = -600;
+        break;
+    }
 
-  // public void setPositionByElements(AlgaePosition newPosition) {
-  //   // Set the Position of the Algae Shooter
-  //   this.elevatorHeightInches = newPosition.level().elevatorHeightInches();
-  //   this.wristAngleDegrees = newPosition.level().wristAngleDegrees();
-  //   this.RPM = newPosition.level().RPM();
-  // }
+    System.out.printf(
+        "[ALGAE] New Algae Preset - %s - %s In, %s Deg, %s RPM\n",
+        this.toString(), elevatorHeightInches, wristAngleDegrees, RPM);
+  }
 
   public void setReady(boolean ready) {
     // Set the Ready State of the Preset
@@ -51,16 +78,16 @@ public class AlgaePreset {
 
   public double getRPM() {
     // Get the RPM of the Coral Shooter
-    return subsystemsPresets.RPM;
+    return this.RPM;
   }
 
   public double getElevatorHeightInches() {
-    return subsystemsPresets.elevatorHeightInches();
+    return this.elevatorHeightInches;
     // return this.elevatorHeightInches;
   }
 
   public double getWristAngleDegrees() {
-    return subsystemsPresets.wristAngleDegrees();
+    return this.wristAngleDegrees;
   }
 
   public Pose2d getPose() {
@@ -70,51 +97,5 @@ public class AlgaePreset {
   public boolean isReady() {
     // Get the Ready State of the Preset
     return this.isReady;
-  }
-
-  public enum AlgaeLevelPreset {
-    PROCESSOR(8, 190, 1000),
-    FLOOR(8, 200, -600),
-    LOW(39, 210, -1000),
-    HIGH(51, 210, -600);
-
-    AlgaeLevelPreset(double elevatorHeightInches, double wristAngleDegrees, double RPM) {}
-
-    public double elevatorHeightInches() {
-      return elevatorHeightInches;
-    }
-
-    public double wristAngleDegrees() {
-      return wristAngleDegrees;
-    }
-
-    public double RPM() {
-      return RPM;
-    }
-
-    private static double elevatorHeightInches;
-    private static double wristAngleDegrees;
-    private double RPM;
-  }
-
-  public enum AlgaePosition {
-    AB(AlgaeLevelPreset.HIGH),
-    CD(AlgaeLevelPreset.LOW),
-    EF(AlgaeLevelPreset.HIGH),
-    GH(AlgaeLevelPreset.LOW),
-    IJ(AlgaeLevelPreset.HIGH),
-    KL(AlgaeLevelPreset.LOW),
-    FLOOR(AlgaeLevelPreset.FLOOR),
-    PROCESSOR(AlgaeLevelPreset.PROCESSOR);
-
-    AlgaePosition(AlgaeLevelPreset level) {
-      this.level = level;
-    }
-
-    public AlgaeLevelPreset level() {
-      return this.level;
-    }
-
-    private final AlgaeLevelPreset level;
   }
 }
