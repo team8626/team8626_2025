@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <link rel="stylesheet" href="style8626.css">
+    <script src="robotcommunication.js" type="module"></script>
+    <title>Reefscape Dashboard &mdash; Team 8626</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <style>
+        /* Ensure full-screen height */
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Ensure equal-height rows */
+        .equal-height {
+            display: flex;
+            flex-wrap: wrap;
+        }
+    </style>
+</head>
+  <body>
+    <div class="container-fluid text-center full-screen-container">
+        <!-- First Row -->
+        <div class="row">
+            <div class="col-md-4">
+                <h2>General Status</h2>
+            </div>
+            <div class="col-md-4">
+                <h2>AutoChooser</h2>
+            </div>
+            <div class="col-md-4">
+                <h2>Commodore States</h2>
+            </div>
+        </div>
+
+        <!-- Second Row -->
+        <div class="row equal-height">
+            <!-- Left Section: Each heading in its own row -->
+            <div class="col-md-3">
+                <div class="container-fluid">
+
+                    <div class="row">
+                        <div class="col-12">
+                            <h2>Coral Level</h2>
+                            <input type="radio" class="btn-check" name="corallevel" id="L4" autocomplete="off" checked>
+                            <label class="btn btn-secondary" for="L4">L4</label>
+
+                            <input type="radio" class="btn-check" name="corallevel" id="L3" autocomplete="off">
+                            <label class="btn btn-secondary" for="L3">L3</label>
+
+                            <input type="radio" class="btn-check" name="corallevel" id="L2" autocomplete="off" disabled>
+                            <label class="btn btn-secondary" for="L2">L2</label>
+
+                            <input type="radio" class="btn-check" name="corallevel" id="L1" autocomplete="off">
+                            <label class="btn btn-secondary" for="L1">L1</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <h2>Pickup Side</h2>
+                            <input type="radio" class="btn-check" name="intakeside" id="left" autocomplete="off">
+                            <label class="btn btn-secondary" for="left">LEFT</label>
+
+                            <input type="radio" class="btn-check" name="intakeside" id="right" autocomplete="off">
+                            <label class="btn btn-secondary" for="right">RIGHT</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <h2>Drive To Pose</h2>
+                            <input type="radio" class="btn-check" name="drivetopose" id="off" autocomplete="off">
+                            <label class="btn btn-secondary" for="off">OFF</label>
+
+                            <input type="radio" class="btn-check" name="drivetopose" id="on" autocomplete="off">
+                            <label class="btn btn-secondary" for="on">ON</label>
+
+                        </div>
+                    </div>
+                </div>  
+            </div>
+
+            <!-- Ensure the Reef container takes full height -->
+            <div class="col-md-6 d-flex align-items-center justify-content-center reef_container bg-success h-100">
+                <h2>Reef<br><br>Goes<br><br>Here</h2>
+            </div>
+
+            <!-- Right Section -->
+            <div class="col-md-3 d-flex align-items-center justify-content-center">
+                <h2>Game Pieces</h2>
+            </div>
+        </div>
+                <!-- Match Time Box at Bottom Right -->
+                <div class="match-time">
+                    <h2>Match Time</h2>
+                    <h3>xx:xx</h3>
+                </div>
+    </div>
+
+
+    <div class="reef-section">
+        <canvas class="reef-canvas"></canvas>
+      </div>
+
+
+      
+    <!-- Bootstrap JS -->
+    <script src="bootstrap/js/jquery-3.7.1.min.js"></script>
+    <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="intakeside.js"></script>
+    <script src="drivetopose.js"></script>
+    <script src="corallevel.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Page is fully loaded');
+        });
+    </script>
+  </body>
+</html>

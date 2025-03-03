@@ -141,5 +141,185 @@ public class RobotConstants {
         Arrays.asList("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L");
     public static final List<String> allowedAlgaePositions =
         Arrays.asList("AB", "CD", "EF", "GH", "IJ", "KL");
+
+    public static final List<CoralBranch> allowedCoralBranches2 =
+        Arrays.asList(
+            CoralBranch.A,
+            CoralBranch.B,
+            CoralBranch.C,
+            CoralBranch.D,
+            CoralBranch.E,
+            CoralBranch.F,
+            CoralBranch.G,
+            CoralBranch.H,
+            CoralBranch.I,
+            CoralBranch.J,
+            CoralBranch.K,
+            CoralBranch.L);
+
+    public static final List<AlgaeFace2> allowedAlgaeFaces2 =
+        Arrays.asList(
+            AlgaeFace2.AB,
+            AlgaeFace2.CD,
+            AlgaeFace2.EF,
+            AlgaeFace2.GH,
+            AlgaeFace2.IJ,
+            AlgaeFace2.KL);
+
+    public static final List<CoralLevel> allowedCoralLevels2 =
+        Arrays.asList(CoralLevel.L1, CoralLevel.L4);
+
+    public static final DTP defaultDTP = DTP.ON;
+    public static final CoralLevel defaultCoralLevel = CoralLevel.L4;
+    public static final PickupSide defaultPickupSide = PickupSide.NONE;
+
+    public enum AllianceColor {
+      UNKNOWN(0),
+      RED(1),
+      BLUE(2);
+      private final int value;
+
+      private AllianceColor(int value) {
+        this.value = value;
+      }
+
+      public int getValue() {
+        return value;
+      }
+    }
+
+    public enum PickupSide {
+      NONE(0),
+      LEFT(1),
+      RIGHT(2);
+      private final int value;
+
+      private PickupSide(int value) {
+        this.value = value;
+      }
+
+      public int getValue() {
+        return value;
+      }
+
+      public static PickupSide getByValue(int value) {
+        for (PickupSide val : PickupSide.values()) {
+          if (val.getValue() == value) {
+            return val;
+          }
+        }
+        throw new IllegalArgumentException("No enum constant with value " + value);
+      }
+    }
+
+    public enum DTP {
+      OFF(false),
+      ON(true);
+      private final boolean value;
+
+      private DTP(boolean value) {
+        this.value = value;
+      }
+
+      public boolean getValue() {
+        return value;
+      }
+
+      public static DTP getByValue(boolean value) {
+        for (DTP val : DTP.values()) {
+          if (val.getValue() == value) {
+            return val;
+          }
+        }
+        throw new IllegalArgumentException("No enum constant with value " + value);
+      }
+    }
+
+    public enum CoralLevel {
+      L1(1),
+      L2(2),
+      L3(3),
+      L4(4);
+      private final int value;
+
+      private CoralLevel(int value) {
+        this.value = value;
+      }
+
+      public int getValue() {
+        return value;
+      }
+
+      public static CoralLevel getByValue(int value) {
+        for (CoralLevel level : CoralLevel.values()) {
+          if (level.getValue() == value) {
+            return level;
+          }
+        }
+        throw new IllegalArgumentException("No enum constant with value " + value);
+      }
+    }
+
+    public enum CoralBranch {
+      NONE(0),
+      A(1),
+      B(2),
+      C(3),
+      D(4),
+      E(5),
+      F(6),
+      G(7),
+      H(8),
+      I(9),
+      J(10),
+      K(11),
+      L(12);
+      private final int value;
+
+      private CoralBranch(int value) {
+        this.value = value;
+      }
+
+      public int getValue() {
+        return value;
+      }
+
+      public static CoralBranch getByValue(int value) {
+        for (CoralBranch branch : CoralBranch.values()) {
+          if (branch.getValue() == value) {
+            return branch;
+          }
+        }
+        throw new IllegalArgumentException("No enum constant with value " + value);
+      }
+    }
+
+    public enum AlgaeFace2 {
+      NONE(0),
+      AB(1),
+      CD(2),
+      EF(3),
+      GH(4),
+      IJ(5),
+      KL(6);
+      private final int value;
+
+      private AlgaeFace2(int value) {
+        this.value = value;
+      }
+
+      public int getValue() {
+        return value;
+      }
+
+      public static AlgaeFace2 getByValue(int value) {
+        for (AlgaeFace2 face : AlgaeFace2.values()) {
+          if (face.getValue() == value) {
+            return face;
+          }
+        }
+        throw new IllegalArgumentException("No enum constant with value " + value);
+      }
+    }
   }
 }

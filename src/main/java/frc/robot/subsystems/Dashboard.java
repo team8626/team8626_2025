@@ -4,18 +4,12 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.networktables.IntegerPublisher;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotContainer;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * The Dashboard class manages the registration and periodic updating of subsystems with different
@@ -52,21 +46,13 @@ public class Dashboard extends CS_SubsystemBase {
   private static GamePieceState coralState = GamePieceState.IDLE;
   private static GamePieceState algaeState = GamePieceState.IDLE;
 
-  // UI Information
-  private IntegerPublisher matchTimePublisher;
-  private String allianceColor = "UNKNOWN";
-
   /** Use assignment types for updateDashboard implementation. */
   public enum UpdateInterval {
     SHORT_INTERVAL,
     LONG_INTERVAL
   }
 
-  public Dashboard() {
-    // Initialize NetworkTables
-    var table = NetworkTableInstance.getDefault().getTable("Dashboard");
-    matchTimePublisher = table.getIntegerTopic("matchTime").publish();
-  }
+  public Dashboard() {}
   /**
    * Registers a subsystem with the specified update interval.
    *
@@ -144,32 +130,6 @@ public class Dashboard extends CS_SubsystemBase {
         algaeState = GamePieceState.IDLE;
       }
     }
-    // Update UI Data
-    updateUIData();
-  }
-
-  public void updateUIData() {
-    // Set Alliance Color
-    if (DriverStation.isFMSAttached()) {
-      Optional<Alliance> ally = DriverStation.getAlliance();
-      if (ally.isPresent()) {
-        if (ally.get() == Alliance.Red) {
-          allianceColor = "RED";
-        }
-        if (ally.get() == Alliance.Blue) {
-          allianceColor = "BLUE";
-        }
-      }
-    } else {
-      allianceColor = "UNKNOWN";
-    }
-
-    SmartDashboard.putString("Dashboard/AllianceColor", allianceColor);
-    matchTimePublisher.set((long) Math.ceil(Math.max(0.0, DriverStation.getMatchTime())));
-
-    // Game Pieces States
-    SmartDashboard.putString("Dashboard/CORAL State", coralState.toString());
-    SmartDashboard.putString("Dashboard/ALGAE State", algaeState.toString());
   }
 
   public static void setCoralState(GamePieceState new_state) {

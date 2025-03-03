@@ -33,14 +33,14 @@ public class Wrist_SparkFlex implements WristInterface, CS_InterfaceBase {
   public Wrist_SparkFlex() {
     // Setup configuration for the encoder
     encoderConfig
-        .inverted(false)
+        .inverted(true)
         .positionConversionFactor(WristConstants.positionConversionFactor)
         .velocityConversionFactor(WristConstants.velocityConversionFactor);
 
     // Setup configuration for the motor
     config = new SparkFlexConfig();
 
-    config.inverted(true).idleMode(IdleMode.kBrake).smartCurrentLimit(WristConstants.maxCurrent);
+    config.inverted(false).idleMode(IdleMode.kBrake).smartCurrentLimit(WristConstants.maxCurrent);
 
     config
         .closedLoop
