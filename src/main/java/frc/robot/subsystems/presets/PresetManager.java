@@ -44,7 +44,7 @@ public class PresetManager extends CS_SubsystemBase {
   private String uiCurrentIntakeSide = "----";
   private String uiCurrentCoralBranch = "-";
   private String uiCurrentAlgaeFace = "--";
-  private boolean uiCurrentUseDtp = UIConstants.defaultUseDtp;
+  private boolean uiCurrentUseDtp = UIConstants.defaultDTP.getValue();
 
   // private final StringPublisher coralLevelPub =
   // NetworkTableInstance.getDefault().getStringTopic("SmartDashboard/Presets/UI/SelectedCoralLevel");
