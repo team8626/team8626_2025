@@ -40,7 +40,6 @@ import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.elevator.Elevator_LinearSparkMax;
 import frc.robot.subsystems.elevator.Elevator_SimulationRose;
 import frc.robot.subsystems.ledManager.LEDManager;
-import frc.robot.subsystems.objectivetracker.ReefControlsIOServer;
 import frc.robot.subsystems.presets.PresetManager;
 import frc.robot.subsystems.wrist.WristSubsystem;
 import frc.robot.subsystems.wrist.Wrist_Sim;
@@ -69,8 +68,6 @@ public class RobotContainer {
 
   // Vizualizaiton (Only in Simulation)
   private Visualization visualization = Visualization.getInstance();
-
-  private ReefControlsIOServer objectiveTracker = new ReefControlsIOServer();
 
   //
   // ****************************************************************************************

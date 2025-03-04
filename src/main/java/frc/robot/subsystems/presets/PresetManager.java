@@ -19,7 +19,7 @@ import frc.robot.RobotConstants.UIConstants.CoralLevel;
 import frc.robot.RobotConstants.UIConstants.DTP;
 import frc.robot.RobotConstants.UIConstants.PickupSide;
 import frc.robot.subsystems.CS_SubsystemBase;
-import frc.robot.subsystems.objectivetracker.ReefControlsIOServer;
+import frc.robot.subsystems.Dashboard;
 import org.littletonrobotics.frc2025.FieldConstants.CoralObjective;
 import org.littletonrobotics.frc2025.FieldConstants.Reef;
 import org.littletonrobotics.frc2025.FieldConstants.ReefLevel;
@@ -101,23 +101,6 @@ public class PresetManager extends CS_SubsystemBase {
   public static AlgaePreset getAlgaePreset() {
     return currentAlgaePreset;
   }
-
-  // private StructPublisher<Pose2d> robotPostPublisher =
-  //     NetworkTableInstance.getDefault()
-  //         .getStructTopic("SmartDashboard/Presets/Pose2d", Pose2d.struct)
-  //         .publish();
-
-  //   private static double m_ooomf = 3; // m.s-1
-  //   private static double m_angleAdjust = -7;
-  //   private static double m_launchRPMTopMultiplier = 1;
-
-  // // public void set(Preset newPreset) {
-  //   currentPreset = newPreset;
-  // }
-
-  // public Preset get() {
-  //   return currentPreset;
-  // }
 
   //   public static Preset getAimAndShootPreset(Pose2d robotPose) {
 
@@ -221,51 +204,33 @@ public class PresetManager extends CS_SubsystemBase {
   // return null;
   // }
 
-  @Override
-  public void initDashboard() {
-    // println("Initializing PresetManager Dashboard");
-    // SmartDashboard.putString("Presets/UI/SelectedCoralLevel", "");
-    // SmartDashboard.putString("Presets/UI/SelectedCoralBranch", "");
-    // SmartDashboard.putString("Presets/UI/SelectedAlgaeFace", "");
-    // SmartDashboard.putString("Presets/UI/SelectedIntakeSide", "");
-
-    // SmartDashboard.putStringArray(
-    //     "Presets/UI/AllowedCoralLevels", UIConstants.allowedCoralLevels.toArray(new String[0]));
-    // SmartDashboard.putStringArray(
-    //     "Presets/UI/AllowedCoralBranches", UIConstants.allowedCoralBranches.toArray(new
-    // String[0]));
-    // SmartDashboard.putStringArray(
-    //     "Presets/UI/allowedAlgaePositions",
-    //     UIConstants.allowedAlgaePositions.toArray(new String[0]));
-  }
-
   public void updateUIData() {
     // Get updated values from the UI
-    CoralLevel coralLevel = ReefControlsIOServer.getSelectedCoralLevel();
+    CoralLevel coralLevel = Dashboard.getSelectedCoralLevel();
     if (coralLevel != null) {
       uiSelectedCoralLevel2 = coralLevel;
       printf("Coral Level: %s", uiSelectedCoralLevel2.toString());
     }
 
-    CoralBranch coralBranch = ReefControlsIOServer.getSelectedCoralBranch();
+    CoralBranch coralBranch = Dashboard.getSelectedCoralBranch();
     if (coralBranch != null) {
       uiSelectedCoralBranch2 = coralBranch;
       printf("Coral Branch: %s", uiSelectedCoralBranch2.toString());
     }
 
-    AlgaeFace2 algaeFace = ReefControlsIOServer.getSelectedAlgaeFace();
+    AlgaeFace2 algaeFace = Dashboard.getSelectedAlgaeFace();
     if (algaeFace != null) {
       uiSelectedAlgaeFace2 = algaeFace;
       printf("Algae: %s", uiSelectedAlgaeFace2.toString());
     }
 
-    PickupSide intakeSide = ReefControlsIOServer.getSelectedPickupSide();
+    PickupSide intakeSide = Dashboard.getSelectedPickupSide();
     if (intakeSide != null) {
       uiSelectedIntakeSide2 = intakeSide;
       printf("Intake Side: %s", uiSelectedIntakeSide2.toString());
     }
 
-    DTP dtp = ReefControlsIOServer.getSelectedDtp();
+    DTP dtp = Dashboard.getSelectedDtp();
     if (dtp != null) {
       uiSelectedDtp2 = dtp;
       printf("DTP: %s", uiSelectedDtp2.toString());
