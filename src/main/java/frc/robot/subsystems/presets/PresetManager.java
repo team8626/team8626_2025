@@ -8,10 +8,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.networktables.BooleanSubscriber;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.StringSubscriber;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotConstants;
 import frc.robot.RobotConstants.UIConstants;
 import frc.robot.RobotConstants.UIConstants.AlgaeFace2;
@@ -42,15 +38,12 @@ public class PresetManager extends CS_SubsystemBase {
   private UIConstants.PickupSide uiCurrentIntakeSide2 = UIConstants.defaultPickupSide;
   private UIConstants.CoralBranch uiCurrentCoralBranch2 = CoralBranch.NONE;
   private UIConstants.AlgaeFace2 uiCurrentAlgaeFace2 = AlgaeFace2.NONE;
-  private UIConstants.DTP uiCurrentDtp2 = UIConstants.defaultDTP;
+  private static UIConstants.DTP uiCurrentDtp2 = UIConstants.defaultDTP;
 
   private String uiCurrentCoralLevel = "L4";
   private String uiCurrentIntakeSide = "----";
   private String uiCurrentCoralBranch = "-";
   private String uiCurrentAlgaeFace = "--";
-
-
-
 
   // private final StringPublisher coralLevelPub =
   // NetworkTableInstance.getDefault().getStringTopic("SmartDashboard/Presets/UI/SelectedCoralLevel");
@@ -620,5 +613,9 @@ public class PresetManager extends CS_SubsystemBase {
         Reef.centerFaces[faceId].getRotation().getDegrees());
 
     return Reef.centerFaces[faceId].rotateBy(new Rotation2d(Math.PI));
+  }
+
+  public static boolean usingDtp() {
+    return uiCurrentDtp2.getValue();
   }
 }
