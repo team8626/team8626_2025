@@ -68,8 +68,8 @@ public class CoralShooterRampUp extends CS_Command {
     double currentRPMRight = mortar.getShooterRPMRight();
 
     atSetpoint =
-        Math.abs(currentRPMLeft - desiredRPMLeft) <= RPMTolerance
-            && Math.abs(currentRPMRight - desiredRPMRight) <= RPMTolerance;
+        Math.abs(Math.abs(currentRPMLeft) - desiredRPMLeft) <= RPMTolerance
+            && Math.abs(Math.abs(currentRPMRight) - desiredRPMRight) <= RPMTolerance;
     return atSetpoint;
   }
 }
