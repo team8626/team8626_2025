@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.2041025641025636,
+        "y": 2.858782051282052
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.504390096417604,
+        "y": 2.265881165956823
+      },
+      "isLocked": false,
+      "linkedName": "sigma sigma boy (centerToReefA2)"
+    },
+    {
+      "anchor": {
+        "x": 1.7054487179487177,
+        "y": 0.6708333333333337
+      },
+      "prevControl": {
+        "x": 2.955037025944785,
+        "y": 1.5290613244662499
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "ReefA2ToRightPickup"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 56.30993247402023
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -59.26451229808
+  },
+  "useDefaultConstraints": true
+}
