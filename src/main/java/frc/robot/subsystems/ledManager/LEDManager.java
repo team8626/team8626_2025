@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems.ledManager;
 
-import static edu.wpi.first.units.Units.Centimeters;
-import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Seconds;
 
 import edu.wpi.first.wpilibj.AddressableLED;
@@ -80,7 +78,7 @@ public class LEDManager extends CS_SubsystemBase {
 
     switch (mainMode) {
       case DISCONNECTED: // made a heart beat disconnected a white heart beat.
-        currentColor = new Color[] {Color.kHotPink, Color.kPink};
+        currentColor = LEDConstants.CS_Pinks;
         breatheSlow(currentColor).applyTo(m_left);
         breatheSlow(currentColor).applyTo(m_right);
         break;
@@ -239,29 +237,28 @@ public class LEDManager extends CS_SubsystemBase {
   private static LEDPattern breatheFast(Color... colors) {
     LEDPattern new_pattern =
         LEDPattern.gradient(LEDPattern.GradientType.kContinuous, colors)
-            .breathe(Seconds.of(.2)); // TODO: Create a constant for duration
+            .breathe(LEDConstants.breathFastDuration);
     return new_pattern;
   }
 
   private static LEDPattern breatheSlow(Color... colors) {
     LEDPattern new_pattern =
         LEDPattern.gradient(LEDPattern.GradientType.kContinuous, colors)
-            .breathe(Seconds.of(0.8)); // TODO: Create a constant for duration
+            .breathe(LEDConstants.breathSlowDuration);
     return new_pattern;
   }
 
   private static LEDPattern wave(Color... colors) {
     LEDPattern new_pattern =
         LEDPattern.gradient(LEDPattern.GradientType.kContinuous, colors)
-            .scrollAtAbsoluteSpeed(Centimeters.per(Second).of(12.5), LEDConstants.LedSpacing);
-    // TODO: Create a constant for duration
+            .scrollAtAbsoluteSpeed(LEDConstants.scrollVelocity, LEDConstants.ledSpacing);
     return new_pattern;
   }
 
   private static LEDPattern rainbow() {
     LEDPattern rainbow =
         LEDPattern.rainbow(LEDConstants.rainbowSaturation, LEDConstants.rainbowValue)
-            .scrollAtAbsoluteSpeed(Centimeters.per(Second).of(12.5), LEDConstants.LedSpacing);
+            .scrollAtAbsoluteSpeed(LEDConstants.scrollVelocity, LEDConstants.ledSpacing);
 
     return rainbow;
   }
@@ -269,16 +266,10 @@ public class LEDManager extends CS_SubsystemBase {
   private static LEDPattern progressrainbow() {
     Map<Double, Color> maskSteps = Map.of(0.0, Color.kWhite, 0.2, Color.kBlack);
 
-    LEDPattern base = LEDPattern.rainbow(255, 255);
+    LEDPattern base = LEDPattern.rainbow(LEDConstants.rainbowSaturation, LEDConstants.rainbowValue);
     LEDPattern mask =
         LEDPattern.steps(maskSteps)
-            .scrollAtAbsoluteSpeed(Centimeters.per(Second).of(12.5), LEDConstants.LedSpacing);
-
-    // LEDPattern new_pattern =
-    //     LEDPattern.rainbow(LEDConstants.rainbowSaturation, LEDConstants.rainbowValue)
-    //         .scrollAtAbsoluteSpeed(Centimeters.per(Second).of(12.5), LEDConstants.LedSpacing);
-    // return new_pattern;
-
+            .scrollAtAbsoluteSpeed(LEDConstants.scrollVelocity, LEDConstants.ledSpacing);
     return base.mask(mask);
   }
 
@@ -308,9 +299,4 @@ public class LEDManager extends CS_SubsystemBase {
 
     LEDs.setData(LEDBuffer);
   }
-
-  //   public static void error(errorSections errorSections, Color color) {
-  // TODO Auto-generated method stub
-  //   throw new UnsupportedOperationException("Unimplemented method 'error'");
-  // }
 }
