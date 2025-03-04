@@ -51,7 +51,10 @@ public class AlgaeShooter_SparkMax implements AlgaeShooterInterface, CS_Interfac
   public AlgaeShooter_SparkMax() {
     // Setup configuration for the left motor
     leftConfig = new SparkMaxConfig();
-    leftConfig.inverted(true).idleMode(IdleMode.kCoast);
+    leftConfig
+        .inverted(true)
+        .idleMode(IdleMode.kCoast)
+        .smartCurrentLimit(AlgaeShooterConstants.maxCurrent);
 
     leftConfig
         .encoder
@@ -77,7 +80,10 @@ public class AlgaeShooter_SparkMax implements AlgaeShooterInterface, CS_Interfac
 
     // Setup configuration for the right motor
     rightConfig = new SparkMaxConfig();
-    rightConfig.inverted(false).idleMode(IdleMode.kCoast);
+    rightConfig
+        .inverted(false)
+        .idleMode(IdleMode.kCoast)
+        .smartCurrentLimit(AlgaeShooterConstants.maxCurrent);
 
     leftConfig
         .encoder
@@ -136,6 +142,14 @@ public class AlgaeShooter_SparkMax implements AlgaeShooterInterface, CS_Interfac
     values.ampsLeft = leftMotor.getOutputCurrent();
     values.ampsRight = rightMotor.getOutputCurrent();
     values.ampsLauncher = launchMotor.getOutputCurrent();
+
+    values.tempLeft = leftMotor.getMotorTemperature();
+    values.tempRight = rightMotor.getMotorTemperature();
+    values.tempLauncher = launchMotor.getMotorTemperature();
+
+    values.appliedOutputLeft = leftMotor.getAppliedOutput();
+    values.appliedOutputRight = rightMotor.getAppliedOutput();
+    values.appliedOutputLauncher = launchMotor.getAppliedOutput();
 
     values.isLoaded = shooterIsLoaded();
   }

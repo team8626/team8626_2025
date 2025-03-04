@@ -52,7 +52,11 @@ public class CoralShooter_SparkMax implements CoralShooterInterface, CS_Interfac
   public CoralShooter_SparkMax() {
     // Setup configuration for the left motor
     leftConfig = new SparkMaxConfig();
-    leftConfig.inverted(false).idleMode(IdleMode.kCoast);
+    leftConfig
+        .inverted(false)
+        .idleMode(IdleMode.kCoast)
+        .smartCurrentLimit(CoralShooterConstants.maxCurrent);
+    ;
 
     leftConfig
         .encoder
@@ -78,7 +82,10 @@ public class CoralShooter_SparkMax implements CoralShooterInterface, CS_Interfac
 
     // Setup configuration for the right motor
     rightConfig = new SparkMaxConfig();
-    rightConfig.inverted(false).idleMode(IdleMode.kCoast);
+    rightConfig
+        .inverted(false)
+        .idleMode(IdleMode.kCoast)
+        .smartCurrentLimit(CoralShooterConstants.maxCurrent);
 
     rightConfig
         .encoder
@@ -130,6 +137,14 @@ public class CoralShooter_SparkMax implements CoralShooterInterface, CS_Interfac
     values.ampsLeft = leftMotor.getOutputCurrent();
     values.ampsRight = rightMotor.getOutputCurrent();
     values.ampsLauncher = launchMotor.getOutputCurrent();
+
+    values.tempLeft = leftMotor.getMotorTemperature();
+    values.tempRight = rightMotor.getMotorTemperature();
+    values.tempLauncher = launchMotor.getMotorTemperature();
+
+    values.appliedOutputLeft = leftMotor.getAppliedOutput();
+    values.appliedOutputRight = rightMotor.getAppliedOutput();
+    values.appliedOutputLauncher = launchMotor.getAppliedOutput();
 
     values.isLoaded = isLoaded();
   }

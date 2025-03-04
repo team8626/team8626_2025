@@ -73,6 +73,16 @@ public class Wrist_SparkFlex implements WristInterface, CS_InterfaceBase {
     values.appliedOutput = motor.getAppliedOutput();
     values.temperature = motor.getMotorTemperature();
 
+    if (encoder.getVelocity() > 0) {
+      values.isEnabled = true;
+    } else if (encoder.getVelocity() < 0) {
+      values.isEnabled = true;
+    } else if (motor.getOutputCurrent() > 0) {
+      values.isEnabled = false;
+    } else {
+      values.isEnabled = false;
+    }
+
     controller.setReference(desiredAngleDegree, ControlType.kPosition);
   }
 

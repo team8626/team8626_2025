@@ -83,11 +83,12 @@ public class WristSubsystem extends CS_SubsystemBase {
     values.kD = CS_Utils.updateFromSmartDashboard(newkD, values.kD, (value) -> setkD(value));
 
     // Update the SmartDashboard with the current state of the subsystem
-    SmartDashboard.putBoolean("Subsystem/Wrist/enabled", values.isEnabled);
-    SmartDashboard.putNumber("Subsystem/Wrist/currentAngleDegrees", values.currentAngleDegrees);
-    SmartDashboard.putNumber("Subsystem/Wrist/amps", values.amps);
-    SmartDashboard.putNumber("Subsystem/Wrist/desiredAngleDegrees", values.desiredAngleDegrees);
-    SmartDashboard.putNumber("Subsystem/Wrist/appliedOutput", values.appliedOutput);
+    SmartDashboard.putBoolean("Subsystem/Wrist/Enabled", values.isEnabled);
+    SmartDashboard.putNumber("Subsystem/Wrist/CurrentAngleDegrees", values.currentAngleDegrees);
+    SmartDashboard.putNumber("Subsystem/Wrist/Amps", values.amps);
+    SmartDashboard.putNumber("Subsystem/Wrist/DesiredAngleDegrees", values.desiredAngleDegrees);
+    SmartDashboard.putNumber("Subsystem/Wrist/AppliedOutput", values.appliedOutput);
+    SmartDashboard.putNumber("Subsystem/Wrist/Temperature", values.appliedOutput);
 
     //   double newAngle =
     //       SmartDashboard.getNumber(

@@ -17,6 +17,8 @@ public class CoralShooterConstants {
   public static final double launchTimerSeconds = 0.2; // TODO: Tune this
   public static final double shooterTimerSeconds = 0.2; // TODO: Tune this
 
+  public static final int maxCurrent = 60; // Amps
+
   // CoralShooter Constants
   public static final double wheelRadiusMeters = Units.inchesToMeters(2);
   public static final double wheelMassKg = Units.lbsToKilograms(0.03); // am-2647

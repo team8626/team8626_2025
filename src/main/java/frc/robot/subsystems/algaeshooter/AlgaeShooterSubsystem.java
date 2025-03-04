@@ -128,9 +128,18 @@ public class AlgaeShooterSubsystem extends CS_SubsystemBase {
     SmartDashboard.putNumber(
         "Subsystem/AlgaeShooter/Launcher Setpoint", values.currentLauncherSetpoint);
 
-    SmartDashboard.putNumber("Subsystem/AlgaeShooter/Shooter Amps Left", values.ampsLeft);
-    SmartDashboard.putNumber("Subsystem/AlgaeShooter/Shooter Amps Right", values.ampsRight);
-    SmartDashboard.putNumber("Subsystem/AlgaeShooter/Launcher Amps", values.ampsLauncher);
+    SmartDashboard.putNumber("Subsystem/AlgaeShooter/ShooterAmpsLeft", values.ampsLeft);
+    SmartDashboard.putNumber("Subsystem/AlgaeShooter/ShooterAmpsRight", values.ampsRight);
+    SmartDashboard.putNumber("Subsystem/AlgaeShooter/LauncherAmps", values.ampsLauncher);
+    SmartDashboard.putNumber("Subsystem/AlgaeShooter/TemperatureShooterLeft", values.tempLeft);
+    SmartDashboard.putNumber("Subsystem/AlgaeShooter/TemperatureShooterRight", values.tempRight);
+    SmartDashboard.putNumber("Subsystem/AlgaeShooter/TemperatureLauncher", values.tempLauncher);
+    SmartDashboard.putNumber(
+        "Subsystem/AlgaeShooter/AppliedOutputShooterLeft", values.appliedOutputLeft);
+    SmartDashboard.putNumber(
+        "Subsystem/AlgaeShooter/AppliedOutputShooterRight", values.appliedOutputRight);
+    SmartDashboard.putNumber(
+        "Subsystem/AlgaeShooter/AppliedOutputLauncher", values.appliedOutputLauncher);
 
     SmartDashboard.putBoolean("Subsystem/AlgaeShooter/isLoaded", values.isLoaded);
 
