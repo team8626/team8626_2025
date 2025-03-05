@@ -71,6 +71,9 @@ public class AlgaeShooter_SparkMax implements AlgaeShooterInterface, CS_Interfac
         // .velocityFF(0.002)
         .outputRange(-1, 1);
 
+    // Disable limit switch. otherwise the loaded sensor causes the motor to stop!
+    leftConfig.limitSwitch.reverseLimitSwitchEnabled(false).forwardLimitSwitchEnabled(false);
+
     leftMotor = new SparkMax(flywheelConfig.CANIdLeft(), MotorType.kBrushless);
     leftMotor.configure(leftConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
@@ -115,7 +118,7 @@ public class AlgaeShooter_SparkMax implements AlgaeShooterInterface, CS_Interfac
 
     // Launcher Motor
     launchConfig = new SparkMaxConfig();
-    launchConfig.inverted(true).smartCurrentLimit(AlgaeShooterConstants.maxCurrent);
+    launchConfig.inverted(false).smartCurrentLimit(AlgaeShooterConstants.maxCurrent);
 
     launchMotor = new SparkMax(launcherConfig.CANIdLeft(), MotorType.kBrushless);
     launchMotor.configure(
@@ -125,7 +128,7 @@ public class AlgaeShooter_SparkMax implements AlgaeShooterInterface, CS_Interfac
     launchEncoder = launchMotor.getEncoder();
     launchController.setReference(0, ControlType.kDutyCycle);
 
-    loadedSensor = launchMotor.getForwardLimitSwitch();
+    loadedSensor = leftMotor.getForwardLimitSwitch();
   }
 
   @Override
@@ -176,6 +179,7 @@ public class AlgaeShooter_SparkMax implements AlgaeShooterInterface, CS_Interfac
   @Override
   public void stopShooter() {
     leftController.setReference(0, ControlType.kDutyCycle);
+    rightController.setReference(0, ControlType.kDutyCycle);
     shooterIsEnabled = false;
   }
 
@@ -215,23 +219,23 @@ public class AlgaeShooter_SparkMax implements AlgaeShooterInterface, CS_Interfac
   @Override
   public void startLauncher(double new_Setpoint) {
     currentLauncherSetpoint = new_Setpoint;
-    launchController.setReference(new_Setpoint, ControlType.kDutyCycle);
+    launchController.setReference(currentLauncherSetpoint, ControlType.kDutyCycle);
     launcherIsEnabled = true;
   }
 
   @Override
   public double getShooterRPMLeft() {
-    return leftEncoder.getVelocity();
+    return leftEncoder.getVelocity() / flywheelConfig.reduction();
   }
 
   @Override
   public double getShooterRPMRight() {
-    return leftEncoder.getVelocity();
+    return rightEncoder.getVelocity() / flywheelConfig.reduction();
   }
 
   @Override
   public double getLauncherRPM() {
-    return rightEncoder.getVelocity();
+    return launchEncoder.getVelocity() / (36 / 24);
   }
 
   public double getLauncherSetpoint() {
@@ -246,12 +250,7 @@ public class AlgaeShooter_SparkMax implements AlgaeShooterInterface, CS_Interfac
   @Override
   public void setPID(double newkP, double newkI, double newkD) {
     leftConfig.closedLoop.p(newkP).i(newkI).d(newkD);
-    leftMotor.configure(leftConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-
     rightConfig.closedLoop.p(newkP).i(newkI).d(newkD);
-    rightMotor.configure(
-        rightConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-
     printf("New PID: %f, %f, %f", newkP, newkI, newkD);
   }
 

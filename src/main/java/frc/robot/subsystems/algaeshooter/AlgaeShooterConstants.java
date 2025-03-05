@@ -6,14 +6,14 @@ import frc.robot.RobotConstants;
 public class AlgaeShooterConstants {
 
   // Tuned Values
-  public static final double shootRPM = 1800;
+  public static final double shootRPM = 2200;
   public static final double intakeRPM = -600;
-  public static final double launcherShootSetpoint = -1.0;
-  public static final double launcherIntakeSetpoint = 0.5;
+  public static final double launcherShootSetpoint = 1.0;
+  public static final double launcherIntakeSetpoint = -0.5;
 
-  public static final int maxCurrent = 30; // Amps
+  public static final int maxCurrent = 50; // Amps
 
-  public static final double shooterRPMTolerance = 50;
+  public static final double shooterRPMTolerance = 75;
   public static final double launchTimerSeconds = 0.5;
 
   // AlgaeShooter Constants
@@ -26,14 +26,16 @@ public class AlgaeShooterConstants {
   // Flywheel Config
   public static final FlywheelConfig flywheelConfig =
       switch (RobotConstants.robotType) {
-        case COMPBOT -> new FlywheelConfig(9, 10, (36 / 24), 2 * momentOfInertia, 6000.0);
-        case SIMBOT -> new FlywheelConfig(9, 10, (36 / 24), 2 * momentOfInertia, 6000.0);
-        default -> new FlywheelConfig(0, 0, (36 / 24), 2 * momentOfInertia, 6000.0);
+        case COMPBOT -> new FlywheelConfig(11, 10, 1, 2 * momentOfInertia, 6000.0);
+        case SIMBOT -> new FlywheelConfig(11, 10, 1, 2 * momentOfInertia, 6000.0);
+          // case COMPBOT -> new FlywheelConfig(11, 10, (30 / 24), 2 * momentOfInertia, 6000.0);
+          // case SIMBOT -> new FlywheelConfig(11, 10, (30 / 24), 2 * momentOfInertia, 6000.0);
+        default -> new FlywheelConfig(0, 0, (30 / 24), 2 * momentOfInertia, 6000.0);
       };
 
   // Launcher FLywheel Config
   public static final FlywheelConfig launcherConfig =
-      new FlywheelConfig(11, 0, (1.0 / 1.0), 2 * momentOfInertia, 6000.0);
+      new FlywheelConfig(9, 0, (1.0 / 1.0), 2 * momentOfInertia, 6000.0);
 
   // InfraRed Port (Sensor to check if the ALGAE is loaded
   public static final int infraRedPort = 1; // DIO
@@ -41,9 +43,9 @@ public class AlgaeShooterConstants {
   // PID Constants
   public static final Gains gains =
       switch (RobotConstants.robotType) {
-        case COMPBOT -> new Gains(0.0001, 0.0, 0.0, 0.14, 0.00545, 0);
-        case SIMBOT -> new Gains(0.05, 0.0, 0.0, 0.14, 0.00545, 0.0);
-        default -> new Gains(0.05, 0.0, 0.0, 0.14, 0.00545, 0.0);
+        case COMPBOT -> new Gains(0.0001, 0.0, 0.0, 0.04712, 0.00186, 0);
+        case SIMBOT -> new Gains(0.05, 0.0, 0.0, 0.04712, 0.00186, 0.0);
+        default -> new Gains(0.05, 0.0, 0.0, 0.04712, 0.00186, 0.0);
       };
 
   public record Gains(double kP, double kI, double kD, double kS, double kV, double kA) {}
