@@ -38,6 +38,7 @@ let algaeStatus = "---"; // string
 let coralStatus = "---"; // string
 let algaeShootTime = 0; // double (ms)
 let coralShootTime = 0; // double (ms)
+let isConnectionActive = false;
 
 const ntClient = new NT4_Client(
   window.location.hostname,
@@ -104,11 +105,19 @@ const ntClient = new NT4_Client(
     updateUI();
   },
   () => {
-    $("body").css("background-color", "#111529");
+    // Connected
+    if(!isConnectionActive) {
+      $("body").css("background-color", "#111529");
+      isConnectionActive = true;
+    }
   },
   () => {
     // Disconnected
-    $("body").css("background-color", "red");  }
+    if(isConnectionActive) {
+      $("body").css("background-color", "red"); 
+      isConnectionActive = false;
+    }
+  }
 );
 
 // Start NT connection
@@ -167,230 +176,6 @@ function updateUI() {
   // updateDtpValue(selectedDtp);
 }
 
-// Bind DTP Selector
-// bind(document.getElementsByClassName("drivetopose")[0], () => {
-//   selectedDtp = updateDtpValue();
-//   console.log("Selected DTP: " + !selectedDtp);
-//   if(selectedDtp == true) {
-//     ntClient.addSample(toRobotPrefix + dtpTopicName, true);
-//     console.log("Output DTP: TRUE");
-
-//   } else {
-//     ntClient.addSample(toRobotPrefix + dtpTopicName, false);
-//     console.log("Output DTP: FALSE");
-//   }
-// });
-
-  // // Update counter highlight
-  // Array.from(document.getElementsByClassName("counter-area")).forEach(
-  //   (element, index) => {
-  //     if (index > 0 && selectedLevel === index - 1) {
-  //       element.classList.add("active");
-  //     } else {
-  //       element.classList.remove("active");
-  //     }
-  //   }
-  // );
-
-  // // Update level counts
-  // let rpLevelCount = 0;
-  // Array.from(document.getElementsByClassName("counter")).forEach(
-  //   (element, index) => {
-  //     if (index === 0) {
-  //       element.innerText = l1State;
-  //       if (l1State >= 5) rpLevelCount++;
-  //     } else {
-  //       let count = 0;
-  //       let levelState = [l2State, l3State, l4State][index - 1];
-  //       for (let i = 0; i < 12; i++) {
-  //         if (((1 << i) & levelState) > 0) {
-  //           count++;
-  //         }
-  //       }
-  //       element.innerText = count === 12 ? "\u2713" : count;
-  //       if (count >= 5) rpLevelCount++;
-  //     }
-  //   }
-  // );
-
-  // // Update coral buttons
-  // Array.from(document.getElementsByClassName("branch")).forEach(
-  //   (element, index) => {
-  //     let levelState = [l2State, l3State, l4State][selectedLevel];
-  //     if (((1 << index) & levelState) > 0) {
-  //       element.classList.add("active");
-  //     } else {
-  //       element.classList.remove("active");
-  //     }
-  //   }
-  // );
-
-  // // Update algae buttons
-  // Array.from(document.getElementsByClassName("algae")).forEach(
-  //   (element, index) => {
-  //     if (((1 << index) & algaeState) > 0) {
-  //       element.classList.add("active");
-  //     } else {
-  //       element.classList.remove("active");
-  //     }
-  //   }
-  // );
-
-  // Update coop button
-  // let coopDiv = document.getElementsByClassName("coop")[0];
-  // if (coopState) {
-  //   coopDiv.classList.add("active");
-  // } else {
-  //   coopDiv.classList.remove("active");
-  // }
-
-  // Update RP flag
-  // document.getElementsByClassName("flag")[0].hidden =
-  //   isElims || rpLevelCount < (coopState ? 3 : 4);
-
-  // Update elims state
-  // if (isElims) {
-  //   document.body.classList.add("elims");
-  // } else {
-  //   document.body.classList.remove("elims");
-  // }
-
-
-// ***** BUTTON BINDINGS *****
-
-// function bind(element, callback) {
-//   let lastActivation = 0;
-//   let activate = () => {
-//     if (new Date().getTime() - lastActivation > 500) {
-//       callback();
-//       lastActivation = new Date().getTime();
-//     }
-//   };
-
-//   element.addEventListener("touchstart", activate);
-//   element.addEventListener("click", activate);
-//   element.addEventListener("contextmenu", (event) => {
-//     event.preventDefault();
-//     activate();
-//   });
-// }
-
-// window.addEventListener("load", () => {
-//   // Buttons to change selected level
-//   Array.from(document.getElementsByClassName("counter-area")).forEach(
-//     (element, index) => {
-//       if (index > 0) {
-//         bind(element, () => {
-//           ntClient.addSample(toRobotPrefix + selectedLevelTopicName, index - 1);
-//         });
-//       }
-//     }
-//   );
-
-//   // Coral toggle buttons
-//   Array.from(document.getElementsByClassName("branch")).forEach(
-//     (element, index) => {
-//       bind(element, () => {
-//         switch (selectedLevel) {
-//           case 0:
-//             ntClient.addSample(
-//               toRobotPrefix + l2TopicName,
-//               l2State ^ (1 << index)
-//             );
-//             break;
-//           case 1:
-//             ntClient.addSample(
-//               toRobotPrefix + l3TopicName,
-//               l3State ^ (1 << index)
-//             );
-//             break;
-//           case 2:
-//             ntClient.addSample(
-//               toRobotPrefix + l4TopicName,
-//               l4State ^ (1 << index)
-//             );
-//             break;
-//         }
-//       });
-//     }
-//   );
-
-//   // Algae toggle buttons
-//   Array.from(document.getElementsByClassName("algae")).forEach(
-//     (element, index) => {
-//       bind(element, () => {
-//         ntClient.addSample(
-//           toRobotPrefix + algaeTopicName,
-//           algaeState ^ (1 << index)
-//         );
-//       });
-//     }
-//   );
-
-  // // L1 count controls
-  // bind(document.getElementsByClassName("subtract")[0], () => {
-  //   if (l1State > 0) {
-  //     ntClient.addSample(toRobotPrefix + l1TopicName, l1State - 1);
-  //   }
-  // });
-  // bind(document.getElementsByClassName("add")[0], () => {
-  //   ntClient.addSample(toRobotPrefix + l1TopicName, l1State + 1);
-  // });
-
-  
-  // DTP Selector
-  // bind(document.getElementsByClassName("drivetopose")[0], () => {
-  //   console.log("Output DTP: " + !window.selectedDtp);
-  //   ntClient.addSample(toRobotPrefix + dtpTopicName, !window.selectedDtp);
-  // });
-// });
-
-// ***** REEF CANVAS *****
-
-// window.addEventListener("load", () => {
-//   const canvas = document.getElementsByTagName("canvas")[0];
-//   const context = canvas.getContext("2d");
-
-//   let render = () => {
-//     const devicePixelRatio = window.devicePixelRatio;
-//     const width = canvas.clientWidth;
-//     const height = canvas.clientHeight;
-//     canvas.width = width * devicePixelRatio;
-//     canvas.height = height * devicePixelRatio;
-//     context.scale(devicePixelRatio, devicePixelRatio);
-//     context.clearRect(0, 0, width, height);
-
-//     const corners = [
-//       [width * 0.74, height * 0.9],
-//       [width * 0.26, height * 0.9],
-//       [width * 0.03, height * 0.5],
-//       [width * 0.26, height * 0.1],
-//       [width * 0.74, height * 0.1],
-//       [width * 0.97, height * 0.5],
-//     ];
-
-//     context.beginPath();
-//     corners.forEach((corner, index) => {
-//       context.moveTo(width * 0.5, height * 0.5);
-//       context.lineTo(...corner);
-//     });
-//     corners.forEach((corner, index) => {
-//       if (index == 0) {
-//         context.moveTo(...corner);
-//       } else {
-//         context.lineTo(...corner);
-//       }
-//     });
-//     context.closePath();
-
-//     context.strokeStyle = "black";
-//     context.stroke();
-//   };
-
-//   render();
-//   window.addEventListener("resize", render);
-// });
-
 /**
  * Function to update the DTP value and radio buttons
  * @param {*} newValue 
@@ -411,6 +196,10 @@ function updateDtpValue(newValue) {
   sendBooleanToRobot(selectedDtpTopicName, selectedDtp);
 }
 
+/**
+ * Function to update the intake side value and radio buttons
+ * @param {*} newValue
+ */
 function updateIntakeSideValue(newValue) {
     // $("input[name='intakeside'] + label").css("background", "");
 
@@ -427,6 +216,10 @@ function updateIntakeSideValue(newValue) {
     sendIntToRobot(selectedPickupSideTopicName, selectedPickupSide);
 };
 
+/**
+ * Function to update the coral branch value and radio buttons
+ * @param {*} newValue 
+ */
 function updateCoralBranchValue(newValue) {
   if(selectedCoralBranch === newValue) {
     $("input[name='coralGroup']").prop("checked", false); // Uncheck all radios
@@ -440,6 +233,10 @@ function updateCoralBranchValue(newValue) {
   sendIntToRobot(selectedCoralBranchTopicName, selectedCoralBranch);
 };
 
+/**
+ * Function to update the algae face value and radio buttons
+ * @param {*} newValue 
+ */
 function updateAlgaeFaceValue(newValue) {
   if(selectedAlgaeFace === newValue) {
     $("input[name='algaeGroup']").prop("checked", false); // Uncheck all radios
@@ -453,6 +250,10 @@ function updateAlgaeFaceValue(newValue) {
   sendIntToRobot(selectedAlgaeFaceTopicName, selectedAlgaeFace);
 };
 
+/**
+ * Function to update the coral level value and radio buttons
+ * @param {*} newValue 
+ */
 function updateCoralLevelValue(newValue) {
   // $("input[name='corallevel'] + label").css("background", "");
 
@@ -468,7 +269,11 @@ function updateCoralLevelValue(newValue) {
   sendIntToRobot(selectedCoralLevelTopicName, selectedCoralLevel);
 };
 
-// Function to update match time
+/**
+ * Function to update Match Time
+ * @param {*} newValue
+ * @param {*} isAuto
+ */
 function updateMatchTime(newValue, isAuto) {
   let textelement = $("#matchTimeDisplay");
   let matchtime = $(".match-time");
