@@ -256,7 +256,7 @@ public class Dashboard extends CS_SubsystemBase {
     selectedDtpOut.set(value);
   }
 
-  private void setSelectedMatchTime(double value) {
+  private void setMatchTime(double value) {
     selectedMatchTimeOut.set(value);
   }
 
@@ -282,7 +282,7 @@ public class Dashboard extends CS_SubsystemBase {
     this.setSelectedAlgaeFace(0);
     this.setSelectedPickupSide(UIConstants.defaultPickupSide.getValue());
     this.setSelectedDtp(UIConstants.defaultDTP.getValue());
-    this.setSelectedMatchTime(0);
+    this.setMatchTime(0);
   }
 
   public static CoralLevel getSelectedCoralLevel() {
