@@ -2,10 +2,10 @@ package frc.robot.subsystems.presets;
 
 public class Presets {
 
-  public static final AlgaePreset ALGAE_LOW = new AlgaePreset("LOW", 39, 210, -600);
-  public static final AlgaePreset ALGAE_HIGH = new AlgaePreset("HIGH", 51, 210, -600);
-  public static final AlgaePreset ALGAE_FLOOR = new AlgaePreset("FLOOR", 9, 200, -1000);
-  public static final AlgaePreset ALGAE_PROCESS = new AlgaePreset("PROCESS", 9, 190, 1000);
+  public static final AlgaePreset ALGAE_LOW = new AlgaePreset("LOW", 38, 210, -600);
+  public static final AlgaePreset ALGAE_HIGH = new AlgaePreset("HIGH", 50, 210, -600);
+  public static final AlgaePreset ALGAE_FLOOR = new AlgaePreset("FLOOR", 8, 205, -1000);
+  public static final AlgaePreset ALGAE_PROCESS = new AlgaePreset("PROCESS", 8, 170, 1000);
   public static final AlgaePreset ALGAE_NETFROMREEF =
       new AlgaePreset("SHOOT_FROM_REEF", 10, 115, 2200);
   public static final AlgaePreset ALGAE_STOW = new AlgaePreset("STOW", 8, 75, 0);

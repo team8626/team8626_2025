@@ -7,7 +7,7 @@ public class WristConstants {
 
   public static final double minAngleDegrees = 90;
   public static final double maxAngleDegrees = 235;
-  public static final double restAngleDegrees = 75;
+  public static final double restAngleDegrees = 80;
   public static final double positionConversionFactor = 360; // degrees
   public static final double velocityConversionFactor = 360 / 60; // degrees per second
 

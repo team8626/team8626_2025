@@ -65,8 +65,8 @@ public class AlgaeShooterRampUp extends CS_Command {
     double currentRPMRight = algae501.getShooterRPMRight();
 
     atSetpoint =
-        Math.abs(currentRPMLeft - desiredRPM) <= RPMTolerance
-            && Math.abs(currentRPMRight - desiredRPM) <= RPMTolerance;
+        Math.abs(Math.abs(currentRPMLeft) - desiredRPM) <= RPMTolerance
+            && Math.abs(Math.abs(currentRPMRight) - desiredRPM) <= RPMTolerance;
 
     return atSetpoint;
   }

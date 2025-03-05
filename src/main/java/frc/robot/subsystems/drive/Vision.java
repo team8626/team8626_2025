@@ -124,13 +124,15 @@ public class Vision {
     }
     for (Cameras camera : Cameras.values()) {
       Optional<EstimatedRobotPose> poseEst = getEstimatedGlobalPose(camera);
-      if (poseEst.isPresent()) {
-        var pose = poseEst.get();
+      if (poseEst != null) {
+        if (poseEst.isPresent()) {
+          var pose = poseEst.get();
 
-        posePublisher.set(getEstimatedGlobalPose(camera).get().estimatedPose.toPose2d());
+          posePublisher.set(getEstimatedGlobalPose(camera).get().estimatedPose.toPose2d());
 
-        swerveDrive.addVisionMeasurement(
-            pose.estimatedPose.toPose2d(), pose.timestampSeconds, camera.curStdDevs);
+          swerveDrive.addVisionMeasurement(
+              pose.estimatedPose.toPose2d(), pose.timestampSeconds, camera.curStdDevs);
+        }
       }
     }
   }
