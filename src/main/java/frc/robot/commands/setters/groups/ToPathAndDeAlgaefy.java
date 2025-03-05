@@ -13,7 +13,7 @@ public class ToPathAndDeAlgaefy extends SequentialCommandGroup {
   private Supplier<AlgaePreset> presetSupplier;
 
   public ToPathAndDeAlgaefy() {
-    System.out.printf("[Cmd: %s]", this.getName().toUpperCase());
+    System.out.printf("[Cmd: %s] Loaded\n", this.getName().toUpperCase());
     poseSupplier = () -> PresetManager.getAlgaePreset().getPose();
     presetSupplier = () -> PresetManager.getAlgaePreset();
 
