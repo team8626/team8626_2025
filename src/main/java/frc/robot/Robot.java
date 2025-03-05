@@ -118,7 +118,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically when disabled. */
   @Override
   public void disabledPeriodic() {
-    if (!(DriverStation.isFMSAttached() && DriverStation.isDSAttached())) {
+    if (!(DriverStation.isDSAttached())) {
       if (Commodore.getCurrentState() != CommodoreState.DISCONNECTED) {
         Commodore.setCommodoreState(CommodoreState.DISCONNECTED, true);
       }
