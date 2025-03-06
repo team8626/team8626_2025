@@ -16,6 +16,7 @@ public class FollowPathToPose extends CS_Command {
   private Pose2d targetPose;
   private PathConstraints constraints;
   private Command pathfindingCommand;
+  private boolean hasPose = false;
 
   public FollowPathToPose(Supplier<Pose2d> poseSupplier) {
     drivebase = RobotContainer.drivebase;
@@ -30,12 +31,17 @@ public class FollowPathToPose extends CS_Command {
   public void initialize() {
     targetPose = poseSupplier.get();
 
-    constraints =
-        new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI); // The constraints for this path.
-    // constraints = PathConstraints.unlimitedConstraints(12.0); // You can also use unlimited
+    if (this.targetPose != null) {
+      constraints =
+          new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI); // The constraints for this path.
+      // constraints = PathConstraints.unlimitedConstraints(12.0); // You can also use unlimited
 
-    pathfindingCommand = AutoBuilder.pathfindToPose(targetPose, constraints, 0.0);
-    pathfindingCommand.schedule();
+      pathfindingCommand = AutoBuilder.pathfindToPose(targetPose, constraints, 0.0);
+      pathfindingCommand.schedule();
+      hasPose = true;
+    } else {
+      hasPose = false;
+    }
   }
 
   @Override
@@ -46,6 +52,6 @@ public class FollowPathToPose extends CS_Command {
 
   @Override
   public boolean isFinished() {
-    return pathfindingCommand.isFinished();
+    return hasPose && pathfindingCommand.isFinished();
   }
 }

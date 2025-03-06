@@ -1,20 +1,23 @@
 package frc.robot.subsystems.presets;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import java.util.function.Supplier;
+import frc.robot.RobotConstants.UIConstants.AlgaeFace2;
 
 public class AlgaePreset {
-  private Supplier<Pose2d> robotPoseSupplier;
-  // private AlgaeLevelPreset subsystemsPresets;
+  private Pose2d robotPose = null;
   private double elevatorHeightInches;
   private double wristAngleDegrees;
   private double RPM;
-  private boolean isReady = false;
+  public boolean hasPose = false;
+  public boolean hasSubsystemsReady = false;
   private String name;
 
   public AlgaePreset(String name) {
     this.name = name;
-    this.isReady = false;
+    this.hasPose = false;
+    this.hasSubsystemsReady = false;
+
+    // TODO: Set Default subsystems to floor
   }
 
   public AlgaePreset(
@@ -24,45 +27,42 @@ public class AlgaePreset {
     this.wristAngleDegrees = wristAngleDegrees;
     this.RPM = RPM;
 
-    this.isReady = true;
+    this.hasSubsystemsReady = true;
+    this.hasPose = true;
   }
 
   public void setPose(Pose2d newPose) {
     // Set the Pose of the Robot
-    this.robotPoseSupplier = () -> newPose;
+    this.robotPose = newPose;
+    this.hasPose = true;
     System.out.printf(
         "[ALGAE PRESET] New Pose Set to - x: %3f, y: %3f, theta: %3f",
-        robotPoseSupplier.get().getX(),
-        robotPoseSupplier.get().getY(),
-        robotPoseSupplier.get().getRotation().getDegrees());
+        robotPose.getX(), robotPose.getY(), robotPose.getRotation().getDegrees());
   }
 
-  public void setSubsystems(String newPositionName) {
-    switch (newPositionName) {
-      case "AB":
-      case "EF":
-      case "IJ":
+  public void setSubsystems(AlgaeFace2 newPosition) {
+    switch (newPosition) {
+      case AB:
+      case EF:
+      case IJ:
         this.elevatorHeightInches = Presets.ALGAE_HIGH.getElevatorHeightInches();
         this.wristAngleDegrees = Presets.ALGAE_HIGH.getWristAngleDegrees();
         this.RPM = Presets.ALGAE_HIGH.getRPM();
+        this.hasSubsystemsReady = true;
         break;
-      case "CD":
-      case "GH":
-      case "KL":
+      case CD:
+      case GH:
+      case KL:
         this.elevatorHeightInches = Presets.ALGAE_LOW.getElevatorHeightInches();
         this.wristAngleDegrees = Presets.ALGAE_LOW.getWristAngleDegrees();
         this.RPM = Presets.ALGAE_LOW.getRPM();
+        this.hasSubsystemsReady = true;
         break;
-      case "PROCESSOR":
-        this.elevatorHeightInches = 8;
-        this.wristAngleDegrees = 190;
-        this.RPM = 1000;
-        break;
-      case "FLOOR":
+      case FLOOR:
       default:
-        this.elevatorHeightInches = 8;
-        this.wristAngleDegrees = 200;
-        this.RPM = -600;
+        this.elevatorHeightInches = Presets.ALGAE_FLOOR.getElevatorHeightInches();
+        this.wristAngleDegrees = Presets.ALGAE_FLOOR.getWristAngleDegrees();
+        this.RPM = Presets.ALGAE_FLOOR.getRPM();
         break;
     }
 
@@ -71,9 +71,41 @@ public class AlgaePreset {
         this.toString(), elevatorHeightInches, wristAngleDegrees, RPM);
   }
 
-  public void setReady(boolean ready) {
-    // Set the Ready State of the Preset
-    this.isReady = ready;
+  private void setSubsystems(String newPositionName) {
+    switch (newPositionName) {
+      case "AB":
+      case "EF":
+      case "IJ":
+        this.elevatorHeightInches = Presets.ALGAE_HIGH.getElevatorHeightInches();
+        this.wristAngleDegrees = Presets.ALGAE_HIGH.getWristAngleDegrees();
+        this.RPM = Presets.ALGAE_HIGH.getRPM();
+        this.hasSubsystemsReady = true;
+        break;
+      case "CD":
+      case "GH":
+      case "KL":
+        this.elevatorHeightInches = Presets.ALGAE_LOW.getElevatorHeightInches();
+        this.wristAngleDegrees = Presets.ALGAE_LOW.getWristAngleDegrees();
+        this.RPM = Presets.ALGAE_LOW.getRPM();
+        this.hasSubsystemsReady = true;
+        break;
+      case "PROCESSOR":
+        this.elevatorHeightInches = Presets.ALGAE_PROCESS.getElevatorHeightInches();
+        this.wristAngleDegrees = Presets.ALGAE_PROCESS.getWristAngleDegrees();
+        this.RPM = Presets.ALGAE_PROCESS.getRPM();
+        this.hasSubsystemsReady = true;
+        break;
+      case "FLOOR":
+      default:
+        this.elevatorHeightInches = Presets.ALGAE_FLOOR.getElevatorHeightInches();
+        this.wristAngleDegrees = Presets.ALGAE_FLOOR.getWristAngleDegrees();
+        this.RPM = Presets.ALGAE_FLOOR.getRPM();
+        break;
+    }
+
+    System.out.printf(
+        "[ALGAE] New Algae Preset - %s - %s In, %s Deg, %s RPM\n",
+        this.toString(), elevatorHeightInches, wristAngleDegrees, RPM);
   }
 
   public double getRPM() {
@@ -83,19 +115,30 @@ public class AlgaePreset {
 
   public double getElevatorHeightInches() {
     return this.elevatorHeightInches;
-    // return this.elevatorHeightInches;
   }
 
   public double getWristAngleDegrees() {
     return this.wristAngleDegrees;
   }
 
+  /**
+   * Get the Pose of the Robot
+   *
+   * @return <null>> if the Pose is not set, otherwise the Pose of the Robot
+   */
   public Pose2d getPose() {
-    return this.robotPoseSupplier.get();
+    return hasPose ? this.robotPose : null;
   }
 
-  public boolean isReady() {
+  private boolean isReady() {
     // Get the Ready State of the Preset
-    return this.isReady;
+    return this.hasSubsystemsReady && this.hasPose;
+  }
+
+  public void reset() {
+    this.hasPose = false;
+
+    // Reset to NONE (Floor)
+    this.setSubsystems(AlgaeFace2.FLOOR);
   }
 }

@@ -108,8 +108,9 @@ public class Dashboard extends CS_SubsystemBase {
 
   private final IntegerPublisher allianceColorOut;
   private final IntegerPublisher allowedCoralLevelsOut;
-  private final IntegerPublisher selectedCoralLevelOut;
-  private final IntegerPublisher selectedAlgaeFaceOut;
+  private static IntegerPublisher selectedCoralLevelOut;
+  private static IntegerPublisher selectedCoralBranchOut;
+  private static IntegerPublisher selectedAlgaeFaceOut;
   private final IntegerPublisher selectedPickupSideOut;
   private final BooleanPublisher selectedDtpOut;
   private final DoublePublisher selectedMatchTimeOut;
@@ -146,6 +147,7 @@ public class Dashboard extends CS_SubsystemBase {
     allianceColorOut = outputTable.getIntegerTopic(allianceColorTopicName).publish();
     allowedCoralLevelsOut = outputTable.getIntegerTopic(allowedCoralLevelsTopicName).publish();
     selectedCoralLevelOut = outputTable.getIntegerTopic(selectedCoralLevelTopicName).publish();
+    selectedCoralBranchOut = outputTable.getIntegerTopic(selectedCoralBranchTopicName).publish();
     selectedAlgaeFaceOut = outputTable.getIntegerTopic(selectedAlgaeFaceTopicName).publish();
     selectedDtpOut = outputTable.getBooleanTopic(selectedDtpTopicName).publish();
     selectedPickupSideOut = outputTable.getIntegerTopic(selectedPickupSideTopicName).publish();
@@ -236,15 +238,19 @@ public class Dashboard extends CS_SubsystemBase {
     allianceColorOut.set(getAllianceColorAsInt());
   }
 
-  private void setAllowedCoralLevels(int value) {
-    allowedCoralLevelsOut.set(value);
+  private void setAllowedCoralLevels(List<CoralLevel> allowedcorallevels2) {
+    // TODO: allowedCoralLevelsOut.set(allowedcorallevels2);
   }
 
-  private void setSelectedCoralLevel(int value) {
+  public static void setSelectedCoralLevel(int value) {
     selectedCoralLevelOut.set(value);
   }
 
-  private void setSelectedAlgaeFace(int value) {
+  public static void setSelectedCoralBranch(int value) {
+    selectedCoralBranchOut.set(value);
+  }
+
+  public static void setSelectedAlgaeFace(int value) {
     selectedAlgaeFaceOut.set(value);
   }
 
@@ -256,7 +262,7 @@ public class Dashboard extends CS_SubsystemBase {
     selectedDtpOut.set(value);
   }
 
-  private void setSelectedMatchTime(double value) {
+  private void setMatchTime(double value) {
     selectedMatchTimeOut.set(value);
   }
 
@@ -277,12 +283,13 @@ public class Dashboard extends CS_SubsystemBase {
   }
 
   private void setDefaultValues() {
-    this.setAllowedCoralLevels(0);
-    this.setSelectedCoralLevel(UIConstants.defaultCoralLevel.getValue());
-    this.setSelectedAlgaeFace(0);
-    this.setSelectedPickupSide(UIConstants.defaultPickupSide.getValue());
-    this.setSelectedDtp(UIConstants.defaultDTP.getValue());
-    this.setSelectedMatchTime(0);
+    setAllowedCoralLevels(UIConstants.allowedCoralLevels2);
+    setSelectedCoralLevel(UIConstants.defaultCoralLevel.getValue());
+    setSelectedCoralBranch(UIConstants.defaultCoralBranch.getValue());
+    setSelectedAlgaeFace(UIConstants.defaultAlgaeFace.getValue());
+    setSelectedPickupSide(UIConstants.defaultPickupSide.getValue());
+    setSelectedDtp(UIConstants.defaultDTP.getValue());
+    setMatchTime(0);
   }
 
   public static CoralLevel getSelectedCoralLevel() {

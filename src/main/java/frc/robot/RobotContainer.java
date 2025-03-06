@@ -1,4 +1,4 @@
-// Copyright (c) 2024 FRC 8626
+// Copyright (c) 2025 FRC 8626
 // http://github.com/team8626
 //
 // Open Source Software; you can modify and/or share it under the terms of
@@ -19,13 +19,9 @@ import frc.robot.commands.setters.groups.ToAlgaeIntake;
 import frc.robot.commands.setters.groups.ToAlgaeShoot;
 import frc.robot.commands.setters.groups.ToCoralIntake;
 import frc.robot.commands.setters.groups.ToCoralShoot;
+import frc.robot.commands.setters.groups.ToPathAndCoralShoot;
+import frc.robot.commands.setters.groups.ToPathAndDeAlgaefy;
 import frc.robot.commands.setters.groups.ToSubsystemsPreset;
-import frc.robot.commands.setters.units.AlgaeShooterIntake;
-import frc.robot.commands.setters.units.AlgaeShooterLaunch;
-import frc.robot.commands.setters.units.CoralShooterIntake;
-import frc.robot.commands.setters.units.CoralShooterLaunch;
-import frc.robot.commands.tuning.Tune_AlgaeShooter;
-import frc.robot.commands.tuning.Tune_CoralShooter;
 import frc.robot.subsystems.Dashboard;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterSubsystem;
 import frc.robot.subsystems.algaeshooter.AlgaeShooter_Sim;
@@ -252,12 +248,15 @@ public class RobotContainer {
     // controller.btn_X.onTrue(new InstantCommand(() -> elevator.setHeight(50)));
 
     // Algae Shooter Test
+    controller.btn_A.toggleOnTrue(new ToPathAndCoralShoot());
+    controller.btn_B.toggleOnTrue(new ToPathAndDeAlgaefy());
+
     // controller.btn_A.toggleOnTrue(new AlgaeShooterIntake());
     // controller.btn_B.toggleOnTrue(new Tune_AlgaeShooter());
     // controller.btn_Y.toggleOnTrue(new AlgaeShooterLaunch());
-    controller.btn_X.toggleOnTrue(
-        new FeedForwardCharacterization(
-            algae501, algae501::runCharacterization, algae501::getCharacterizationVelocity));
+    // controller.btn_X.toggleOnTrue(
+    //     new FeedForwardCharacterization(
+    //         algae501, algae501::runCharacterization, algae501::getCharacterizationVelocity));
 
     // Coral Shooter Test
     // controller.btn_A.toggleOnTrue(new CoralShooterIntake());
@@ -333,13 +332,13 @@ public class RobotContainer {
 
   private void configureTestButtonBoxBindings(CS_ButtonBoxController controller) {
     // Coral Shooter Tuning functions
-    controller.btn_1.toggleOnTrue(new CoralShooterIntake());
-    controller.btn_2.toggleOnTrue(new Tune_CoralShooter());
-    controller.btn_3.toggleOnTrue(new CoralShooterLaunch());
+    // controller.btn_1.toggleOnTrue(new CoralShooterIntake());
+    // controller.btn_2.toggleOnTrue(new Tune_CoralShooter());
+    // controller.btn_3.toggleOnTrue(new CoralShooterLaunch());
 
-    controller.btn_4.toggleOnTrue(new AlgaeShooterIntake());
-    controller.btn_5.toggleOnTrue(new Tune_AlgaeShooter());
-    controller.btn_6.toggleOnTrue(new AlgaeShooterLaunch());
+    // controller.btn_4.toggleOnTrue(new AlgaeShooterIntake());
+    // controller.btn_5.toggleOnTrue(new Tune_AlgaeShooter());
+    // controller.btn_6.toggleOnTrue(new AlgaeShooterLaunch());
 
     // controller.btn_5.toggleOnTrue(new InstantCommand(() -> elevator.setHeight(8)));
     // controller.btn_6.toggleOnTrue(new InstantCommand(() -> elevator.setHeight(51)));

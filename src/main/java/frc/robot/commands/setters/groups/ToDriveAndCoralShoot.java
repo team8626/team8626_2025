@@ -17,7 +17,7 @@ public class ToDriveAndCoralShoot extends SequentialCommandGroup {
   private Supplier<Pose2d> poseSupplier;
 
   public ToDriveAndCoralShoot() {
-    System.out.printf("[Cmd: %s]", this.getName().toUpperCase());
+    System.out.printf("[Cmd: %s] Loaded\n", this.getName().toUpperCase());
     poseSupplier = () -> PresetManager.getCoralPreset().getPose();
 
     addCommands(

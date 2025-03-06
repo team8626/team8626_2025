@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.robot.commands.setters.units.ElevatorSetHeight;
 import frc.robot.commands.setters.units.WristSetAngle;
 import frc.robot.subsystems.presets.AlgaePreset;
+import frc.robot.subsystems.presets.PresetManager;
 import java.util.function.Supplier;
 
 public class ToDeAlgaefy extends ParallelCommandGroup {
@@ -27,6 +28,7 @@ public class ToDeAlgaefy extends ParallelCommandGroup {
                     + presetSupplier.get().getWristAngleDegrees()),
             new ElevatorSetHeight(() -> presetSupplier.get().getElevatorHeightInches()),
             new WristSetAngle(() -> presetSupplier.get().getWristAngleDegrees())),
-        new ToAlgaeIntake(() -> presetSupplier.get().getRPM()));
+        new ToAlgaeIntake(() -> presetSupplier.get().getRPM()),
+        PresetManager.resetAlgaePresetCmd());
   }
 }

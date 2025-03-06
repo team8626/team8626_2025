@@ -135,14 +135,7 @@ public class RobotConstants {
   // ****************************************************************************************
   // UI Constants
   public static class UIConstants {
-    public static final List<String> allowedCoralLevels = Arrays.asList("L1", "L4");
-    public static final List<String> allowedIntakeSides = Arrays.asList("LEFT", "RIGHT");
-    public static final List<String> allowedCoralBranches =
-        Arrays.asList("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L");
-    public static final List<String> allowedAlgaePositions =
-        Arrays.asList("AB", "CD", "EF", "GH", "IJ", "KL");
-
-    public static final List<CoralBranch> allowedCoralBranches2 =
+    public static final List<CoralBranch> allowedCoralBranches =
         Arrays.asList(
             CoralBranch.A,
             CoralBranch.B,
@@ -172,6 +165,8 @@ public class RobotConstants {
     public static final DTP defaultDTP = DTP.ON;
     public static final CoralLevel defaultCoralLevel = CoralLevel.L4;
     public static final PickupSide defaultPickupSide = PickupSide.NONE;
+    public static final CoralBranch defaultCoralBranch = CoralBranch.NONE;
+    public static final AlgaeFace2 defaultAlgaeFace = AlgaeFace2.FLOOR;
 
     public enum AllianceColor {
       UNKNOWN(0),
@@ -295,13 +290,14 @@ public class RobotConstants {
     }
 
     public enum AlgaeFace2 {
-      NONE(0),
+      FLOOR(0),
       AB(1),
       CD(2),
       EF(3),
       GH(4),
       IJ(5),
       KL(6);
+
       private final int value;
 
       private AlgaeFace2(int value) {
