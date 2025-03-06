@@ -51,7 +51,8 @@ public class ToCoralShoot extends SequentialCommandGroup {
                         "Subsystem/CoralShooter/Last Shot in (ms)", (int) (elapsedTime * 1000));
                   }
                 },
-                Commodore.getSetStateCommand(CommodoreState.IDLE)),
+                Commodore.getSetStateCommand(CommodoreState.IDLE),
+                PresetManager.resetCoralPresetCmd()),
             new SequentialCommandGroup(Commodore.getSetStateCommand(CommodoreState.IDLE)),
             mortar::isLoaded));
   }
