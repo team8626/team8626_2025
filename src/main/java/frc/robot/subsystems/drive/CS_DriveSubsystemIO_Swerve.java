@@ -1,4 +1,4 @@
-// Copyright (c) 2024 FRC 8626
+// Copyright (c) 2025 FRC 8626
 // http://github.com/team8626
 //
 // Open Source Software; you can modify and/or share it under the terms of
@@ -16,6 +16,7 @@ import frc.robot.OperatorConstants;
 import frc.utils.CS_XboxController;
 import java.io.File;
 import java.util.function.Supplier;
+import org.littletonrobotics.frc2025.util.AllianceFlipUtil;
 
 public class CS_DriveSubsystemIO_Swerve extends SwerveSubsystem implements CS_DriveSubsystemIO {
 
@@ -34,10 +35,12 @@ public class CS_DriveSubsystemIO_Swerve extends SwerveSubsystem implements CS_Dr
         this.driveCommand(
             () ->
                 MathUtil.applyDeadband(
-                    -xboxController.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
+                    -xboxController.getLeftY() * (AllianceFlipUtil.shouldFlip() ? -1.0 : 1.0),
+                    OperatorConstants.LEFT_Y_DEADBAND),
             () ->
                 MathUtil.applyDeadband(
-                    -xboxController.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
+                    -xboxController.getLeftX() * (AllianceFlipUtil.shouldFlip() ? -1.0 : 1.0),
+                    OperatorConstants.LEFT_X_DEADBAND),
             () -> -xboxController.getRightX());
 
     setDefaultCommand(driveCommand);
