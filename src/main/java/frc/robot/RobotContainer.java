@@ -1,4 +1,4 @@
-// Copyright (c) 2024 FRC 8626
+// Copyright (c) 2025 FRC 8626
 // http://github.com/team8626
 //
 // Open Source Software; you can modify and/or share it under the terms of
@@ -15,8 +15,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Commodore.CommodoreState;
 import frc.robot.RobotConstants.RobotType;
+import frc.robot.commands.setters.groups.ToAlgaeIntake;
+import frc.robot.commands.setters.groups.ToAlgaeShoot;
+import frc.robot.commands.setters.groups.ToCoralIntake;
+import frc.robot.commands.setters.groups.ToCoralShoot;
 import frc.robot.commands.setters.groups.ToPathAndCoralShoot;
 import frc.robot.commands.setters.groups.ToPathAndDeAlgaefy;
+import frc.robot.commands.setters.groups.ToSubsystemsPreset;
 import frc.robot.subsystems.Dashboard;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterSubsystem;
 import frc.robot.subsystems.algaeshooter.AlgaeShooter_Sim;
@@ -33,6 +38,7 @@ import frc.robot.subsystems.elevator.Elevator_LinearSparkMax;
 import frc.robot.subsystems.elevator.Elevator_SimulationRose;
 import frc.robot.subsystems.ledManager.LEDManager;
 import frc.robot.subsystems.presets.PresetManager;
+import frc.robot.subsystems.presets.Presets;
 import frc.robot.subsystems.wrist.WristSubsystem;
 import frc.robot.subsystems.wrist.Wrist_Sim;
 import frc.robot.subsystems.wrist.Wrist_SparkFlex;
@@ -178,21 +184,40 @@ public class RobotContainer {
     //         () -> Commodore.setCommodoreState(CommodoreState.ALGAE_SHOOT,
     // true).withToggleState()));
 
-    controller.btn_RightBumper.onTrue(
-        new InstantCommand(
-            () ->
-                Commodore.setCommodoreState(CommodoreState.CORAL_INTAKE, true).withToggleState()));
-    controller.btn_RightTrigger.onTrue(
-        new InstantCommand(
-            () -> Commodore.setCommodoreState(CommodoreState.CORAL_SHOOT, true).withToggleState()));
+    controller.btn_RightBumper.toggleOnTrue(new ToCoralIntake());
+    controller.btn_RightTrigger.toggleOnTrue(new ToCoralShoot());
 
-    controller.btn_LeftBumper.onTrue(
-        new InstantCommand(
-            () ->
-                Commodore.setCommodoreState(CommodoreState.ALGAE_INTAKE, true).withToggleState()));
-    controller.btn_LeftTrigger.onTrue(
-        new InstantCommand(
-            () -> Commodore.setCommodoreState(CommodoreState.ALGAE_SHOOT, true).withToggleState()));
+    controller.btn_LeftBumper.toggleOnTrue(new ToAlgaeIntake());
+    controller.btn_LeftTrigger.toggleOnTrue(new ToAlgaeShoot());
+
+    // controller.btn_X.onTrue(new ToSubsystemsPreset(() -> PresetManager.getAlgaePreset()));
+
+    controller.btn_Y.onTrue(new ToSubsystemsPreset(() -> Presets.ALGAE_STOW));
+    controller.btn_B.onTrue(new ToSubsystemsPreset(() -> Presets.ALGAE_PROCESS));
+    controller.btn_A.onTrue(new ToSubsystemsPreset(() -> Presets.ALGAE_FLOOR));
+
+    // controller.btn_RightBumper.onTrue(
+    //     new InstantCommand(
+    //         () ->
+    //             Commodore.setCommodoreState(CommodoreState.CORAL_INTAKE,
+    // true).withToggleState()));
+    // controller.btn_RightTrigger.onTrue(
+    //     new InstantCommand(
+    //         () -> Commodore.setCommodoreState(CommodoreState.CORAL_SHOOT,
+    // true).withToggleState()));
+
+    // controller.btn_LeftBumper.onTrue(
+    //     new InstantCommand(
+    //         () ->
+    //             Commodore.setCommodoreState(CommodoreState.ALGAE_INTAKE,
+    // true).withToggleState()));
+    // controller.btn_LeftTrigger.onTrue(
+    //     new InstantCommand(
+    //         () -> Commodore.setCommodoreState(CommodoreState.ALGAE_SHOOT,
+    // true).withToggleState()));
+
+    // controller.btn_B.toggleOnTrue(new Tune_AlgaeShooter());
+    // controller.btn_Y.toggleOnTrue(new AlgaeShooterLaunch());
 
     // controller.btn_A.onTrue(
     //     new InstantCommand(
@@ -265,6 +290,7 @@ public class RobotContainer {
     //     new InstantCommand(
     //         () -> Commodore.setCommodoreState(CommodoreState.ALGAE_SHOOT,
     // true).withToggleState()));
+
   }
 
   private void configureOperatorBindings(CS_XboxController controller) {

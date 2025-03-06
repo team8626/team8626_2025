@@ -170,6 +170,21 @@ public class CoralShooterSubsystem extends CS_SubsystemBase {
     SmartDashboard.putNumber("Subsystem/CoralShooter/ShooterAmpsLeft", values.ampsLeft);
     SmartDashboard.putNumber("Subsystem/CoralShooter/ShooterAmpsRight", values.ampsRight);
     SmartDashboard.putNumber("Subsystem/CoralShooter/LauncherAmps", values.ampsLauncher);
+    SmartDashboard.putNumber("Subsystem/CoralShooter/TemperatureShooterLeft", values.tempLeft);
+    SmartDashboard.putNumber("Subsystem/CoralShooter/TemperatureShooterRight", values.tempRight);
+    SmartDashboard.putNumber("Subsystem/CoralShooter/TemperatureLauncher", values.tempLauncher);
+    SmartDashboard.putNumber(
+        "Subsystem/CoralShooter/AppliedOutputShooterLeft", values.appliedOutputLeft);
+    SmartDashboard.putNumber(
+        "Subsystem/CoralShooter/AppliedOutputShooterRight", values.appliedOutputRight);
+    SmartDashboard.putNumber(
+        "Subsystem/CoralShooter/AppliedOutputLauncher", values.appliedOutputLauncher);
+    SmartDashboard.putNumber(
+        "Subsystem/CoralShooter/ShooterappliedOutputLeft", values.appliedOutputLeft);
+    SmartDashboard.putNumber(
+        "Subsystem/CoralShooter/ShooterappliedOutputRight", values.appliedOutputRight);
+    SmartDashboard.putNumber(
+        "Subsystem/CoralShooter/LauncherappliedOutputAmps", values.appliedOutputLauncher);
 
     SmartDashboard.putBoolean("Subsystem/CoralShooter/IsLoaded", values.isLoaded);
 
