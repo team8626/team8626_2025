@@ -102,30 +102,30 @@ public class LEDManager extends CS_SubsystemBase {
         currentColor = new Color[] {Color.kGreen, Color.kGreenYellow};
         break;
 
-      case TUNE_CORALSHOOTER:
-        breatheSlow(Color.kCoral, Color.kBlack).applyTo(m_left);
-        breatheSlow(Color.kCoral, Color.kBlack).applyTo(m_right);
-        break;
+        // case TUNE_CORALSHOOTER:
+        //   breatheSlow(Color.kCoral, Color.kBlack).applyTo(m_left);
+        //   breatheSlow(Color.kCoral, Color.kBlack).applyTo(m_right);
+        //   break;
 
-      case TUNE_ALGAESHOOTER:
-        breatheSlow(Color.kAquamarine, Color.kBlack).applyTo(m_left);
-        breatheSlow(Color.kAquamarine, Color.kBlack).applyTo(m_right);
-        break;
+        // case TUNE_ALGAESHOOTER:
+        //   breatheSlow(Color.kAquamarine, Color.kBlack).applyTo(m_left);
+        //   breatheSlow(Color.kAquamarine, Color.kBlack).applyTo(m_right);
+        //   break;
 
-      case CLIMB_PREP:
-        progressrainbow().applyTo(m_left);
-        progressrainbow().applyTo(m_right);
-        break;
+        // case CLIMB_PREP:
+        //   progressrainbow().applyTo(m_left);
+        //   progressrainbow().applyTo(m_right);
+        //   break;
 
-      case CLIMB_READY:
-        rainbow().blink(Seconds.of(1)).applyTo(m_left);
-        rainbow().blink(Seconds.of(1)).applyTo(m_right);
-        break;
+        // case CLIMB_READY:
+        //   rainbow().blink(Seconds.of(1)).applyTo(m_left);
+        //   rainbow().blink(Seconds.of(1)).applyTo(m_right);
+        //   break;
 
-      case CLIMB_NOW:
-        rainbow().applyTo(m_left);
-        rainbow().applyTo(m_right);
-        break;
+        // case CLIMB_NOW:
+        //   rainbow().applyTo(m_left);
+        //   rainbow().applyTo(m_right);
+        //   break;
 
       case UNKNOWN:
       case TRANSITION:
@@ -138,11 +138,13 @@ public class LEDManager extends CS_SubsystemBase {
 
   private static void updateCoralLEDs() {
     Color color = new Color(255, 63, 13);
+    Color[] currentCoralColor = new Color[] {color, Color.kBlack};
+
     switch (Dashboard.getCoralState()) {
       case RAMPING_UP:
       case LAUNCHING:
         currentColor = new Color[] {color, Color.kBlack};
-        breatheFast(currentColor).applyTo(m_back_top);
+        breatheFast(currentCoralColor).applyTo(m_back_top);
         break;
 
       case IDLE:
@@ -152,7 +154,7 @@ public class LEDManager extends CS_SubsystemBase {
 
       case INTAKING:
         currentColor = new Color[] {color, Color.kBlack};
-        breatheSlow(currentColor).applyTo(m_back_top);
+        breatheSlow(currentCoralColor).applyTo(m_back_top);
         break;
 
       case LOADED:
@@ -167,12 +169,12 @@ public class LEDManager extends CS_SubsystemBase {
 
   private static void updateAlgaeLEDs() {
     Color color = new Color(25, 175, 25);
+    Color[] currentAlgaeColor = new Color[] {color, Color.kBlack};
 
     switch (Dashboard.getAlgaeState()) {
       case RAMPING_UP:
       case LAUNCHING:
-        currentColor = new Color[] {color, Color.kBlack};
-        breatheFast(currentColor).applyTo(m_back_bottom);
+        breatheFast(currentAlgaeColor).applyTo(m_back_bottom);
         break;
 
       case IDLE:
@@ -181,8 +183,7 @@ public class LEDManager extends CS_SubsystemBase {
         break;
 
       case INTAKING:
-        currentColor = new Color[] {color, Color.kBlack};
-        breatheSlow(currentColor).applyTo(m_back_bottom);
+        breatheSlow(currentAlgaeColor).applyTo(m_back_bottom);
         break;
 
       case LOADED:
