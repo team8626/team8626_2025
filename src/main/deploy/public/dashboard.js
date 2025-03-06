@@ -1,9 +1,10 @@
-// Copyright (c) 2025 FRC 6328
-// http://github.com/Mechanical-Advantage
+// Copyright (c) 2025 FRC 8626
+// http://github.com/team8626
 //
-// Use of this source code is governed by an MIT-style
-// license that can be found in the LICENSE file at
-// the root directory of this project.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+//
+// Original Work by Team 6328 Mechanical Advantage
 
 import { NT4_Client } from "./NT4.js";
 // ***** NETWORKTABLES *****
@@ -23,6 +24,7 @@ const algaeStateTopicName = "algaeState";
 const coralStateTopicName = "coralState";
 const algaeShootTimeTopicName = "algaeShootTime";
 const coralShootTimeTopicName = "coralShootTime";
+const autoPathTopicName = "/SmartDashboard/Auto Path";
 
 // ***** STATE CACHE *****
 let allianceColor = 0; // int (0 = Unknown, 1 = Red, 2 Blue)
@@ -54,52 +56,58 @@ const ntClient = new NT4_Client(
     if (topic.name === toDashboardPrefix + allianceColorTopicName) {
       allianceColor = value;
       udateAlliance(allianceColor);
-      console.log("Alliance color: " + allianceColor);
+      console.log("Rx Alliance color: " + allianceColor);
     } else if (topic.name === toDashboardPrefix + isAutoTopicName) {
       isAuto = value;
       updateMatchTime(matchTime, isAuto);
-      console.log("Is Auto: " + isAuto);
+      console.log("Rx Is Auto: " + isAuto);
     } else if (topic.name === toDashboardPrefix + matchTimeTopicName) {
       matchTime = value;
       updateMatchTime(matchTime, isAuto);
     } else if (topic.name === toDashboardPrefix + allowedCoralLevelsTopicName) {
       allowedCoralLevels = value;
-      console.log("Allowed coral levels: " + allowedCoralLevels);
+      console.log("Rx Allowed coral levels: " + allowedCoralLevels);
     } else if (topic.name === toDashboardPrefix + selectedCoralLevelTopicName) {
       selectedCoralLevel = value;
-      updateCoralLevelValue(selectedCoralLevel);
-      console.log("Selected coral level: " + selectedCoralLevel);
+      updateCoralLevelValue(selectedCoralLevel, true);
+      console.log("Rx Selected coral level: " + selectedCoralLevel);
     } else if (topic.name === toDashboardPrefix + selectedCoralBranchTopicName) {
       selectedCoralBranch = value;
-      console.log("Selected coral branch: " + selectedCoralBranch);
+      console.log("Rx Selected coral branch: " + selectedCoralBranch);
+      updateCoralBranchValue(selectedCoralBranch, true)
     } else if (topic.name === toDashboardPrefix + selectedAlgaeFaceTopicName) {
       selectedAlgaeFace = value;
-      console.log("Selected algae face: " + selectedAlgaeFace);
+      console.log("Rx Selected algae face: " + selectedAlgaeFace);
+      updateAlgaeFaceValue(selectedAlgaeFace, true);
     } else if (topic.name === toDashboardPrefix + selectedPickupSideTopicName) {
       selectedPickupSide = value;
       updateIntakeSideValue(selectedPickupSide);
-      console.log("Selected pickup side: " + selectedPickupSide);
+      console.log("Rx Selected pickup side: " + selectedPickupSide);
     } else if (topic.name === toDashboardPrefix + selectedDtpTopicName) {
       selectedDtp = value;
       updateDtpValue(selectedDtp);
-      console.log("Input DTP: " + selectedDtp);
+      console.log("Rx Input DTP: " + selectedDtp);
     } else if (topic.name === toDashboardPrefix + algaeStateTopicName) {
       algaeStatus = value;
       updateAlgaeState(algaeStatus);
-      console.log("Algae state: " + algaeStatus);
+      console.log("Rx Algae state: " + algaeStatus);
     } else if (topic.name === toDashboardPrefix + coralStateTopicName) { 
       coralStatus = value;
       updateCoralState(coralStatus);
-      console.log("Coral state: " + coralStatus);
+      console.log("Rx Coral state: " + coralStatus);
     } else if (topic.name === toDashboardPrefix + algaeShootTimeTopicName) {
       algaeShootTime = value;
       updateAlgaeShootTime(algaeShootTime);
-      console.log("Algae shoot time: " + algaeShootTime);
+      console.log("Rx Algae shoot time: " + algaeShootTime);
     } else if (topic.name === toDashboardPrefix + coralShootTimeTopicName) {
       coralShootTime = value;
       updateCoralShootTime(coralShootTime);
-      console.log("Coral shoot time: " + coralShootTime);
-    } else {
+      console.log("Rx Coral shoot time: " + coralShootTime);
+    } else if (topic.name === autoPathTopicName) {
+      console.log("Rx Auto Path: " + value);
+      alert("Auto Path: " + value);
+    } 
+    else {
       return;
     }
     updateUI();
@@ -136,7 +144,8 @@ window.addEventListener("load", () => {
       toDashboardPrefix + algaeStateTopicName,
       toDashboardPrefix + coralStateTopicName,
       toDashboardPrefix + algaeShootTimeTopicName,
-      toDashboardPrefix + coralShootTimeTopicName
+      toDashboardPrefix + coralShootTimeTopicName,
+      autoPathTopicName
     ],
     false,
     false,
@@ -220,53 +229,63 @@ function updateIntakeSideValue(newValue) {
  * Function to update the coral branch value and radio buttons
  * @param {*} newValue 
  */
-function updateCoralBranchValue(newValue) {
-  if(selectedCoralBranch === newValue) {
+function updateCoralBranchValue(newValue, fromRobot = false) {
+  if(selectedCoralBranch == newValue && !fromRobot) {
     $("input[name='coralGroup']").prop("checked", false); // Uncheck all radios
-    $(this).prop('checked', false);
     selectedCoralBranch = 0;
   } else {
     $(this).prop('checked', true);
     selectedCoralBranch = newValue;
   }
-  // Send the updated value over NetworkTables
-  sendIntToRobot(selectedCoralBranchTopicName, selectedCoralBranch);
+
+  if(fromRobot){
+    updateCoralTarget(newValue, selectedCoralLevel);
+  } else {
+    sendIntToRobot(selectedCoralBranchTopicName, selectedCoralBranch);
+  }
 };
 
 /**
  * Function to update the algae face value and radio buttons
  * @param {*} newValue 
  */
-function updateAlgaeFaceValue(newValue) {
-  if(selectedAlgaeFace === newValue) {
+function updateAlgaeFaceValue(newValue, fromRobot = false) {
+  if(selectedAlgaeFace == newValue && !fromRobot) {
     $("input[name='algaeGroup']").prop("checked", false); // Uncheck all radios
-    $(this).prop('checked', false);
     selectedAlgaeFace = 0;
   } else {
     $(this).prop('checked', true);
     selectedAlgaeFace = newValue;
   }
-  // Send the updated value over NetworkTables
-  sendIntToRobot(selectedAlgaeFaceTopicName, selectedAlgaeFace);
+  
+  if(fromRobot){
+    updateAlgaeTarget(newValue);
+  } else{
+    // Send the updated value over NetworkTables
+    sendIntToRobot(selectedAlgaeFaceTopicName, selectedAlgaeFace);
+  }
 };
 
 /**
  * Function to update the coral level value and radio buttons
  * @param {*} newValue 
  */
-function updateCoralLevelValue(newValue) {
-  // $("input[name='corallevel'] + label").css("background", "");
-
-  if(selectedCoralLevel === newValue) {
-    // $("label[for='corallevel_" + newValue + "']").css("background", "red");
+function updateCoralLevelValue(newValue, fromRobot = false) {
+  if(selectedCoralLevel == newValue) {
+    // Do Nothing
   } else {
     $(this).prop('checked', true);
-    // $("label[for='corallevel_" + newValue + "']").css("background", "red");
     selectedCoralLevel = newValue;
   }
+  if(fromRobot){
+    updateCoralTarget(selectedCoralBranch, newValue);
+  } else {
+    sendIntToRobot(selectedCoralLevelTopicName, selectedCoralLevel);
+  }
+
+
   // Send the updated value over NetworkTables
   console.log("Sending coral level: " + selectedCoralLevel);
-  sendIntToRobot(selectedCoralLevelTopicName, selectedCoralLevel);
 };
 
 /**
@@ -316,6 +335,29 @@ function updateCoralState(newValue) {
   const textelement = $("#coral-state");
   if (textelement) {
     textelement.text(newValue);
+  }
+}
+
+function updateAlgaeTarget(newValue) {
+  const textelement = $("#algae-target");
+  if (textelement) {
+    let target = "Ground"
+    if(newValue > 0){
+      target  = String.fromCharCode(64+(newValue*2)-1)+ String.fromCharCode(64+(newValue*2));
+    
+    }
+    textelement.text(target);
+  }
+}
+
+function updateCoralTarget(newBranchValue, newLevelValue) {
+  const textelement = $("#coral-target");
+  if (textelement) {
+    var branch = "--";
+    if(newBranchValue > 0){
+      branch = String.fromCharCode(64+newBranchValue);
+    }
+    textelement.text(branch + " - L" + newLevelValue);
   }
 }
 
