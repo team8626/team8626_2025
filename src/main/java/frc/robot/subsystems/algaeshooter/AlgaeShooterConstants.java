@@ -14,7 +14,7 @@ public class AlgaeShooterConstants {
 
   public static final int maxCurrent = 50; // Amps
 
-  public static final double shooterRPMTolerance = 75;
+  public static final double shooterRPMTolerance = 100;
   public static final double launchTimerSeconds = 0.5;
 
   // AlgaeShooter Constants

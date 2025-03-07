@@ -41,7 +41,7 @@ public class AlgaeShooterRampUp extends CS_Command {
   @Override
   public void initialize() {
     Dashboard.setAlgaeState(GamePieceState.RAMPING_UP);
-    algae501.startRampUp();
+    algae501.startRampUp(desiredRPM);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

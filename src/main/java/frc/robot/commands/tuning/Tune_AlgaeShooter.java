@@ -9,6 +9,7 @@ package frc.robot.commands.tuning;
 import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterSubsystem;
+import frc.robot.subsystems.presets.Presets;
 
 public class Tune_AlgaeShooter extends CS_Command {
   private AlgaeShooterSubsystem algae501;
@@ -24,7 +25,7 @@ public class Tune_AlgaeShooter extends CS_Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    algae501.startRampUp();
+    algae501.startRampUp(Presets.ALGAE_NETFROMREEF.getRPM());
   }
 
   // Called every time the scheduler runs while the command is scheduled.
