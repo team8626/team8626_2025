@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Commodore;
 import frc.robot.Commodore.CommodoreState;
 import frc.robot.RobotContainer;
-import frc.robot.commands.setters.units.CoralShooterIntake;
+import frc.robot.commands.setters.units.CoralShooterIntake2;
 import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
 
 public class ToCoralIntake extends SequentialCommandGroup {
@@ -25,7 +25,8 @@ public class ToCoralIntake extends SequentialCommandGroup {
         new ConditionalCommand(
             new SequentialCommandGroup(
                 Commodore.getSetStateCommand(CommodoreState.CORAL_INTAKE),
-                new CoralShooterIntake()),
+                // new CoralShooterIntake()),
+                new CoralShooterIntake2()),
             new SequentialCommandGroup(Commodore.getSetStateCommand(CommodoreState.IDLE)),
             () -> !mortar.isLoaded()),
         Commodore.getSetStateCommand(CommodoreState.IDLE));
