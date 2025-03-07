@@ -12,9 +12,9 @@ public class ElevatorConstants {
   public static final double positionConversionFactor =
       1 / (Units.inchesToMeters(2 * Math.PI * drumRadiusInches) * cascadingRatio);
   public static final double velocityConversionFactor = positionConversionFactor / 60;
-  public static final double minHeightInches = 7;
-  public static final double maxHeightInches = 50;
-  public static final double initHeightInches = 7;
+  public static final double minHeightInches = 8;
+  public static final double maxHeightInches = 45;
+  public static final double initHeightInches = 8;
 
   public static final int maxCurrent = 60; // Amps
 
