@@ -155,7 +155,7 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
   }
 
   // Zero the elevator by srunning it reverse until it hits the bottom ---Gently---
-  private void reset() {
+  public void reset() {
     this.isZeroed = false;
     this.isZeroing = true;
     controllerRight.setReference(-.25, ControlType.kDutyCycle);

@@ -29,6 +29,10 @@ public class ElevatorSubsystem extends CS_SubsystemBase {
     return elevatorInterface.getHeightInches();
   }
 
+  public void reset() {
+    elevatorInterface.reset();
+  }
+
   public void setkP(double new_value) {
     elevatorInterface.setElevatorkP(new_value);
   }
