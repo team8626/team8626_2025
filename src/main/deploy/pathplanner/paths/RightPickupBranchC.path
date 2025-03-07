@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.026587748977374,
-        "y": 1.8861024658634984
+        "x": 1.5896094479650822,
+        "y": 0.67066961684317
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.2696333201426375,
-        "y": 0.23788088852504563
+        "x": 2.0623039394972396,
+        "y": 1.579922639042858
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "RightPickupBranchC"
     },
     {
       "anchor": {
-        "x": 1.8396500452509466,
-        "y": 2.198365960031185
+        "x": 3.726,
+        "y": 3.033
       },
       "prevControl": {
-        "x": 1.7788160022699608,
-        "y": 1.3145988752257138
+        "x": 2.0420273156702713,
+        "y": 2.1282611742241953
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "@BranchCRightPickup"
     }
   ],
   "rotationTargets": [],
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 6.77,
-    "maxAcceleration": 4.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -179.57045708714256
+    "rotation": -118.80505326565509
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -179.1449240401017
+    "rotation": 53.84136985504226
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }
