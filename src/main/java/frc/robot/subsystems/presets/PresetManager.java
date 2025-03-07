@@ -8,6 +8,9 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructPublisher;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotConstants;
@@ -43,6 +46,15 @@ public class PresetManager extends CS_SubsystemBase {
 
   private static CoralPreset currentCoralPreset = new CoralPreset("autoPreset");
   private static AlgaePreset currentAlgaePreset = new AlgaePreset("autoPreset");
+
+  StructPublisher<Pose2d> coralPresetPosePub =
+      NetworkTableInstance.getDefault()
+          .getStructTopic("SmartDashboard/Subsystem/PresetManager/CoralPreset/Pose", Pose2d.struct)
+          .publish();
+  StructPublisher<Pose2d> algaePresetPosePub =
+      NetworkTableInstance.getDefault()
+          .getStructTopic("SmartDashboard/Subsystem/PresetManager/AlgaePreset/Pose", Pose2d.struct)
+          .publish();
 
   // Singleton instance
   private static PresetManager instance;
@@ -435,5 +447,24 @@ public class PresetManager extends CS_SubsystemBase {
 
   public static Command resetAlgaePresetCmd() {
     return new InstantCommand(() -> currentAlgaePreset.reset());
+  }
+
+  @Override
+  public void updateDashboard() {
+    SmartDashboard.putNumber(
+        "Subsystem/PresetManager/CoralPreset/RPMLeft", currentCoralPreset.getRPMLeft());
+    SmartDashboard.putNumber(
+        "Subsystem/PresetManager/CoralPreset/RPMRight", currentCoralPreset.getRPMRight());
+    coralPresetPosePub.set(currentCoralPreset.getPose());
+
+    SmartDashboard.putNumber(
+        "Subsystem/PresetManager/AlgaePreset/ElevatorHeight",
+        currentAlgaePreset.getElevatorHeightInches());
+    SmartDashboard.putNumber(
+        "Subsystem/PresetManager/AlgaePreset/RPM", currentAlgaePreset.getRPM());
+    SmartDashboard.putNumber(
+        "Subsystem/PresetManager/AlgaePreset/WristAngle",
+        currentAlgaePreset.getWristAngleDegrees());
+    algaePresetPosePub.set(currentAlgaePreset.getPose());
   }
 }
