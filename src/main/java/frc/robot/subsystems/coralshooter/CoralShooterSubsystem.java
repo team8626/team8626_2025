@@ -8,8 +8,8 @@ import frc.utils.CS_Utils;
 public class CoralShooterSubsystem extends CS_SubsystemBase {
   private CoralShooterInterface coralShooterInterface;
   private CoralShooterValues values;
-  private double shootingRPMLeft = CoralShooterConstants.RPMShootLeft;
-  private double shootingRPMRight = CoralShooterConstants.RPMShootRight;
+  private double shootingRPMLeft; // = CoralShooterConstants.RPMShootLeft;
+  private double shootingRPMRight; // = CoralShooterConstants.RPMShootRight;
 
   public CoralShooterSubsystem(CoralShooterInterface subsystem_interface) {
     super();
@@ -19,8 +19,9 @@ public class CoralShooterSubsystem extends CS_SubsystemBase {
     println("Created");
   }
 
-  // Calls to the coralShooter interface
-  public void startRampUp() {
+  public void startRampUp(double newRPMLeft, double newRPMRight) {
+    shootingRPMLeft = newRPMLeft;
+    shootingRPMRight = newRPMRight;
     coralShooterInterface.startShooter(shootingRPMLeft, shootingRPMRight);
   }
 
@@ -188,20 +189,21 @@ public class CoralShooterSubsystem extends CS_SubsystemBase {
 
     SmartDashboard.putBoolean("Subsystem/CoralShooter/IsLoaded", values.isLoaded);
 
-    double newRPMLeft =
-        SmartDashboard.getNumber(
-            "Subsystem/CoralShooter/ShootingRPMLeft", CoralShooterConstants.RPMShootLeft);
-    if (newRPMLeft != shootingRPMLeft) {
-      setShooterRPM(newRPMLeft, shootingRPMRight);
-      shootingRPMLeft = newRPMLeft;
-    }
-    double newRPMRight =
-        SmartDashboard.getNumber(
-            "Subsystem/CoralShooter/ShootingRPMRight", CoralShooterConstants.RPMShootRight);
-    if (newRPMRight != shootingRPMRight) {
-      setShooterRPM(shootingRPMLeft, newRPMRight);
-      shootingRPMRight = newRPMRight;
-    }
+    // TODO: Add the ability to change the RPMs on the fly
+    // double newRPMLeft =
+    //     SmartDashboard.getNumber(
+    //         "Subsystem/CoralShooter/ShootingRPMLeft", CoralShooterConstants.RPMShootLeft);
+    // if (newRPMLeft != shootingRPMLeft) {
+    //   setShooterRPM(newRPMLeft, shootingRPMRight);
+    //   shootingRPMLeft = newRPMLeft;
+    // }
+    // double newRPMRight =
+    //     SmartDashboard.getNumber(
+    //         "Subsystem/CoralShooter/ShootingRPMRight", CoralShooterConstants.RPMShootRight);
+    // if (newRPMRight != shootingRPMRight) {
+    //   setShooterRPM(shootingRPMLeft, newRPMRight);
+    //   shootingRPMRight = newRPMRight;
+    // }
     SmartDashboard.putNumber("Subsystem/CoralShooter/ShootingRPMLeft", shootingRPMLeft);
     SmartDashboard.putNumber("Subsystem/CoralShooter/ShootingRPMRight", shootingRPMRight);
   }

@@ -17,26 +17,18 @@ import java.util.function.DoubleSupplier;
 public class CoralShooterRampUp extends CS_Command {
   private CoralShooterSubsystem mortar;
 
-  private double desiredRPMLeft = CoralShooterConstants.RPMShootLeft;
-  private double desiredRPMRight = CoralShooterConstants.RPMShootRight;
+  private double desiredRPMLeft;
+  private double desiredRPMRight;
   private final double RPMTolerance = CoralShooterConstants.RPMTolerance;
   private final double RPMDifferentialTolerance = CoralShooterConstants.RPMDifferentialTolerance;
 
-  public CoralShooterRampUp() {
-    mortar = RobotContainer.mortar;
-
-    addRequirements(mortar);
-
-    this.setTAGString("CORALSHOOTER_RAMPUP");
-  }
-
   public CoralShooterRampUp(DoubleSupplier new_RPMLeft, DoubleSupplier new_RPMRight) {
     mortar = RobotContainer.mortar;
+
     desiredRPMLeft = new_RPMLeft.getAsDouble();
     desiredRPMRight = new_RPMRight.getAsDouble();
 
     addRequirements(mortar);
-
     this.setTAGString("CORALSHOOTER_RAMPUP");
   }
 
@@ -44,7 +36,7 @@ public class CoralShooterRampUp extends CS_Command {
   @Override
   public void initialize() {
     Dashboard.setCoralState(GamePieceState.RAMPING_UP);
-    mortar.startRampUp();
+    mortar.startRampUp(desiredRPMLeft, desiredRPMRight);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

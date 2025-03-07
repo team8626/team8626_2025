@@ -14,8 +14,6 @@ public class CoralShooterStop extends CS_Command {
   private CoralShooterSubsystem mortar;
 
   public CoralShooterStop() {
-    // Use addRequirements() here to declare subsystem dependencies.
-    // For example: addRequirements(Robot.m_subsystem);
     mortar = RobotContainer.mortar;
 
     addRequirements(mortar);
