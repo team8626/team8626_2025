@@ -43,6 +43,10 @@ public class AlgaeShooterSubsystem extends CS_SubsystemBase {
     algaeShooterInterface.startLauncher(new_Setpoint);
   }
 
+  public void startShooterBySetpoint(double new_Setpoint) {
+    algaeShooterInterface.startShooterBySetpoint(new_Setpoint);
+  }
+
   public void stopShooter() {
     algaeShooterInterface.stopShooter();
   }

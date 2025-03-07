@@ -224,6 +224,13 @@ public class AlgaeShooter_SparkMax implements AlgaeShooterInterface, CS_Interfac
   }
 
   @Override
+  public void startShooterBySetpoint(double new_Setpoint) {
+    rightController.setReference(new_Setpoint, ControlType.kDutyCycle);
+    leftController.setReference(new_Setpoint, ControlType.kDutyCycle);
+    shooterIsEnabled = true;
+  }
+
+  @Override
   public double getShooterRPMLeft() {
     return leftEncoder.getVelocity() / flywheelConfig.reduction();
   }
