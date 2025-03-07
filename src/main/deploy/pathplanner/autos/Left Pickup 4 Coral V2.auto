@@ -1,0 +1,55 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LeftScoreBranchJ"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "@BranchJLeftPickup"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LeftPickupBranchL"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "@BranchLLeftPickup"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LeftPickupBranchA"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "@BranchALeftPickup"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LeftPickupBranchK"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
