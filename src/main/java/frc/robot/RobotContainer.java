@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotConstants.RobotType;
+import frc.robot.commands.setters.autos.Auto_H;
 import frc.robot.commands.setters.groups.ToAlgaeShootFrom10ft;
 import frc.robot.commands.setters.groups.ToAlgaeShootFromReef;
 import frc.robot.commands.setters.groups.ToCoralIntake;
@@ -204,6 +205,7 @@ public class RobotContainer {
     controller.btn_East.onTrue(new InstantCommand(() -> wrist.goDown(5.0)));
 
     controller.btn_X.onTrue(new InstantCommand(() -> elevator.reset()));
+    // controller.btn_B.onTrue(new Auto_A());
 
     // controller.btn_A.onTrue(new InstantCommand(() -> elevator.setHeight(10.0)));
     // controller.btn_B.onTrue(new InstantCommand(() -> elevator.setHeight(28.0)));
@@ -265,7 +267,10 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     // Return the path to follow in autonomous mode
-    return this.autoChooser.getSelected();
+    // return this.autoChooser.getSelected();
+    return new Auto_H();
+
+    // return new SequentialCommandGroup(new Auto_H(), new Auto_PickupLeft());
   }
 
   public RobotType getRobotType() {
