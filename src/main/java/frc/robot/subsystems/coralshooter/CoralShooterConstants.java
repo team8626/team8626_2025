@@ -6,8 +6,8 @@ import frc.robot.RobotConstants;
 public class CoralShooterConstants {
 
   // Tuned Values
-  public static final double RPMShootLeft = 1275;
-  public static final double RPMShootRight = 1275;
+  // public static final double RPMShootLeft = 1275;
+  // public static final double RPMShootRight = 1275;
   public static final double RPMIntake = -300;
   public static final double launcherShootSetpoint = -1.0;
   public static final double launcherIntakeSetpoint = 0.3;

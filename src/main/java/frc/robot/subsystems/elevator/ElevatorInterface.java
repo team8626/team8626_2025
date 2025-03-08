@@ -47,5 +47,7 @@ public interface ElevatorInterface {
 
   public abstract void setElevatorkD(double kD);
 
+  public abstract void reset();
+
   public default void runCharacterization(double input) {}
 }

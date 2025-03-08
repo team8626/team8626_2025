@@ -1,13 +1,26 @@
 package frc.robot.subsystems.presets;
 
+import frc.robot.subsystems.algaeshooter.AlgaeShooterConstants;
+
 public class Presets {
 
-  public static final AlgaePreset ALGAE_LOW = new AlgaePreset("LOW", 38, 210, -600);
-  public static final AlgaePreset ALGAE_HIGH = new AlgaePreset("HIGH", 50, 210, -600);
+  public static final AlgaePreset ALGAE_LOW = new AlgaePreset("LOW", 36, 190, -600);
+  public static final AlgaePreset ALGAE_HIGH = new AlgaePreset("HIGH", 48, 190, -600);
   public static final AlgaePreset ALGAE_FLOOR = new AlgaePreset("FLOOR", 8, 205, -1000);
   public static final AlgaePreset ALGAE_PROCESS = new AlgaePreset("PROCESS", 8, 170, 1000);
   public static final AlgaePreset ALGAE_NETFROMREEF =
-      new AlgaePreset("SHOOT_FROM_REEF", 10, 115, 2200);
+      new AlgaePreset(
+          "ALGAE_NETFROMREEEF", 48, 115, 2200 / AlgaeShooterConstants.flywheelConfig.reduction());
+  public static final AlgaePreset ALGAE_NETFROM6FT =
+      new AlgaePreset(
+          "ALGAE_NETFROM6FT", 8, 180 - 74, 1433 / AlgaeShooterConstants.flywheelConfig.reduction());
+  public static final AlgaePreset ALGAE_NETFROM10FT =
+      new AlgaePreset(
+          "ALGAE_NETFROM10FT",
+          8,
+          180 - 66,
+          2200 / AlgaeShooterConstants.flywheelConfig.reduction());
+
   public static final AlgaePreset ALGAE_STOW = new AlgaePreset("STOW", 8, 75, 0);
 
   public static final CoralPreset CORAL_L1 = new CoralPreset("L1", 900, 1000);

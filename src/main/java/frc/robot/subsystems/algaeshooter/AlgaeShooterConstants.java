@@ -10,10 +10,11 @@ public class AlgaeShooterConstants {
   public static final double intakeRPM = -600;
   public static final double launcherShootSetpoint = 1.0;
   public static final double launcherIntakeSetpoint = -0.5;
+  public static final double discardShootSetpoint = -0.5;
 
   public static final int maxCurrent = 50; // Amps
 
-  public static final double shooterRPMTolerance = 75;
+  public static final double shooterRPMTolerance = 100;
   public static final double launchTimerSeconds = 0.5;
 
   // AlgaeShooter Constants

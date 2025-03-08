@@ -14,11 +14,8 @@ package frc.robot;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.setters.groups.*;
-import frc.robot.commands.tuning.Tune_AlgaeShooter;
-import frc.robot.commands.tuning.Tune_CoralShooter;
 import frc.robot.subsystems.CS_SubsystemBase;
 import java.util.LinkedList;
 import java.util.List;
@@ -49,11 +46,14 @@ public class Commodore extends CS_SubsystemBase {
     CORAL_SHOOT_LAUNCHING,
     CORAL_INTAKE,
 
+    ALGAE_SHOOT_SETTINGSUBSYSTEMS,
     ALGAE_SHOOT,
     ALGAE_SHOOT_RAMPINGUP,
     ALGAE_SHOOT_LAUNCHING,
     ALGAE_INTAKE,
     ALGAE_LOADED,
+
+    ELEVATOR_ZEROING,
 
     TUNE_CORALSHOOTER,
     TUNE_ALGAESHOOTER,
@@ -91,7 +91,7 @@ public class Commodore extends CS_SubsystemBase {
    *
    * @param newState The state to set the robot to
    */
-  public Commodore setCommodoreState(CommodoreState newState) {
+  public static Commodore setCommodoreState(CommodoreState newState) {
     return setCommodoreState(newState, false);
   }
 
@@ -139,8 +139,10 @@ public class Commodore extends CS_SubsystemBase {
       switch (newState) {
           // This is the resting state, robot is enabled, but not doing anything
         case IDLE:
-          isToggleState = false;
-          toIdle();
+          applyState(newState);
+
+          // isToggleState = false;
+          // toIdle();
           break;
 
           // Those cases are just for LED update
@@ -157,23 +159,31 @@ public class Commodore extends CS_SubsystemBase {
           // Those cases are for launching commands
           // State will go to TRANSITION and then the command will update the state
         case CORAL_SHOOT:
-          toCoralShoot();
+          applyState(newState);
+          // toCoralShoot();
           break;
         case CORAL_INTAKE:
-          toCoralIntake();
+          applyState(newState);
+          // toCoralIntake();
           break;
         case ALGAE_SHOOT:
-          toAlgaeShoot();
+          applyState(newState);
+          // toAlgaeShoot();
           break;
         case ALGAE_INTAKE:
-          toAlgaeIntake();
+          applyState(newState);
+          // toAlgaeIntake();
           break;
           // Tuning States
         case TUNE_CORALSHOOTER:
-          tuneCoralShooter();
+          applyState(newState);
+
+          // tuneCoralShooter();
           break;
         case TUNE_ALGAESHOOTER:
-          tuneCoralShooter();
+          applyState(newState);
+
+          // tuneCoralShooter();
           break;
 
           // We shouldn't be there!
@@ -218,7 +228,7 @@ public class Commodore extends CS_SubsystemBase {
     }
     // Same state, nothing to do
     else {
-      getInstance().printf("Same state (%s) -- Do Nothing\n", newState.toString());
+      // getInstance().printf("Same state (%s) -- Do Nothing\n", newState.toString());
     }
   }
 
@@ -286,39 +296,39 @@ public class Commodore extends CS_SubsystemBase {
     }
   }
 
-  private static void toIdle() {
-    applyState(CommodoreState.TRANSITION);
-    CommandScheduler.getInstance().schedule(new ToIdle());
-  }
+  // private static void toIdle() {
+  //   // applyState(CommodoreState.TRANSITION);
+  //   // CommandScheduler.getInstance().schedule(new ToIdle());
+  // }
 
-  private static void toCoralShoot() {
-    applyState(CommodoreState.TRANSITION);
-    CommandScheduler.getInstance().schedule(new ToCoralShoot());
-  }
+  // private static void toCoralShoot() {
+  //   applyState(CommodoreState.TRANSITION);
+  //   CommandScheduler.getInstance().schedule(new ToCoralShoot());
+  // }
 
-  private static void toCoralIntake() {
-    applyState(CommodoreState.TRANSITION);
-    CommandScheduler.getInstance().schedule(new ToCoralIntake());
-  }
+  // private static void toCoralIntake() {
+  //   applyState(CommodoreState.TRANSITION);
+  //   CommandScheduler.getInstance().schedule(new ToCoralIntake());
+  // }
 
-  private static void tuneCoralShooter() {
-    applyState(CommodoreState.TUNE_CORALSHOOTER);
-    CommandScheduler.getInstance().schedule(new Tune_CoralShooter());
-  }
+  // private static void tuneCoralShooter() {
+  //   applyState(CommodoreState.TUNE_CORALSHOOTER);
+  //   CommandScheduler.getInstance().schedule(new Tune_CoralShooter());
+  // }
 
-  private static void toAlgaeShoot() {
-    applyState(CommodoreState.TRANSITION);
-    CommandScheduler.getInstance().schedule(new ToAlgaeShoot());
-  }
+  // private static void toAlgaeShoot() {
+  //   applyState(CommodoreState.TRANSITION);
+  //   CommandScheduler.getInstance().schedule(new ToAlgaeShootFromReef());
+  // }
 
-  private static void toAlgaeIntake() {
-    applyState(CommodoreState.TRANSITION);
-    // TODO : Implement the ToAlgaeIntake command
-    // CommandScheduler.getInstance().schedule(new ToAlgaeIntake());
-  }
+  // private static void toAlgaeIntake() {
+  //   applyState(CommodoreState.TRANSITION);
+  //   // TODO : Implement the ToAlgaeIntake command
+  //   // CommandScheduler.getInstance().schedule(new ToAlgaeIntake());
+  // }
 
-  private static void tuneAlgaeShooter() {
-    applyState(CommodoreState.TUNE_ALGAESHOOTER);
-    CommandScheduler.getInstance().schedule(new Tune_AlgaeShooter());
-  }
+  // private static void tuneAlgaeShooter() {
+  //   applyState(CommodoreState.TUNE_ALGAESHOOTER);
+  //   CommandScheduler.getInstance().schedule(new Tune_AlgaeShooter());
+  // }
 }

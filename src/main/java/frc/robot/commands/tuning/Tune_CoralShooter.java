@@ -9,6 +9,7 @@ package frc.robot.commands.tuning;
 import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
 import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
+import frc.robot.subsystems.presets.Presets;
 
 public class Tune_CoralShooter extends CS_Command {
   private CoralShooterSubsystem mortar;
@@ -24,7 +25,7 @@ public class Tune_CoralShooter extends CS_Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    mortar.startRampUp();
+    mortar.startRampUp(Presets.CORAL_L4.getRPMLeft(), Presets.CORAL_L4.getRPMRight());
   }
 
   // Called every time the scheduler runs while the command is scheduled.

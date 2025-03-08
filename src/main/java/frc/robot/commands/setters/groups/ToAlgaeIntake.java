@@ -46,6 +46,7 @@ public class ToAlgaeIntake extends SequentialCommandGroup {
         new ConditionalCommand(
             Commodore.getSetStateCommand(CommodoreState.ALGAE_LOADED),
             Commodore.getSetStateCommand(CommodoreState.IDLE),
-            () -> algae501.isLoaded()));
+            () -> algae501.isLoaded()),
+        new ToSubsystemsPreset(() -> Presets.ALGAE_STOW));
   }
 }

@@ -17,34 +17,40 @@ import java.util.function.DoubleSupplier;
 public class CoralShooterRampUp extends CS_Command {
   private CoralShooterSubsystem mortar;
 
-  private double desiredRPMLeft = CoralShooterConstants.RPMShootLeft;
-  private double desiredRPMRight = CoralShooterConstants.RPMShootRight;
+  private double desiredRPMLeft;
+  private double desiredRPMRight;
   private final double RPMTolerance = CoralShooterConstants.RPMTolerance;
   private final double RPMDifferentialTolerance = CoralShooterConstants.RPMDifferentialTolerance;
 
-  public CoralShooterRampUp() {
+  public CoralShooterRampUp() {}
+
+  // public CoralShooterRampUp(DoubleSupplier new_RPMLeft, DoubleSupplier new_RPMRight) {
+  //   mortar = RobotContainer.mortar;
+
+  //   desiredRPMLeft = new_RPMLeft.getAsDouble();
+  //   desiredRPMRight = new_RPMRight.getAsDouble();
+
+  //   addRequirements(mortar);
+  //   this.setTAGString("CORALSHOOTER_RAMPUP");
+  // }
+
+  public CoralShooterRampUp(
+      DoubleSupplier new_RPMLeftSupplier, DoubleSupplier new_RPMRightSupplier) {
     mortar = RobotContainer.mortar;
 
-    addRequirements(mortar);
-
-    this.setTAGString("CORALSHOOTER_RAMPUP");
-  }
-
-  public CoralShooterRampUp(DoubleSupplier new_RPMLeft, DoubleSupplier new_RPMRight) {
-    mortar = RobotContainer.mortar;
-    desiredRPMLeft = new_RPMLeft.getAsDouble();
-    desiredRPMRight = new_RPMRight.getAsDouble();
+    desiredRPMLeft = new_RPMLeftSupplier.getAsDouble();
+    desiredRPMRight = new_RPMRightSupplier.getAsDouble();
 
     addRequirements(mortar);
-
     this.setTAGString("CORALSHOOTER_RAMPUP");
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    printf("[CORALSHOOTER_RAMPUP] RPM Left: %f, RPM Right: %f", desiredRPMLeft, desiredRPMRight);
     Dashboard.setCoralState(GamePieceState.RAMPING_UP);
-    mortar.startRampUp();
+    mortar.startRampUp(desiredRPMLeft, desiredRPMRight);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

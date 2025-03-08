@@ -13,15 +13,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.Commodore.CommodoreState;
 import frc.robot.RobotConstants.RobotType;
-import frc.robot.commands.setters.groups.ToAlgaeIntake;
-import frc.robot.commands.setters.groups.ToAlgaeShoot;
+import frc.robot.commands.setters.groups.ToAlgaeShootAuto;
+import frc.robot.commands.setters.groups.ToAlgaeShootFrom10ft;
+import frc.robot.commands.setters.groups.ToAlgaeShootFromReef;
 import frc.robot.commands.setters.groups.ToCoralIntake;
 import frc.robot.commands.setters.groups.ToCoralShoot;
 import frc.robot.commands.setters.groups.ToPathAndCoralShoot;
 import frc.robot.commands.setters.groups.ToPathAndDeAlgaefy;
 import frc.robot.commands.setters.groups.ToSubsystemsPreset;
+import frc.robot.commands.setters.units.AlgaeShooterDiscard;
 import frc.robot.subsystems.Dashboard;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterSubsystem;
 import frc.robot.subsystems.algaeshooter.AlgaeShooter_Sim;
@@ -37,6 +38,7 @@ import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.elevator.Elevator_LinearSparkMax;
 import frc.robot.subsystems.elevator.Elevator_SimulationRose;
 import frc.robot.subsystems.ledManager.LEDManager;
+import frc.robot.subsystems.presets.CoralPreset;
 import frc.robot.subsystems.presets.PresetManager;
 import frc.robot.subsystems.presets.Presets;
 import frc.robot.subsystems.wrist.WristSubsystem;
@@ -46,6 +48,7 @@ import frc.robot.vizualization.Visualization;
 import frc.utils.CS_ButtonBoxController;
 import frc.utils.CS_XboxController;
 import java.io.File;
+import java.util.function.Supplier;
 import org.littletonrobotics.frc2024.commands.FeedForwardCharacterization;
 
 public class RobotContainer {
@@ -177,120 +180,16 @@ public class RobotContainer {
   }
 
   private void configureDriverBindings(CS_XboxController controller) {
-    // controller.btn_LeftTrigger.toggleOnTrue(new ToPathAndDeAlgae());
-    // controller.btn_A.toggleOnTrue(new ToPathAndDeAlgae());
-    // controller.btn_LeftBumper.onTrue(
-    //     new InstantCommand(
-    //         () -> Commodore.setCommodoreState(CommodoreState.ALGAE_SHOOT,
-    // true).withToggleState()));
-
     controller.btn_RightBumper.toggleOnTrue(new ToCoralIntake());
-    controller.btn_RightTrigger.toggleOnTrue(new ToCoralShoot());
+    controller.btn_RightTrigger.toggleOnTrue(new ToPathAndCoralShoot());
 
-    controller.btn_LeftBumper.toggleOnTrue(new ToAlgaeIntake());
-    controller.btn_LeftTrigger.toggleOnTrue(new ToAlgaeShoot());
-
-    // controller.btn_X.onTrue(new ToSubsystemsPreset(() -> PresetManager.getAlgaePreset()));
+    controller.btn_LeftBumper.toggleOnTrue(new ToPathAndDeAlgaefy());
+    controller.btn_LeftTrigger.toggleOnTrue(new ToAlgaeShootFrom10ft());
 
     controller.btn_Y.onTrue(new ToSubsystemsPreset(() -> Presets.ALGAE_STOW));
-    controller.btn_B.onTrue(new ToSubsystemsPreset(() -> Presets.ALGAE_PROCESS));
-    controller.btn_A.onTrue(new ToSubsystemsPreset(() -> Presets.ALGAE_FLOOR));
-
-    // controller.btn_RightBumper.onTrue(
-    //     new InstantCommand(
-    //         () ->
-    //             Commodore.setCommodoreState(CommodoreState.CORAL_INTAKE,
-    // true).withToggleState()));
-    // controller.btn_RightTrigger.onTrue(
-    //     new InstantCommand(
-    //         () -> Commodore.setCommodoreState(CommodoreState.CORAL_SHOOT,
-    // true).withToggleState()));
-
-    // controller.btn_LeftBumper.onTrue(
-    //     new InstantCommand(
-    //         () ->
-    //             Commodore.setCommodoreState(CommodoreState.ALGAE_INTAKE,
-    // true).withToggleState()));
-    // controller.btn_LeftTrigger.onTrue(
-    //     new InstantCommand(
-    //         () -> Commodore.setCommodoreState(CommodoreState.ALGAE_SHOOT,
-    // true).withToggleState()));
-
-    // controller.btn_B.toggleOnTrue(new Tune_AlgaeShooter());
-    // controller.btn_Y.toggleOnTrue(new AlgaeShooterLaunch());
-
-    // controller.btn_A.onTrue(
-    //     new InstantCommand(
-    //         () ->
-    //             Commodore.setCommodoreState(CommodoreState.CORAL_INTAKE,
-    // true).withToggleState()));
-
-    // controller.btn_B.onTrue(
-    //     new InstantCommand(
-    //         () -> Commodore.setCommodoreState(CommodoreState.CORAL_SHOOT,
-    // true).withToggleState()));
-
-    // // Wrist Test
-    // controller.btn_A.onTrue(new InstantCommand(() -> wrist.setAngleDegrees(90)));
-    // controller.btn_B.onTrue(new InstantCommand(() -> wrist.setAngleDegrees(180)));
-    // controller.btn_Y.onTrue(new InstantCommand(() -> wrist.setAngleDegrees(220)));
-    // controller.btn_West.onTrue(new InstantCommand(() -> wrist.setAngleDegrees(120)));
-    // controller.btn_North.onTrue(new InstantCommand(() -> wrist.setAngleDegrees(90)));
-    // controller.btn_East.onTrue(new InstantCommand(() -> wrist.setAngleDegrees(180)));
-    // controller.btn_South.onTrue(new InstantCommand(() -> wrist.setAngleDegrees(200)));
-
-    // controller.btn_X.onTrue(new InstantCommand(() -> wrist.setAngleDegrees(220)));
-
-    // Elevator Test
-    // controller.btn_A.onTrue(new InstantCommand(() -> elevator.setHeight(7)));
-    // controller.btn_B.onTrue(new InstantCommand(() -> elevator.setHeight(18)));
-    // controller.btn_Y.onTrue(new InstantCommand(() -> elevator.setHeight(32)));
-    // controller.btn_X.onTrue(new InstantCommand(() -> elevator.setHeight(50)));
-
-    // Algae Shooter Test
-    controller.btn_A.toggleOnTrue(new ToPathAndCoralShoot());
-    controller.btn_B.toggleOnTrue(new ToPathAndDeAlgaefy());
-
-    // controller.btn_A.toggleOnTrue(new AlgaeShooterIntake());
-    // controller.btn_B.toggleOnTrue(new Tune_AlgaeShooter());
-    // controller.btn_Y.toggleOnTrue(new AlgaeShooterLaunch());
-    // controller.btn_X.toggleOnTrue(
-    //     new FeedForwardCharacterization(
-    //         algae501, algae501::runCharacterization, algae501::getCharacterizationVelocity));
-
-    // Coral Shooter Test
-    // controller.btn_A.toggleOnTrue(new CoralShooterIntake());
-    // controller.btn_B.toggleOnTrue(new CoralShooterRampUp());
-    // controller.btn_Y.toggleOnTrue(new CoralShooterLaunch());
-    // controller.btn_X.toggleOnTrue(new ToCoralShoot());
-
-    // Drive to Pose Test
-    // controller.btn_North.onTrue(new ToPathAndCoralShoot());
-    // controller.btn_South.onTrue(new ToPathAndDeAlgae());
-
-    // controller.btn_B.toggleOnTrue(new ToDriveAndGetAlgae());
-
-    // new CoralDriveShootToPreset(() -> PresetManager.getCoralPreset().getPose()));
-
-    // controller.btn_X.toggleOnTrue(
-    //     new FeedForwardCharacterization(
-    //         mortar, mortar::runCharacterizationLeft, mortar::getCharacterizationVelocityLeft));
-
-    // controller.btn_Y.toggleOnTrue(
-    //     new FeedForwardCharacterization(
-    //         mortar, mortar::runCharacterizationRight, mortar::getCharacterizationVelocityRight));
-
-    // controller.btn_X.onTrue(
-    //     new InstantCommand(
-    //         () ->
-    //             Commodore.setCommodoreState(CommodoreState.ALGAE_INTAKE,
-    // true).withToggleState()));
-
-    // controller.btn_Y.onTrue(
-    //     new InstantCommand(
-    //         () -> Commodore.setCommodoreState(CommodoreState.ALGAE_SHOOT,
-    // true).withToggleState()));
-
+    controller.btn_X.toggleOnTrue(new AlgaeShooterDiscard());
+    controller.btn_B.toggleOnTrue(new ToSubsystemsPreset(() -> Presets.ALGAE_PROCESS));
+    controller.btn_A.toggleOnTrue(new ToAlgaeShootFromReef());
   }
 
   private void configureOperatorBindings(CS_XboxController controller) {
@@ -304,10 +203,12 @@ public class RobotContainer {
     controller.btn_West.onTrue(new InstantCommand(() -> wrist.goUp(5.0)));
     controller.btn_East.onTrue(new InstantCommand(() -> wrist.goDown(5.0)));
 
-    controller.btn_A.onTrue(new InstantCommand(() -> elevator.setHeight(10.0)));
-    controller.btn_B.onTrue(new InstantCommand(() -> elevator.setHeight(28.0)));
-    controller.btn_Y.onTrue(new InstantCommand(() -> elevator.setHeight(40.0)));
-    controller.btn_X.onTrue(new InstantCommand(() -> elevator.setHeight(51.0)));
+    controller.btn_X.onTrue(new InstantCommand(() -> elevator.reset()));
+
+    // controller.btn_A.onTrue(new InstantCommand(() -> elevator.setHeight(10.0)));
+    // controller.btn_B.onTrue(new InstantCommand(() -> elevator.setHeight(28.0)));
+    // controller.btn_Y.onTrue(new InstantCommand(() -> elevator.setHeight(40.0)));
+    // controller.btn_X.onTrue(new InstantCommand(() -> elevator.setHeight(51.0)));
   }
 
   private void configureTestOperatorBindings(CS_XboxController controller) {}
@@ -324,63 +225,42 @@ public class RobotContainer {
   //
   // ----------------------------------------------------------------------------------
   private void configureButtonBoxBindings(CS_ButtonBoxController controller) {
-    // controller.btn_1.onTrue(
-    //     new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.INTAKE, true)));
-    // controller.btn_9.onTrue(
-    //     new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.IDLE, true)));
+    controller.btn_1.toggleOnTrue(new ToAlgaeShootFromReef());
+
+    controller.btn_2.toggleOnTrue(new ToPathAndCoralShoot());
+    controller.btn_3.toggleOnTrue(new ToPathAndDeAlgaefy());
+    controller.btn_4.toggleOnTrue(
+        new ToAlgaeShootAuto(() -> PresetManager.getAimAndShootPreset(drivebase.getPose2d())));
+
+    // controller.btn_3.toggleOnTrue(new ToCoralIntake());
+    // controller.btn_4.toggleOnTrue(new ToCoralShoot());
+    // controller.btn_5.toggleOnTrue(new ToAlgaeShootFromReef());
+    // controller.btn_6.toggleOnTrue(new ToSubsystemsPreset(() -> Presets.ALGAE_STOW));
+    // controller.btn_7.toggleOnTrue(new ToSubsystemsPreset(() -> Presets.ALGAE_PROCESS));
+    // controller.btn_8.toggleOnTrue(new ToSubsystemsPreset(() -> Presets.ALGAE_SHOOT));
+    // controller.btn_9.toggleOnTrue(new ToSubsystemsPreset(() -> Presets.ALGAE_INTAKE));
   }
 
   private void configureTestButtonBoxBindings(CS_ButtonBoxController controller) {
-    // Coral Shooter Tuning functions
-    // controller.btn_1.toggleOnTrue(new CoralShooterIntake());
-    // controller.btn_2.toggleOnTrue(new Tune_CoralShooter());
-    // controller.btn_3.toggleOnTrue(new CoralShooterLaunch());
-
-    // controller.btn_4.toggleOnTrue(new AlgaeShooterIntake());
-    // controller.btn_5.toggleOnTrue(new Tune_AlgaeShooter());
-    // controller.btn_6.toggleOnTrue(new AlgaeShooterLaunch());
-
-    // controller.btn_5.toggleOnTrue(new InstantCommand(() -> elevator.setHeight(8)));
-    // controller.btn_6.toggleOnTrue(new InstantCommand(() -> elevator.setHeight(51)));
-    // controller.btn_7.toggleOnTrue(new InstantCommand(() -> wrist.setAngleDegrees(0)));
-    // controller.btn_8.toggleOnTrue(new InstantCommand(() -> wrist.setAngleDegrees(200)));
-
-    // controller.btn_7.toggleOnTrue(new InstantCommand(() -> climber.setAngleDegrees(90)));
-    // controller.btn_8.toggleOnTrue(new InstantCommand(() -> climber.setAngleDegrees(230)));
-
-    // controller.btn_7.toggleOnTrue(new InstantCommand(() -> wrist.setAngleDegrees(90)));
-    // controller.btn_8.toggleOnTrue(new InstantCommand(() -> wrist.setAngleDegrees(180)));
-
+    controller.btn_7.toggleOnTrue(
+        new FeedForwardCharacterization(
+            mortar, mortar::runCharacterizationLeft, mortar::getCharacterizationVelocityLeft));
+    controller.btn_8.toggleOnTrue(
+        new FeedForwardCharacterization(
+            mortar, mortar::runCharacterizationRight, mortar::getCharacterizationVelocityRight));
     controller.btn_9.toggleOnTrue(
         new FeedForwardCharacterization(
             algae501, algae501::runCharacterization, algae501::getCharacterizationVelocity));
   }
 
   private void configureDefaultCommands() {
-    // Set the default command for a subsystem here.
-    // TODO: @NickCanCode do we need invert for red?
-    // TODO: @NickCanCode implement slow drive in swerve subsystem
-
     drivebase.setDefaultCommand(driverController);
   }
 
   private void configureNamedCommands() {
-
-    NamedCommands.registerCommand(
-        "Idle", new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.IDLE, true)));
-    NamedCommands.registerCommand(
-        "Shoot",
-        new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.CORAL_SHOOT, true)));
-    NamedCommands.registerCommand(
-        "Intake",
-        new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.CORAL_INTAKE, true)));
-    NamedCommands.registerCommand(
-        "GoToPosition",
-        new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.GO_TO_POSITION, true)));
-
-    // NamedCommands.registerCommand("Note1_Check", new Note1_Check());
-    // NamedCommands.registerCommand("Note2_Check", new Note2_Check());
-    // NamedCommands.registerCommand("Note3_Check", new Note3_Check());
+    Supplier<CoralPreset> presetSupplier = () -> Presets.CORAL_L4;
+    NamedCommands.registerCommand("Shoot", new ToCoralIntake());
+    NamedCommands.registerCommand("Intake", new ToCoralShoot(presetSupplier));
   }
 
   public Command getAutonomousCommand() {

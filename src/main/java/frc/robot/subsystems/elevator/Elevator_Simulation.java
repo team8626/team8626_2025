@@ -85,4 +85,10 @@ public class Elevator_Simulation implements ElevatorInterface, CS_InterfaceBase 
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'goDown'");
   }
+
+  @Override
+  public void reset() {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'reset'");
+  }
 }

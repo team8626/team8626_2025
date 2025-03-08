@@ -17,22 +17,40 @@ import frc.robot.commands.setters.units.CoralShooterLaunch;
 import frc.robot.commands.setters.units.CoralShooterRampUp;
 import frc.robot.commands.setters.units.CoralShooterStop;
 import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
+import frc.robot.subsystems.presets.CoralPreset;
 import frc.robot.subsystems.presets.PresetManager;
+import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 
 public class ToCoralShoot extends SequentialCommandGroup {
   private final Timer timer = new Timer();
+  private CoralShooterSubsystem mortar;
+  private DoubleSupplier rpmLeftSupplier = null;
+  private DoubleSupplier rpmRightSupplier = null;
 
-  public ToCoralShoot() {
-    CoralShooterSubsystem mortar = RobotContainer.mortar;
+  public ToCoralShoot(Supplier<CoralPreset> presetSupplier) {
+    this.mortar = RobotContainer.mortar;
+    rpmLeftSupplier = () -> presetSupplier.get().getRPMLeft();
+    rpmRightSupplier = () -> presetSupplier.get().getRPMRight();
+    buildCommandGroup();
+  }
 
-    System.out.println("[Cmd: TOCORALSHOOT]");
+  // public ToCoralShoot() {
+  //   this.mortar = RobotContainer.mortar;
+  //   System.out.println("[Cmd: TOALGAEINTAKE]");
+
+  //   rpmLeftSupplier = () -> Presets.CORAL_L4.getRPMLeft();
+  //   rpmRightSupplier = () -> Presets.CORAL_L4.getRPMRight();
+
+  //   buildCommandGroup();
+  // }
+
+  private void buildCommandGroup() {
     addCommands(
         new ConditionalCommand(
             new SequentialCommandGroup(
                 Commodore.getSetStateCommand(CommodoreState.CORAL_SHOOT_RAMPINGUP),
-                new CoralShooterRampUp(
-                    () -> PresetManager.getCoralPreset().getRPMLeft(),
-                    () -> PresetManager.getCoralPreset().getRPMRight()) {
+                new CoralShooterRampUp(rpmLeftSupplier, rpmRightSupplier) {
                   @Override
                   public void initialize() {
                     super.initialize();

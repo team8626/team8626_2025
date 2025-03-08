@@ -4,43 +4,41 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.tuning;
+package frc.robot.commands.setters.units;
 
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
+import frc.robot.subsystems.algaeshooter.AlgaeShooterConstants;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterSubsystem;
-import frc.robot.subsystems.presets.Presets;
 
-public class Tune_AlgaeShooter extends CS_Command {
+public class AlgaeShooterDiscard extends CS_Command {
   private AlgaeShooterSubsystem algae501;
+  private final Timer timer = new Timer();
 
-  public Tune_AlgaeShooter() {
+  public AlgaeShooterDiscard() {
     algae501 = RobotContainer.algae501;
 
-    addRequirements(algae501);
-
-    this.setTAGString("TUNE_ALGAESHOOTER");
+    this.setTAGString("ALGAESHOOTER_DISCARD");
   }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    algae501.startRampUp(Presets.ALGAE_NETFROM10FT.getRPM());
+
+    algae501.startLauncher(AlgaeShooterConstants.launcherShootSetpoint);
+    algae501.startShooterBySetpoint(AlgaeShooterConstants.discardShootSetpoint);
+    timer.reset();
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {}
 
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    if (interrupted) {
-      algae501.stopShooter();
-    }
+    algae501.stopLauncher();
+    algae501.stopShooter();
   }
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return false;

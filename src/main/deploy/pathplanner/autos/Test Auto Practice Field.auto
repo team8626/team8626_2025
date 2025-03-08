@@ -11,12 +11,6 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "@BranchGReturnTest"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "Intake"
