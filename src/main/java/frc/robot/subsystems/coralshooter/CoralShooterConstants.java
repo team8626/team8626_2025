@@ -43,8 +43,7 @@ public class CoralShooterConstants {
   public static final int leftUSPort = 1; // Analog
   public static final int rightUSPort = 2; // Analog
 
-  public static double usScaleFactor = 5*1/(5./1024.); //scale converting voltage to distance
-
+  public static double usScaleFactor = 5 * 1 / (5. / 1024.); // scale converting voltage to distance
 
   // PID Constants
   public static final Gains gainsLeft =
