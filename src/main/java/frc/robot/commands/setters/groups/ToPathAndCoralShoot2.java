@@ -29,6 +29,6 @@ public class ToPathAndCoralShoot2 extends SequentialCommandGroup {
         // TODO: UNCOMMENT THIS AND TEST
         new WaitCommand(CoralShooterConstants.shooterTimerSeconds)
             .onlyIf(() -> PresetManager.usingDtp()),
-        new ToCoralShoot(presetSupplier));
+        new ToCoralShoot2());
   }
 }

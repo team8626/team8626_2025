@@ -13,7 +13,7 @@ import frc.robot.Commodore;
 import frc.robot.Commodore.CommodoreState;
 import frc.robot.RobotContainer;
 import frc.robot.commands.setters.units.CoralShooterLaunch;
-import frc.robot.commands.setters.units.CoralShooterRampUp;
+import frc.robot.commands.setters.units.CoralShooterRampUp2;
 import frc.robot.commands.setters.units.CoralShooterStop;
 import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
 import frc.robot.subsystems.presets.CoralPreset;
@@ -26,9 +26,11 @@ public class ToCoralShoot2 extends SequentialCommandGroup {
   private CoralShooterSubsystem mortar;
   private DoubleSupplier rpmLeftSupplier = null;
   private DoubleSupplier rpmRightSupplier = null;
+  private double rpmLeft = 0;
+  private double rpmRight = 0;
   private Supplier<CoralPreset> presetSupplier;
 
-  public ToCoralShoot2(Supplier<CoralPreset> presetSupplier) {
+  public ToCoralShoot2() {
     this.mortar = RobotContainer.mortar;
     rpmLeftSupplier = () -> presetSupplier.get().getRPMLeft();
     rpmRightSupplier = () -> presetSupplier.get().getRPMRight();
@@ -51,9 +53,7 @@ public class ToCoralShoot2 extends SequentialCommandGroup {
             new SequentialCommandGroup(
                 Commodore.getSetStateCommand(CommodoreState.CORAL_SHOOT_RAMPINGUP),
                 // new CoralShooterRampUp((rpmLeftSupplier), rpmRightSupplier) {
-                new CoralShooterRampUp(
-                    () -> presetSupplier.get().getRPMLeft(),
-                    () -> presetSupplier.get().getRPMRight()) {
+                new CoralShooterRampUp2() {
                   // @Override
                   // public void initialize() {
                   //   super.initialize();
