@@ -26,6 +26,8 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Robot;
@@ -69,6 +71,17 @@ public class Dashboard extends CS_SubsystemBase {
     IDLE,
     LOADED
   }
+
+  // Our own autochooser
+  private SendableChooser<AutoOptions> mainAutoChooser = new SendableChooser<AutoOptions>();
+
+  public enum AutoOptions {
+    H,
+    H_LEFT_L,
+    G_RIGHT_C,
+    DO_NOTHING,
+    TRAJECTORY,
+  };
 
   // NetworkTables Topics for communication
   private static final String toRobotTable = "/UIDashboard/ToRobot";
@@ -164,6 +177,17 @@ public class Dashboard extends CS_SubsystemBase {
 
     // Set default values
     this.setDefaultValues();
+
+    // Create auto chooser drop down
+    mainAutoChooser.addOption("DO NOTHING", AutoOptions.DO_NOTHING);
+    mainAutoChooser.addOption("H", AutoOptions.H);
+    mainAutoChooser.addOption("H_LEFT_L", AutoOptions.H_LEFT_L);
+    mainAutoChooser.addOption("G_RIGHT_C", AutoOptions.G_RIGHT_C);
+    mainAutoChooser.setDefaultOption("TRAJECTORY", AutoOptions.TRAJECTORY);
+
+    mainAutoChooser.setDefaultOption("TRAJECTORY", AutoOptions.TRAJECTORY);
+
+    SmartDashboard.putData("Autonomous Selection", mainAutoChooser);
 
     if (Robot.isSimulation()) {
       timer.start();
@@ -399,5 +423,9 @@ public class Dashboard extends CS_SubsystemBase {
 
   public static Command getSetAlgaeStateCommand(GamePieceState new_state) {
     return new InstantCommand(() -> Dashboard.setAlgaeState(new_state));
+  }
+
+  public AutoOptions getSelectedAuto() {
+    return mainAutoChooser.getSelected();
   }
 }

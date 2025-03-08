@@ -13,17 +13,23 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.RobotConstants.RobotType;
+import frc.robot.commands.setters.autos.Auto_C;
+import frc.robot.commands.setters.autos.Auto_G;
 import frc.robot.commands.setters.autos.Auto_H;
+import frc.robot.commands.setters.autos.Auto_L;
+import frc.robot.commands.setters.autos.Auto_PickupLeft;
+import frc.robot.commands.setters.autos.Auto_PickupRight;
 import frc.robot.commands.setters.groups.ToAlgaeShootFrom10ft;
 import frc.robot.commands.setters.groups.ToAlgaeShootFromReef;
+import frc.robot.commands.setters.groups.ToAlgaeSpit;
 import frc.robot.commands.setters.groups.ToCoralIntake;
 import frc.robot.commands.setters.groups.ToCoralShoot;
 import frc.robot.commands.setters.groups.ToPathAndCoralShoot;
 import frc.robot.commands.setters.groups.ToPathAndCoralShoot2;
 import frc.robot.commands.setters.groups.ToPathAndDeAlgaefy;
 import frc.robot.commands.setters.groups.ToSubsystemsPreset;
-import frc.robot.commands.setters.units.AlgaeShooterDiscard;
 import frc.robot.subsystems.Dashboard;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterSubsystem;
 import frc.robot.subsystems.algaeshooter.AlgaeShooter_Sim;
@@ -188,7 +194,7 @@ public class RobotContainer {
     controller.btn_LeftTrigger.toggleOnTrue(new ToAlgaeShootFrom10ft());
 
     controller.btn_Y.onTrue(new ToSubsystemsPreset(() -> Presets.ALGAE_STOW));
-    controller.btn_X.toggleOnTrue(new AlgaeShooterDiscard());
+    controller.btn_X.toggleOnTrue(new ToAlgaeSpit());
     controller.btn_B.toggleOnTrue(new ToSubsystemsPreset(() -> Presets.ALGAE_PROCESS));
     controller.btn_A.toggleOnTrue(new ToAlgaeShootFromReef());
   }
@@ -266,11 +272,26 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    // Return the path to follow in autonomous mode
-    // return this.autoChooser.getSelected();
-    return new Auto_H();
-
-    // return new SequentialCommandGroup(new Auto_H(), new Auto_PickupLeft());
+    Command retVal = null;
+    switch (dashboard.getSelectedAuto()) {
+      case H:
+        retVal = new Auto_H();
+        break;
+      case H_LEFT_L:
+        retVal = new SequentialCommandGroup(new Auto_H(), new Auto_PickupLeft(), new Auto_L());
+        break;
+      case G_RIGHT_C:
+        retVal = new SequentialCommandGroup(new Auto_G(), new Auto_PickupRight(), new Auto_C());
+        break;
+      case DO_NOTHING:
+        retVal = null;
+        break;
+      case TRAJECTORY:
+      default:
+        autoChooser.getSelected();
+    }
+    System.out.println("*********************  Selected Auto: " + dashboard.getSelectedAuto());
+    return retVal;
   }
 
   public RobotType getRobotType() {
