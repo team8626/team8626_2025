@@ -259,8 +259,8 @@ public class RobotContainer {
 
   private void configureNamedCommands() {
     Supplier<CoralPreset> presetSupplier = () -> Presets.CORAL_L4;
-    NamedCommands.registerCommand("Shoot", new ToCoralIntake());
-    NamedCommands.registerCommand("Intake", new ToCoralShoot(presetSupplier));
+    NamedCommands.registerCommand("Shoot", new ToCoralShoot(presetSupplier));
+    NamedCommands.registerCommand("Intake", new ToCoralIntake());
   }
 
   public Command getAutonomousCommand() {
