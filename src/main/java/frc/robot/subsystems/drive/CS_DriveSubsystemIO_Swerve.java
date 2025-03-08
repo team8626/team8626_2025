@@ -16,6 +16,7 @@ import frc.robot.OperatorConstants;
 import frc.utils.CS_XboxController;
 import java.io.File;
 import java.util.function.Supplier;
+import org.littletonrobotics.frc2025.util.AllianceFlipUtil;
 
 public class CS_DriveSubsystemIO_Swerve extends SwerveSubsystem implements CS_DriveSubsystemIO {
 
@@ -34,11 +35,11 @@ public class CS_DriveSubsystemIO_Swerve extends SwerveSubsystem implements CS_Dr
         this.driveCommand(
             () ->
                 MathUtil.applyDeadband(
-                    -xboxController.getLeftY(), // * (AllianceFlipUtil.shouldFlip() ? -1.0 : 1.0),
+                    -xboxController.getLeftY() * (AllianceFlipUtil.shouldFlip() ? -1.0 : 1.0),
                     OperatorConstants.LEFT_Y_DEADBAND),
             () ->
                 MathUtil.applyDeadband(
-                    -xboxController.getLeftX(), // * (AllianceFlipUtil.shouldFlip() ? -1.0 : 1.0),
+                    -xboxController.getLeftX() * (AllianceFlipUtil.shouldFlip() ? -1.0 : 1.0),
                     OperatorConstants.LEFT_X_DEADBAND),
             () -> -xboxController.getRightX());
 
