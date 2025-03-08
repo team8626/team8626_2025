@@ -29,9 +29,12 @@ public class FollowPathToPose extends CS_Command {
 
   @Override
   public void initialize() {
+
     targetPose = poseSupplier.get();
 
     if (this.targetPose != null) {
+      println("X: " + targetPose.getX() + " Y: " + targetPose.getY());
+
       constraints =
           new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI); // The constraints for this path.
       // constraints = PathConstraints.unlimitedConstraints(12.0); // You can also use unlimited
