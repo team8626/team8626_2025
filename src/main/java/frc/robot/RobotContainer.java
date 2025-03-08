@@ -230,7 +230,7 @@ public class RobotContainer {
     controller.btn_2.toggleOnTrue(new ToPathAndCoralShoot());
     controller.btn_3.toggleOnTrue(new ToPathAndDeAlgaefy());
     controller.btn_4.toggleOnTrue(
-      new ToAlgaeShootAuto(() -> PresetManager.getAimAndShootPreset(drivebase.getPose2d())));
+        new ToAlgaeShootAuto(() -> PresetManager.getAimAndShootPreset(drivebase.getPose2d())));
 
     // controller.btn_3.toggleOnTrue(new ToCoralIntake());
     // controller.btn_4.toggleOnTrue(new ToCoralShoot());
