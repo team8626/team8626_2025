@@ -24,7 +24,7 @@ public class CoralShooterRampUp2 extends CS_Command {
   private final double RPMTolerance = CoralShooterConstants.RPMTolerance;
   private final double RPMDifferentialTolerance = CoralShooterConstants.RPMDifferentialTolerance;
 
-  // public CoralShooterRampUp() {}
+  public CoralShooterRampUp2() {}
 
   // public CoralShooterRampUp(DoubleSupplier new_RPMLeft, DoubleSupplier new_RPMRight) {
   //   mortar = RobotContainer.mortar;
