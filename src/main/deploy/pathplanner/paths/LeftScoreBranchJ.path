@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.2178911545631745,
-        "y": 4.938189352541173
+        "x": 7.218426848003557,
+        "y": 4.938300868368952
       },
       "isLocked": false,
       "linkedName": null
@@ -20,12 +20,12 @@
         "y": 5.182998
       },
       "prevControl": {
-        "x": 4.645300566783527,
-        "y": 5.225323087333932
+        "x": 4.6498883986680575,
+        "y": 5.236106779122854
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "@BranchJLeftPickup"
     }
   ],
   "rotationTargets": [

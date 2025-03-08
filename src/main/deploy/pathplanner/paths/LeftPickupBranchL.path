@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.6364345578794115,
-        "y": 7.391960887202511
+        "x": 1.4105819673891409,
+        "y": 7.184525095621744
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.0280904409043172,
-        "y": 7.1717911029955355
+        "x": 1.8022378504140466,
+        "y": 6.964355311414769
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "LeftPickupBranchL"
     },
     {
       "anchor": {
@@ -20,12 +20,12 @@
         "y": 5.037926076493173
       },
       "prevControl": {
-        "x": 1.4136424699685155,
+        "x": 1.413642469968516,
         "y": 6.050771191573892
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "@BranchLLeftPickup"
     }
   ],
   "rotationTargets": [],

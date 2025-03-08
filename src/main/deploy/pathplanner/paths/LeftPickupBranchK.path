@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.5037009458188646,
-        "y": 7.269401962845413
+        "x": 1.4105819673891409,
+        "y": 7.184525095621744
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3460726549572186,
-        "y": 5.674619605255861
+        "x": 2.252953676527495,
+        "y": 5.589742738032192
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "LeftPickupBranchK"
     },
     {
       "anchor": {
@@ -48,7 +48,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -53.425981940216786
+    "rotation": -53.141659823495345
   },
   "useDefaultConstraints": true
 }
