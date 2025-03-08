@@ -64,6 +64,9 @@ public interface CoralShooterInterface {
     protected double desiredRPMLeft = 0;
     protected double desiredRPMRight = 0;
 
+    protected double sensorLeftDistance = 0;
+    protected double sensorRightDistance = 0;
+
     protected double kPLeft = gainsLeft.kP();
     protected double kILeft = gainsLeft.kI();
     protected double kDLeft = gainsLeft.kD();

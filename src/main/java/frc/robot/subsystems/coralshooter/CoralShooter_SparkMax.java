@@ -18,6 +18,7 @@ import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.subsystems.CS_InterfaceBase;
 
@@ -44,6 +45,9 @@ public class CoralShooter_SparkMax implements CoralShooterInterface, CS_Interfac
       new SimpleMotorFeedforward(gainsRight.kS(), gainsRight.kV(), gainsRight.kA());
 
   private DigitalInput loadedSensor = new DigitalInput(CoralShooterConstants.lidarPort);
+
+  private AnalogInput leftSensor = new AnalogInput(CoralShooterConstants.leftUSPort);
+  // private AnalogInput rightSensor = new AnalogInput(CoralShooterConstants.rightUSPort);
 
   private boolean shooterIsEnabled = false;
   private boolean launcherIsEnabled = false;
@@ -145,6 +149,9 @@ public class CoralShooter_SparkMax implements CoralShooterInterface, CS_Interfac
     values.appliedOutputLeft = leftMotor.getAppliedOutput();
     values.appliedOutputRight = rightMotor.getAppliedOutput();
     values.appliedOutputLauncher = launchMotor.getAppliedOutput();
+
+    values.sensorLeftDistance = leftSensor.getVoltage() * CoralShooterConstants.usScaleFactor;
+    // values.sensorRightDistance = rightSensor.getVoltage();
 
     values.isLoaded = isLoaded();
   }
