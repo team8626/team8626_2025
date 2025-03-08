@@ -20,14 +20,14 @@ public class AlgaeShooterRampUp extends CS_Command {
   private double desiredRPM = AlgaeShooterConstants.shootRPM;
   private final double RPMTolerance = AlgaeShooterConstants.shooterRPMTolerance;
 
-  public AlgaeShooterRampUp() {
-    algae501 = RobotContainer.algae501;
+  // public AlgaeShooterRampUp() {
+  //   algae501 = RobotContainer.algae501;
 
-    addRequirements(algae501);
+  //   addRequirements(algae501);
 
-    this.desiredRPM = AlgaeShooterConstants.shootRPM;
-    this.setTAGString("ALGAESHOOTER_RAMPUP");
-  }
+  //   this.desiredRPM = AlgaeShooterConstants.shootRPM;
+  //   this.setTAGString("ALGAESHOOTER_RAMPUP");
+  // }
 
   public AlgaeShooterRampUp(DoubleSupplier newRPM) {
     algae501 = RobotContainer.algae501;
@@ -40,6 +40,8 @@ public class AlgaeShooterRampUp extends CS_Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    printf("RPM: %f", desiredRPM);
+
     Dashboard.setAlgaeState(GamePieceState.RAMPING_UP);
     algae501.startRampUp(desiredRPM);
   }

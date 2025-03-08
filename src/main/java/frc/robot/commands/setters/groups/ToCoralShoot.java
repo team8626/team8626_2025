@@ -19,7 +19,6 @@ import frc.robot.commands.setters.units.CoralShooterStop;
 import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
 import frc.robot.subsystems.presets.CoralPreset;
 import frc.robot.subsystems.presets.PresetManager;
-import frc.robot.subsystems.presets.Presets;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
@@ -36,14 +35,15 @@ public class ToCoralShoot extends SequentialCommandGroup {
     buildCommandGroup();
   }
 
-  public ToCoralShoot() {
-    this.mortar = RobotContainer.mortar;
-    System.out.println("[Cmd: TOALGAEINTAKE]");
+  // public ToCoralShoot() {
+  //   this.mortar = RobotContainer.mortar;
+  //   System.out.println("[Cmd: TOALGAEINTAKE]");
 
-    rpmLeftSupplier = () -> Presets.CORAL_L4.getRPMLeft();
-    rpmRightSupplier = () -> Presets.CORAL_L4.getRPMRight();
-    buildCommandGroup();
-  }
+  //   rpmLeftSupplier = () -> Presets.CORAL_L4.getRPMLeft();
+  //   rpmRightSupplier = () -> Presets.CORAL_L4.getRPMRight();
+
+  //   buildCommandGroup();
+  // }
 
   private void buildCommandGroup() {
     addCommands(

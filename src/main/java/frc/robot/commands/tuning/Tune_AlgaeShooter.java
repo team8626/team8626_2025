@@ -25,7 +25,7 @@ public class Tune_AlgaeShooter extends CS_Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    algae501.startRampUp(Presets.ALGAE_NETFROMREEF.getRPM());
+    algae501.startRampUp(Presets.ALGAE_NETFROM10FT.getRPM());
   }
 
   // Called every time the scheduler runs while the command is scheduled.

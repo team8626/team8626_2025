@@ -13,7 +13,7 @@ public class ElevatorConstants {
       1 / (Units.inchesToMeters(2 * Math.PI * drumRadiusInches) * cascadingRatio);
   public static final double velocityConversionFactor = positionConversionFactor / 60;
   public static final double minHeightInches = 8;
-  public static final double maxHeightInches = 45;
+  public static final double maxHeightInches = 48;
   public static final double initHeightInches = 8;
 
   public static final int maxCurrent = 60; // Amps
@@ -23,7 +23,7 @@ public class ElevatorConstants {
 
   public static final double maxVelocityInchesPerSec = 40;
   public static final double maxAccelerationInchesPerSec2 = 20;
-  public static final double toleranceInches = 0.25;
+  public static final double toleranceInches = 1;
 
   public static final MotorConfig motorConfig =
       switch (RobotConstants.robotType) {
