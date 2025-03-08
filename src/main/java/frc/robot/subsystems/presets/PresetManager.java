@@ -324,7 +324,7 @@ public class PresetManager extends CS_SubsystemBase {
             "New Robot Pose - x: %3f, y: %3f, theta: %3f",
             robotPose2.getX(), robotPose2.getY(), robotPose2.getRotation().getDegrees());
 
-        currentCoralPreset.setPose(robotPose2);
+        currentCoralPreset.setPose(AllianceFlipUtil.apply(robotPose2));
 
       } else if (uiSelectedCoralBranch2.equals(CoralBranch.NONE)) {
         this.uiCurrentCoralBranch2 = uiSelectedCoralBranch2;
@@ -368,7 +368,7 @@ public class PresetManager extends CS_SubsystemBase {
             "New Algae Pose - x: %3f, y: %3f, theta: %3f\n",
             robotPose2.getX(), robotPose2.getY(), robotPose2.getRotation().getDegrees());
 
-        currentAlgaePreset.setPose(robotPose2);
+        currentAlgaePreset.setPose(AllianceFlipUtil.apply(robotPose2));
         currentAlgaePreset.setSubsystems(uiSelectedAlgaeFace2);
       }
       // New Selected Value for ALGAE is around the REEF ==> FLOOR
