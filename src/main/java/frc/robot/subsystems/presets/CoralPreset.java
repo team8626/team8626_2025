@@ -2,29 +2,18 @@ package frc.robot.subsystems.presets;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import frc.robot.RobotConstants.UIConstants.CoralLevel;
-import frc.robot.subsystems.coralshooter.CoralShooterConstants;
 
 public class CoralPreset {
   public String name = "-";
   public Pose2d robotPose;
-  public double RPMLeft = CoralShooterConstants.RPMShootLeft;
-  public double RPMRight = CoralShooterConstants.RPMShootRight;
-  // public boolean isReady = false;
+  public double RPMLeft = 0;
+  public double RPMRight = 0;
   public boolean hasPose = false;
   public boolean hasLevel = false;
 
   public CoralPreset(String name) {
     this.name = name;
   }
-
-  // public CoralPreset(
-  //     String name, Pose2d robotPose, double RPMLeft, double RPMRight, boolean isReady) {
-  //   this.name = name;
-  //   this.robotPoseSupplier = () -> robotPose;
-  //   this.RPMLeft = RPMLeft;
-  //   this.RPMRight = RPMRight;
-  //   this.isReady = isReady;
-  // }
 
   public CoralPreset(String name, double RPMLeft, double RPMRight) {
     this.name = name;

@@ -119,6 +119,14 @@ public class AlgaeShooter_Sim implements AlgaeShooterInterface, CS_InterfaceBase
   }
 
   @Override
+  public void startShooterBySetpoint(double new_Setpoint) {
+    // rightController.setReference(new_Setpoint, ControlType.kDutyCycle);
+    // leftController.setReference(new_Setpoint, ControlType.kDutyCycle);
+    shooterIsEnabled = true;
+    printf("Motors Setpoint: %f", new_Setpoint);
+  }
+
+  @Override
   public double getShooterRPMLeft() {
     return leftSim.getAngularVelocityRPM();
   }

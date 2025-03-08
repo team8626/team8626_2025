@@ -11,6 +11,8 @@ public interface AlgaeShooterInterface {
 
   void startLauncher(double new_Setpoint);
 
+  void startShooterBySetpoint(double new_Setpoint);
+
   void updateLauncherSetpoint(double new_Setpoint);
 
   void stopLauncher();

@@ -8,13 +8,14 @@ package frc.robot.commands.setters.groups;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.setters.units.ElevatorSetHeight;
 import frc.robot.commands.setters.units.WristSetAngle;
 import frc.robot.subsystems.presets.AlgaePreset;
 import frc.robot.subsystems.presets.PresetManager;
 import java.util.function.Supplier;
 
-public class ToDeAlgaefy extends ParallelCommandGroup {
+public class ToDeAlgaefy extends SequentialCommandGroup {
 
   public ToDeAlgaefy(Supplier<AlgaePreset> presetSupplier) {
     System.out.println("[Cmd: TODEALGAE]");

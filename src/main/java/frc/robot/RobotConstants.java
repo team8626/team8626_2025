@@ -162,7 +162,7 @@ public class RobotConstants {
     public static final List<CoralLevel> allowedCoralLevels2 =
         Arrays.asList(CoralLevel.L1, CoralLevel.L4);
 
-    public static final DTP defaultDTP = DTP.ON;
+    public static final DTP defaultDTP = DTP.OFF; // TODO
     public static final CoralLevel defaultCoralLevel = CoralLevel.L4;
     public static final PickupSide defaultPickupSide = PickupSide.NONE;
     public static final CoralBranch defaultCoralBranch = CoralBranch.NONE;

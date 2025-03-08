@@ -70,4 +70,7 @@ public class Elevator_SimulationRose implements ElevatorInterface, CS_InterfaceB
   public void goDown(double offsetInches) {
     desiredHeightInches -= offsetInches;
   }
+
+  @Override
+  public void reset() {}
 }
