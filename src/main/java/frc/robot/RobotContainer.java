@@ -19,6 +19,7 @@ import frc.robot.commands.setters.groups.ToAlgaeShootFromReef;
 import frc.robot.commands.setters.groups.ToCoralIntake;
 import frc.robot.commands.setters.groups.ToCoralShoot;
 import frc.robot.commands.setters.groups.ToPathAndCoralShoot;
+import frc.robot.commands.setters.groups.ToPathAndCoralShoot2;
 import frc.robot.commands.setters.groups.ToPathAndDeAlgaefy;
 import frc.robot.commands.setters.groups.ToSubsystemsPreset;
 import frc.robot.commands.setters.units.AlgaeShooterDiscard;
@@ -226,7 +227,7 @@ public class RobotContainer {
   private void configureButtonBoxBindings(CS_ButtonBoxController controller) {
     // controller.btn_1.toggleOnTrue(new ToAlgaeShootFromReef());
 
-    // controller.btn_2.toggleOnTrue(new ToPathAndCoralShoot2());
+    controller.btn_2.toggleOnTrue(new ToPathAndCoralShoot2());
     // controller.btn_3.toggleOnTrue(new ToPathAndDeAlgaefy());
     // controller.btn_4.toggleOnTrue(
     //     new ToAlgaeShootAuto(() -> PresetManager.getAimAndShootPreset(drivebase.getPose2d())));

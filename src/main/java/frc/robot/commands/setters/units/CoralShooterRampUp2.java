@@ -6,25 +6,24 @@
 
 package frc.robot.commands.setters.units;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
 import frc.robot.subsystems.Dashboard;
 import frc.robot.subsystems.Dashboard.GamePieceState;
 import frc.robot.subsystems.coralshooter.CoralShooterConstants;
 import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
-import java.util.function.DoubleSupplier;
+import frc.robot.subsystems.presets.Presets;
 
 public class CoralShooterRampUp2 extends CS_Command {
   private CoralShooterSubsystem mortar;
 
   // private double desiredRPMLeft;
   // private double desiredRPMRight;
-  private DoubleSupplier desiredRPMLeftSupplier;
-  private DoubleSupplier desiredRPMRightSupplier;
+  private double desiredRpmLeft;
+  private double desiredRpmRight;
   private final double RPMTolerance = CoralShooterConstants.RPMTolerance;
   private final double RPMDifferentialTolerance = CoralShooterConstants.RPMDifferentialTolerance;
-
-  public CoralShooterRampUp2() {}
 
   // public CoralShooterRampUp(DoubleSupplier new_RPMLeft, DoubleSupplier new_RPMRight) {
   //   mortar = RobotContainer.mortar;
@@ -36,15 +35,15 @@ public class CoralShooterRampUp2 extends CS_Command {
   //   this.setTAGString("CORALSHOOTER_RAMPUP");
   // }
 
-  public CoralShooterRampUp2(
-      DoubleSupplier new_RPMLeftSupplier, DoubleSupplier new_RPMRightSupplier) {
+  public CoralShooterRampUp2() {
+    // DoubleSupplier new_RPMLeftSupplier, DoubleSupplier new_RPMRightSupplier) {
     mortar = RobotContainer.mortar;
 
     // desiredRPMLeft = new_RPMLeftSupplier.getAsDouble();
     // desiredRPMRight = new_RPMRightSupplier.getAsDouble();
 
-    desiredRPMLeftSupplier = new_RPMLeftSupplier;
-    desiredRPMRightSupplier = new_RPMRightSupplier;
+    desiredRpmLeft = Presets.CORAL_L4.RPMLeft;
+    desiredRpmRight = Presets.CORAL_L4.RPMRight;
 
     addRequirements(mortar);
     this.setTAGString("CORALSHOOTER_RAMPUP");
@@ -56,10 +55,14 @@ public class CoralShooterRampUp2 extends CS_Command {
     Dashboard.setCoralState(GamePieceState.RAMPING_UP);
     // printf("[CORALSHOOTER_RAMPUP] RPM Left: %f, RPM Right: %f", desiredRPMLeft, desiredRPMRight);
     // mortar.startRampUp(desiredRPMLeft, desiredRPMRight);
-    printf(
-        "[CORALSHOOTER_RAMPUP] RPM Left: %f, RPM Right: %f",
-        desiredRPMLeftSupplier.getAsDouble(), desiredRPMRightSupplier.getAsDouble());
-    mortar.startRampUp(desiredRPMLeftSupplier.getAsDouble(), desiredRPMRightSupplier.getAsDouble());
+    desiredRpmLeft =
+        SmartDashboard.getNumber(
+            "Subsystem/PresetManager/CoralPreset/RPMLeft", Presets.CORAL_L4.RPMLeft);
+    desiredRpmRight =
+        SmartDashboard.getNumber(
+            "Subsystem/PresetManager/CoralPreset/RPMRight", Presets.CORAL_L4.RPMRight);
+    printf("[CORALSHOOTER_RAMPUP] RPM Left: %f, RPM Right: %f", desiredRpmLeft, desiredRpmRight);
+    mortar.startRampUp(desiredRpmLeft, desiredRpmRight);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -86,9 +89,8 @@ public class CoralShooterRampUp2 extends CS_Command {
     //     Math.abs(Math.abs(currentRPMLeft) - desiredRPMLeft) <= RPMTolerance
     //         && Math.abs(Math.abs(currentRPMRight) - desiredRPMRight) <= RPMTolerance;
     atSetpoint =
-        Math.abs(Math.abs(currentRPMLeft) - desiredRPMLeftSupplier.getAsDouble()) <= RPMTolerance
-            && Math.abs(Math.abs(currentRPMRight) - desiredRPMRightSupplier.getAsDouble())
-                <= RPMTolerance;
+        Math.abs(Math.abs(currentRPMLeft) - desiredRpmLeft) <= RPMTolerance
+            && Math.abs(Math.abs(currentRPMRight) - desiredRpmRight) <= RPMTolerance;
     return atSetpoint;
   }
 }

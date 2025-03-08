@@ -26,8 +26,6 @@ public class ToCoralShoot2 extends SequentialCommandGroup {
   private CoralShooterSubsystem mortar;
   private DoubleSupplier rpmLeftSupplier = null;
   private DoubleSupplier rpmRightSupplier = null;
-  private double rpmLeft = 0;
-  private double rpmRight = 0;
   private Supplier<CoralPreset> presetSupplier;
 
   public ToCoralShoot2() {
@@ -54,6 +52,7 @@ public class ToCoralShoot2 extends SequentialCommandGroup {
                 Commodore.getSetStateCommand(CommodoreState.CORAL_SHOOT_RAMPINGUP),
                 // new CoralShooterRampUp((rpmLeftSupplier), rpmRightSupplier) {
                 new CoralShooterRampUp2() {
+                  // TODO - Test this
                   // @Override
                   // public void initialize() {
                   //   super.initialize();
