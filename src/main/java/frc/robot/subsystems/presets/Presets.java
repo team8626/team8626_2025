@@ -26,5 +26,5 @@ public class Presets {
   public static final CoralPreset CORAL_L1 = new CoralPreset("L1", 900, 1000);
   public static final CoralPreset CORAL_L2 = new CoralPreset("L2", 900, 1000);
   public static final CoralPreset CORAL_L3 = new CoralPreset("L3", 550, 1335);
-  public static final CoralPreset CORAL_L4 = new CoralPreset("L4", 1275, 1275);
+  public static final CoralPreset CORAL_L4 = new CoralPreset("L4", 1300, 1300);
 }
