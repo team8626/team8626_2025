@@ -76,6 +76,7 @@ public class Dashboard extends CS_SubsystemBase {
   private SendableChooser<AutoOptions> mainAutoChooser = new SendableChooser<AutoOptions>();
 
   public enum AutoOptions {
+    F_RIGHT_C,
     H,
     H_LEFT_L,
     G_RIGHT_C,
@@ -180,6 +181,7 @@ public class Dashboard extends CS_SubsystemBase {
 
     // Create auto chooser drop down
     mainAutoChooser.addOption("DO NOTHING", AutoOptions.DO_NOTHING);
+    mainAutoChooser.addOption("F_RIGHT_C", AutoOptions.F_RIGHT_C);
     mainAutoChooser.addOption("H", AutoOptions.H);
     mainAutoChooser.addOption("H_LEFT_L", AutoOptions.H_LEFT_L);
     mainAutoChooser.addOption("G_RIGHT_C", AutoOptions.G_RIGHT_C);
