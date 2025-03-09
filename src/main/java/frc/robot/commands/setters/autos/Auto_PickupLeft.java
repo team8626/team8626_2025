@@ -15,7 +15,6 @@ public class Auto_PickupLeft extends SequentialCommandGroup {
 
   public Auto_PickupLeft() {
     System.out.printf("[Cmd: %s] Loaded\n", this.getName().toUpperCase());
-    poseSupplier = () -> PresetManager.getCoralPreset().getPose();
     poseSupplier = () -> PresetManager.getRobotPoseFromPickupSide(PickupSide.LEFT);
 
     addCommands(

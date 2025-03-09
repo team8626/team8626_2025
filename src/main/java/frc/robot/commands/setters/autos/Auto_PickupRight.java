@@ -15,8 +15,7 @@ public class Auto_PickupRight extends SequentialCommandGroup {
 
   public Auto_PickupRight() {
     System.out.printf("[Cmd: %s] Loaded\n", this.getName().toUpperCase());
-    poseSupplier = () -> PresetManager.getCoralPreset().getPose();
-    poseSupplier = () -> PresetManager.getRobotPoseFromPickupSide(PickupSide.LEFT);
+    poseSupplier = () -> PresetManager.getRobotPoseFromPickupSide(PickupSide.RIGHT);
 
     addCommands(
         new PrintCommand("X: " + poseSupplier.get().getX() + " Y: " + poseSupplier.get().getY()),
