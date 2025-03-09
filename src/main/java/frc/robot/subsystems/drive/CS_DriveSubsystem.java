@@ -8,6 +8,7 @@ import java.io.File;
 
 public class CS_DriveSubsystem extends CS_SubsystemBase {
   private CS_DriveSubsystemIO subsystemInterface;
+  private boolean isFlipped = false;
 
   public CS_DriveSubsystem(CS_DriveSubsystemIO subsystem_interface) {
     this.subsystemInterface = subsystem_interface;
@@ -39,6 +40,10 @@ public class CS_DriveSubsystem extends CS_SubsystemBase {
 
   public void stop() {
     drive(new ChassisSpeeds());
+  }
+
+  public void flipToggle() {
+    subsystemInterface.toggleFlip();
   }
 
   @Override

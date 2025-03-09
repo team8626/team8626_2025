@@ -22,4 +22,6 @@ public interface CS_DriveSubsystemIO {
   public Pose2d getPose();
 
   public void drive(ChassisSpeeds velocity);
+
+  public void toggleFlip();
 }
