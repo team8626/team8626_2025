@@ -18,35 +18,19 @@ import frc.robot.subsystems.presets.Presets;
 public class CoralShooterRampUp2 extends CS_Command {
   private CoralShooterSubsystem mortar;
 
-  // private double desiredRPMLeft;
-  // private double desiredRPMRight;
   private double desiredRpmLeft;
   private double desiredRpmRight;
   private final double RPMTolerance = CoralShooterConstants.RPMTolerance;
   private final double RPMDifferentialTolerance = CoralShooterConstants.RPMDifferentialTolerance;
 
-  // public CoralShooterRampUp(DoubleSupplier new_RPMLeft, DoubleSupplier new_RPMRight) {
-  //   mortar = RobotContainer.mortar;
-
-  //   desiredRPMLeft = new_RPMLeft.getAsDouble();
-  //   desiredRPMRight = new_RPMRight.getAsDouble();
-
-  //   addRequirements(mortar);
-  //   this.setTAGString("CORALSHOOTER_RAMPUP");
-  // }
-
   public CoralShooterRampUp2() {
-    // DoubleSupplier new_RPMLeftSupplier, DoubleSupplier new_RPMRightSupplier) {
     mortar = RobotContainer.mortar;
-
-    // desiredRPMLeft = new_RPMLeftSupplier.getAsDouble();
-    // desiredRPMRight = new_RPMRightSupplier.getAsDouble();
 
     desiredRpmLeft = Presets.CORAL_L4.RPMLeft;
     desiredRpmRight = Presets.CORAL_L4.RPMRight;
 
     addRequirements(mortar);
-    this.setTAGString("CORALSHOOTER_RAMPUP");
+    this.setTAGString("CORALSHOOTER_RAMPUP2");
   }
 
   // Called when the command is initially scheduled.
