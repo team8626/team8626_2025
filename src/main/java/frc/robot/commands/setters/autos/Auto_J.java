@@ -20,7 +20,7 @@ public class Auto_J extends SequentialCommandGroup {
     System.out.printf("[Cmd: %s] Loaded\n", this.getName().toUpperCase());
     poseSupplier = () -> PresetManager.getRobotPoseFromTarget(CoralBranch.J, CoralLevel.L4, 10);
     finalPoseSupplier =
-        () -> PresetManager.getRobotPoseFromTarget(CoralBranch.G, CoralLevel.L4, -2);
+        () -> PresetManager.getRobotPoseFromTarget(CoralBranch.J, CoralLevel.L4, -2);
 
     addCommands(
         new FollowPathToPose(finalPoseSupplier),

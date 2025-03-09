@@ -296,6 +296,9 @@ public class RobotContainer {
       case J_LEFT_K:
         retVal = new SequentialCommandGroup(new Auto_J(), new Auto_PickupLeft(), new Auto_K());
         break;
+      case SOURCE:
+        retVal = new Auto_PickupLeft();
+        break;
       case DO_NOTHING:
         retVal = null;
         break;

@@ -83,6 +83,7 @@ public class Dashboard extends CS_SubsystemBase {
     J_LEFT_K,
     G_RIGHT_C,
     DO_NOTHING,
+    SOURCE,
     TRAJECTORY,
   };
 
@@ -189,6 +190,8 @@ public class Dashboard extends CS_SubsystemBase {
     mainAutoChooser.addOption("J_LEFT_K", AutoOptions.J_LEFT_K);
     mainAutoChooser.addOption("H", AutoOptions.H);
     mainAutoChooser.addOption("H_LEFT_L", AutoOptions.H_LEFT_L);
+    mainAutoChooser.addOption("SOURCE", AutoOptions.SOURCE);
+
     mainAutoChooser.setDefaultOption("TRAJECTORY", AutoOptions.TRAJECTORY);
 
     mainAutoChooser.setDefaultOption("TRAJECTORY", AutoOptions.TRAJECTORY);
