@@ -16,8 +16,12 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.RobotConstants.RobotType;
 import frc.robot.commands.setters.autos.Auto_C;
+import frc.robot.commands.setters.autos.Auto_E_L1;
+import frc.robot.commands.setters.autos.Auto_F;
 import frc.robot.commands.setters.autos.Auto_G;
 import frc.robot.commands.setters.autos.Auto_H;
+import frc.robot.commands.setters.autos.Auto_J;
+import frc.robot.commands.setters.autos.Auto_K;
 import frc.robot.commands.setters.autos.Auto_L;
 import frc.robot.commands.setters.autos.Auto_PickupLeft;
 import frc.robot.commands.setters.autos.Auto_PickupRight;
@@ -26,7 +30,6 @@ import frc.robot.commands.setters.groups.ToAlgaeShootFromReef;
 import frc.robot.commands.setters.groups.ToAlgaeSpit;
 import frc.robot.commands.setters.groups.ToCoralIntake;
 import frc.robot.commands.setters.groups.ToCoralShoot;
-import frc.robot.commands.setters.groups.ToPathAndCoralShoot;
 import frc.robot.commands.setters.groups.ToPathAndCoralShoot2;
 import frc.robot.commands.setters.groups.ToPathAndDeAlgaefy;
 import frc.robot.commands.setters.groups.ToSubsystemsPreset;
@@ -188,7 +191,7 @@ public class RobotContainer {
 
   private void configureDriverBindings(CS_XboxController controller) {
     controller.btn_RightBumper.toggleOnTrue(new ToCoralIntake());
-    controller.btn_RightTrigger.toggleOnTrue(new ToPathAndCoralShoot());
+    controller.btn_RightTrigger.toggleOnTrue(new ToPathAndCoralShoot2());
 
     controller.btn_LeftBumper.toggleOnTrue(new ToPathAndDeAlgaefy());
     controller.btn_LeftTrigger.toggleOnTrue(new ToAlgaeShootFrom10ft());
@@ -235,7 +238,7 @@ public class RobotContainer {
   private void configureButtonBoxBindings(CS_ButtonBoxController controller) {
     // controller.btn_1.toggleOnTrue(new ToAlgaeShootFromReef());
 
-    controller.btn_2.toggleOnTrue(new ToPathAndCoralShoot2());
+    // controller.btn_2.toggleOnTrue(new ToPathAndCoralShoot2());
     // controller.btn_3.toggleOnTrue(new ToPathAndDeAlgaefy());
     // controller.btn_4.toggleOnTrue(
     //     new ToAlgaeShootAuto(() -> PresetManager.getAimAndShootPreset(drivebase.getPose2d())));
@@ -277,11 +280,20 @@ public class RobotContainer {
       case H:
         retVal = new Auto_H();
         break;
+      case E1_RIGHT_C:
+        retVal = new SequentialCommandGroup(new Auto_E_L1(), new Auto_PickupRight(), new Auto_C());
+        break;
+      case F_RIGHT_C:
+        retVal = new SequentialCommandGroup(new Auto_F(), new Auto_PickupRight(), new Auto_C());
+        break;
       case H_LEFT_L:
         retVal = new SequentialCommandGroup(new Auto_H(), new Auto_PickupLeft(), new Auto_L());
         break;
       case G_RIGHT_C:
         retVal = new SequentialCommandGroup(new Auto_G(), new Auto_PickupRight(), new Auto_C());
+        break;
+      case J_LEFT_K:
+        retVal = new SequentialCommandGroup(new Auto_J(), new Auto_PickupLeft(), new Auto_K());
         break;
       case DO_NOTHING:
         retVal = null;
@@ -290,7 +302,6 @@ public class RobotContainer {
       default:
         autoChooser.getSelected();
     }
-    System.out.println("*********************  Selected Auto: " + dashboard.getSelectedAuto());
     return retVal;
   }
 
