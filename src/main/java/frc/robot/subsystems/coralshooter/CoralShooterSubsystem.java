@@ -186,8 +186,8 @@ public class CoralShooterSubsystem extends CS_SubsystemBase {
         "Subsystem/CoralShooter/ShooterappliedOutputRight", values.appliedOutputRight);
     SmartDashboard.putNumber(
         "Subsystem/CoralShooter/LauncherappliedOutputAmps", values.appliedOutputLauncher);
-    SmartDashboard.putNumber(
-        "Subsystem/CoralShooter/SensorLeftDistance", values.sensorLeftDistance);
+    // SmartDashboard.putNumber("Subsystem/CoralShooter/SensorLeftDistance",
+    // values.sensorLeftDistance);
     // SmartDashboard.putNumber("Subsystem/CoralShooter/SensorRightDistance",
     // values.sensorRightDistance);
 
