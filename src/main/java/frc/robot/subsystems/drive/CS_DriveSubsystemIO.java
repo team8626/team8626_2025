@@ -17,6 +17,8 @@ public interface CS_DriveSubsystemIO {
 
   public Command driveToPose(Supplier<Pose2d> poseSupplier);
 
+  public ChassisSpeeds getRobotVelocity();
+
   public Pose2d getPose();
 
   public void drive(ChassisSpeeds velocity);
