@@ -18,7 +18,7 @@ public class Auto_C extends SequentialCommandGroup {
   public Auto_C() {
     System.out.printf("[Cmd: %s] Loaded\n", this.getName().toUpperCase());
     poseSupplier = () -> PresetManager.getCoralPreset().getPose();
-    poseSupplier = () -> PresetManager.getRobotPoseFromTarget(CoralBranch.C, CoralLevel.L4);
+    poseSupplier = () -> PresetManager.getRobotPoseFromTarget(CoralBranch.C, CoralLevel.L4, 10);
 
     addCommands(
         new FollowPathToPose(poseSupplier),
