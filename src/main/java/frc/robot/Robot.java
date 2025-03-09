@@ -26,26 +26,10 @@ public class Robot extends TimedRobot {
   public Robot() {
     robotContainer = RobotContainer.getInstance();
 
-    // TODO: Remove? We aren't using that m_chooser.set
-    // DefaultOption("Default Auto", kDefaultAuto);
-    // m_chooser.addOption("My Auto", kCustomAuto);
-    // SmartDashboard.putData("Auto choices", m_chooser);
-
     // log to USB
     DataLogManager.start();
     DriverStation.startDataLog(DataLogManager.getLog());
 
-    // Set the Commodore to boot up (disconnected)
-    // if(RobotContainer.isDebugEnabled()){
-    //
-    // DriverStation.reportWarning("################################################################################", false);
-    //   DriverStation.reportWarning("########## WARNING !!!
-    //        ##########", false);
-    //   DriverStation.reportWarning("########## DEBUG IS ENABLED ON THIS BUILD...
-    //        ##########", false);
-    //
-    // DriverStation.reportWarning("################################################################################", false);
-    // }
     Commodore.setCommodoreState(CommodoreState.BOOT, true);
     isReady = true;
   }
