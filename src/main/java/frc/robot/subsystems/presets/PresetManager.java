@@ -25,6 +25,7 @@ import frc.robot.RobotConstants.UIConstants.PickupSide;
 import frc.robot.subsystems.CS_SubsystemBase;
 import frc.robot.subsystems.Dashboard;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterConstants;
+import org.littletonrobotics.frc2025.FieldConstants.CoralStation;
 import org.littletonrobotics.frc2025.FieldConstants.Reef;
 import org.littletonrobotics.frc2025.FieldConstants.ReefLevel;
 import org.littletonrobotics.frc2025.util.AllianceFlipUtil;
@@ -324,7 +325,7 @@ public class PresetManager extends CS_SubsystemBase {
             "New Robot Pose - x: %3f, y: %3f, theta: %3f",
             robotPose2.getX(), robotPose2.getY(), robotPose2.getRotation().getDegrees());
 
-        currentCoralPreset.setPose(robotPose2);
+        currentCoralPreset.setPose(AllianceFlipUtil.apply(robotPose2));
 
       } else if (uiSelectedCoralBranch2.equals(CoralBranch.NONE)) {
         this.uiCurrentCoralBranch2 = uiSelectedCoralBranch2;
@@ -368,7 +369,7 @@ public class PresetManager extends CS_SubsystemBase {
             "New Algae Pose - x: %3f, y: %3f, theta: %3f\n",
             robotPose2.getX(), robotPose2.getY(), robotPose2.getRotation().getDegrees());
 
-        currentAlgaePreset.setPose(robotPose2);
+        currentAlgaePreset.setPose(AllianceFlipUtil.apply(robotPose2));
         currentAlgaePreset.setSubsystems(uiSelectedAlgaeFace2);
       }
       // New Selected Value for ALGAE is around the REEF ==> FLOOR
@@ -384,7 +385,54 @@ public class PresetManager extends CS_SubsystemBase {
     }
   }
 
-  private Pose2d getBranchPoseFromTarget2(CoralBranch branch, CoralLevel level) {
+  public static Pose2d getRobotPoseFromTarget(
+      CoralBranch newBranch, CoralLevel newLevel, double newOffsetInches) {
+    Pose2d retValue = new Pose2d();
+    Pose2d branchPose = getBranchPoseFromTarget2(newBranch, newLevel);
+
+    Pose2d robotPose =
+        branchPose.plus(
+            new Transform2d(
+                RobotConstants.robotCenterOffset.getX()
+                    + Units.inchesToMeters(1.625)
+                    + Units.inchesToMeters(
+                        newOffsetInches), //  1.625 for Branch inset to face distance...
+                Units.inchesToMeters(newOffsetInches),
+                new Rotation2d())); /// branchPose.getRotation()));
+
+    Pose2d robotPose2 =
+        new Pose2d(
+            robotPose.getX(),
+            robotPose.getY(),
+            new Rotation2d(robotPose.getRotation().getRadians()));
+
+    retValue = AllianceFlipUtil.apply(robotPose2);
+    return retValue;
+  }
+
+  public static Pose2d getRobotPoseFromPickupSide(PickupSide newSide) {
+    Pose2d retValue = new Pose2d();
+    Pose2d sidepose = getPickupPoseFromPickupSide(newSide);
+
+    Pose2d robotPose =
+        sidepose.plus(
+            new Transform2d(
+                RobotConstants.robotCenterOffset.getX()
+                    + Units.inchesToMeters(1.625), //  1.625 for Branch inset to face distance...
+                0,
+                new Rotation2d())); /// branchPose.getRotation()));
+
+    Pose2d robotPose2 =
+        new Pose2d(
+            robotPose.getX(),
+            robotPose.getY(),
+            new Rotation2d(robotPose.getRotation().getRadians()));
+
+    retValue = AllianceFlipUtil.apply(robotPose2);
+    return retValue;
+  }
+
+  public static Pose2d getBranchPoseFromTarget2(CoralBranch branch, CoralLevel level) {
     ReefLevel branchHeight;
     int branchId = 0;
 
@@ -491,6 +539,21 @@ public class PresetManager extends CS_SubsystemBase {
         Reef.centerFaces[faceId].getRotation().getDegrees());
 
     return Reef.centerFaces[faceId];
+  }
+
+  private static Pose2d getPickupPoseFromPickupSide(PickupSide newSide) {
+    Pose2d retValue = new Pose2d();
+
+    switch (newSide) {
+      case LEFT:
+        retValue = CoralStation.leftCenterFace;
+        break;
+      case RIGHT:
+      default:
+        retValue = CoralStation.rightCenterFace;
+        break;
+    }
+    return retValue;
   }
 
   public static boolean usingDtp() {

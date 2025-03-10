@@ -35,6 +35,11 @@ public class AlgaeShooterSubsystem extends CS_SubsystemBase {
     algaeShooterInterface.startLauncher(AlgaeShooterConstants.launcherIntakeSetpoint);
   }
 
+  public void startDiscard() {
+    algaeShooterInterface.startShooter(-AlgaeShooterConstants.intakeRPM);
+    algaeShooterInterface.startLauncher(-AlgaeShooterConstants.launcherIntakeSetpoint);
+  }
+
   public void startIntake(double newSpeed) {
     algaeShooterInterface.startShooter(newSpeed);
     algaeShooterInterface.startLauncher(AlgaeShooterConstants.launcherIntakeSetpoint);

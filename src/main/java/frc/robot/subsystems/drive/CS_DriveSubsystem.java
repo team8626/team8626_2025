@@ -6,19 +6,16 @@ import frc.robot.subsystems.CS_SubsystemBase;
 import frc.utils.CS_XboxController;
 import java.io.File;
 
-// public class CS_SwerveSubsystem extends SwerveSubsystem  implements CS_SwerveSubsystemIO{
 public class CS_DriveSubsystem extends CS_SubsystemBase {
   private CS_DriveSubsystemIO subsystemInterface;
+  private boolean isFlipped = false;
 
   public CS_DriveSubsystem(CS_DriveSubsystemIO subsystem_interface) {
     this.subsystemInterface = subsystem_interface;
-    // TODO: Instantiate the Drivetrain
   }
 
   public CS_DriveSubsystem(CS_DriveSubsystemIO subsystem_interface, File directory) {
     this.subsystemInterface = subsystem_interface;
-    // TODO: Instantiate the Drivetrain
-    // super(directory);
   }
 
   public void setDefaultCommand(CS_XboxController xboxController) {
@@ -33,8 +30,20 @@ public class CS_DriveSubsystem extends CS_SubsystemBase {
     return subsystemInterface.getPose();
   }
 
+  public ChassisSpeeds getRobotVelocity() {
+    return subsystemInterface.getRobotVelocity();
+  }
+
   public void drive(ChassisSpeeds velocity) {
     subsystemInterface.drive(velocity);
+  }
+
+  public void stop() {
+    drive(new ChassisSpeeds());
+  }
+
+  public void flipToggle() {
+    subsystemInterface.toggleFlip();
   }
 
   @Override

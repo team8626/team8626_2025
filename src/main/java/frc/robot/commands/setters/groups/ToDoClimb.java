@@ -19,7 +19,6 @@ public class ToDoClimb extends ParallelCommandGroup {
     System.out.println("[Cmd: TODOCLIMB]");
 
     addCommands(
-        Commodore.getSetStateCommand(CommodoreState.CLIMB_NOW),
-        new ClimberSetAngle(() -> 0 /* TODO: GET THE PRESET POSITION */));
+        Commodore.getSetStateCommand(CommodoreState.CLIMB_NOW), new ClimberSetAngle(() -> 180));
   }
 }

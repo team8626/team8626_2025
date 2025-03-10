@@ -16,8 +16,11 @@ import frc.robot.OperatorConstants;
 import frc.utils.CS_XboxController;
 import java.io.File;
 import java.util.function.Supplier;
+import org.littletonrobotics.frc2025.util.AllianceFlipUtil;
 
 public class CS_DriveSubsystemIO_Swerve extends SwerveSubsystem implements CS_DriveSubsystemIO {
+
+  private boolean isFlipped = false;
 
   public CS_DriveSubsystemIO_Swerve(File directory) {
     super(directory);
@@ -34,11 +37,15 @@ public class CS_DriveSubsystemIO_Swerve extends SwerveSubsystem implements CS_Dr
         this.driveCommand(
             () ->
                 MathUtil.applyDeadband(
-                    -xboxController.getLeftY(), // * (AllianceFlipUtil.shouldFlip() ? -1.0 : 1.0),
+                    -xboxController.getLeftY()
+                        * (AllianceFlipUtil.shouldFlip() ? -1.0 : 1.0)
+                        * (isFlipped ? -1.0 : 1.0),
                     OperatorConstants.LEFT_Y_DEADBAND),
             () ->
                 MathUtil.applyDeadband(
-                    -xboxController.getLeftX(), // * (AllianceFlipUtil.shouldFlip() ? -1.0 : 1.0),
+                    -xboxController.getLeftX()
+                        * (AllianceFlipUtil.shouldFlip() ? -1.0 : 1.0)
+                        * (isFlipped ? -1.0 : 1.0),
                     OperatorConstants.LEFT_X_DEADBAND),
             () -> -xboxController.getRightX());
 
@@ -72,5 +79,10 @@ public class CS_DriveSubsystemIO_Swerve extends SwerveSubsystem implements CS_Dr
         constraints,
         edu.wpi.first.units.Units.MetersPerSecond.of(0) // Goal end velocity in meters/sec
         );
+  }
+
+  @Override
+  public void toggleFlip() {
+    isFlipped = !isFlipped;
   }
 }

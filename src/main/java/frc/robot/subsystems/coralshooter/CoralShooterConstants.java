@@ -14,8 +14,8 @@ public class CoralShooterConstants {
 
   public static final double RPMTolerance = 20;
   public static final double RPMDifferentialTolerance = 10;
-  public static final double launchTimerSeconds = 0.2; // TODO: Tune this
-  public static final double shooterTimerSeconds = 0.2; // TODO: Tune this
+  public static final double launchTimerSeconds = 0.2;
+  public static final double shooterTimerSeconds = 0.2;
 
   public static final int maxCurrent = 60; // Amps
 
@@ -40,6 +40,10 @@ public class CoralShooterConstants {
 
   // Lidar Port (Sensor to check if the CORAL is loaded)
   public static final int lidarPort = 0; // DIO
+  public static final int leftUSPort = 1; // Analog
+  public static final int rightUSPort = 2; // Analog
+
+  public static double usScaleFactor = 5 * 1 / (5. / 1024.); // scale converting voltage to distance
 
   // PID Constants
   public static final Gains gainsLeft =

@@ -8,7 +8,6 @@ package frc.robot.commands.setters.groups;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Commodore;
@@ -34,36 +33,35 @@ public class ToAlgaeShootFromReef extends SequentialCommandGroup {
 
     System.out.println("[Cmd: TOALGAESHOOT]");
     addCommands(
-        new ConditionalCommand(
-            new SequentialCommandGroup(
-                Commodore.getSetStateCommand(CommodoreState.ALGAE_SHOOT_RAMPINGUP),
-                new ParallelCommandGroup(
-                    new ElevatorSetHeight(
-                        () -> Presets.ALGAE_NETFROMREEF.getElevatorHeightInches()),
-                    new WristSetAngle(() -> Presets.ALGAE_NETFROMREEF.getWristAngleDegrees())),
-                Commodore.getSetStateCommand(CommodoreState.ALGAE_SHOOT_RAMPINGUP),
-                new AlgaeShooterRampUp(() -> Presets.ALGAE_NETFROMREEF.getRPM()) {
-                  @Override
-                  public void initialize() {
-                    super.initialize();
-                    timer.reset();
-                    timer.start();
-                  }
-                },
-                Commodore.getSetStateCommand(CommodoreState.ALGAE_SHOOT_LAUNCHING),
-                new AlgaeShooterLaunch(),
-                new AlgaeShooterStop() {
-                  @Override
-                  public void initialize() {
-                    super.initialize();
-                    double elapsedTime = timer.get();
-                    SmartDashboard.putNumber(
-                        "Subsystem/AlgaeShooter/Last Shot in (ms)", (int) (elapsedTime * 1000));
-                  }
-                },
-                Commodore.getSetStateCommand(CommodoreState.IDLE),
-                new ToSubsystemsPreset(() -> Presets.ALGAE_STOW)),
+        // new ConditionalCommand(
+        new SequentialCommandGroup(
+            Commodore.getSetStateCommand(CommodoreState.ALGAE_SHOOT_RAMPINGUP),
+            new ParallelCommandGroup(
+                new ElevatorSetHeight(() -> Presets.ALGAE_NETFROMREEF.getElevatorHeightInches()),
+                new WristSetAngle(() -> Presets.ALGAE_NETFROMREEF.getWristAngleDegrees())),
+            Commodore.getSetStateCommand(CommodoreState.ALGAE_SHOOT_RAMPINGUP),
+            new AlgaeShooterRampUp(() -> Presets.ALGAE_NETFROMREEF.getRPM()) {
+              @Override
+              public void initialize() {
+                super.initialize();
+                timer.reset();
+                timer.start();
+              }
+            },
+            Commodore.getSetStateCommand(CommodoreState.ALGAE_SHOOT_LAUNCHING),
+            new AlgaeShooterLaunch(),
+            new AlgaeShooterStop() {
+              @Override
+              public void initialize() {
+                super.initialize();
+                double elapsedTime = timer.get();
+                SmartDashboard.putNumber(
+                    "Subsystem/AlgaeShooter/Last Shot in (ms)", (int) (elapsedTime * 1000));
+              }
+            },
             Commodore.getSetStateCommand(CommodoreState.IDLE),
-            algae501::isLoaded));
+            new ToSubsystemsPreset(() -> Presets.ALGAE_STOW)));
+    // Commodore.getSetStateCommand(CommodoreState.IDLE),
+    // algae501::isLoaded));
   }
 }

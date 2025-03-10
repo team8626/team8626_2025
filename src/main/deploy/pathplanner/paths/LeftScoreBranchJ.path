@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.2178911545631745,
-        "y": 4.938189352541173
+        "x": 7.064659532260572,
+        "y": 4.9549986613992525
       },
       "isLocked": false,
       "linkedName": null
@@ -20,18 +20,18 @@
         "y": 5.182998
       },
       "prevControl": {
-        "x": 4.645300566783527,
-        "y": 5.225323087333932
+        "x": 4.551089996406182,
+        "y": 5.25447489511571
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "@BranchJLeftPickup"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.13527790297809827,
-      "rotationDegrees": 5.650529746358034
+      "waypointRelativePos": 0.1,
+      "rotationDegrees": 0.37608847551369495
     }
   ],
   "constraintZones": [],
@@ -53,7 +53,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 89.50820001252994
+    "rotation": -1.0191704154851746
   },
   "useDefaultConstraints": true
 }

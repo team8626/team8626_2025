@@ -53,4 +53,16 @@ public class CS_DriveSubsystemIO_Tank extends TankSubsystem implements CS_DriveS
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'drive' for TankDrive");
   }
+
+  @Override
+  public ChassisSpeeds getRobotVelocity() {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'getRobotVelocity'");
+  }
+
+  @Override
+  public void toggleFlip() {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'toggleFlip'");
+  }
 }

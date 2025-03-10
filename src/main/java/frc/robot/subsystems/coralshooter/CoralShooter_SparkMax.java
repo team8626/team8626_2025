@@ -45,6 +45,9 @@ public class CoralShooter_SparkMax implements CoralShooterInterface, CS_Interfac
 
   private DigitalInput loadedSensor = new DigitalInput(CoralShooterConstants.lidarPort);
 
+  // private AnalogInput leftSensor = new AnalogInput(CoralShooterConstants.leftUSPort);
+  // private AnalogInput rightSensor = new AnalogInput(CoralShooterConstants.rightUSPort);
+
   private boolean shooterIsEnabled = false;
   private boolean launcherIsEnabled = false;
   private double currentLauncherSetpoint = 0;
@@ -145,6 +148,9 @@ public class CoralShooter_SparkMax implements CoralShooterInterface, CS_Interfac
     values.appliedOutputLeft = leftMotor.getAppliedOutput();
     values.appliedOutputRight = rightMotor.getAppliedOutput();
     values.appliedOutputLauncher = launchMotor.getAppliedOutput();
+
+    // values.sensorLeftDistance = leftSensor.getVoltage();
+    // values.sensorRightDistance = rightSensor.getVoltage();
 
     values.isLoaded = isLoaded();
   }
