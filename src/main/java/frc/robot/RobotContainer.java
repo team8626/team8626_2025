@@ -30,6 +30,7 @@ import frc.robot.commands.setters.groups.ToAlgaeShootFromReef;
 import frc.robot.commands.setters.groups.ToAlgaeSpit;
 import frc.robot.commands.setters.groups.ToCoralIntake;
 import frc.robot.commands.setters.groups.ToCoralShoot;
+import frc.robot.commands.setters.groups.ToCoralShoot2;
 import frc.robot.commands.setters.groups.ToPathAndCoralShoot2;
 import frc.robot.commands.setters.groups.ToPathAndDeAlgaefy;
 import frc.robot.commands.setters.groups.ToSubsystemsPreset;
@@ -237,7 +238,7 @@ public class RobotContainer {
   //
   // ----------------------------------------------------------------------------------
   private void configureButtonBoxBindings(CS_ButtonBoxController controller) {
-    // controller.btn_1.toggleOnTrue(new ToAlgaeShootFromReef());
+    controller.btn_1.toggleOnTrue(new ToCoralShoot2());
 
     // controller.btn_2.toggleOnTrue(new ToPathAndCoralShoot2());
     // controller.btn_3.toggleOnTrue(new ToPathAndDeAlgaefy());
