@@ -47,7 +47,8 @@ public class CS_DriveSubsystemIO_Swerve extends SwerveSubsystem implements CS_Dr
                         * (AllianceFlipUtil.shouldFlip() ? -1.0 : 1.0)
                         * (isFlipped ? -1.0 : 1.0),
                     OperatorConstants.LEFT_X_DEADBAND),
-            () -> -xboxController.getRightX());
+            () -> -xboxController.getRightX(),
+            () -> xboxController.getLeftStickButtonPressed());
 
     setDefaultCommand(driveCommand);
   }
