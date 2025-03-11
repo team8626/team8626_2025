@@ -35,6 +35,11 @@ public class AlgaeShooterSubsystem extends CS_SubsystemBase {
     algaeShooterInterface.startLauncher(AlgaeShooterConstants.launcherIntakeSetpoint);
   }
 
+  public void startDiscard() {
+    algaeShooterInterface.startShooter(-AlgaeShooterConstants.intakeRPM);
+    algaeShooterInterface.startLauncher(-AlgaeShooterConstants.launcherIntakeSetpoint);
+  }
+
   public void startIntake(double newSpeed) {
     algaeShooterInterface.startShooter(newSpeed);
     algaeShooterInterface.startLauncher(AlgaeShooterConstants.launcherIntakeSetpoint);
@@ -104,7 +109,7 @@ public class AlgaeShooterSubsystem extends CS_SubsystemBase {
     SmartDashboard.putNumber("Subsystem/AlgaeShooter/Gains/I", AlgaeShooterConstants.gains.kI());
     SmartDashboard.putNumber("Subsystem/AlgaeShooter/Gains/D", AlgaeShooterConstants.gains.kD());
 
-    SmartDashboard.putNumber("Subsystem/AlgaeShooter/LastShotIn(ms)", 0);
+    SmartDashboard.putNumber("Subsystem/AlgaeShooter/Last Shot in (ms)", 0);
   }
 
   @Override
@@ -165,10 +170,5 @@ public class AlgaeShooterSubsystem extends CS_SubsystemBase {
 
   public double getCharacterizationVelocity() {
     return (values.currentRPMLeft + values.currentRPMRight) / 2.0;
-  }
-
-  public double getLastShootTime() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'getLastShootTime'");
   }
 }
