@@ -18,7 +18,6 @@ import frc.robot.commands.setters.groups.ToAlgaeShootFrom10ft;
 import frc.robot.commands.setters.groups.ToAlgaeShootFromReef;
 import frc.robot.commands.setters.groups.ToCoralIntake;
 import frc.robot.commands.setters.groups.ToCoralShoot3;
-import frc.robot.commands.setters.groups.ToPathAndCoralShoot;
 import frc.robot.commands.setters.groups.ToPathAndCoralShoot3;
 import frc.robot.commands.setters.groups.ToPathAndDeAlgaefy;
 import frc.robot.commands.setters.groups.ToSubsystemsPreset;
@@ -203,7 +202,7 @@ public class RobotContainer {
 
     controller.btn_X.onTrue(new InstantCommand(() -> elevator.reset()));
     controller.btn_Y.onTrue(new InstantCommand(() -> drivebase.flipToggle()));
-    
+
     // controller.btn_A.onTrue(new InstantCommand(() -> elevator.setHeight(10.0)));
     // controller.btn_B.onTrue(new InstantCommand(() -> elevator.setHeight(28.0)));
     // controller.btn_Y.onTrue(new InstantCommand(() -> elevator.setHeight(40.0)));
