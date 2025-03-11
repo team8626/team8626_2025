@@ -12,7 +12,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.OperatorConstants;
 import frc.utils.CS_XboxController;
-import java.util.function.Supplier;
 
 public class CS_DriveSubsystemIO_Tank extends TankSubsystem implements CS_DriveSubsystemIO {
 
@@ -44,11 +43,6 @@ public class CS_DriveSubsystemIO_Tank extends TankSubsystem implements CS_DriveS
   }
 
   @Override
-  public Command driveToPose(Supplier<Pose2d> newPoseSupplier) {
-    throw new UnsupportedOperationException("Unimplemented method 'driveToPose' for TankDrive");
-  }
-
-  @Override
   public void drive(ChassisSpeeds velocity) {
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'drive' for TankDrive");
@@ -64,5 +58,29 @@ public class CS_DriveSubsystemIO_Tank extends TankSubsystem implements CS_DriveS
   public void toggleFlip() {
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'toggleFlip'");
+  }
+
+  @Override
+  public Command sysIdDriveMotorCommand() {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'sysIdDriveMotorCommand'");
+  }
+
+  @Override
+  public Command sysIdAngleMotorCommand() {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'sysIdAngleMotorCommand'");
+  }
+
+  @Override
+  public Command centerModulesCommand() {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'centerModulesCommand'");
+  }
+
+  @Override
+  public Command driveToPose(Pose2d pose) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'driveToPose'");
   }
 }

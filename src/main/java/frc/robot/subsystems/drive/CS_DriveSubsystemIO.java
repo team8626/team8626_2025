@@ -10,12 +10,11 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.utils.CS_XboxController;
-import java.util.function.Supplier;
 
 public interface CS_DriveSubsystemIO {
   public void setDefaultCommand(CS_XboxController xboxController);
 
-  public Command driveToPose(Supplier<Pose2d> poseSupplier);
+  // public Command driveToPose(Supplier<Pose2d> poseSupplier);
 
   public ChassisSpeeds getRobotVelocity();
 
@@ -24,4 +23,12 @@ public interface CS_DriveSubsystemIO {
   public void drive(ChassisSpeeds velocity);
 
   public void toggleFlip();
+
+  public Command sysIdDriveMotorCommand();
+
+  public Command sysIdAngleMotorCommand();
+
+  public Command centerModulesCommand();
+
+  public Command driveToPose(Pose2d pose);
 }

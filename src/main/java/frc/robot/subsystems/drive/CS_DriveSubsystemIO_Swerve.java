@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.OperatorConstants;
 import frc.utils.CS_XboxController;
 import java.io.File;
-import java.util.function.Supplier;
 import org.littletonrobotics.frc2025.util.AllianceFlipUtil;
 
 public class CS_DriveSubsystemIO_Swerve extends SwerveSubsystem implements CS_DriveSubsystemIO {
@@ -51,12 +50,6 @@ public class CS_DriveSubsystemIO_Swerve extends SwerveSubsystem implements CS_Dr
             () -> xboxController.getLeftStickButtonPressed());
 
     setDefaultCommand(driveCommand);
-  }
-
-  @Override
-  public Command driveToPose(Supplier<Pose2d> newPoseSupplier) {
-    printf("Driving to Pose: %s", newPoseSupplier.get());
-    return super.driveToPose(newPoseSupplier.get());
   }
 
   /**
