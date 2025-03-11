@@ -21,7 +21,8 @@ public class ToPathAndCoralShoot3 extends SequentialCommandGroup {
     presetSupplier = () -> PresetManager.getCoralPreset();
 
     addCommands(
-        new PrintCommand("ToPathAndCoralShoot3 : Using DTP ").onlyIf(() -> PresetManager.usingDtp()),
+        new PrintCommand("ToPathAndCoralShoot3 : Using DTP ")
+            .onlyIf(() -> PresetManager.usingDtp()),
         new PrintCommand("ToPathAndCoralShoot3 : NOT Using DTP ")
             .onlyIf(() -> !PresetManager.usingDtp()),
         new FollowPathToPose(poseSupplier).onlyIf(() -> PresetManager.usingDtp()),
