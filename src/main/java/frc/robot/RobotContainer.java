@@ -225,8 +225,6 @@ public class RobotContainer {
   //
   // ----------------------------------------------------------------------------------
   private void configureButtonBoxBindings(CS_ButtonBoxController controller) {
-    controller.btn_1.toggleOnTrue(new ToAlgaeShootFromReef());
-
     controller.btn_1.toggleOnTrue(new ToCoralShoot3());
     controller.btn_2.toggleOnTrue(new ToCoralShoot3(() -> Presets.CORAL_L1));
     controller.btn_3.toggleOnTrue(new ToCoralShoot3(() -> Presets.CORAL_L2));
