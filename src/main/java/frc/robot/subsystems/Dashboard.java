@@ -311,6 +311,14 @@ public class Dashboard extends CS_SubsystemBase {
     selectedMatchTimeOut.set(value);
   }
 
+  public static void setResetCoralBranch(boolean value) {
+    resetCoralBranchOut.set(value);
+  }
+
+  public static void setResetAlgaeFace(boolean value) {
+    resetAlgaeFaceOut.set(value);
+  }
+
   private int getAllianceColorAsInt() {
     int retVal = 0;
 
@@ -334,6 +342,8 @@ public class Dashboard extends CS_SubsystemBase {
     setSelectedAlgaeFace(UIConstants.defaultAlgaeFace.getValue());
     setSelectedPickupSide(UIConstants.defaultPickupSide.getValue());
     setSelectedDtp(UIConstants.defaultDTP.getValue());
+    setResetCoralBranch(false);
+    setResetAlgaeFace(false);
     setMatchTime(0);
   }
 
@@ -458,19 +468,19 @@ public class Dashboard extends CS_SubsystemBase {
     return mainAutoChooser.getSelected();
   }
 
-  public static void resetCoralBranch() {
-    resetCoralBranchOut.set(true);
-  }
+  // public static void resetCoralBranch() {
+  //   resetCoralBranchOut.set(true);
+  // }
 
-  public static void resetAlgaeFace() {
-    resetAlgaeFaceOut.set(true);
-  }
+  // public static void resetAlgaeFace() {
+  //   resetAlgaeFaceOut.set(true);
+  // }
 
-  public static void resetCoralBranch(boolean value) {
-    resetCoralBranchOut.set(value);
-  }
+  // public static void resetCoralBranch(boolean value) {
+  //   resetCoralBranchOut.set(value);
+  // }
 
-  public static void resetAlgaeFace(boolean value) {
-    resetAlgaeFaceOut.set(value);
-  }
+  // public static void resetAlgaeFace(boolean value) {
+  //   resetAlgaeFaceOut.set(value);
+  // }
 }

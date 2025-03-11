@@ -9,6 +9,8 @@ package frc.robot.commands.setters.groups;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Commodore;
 import frc.robot.Commodore.CommodoreState;
@@ -55,7 +57,8 @@ public class ToCoralShoot3 extends SequentialCommandGroup {
                   }
                 },
                 Commodore.getSetStateCommand(CommodoreState.IDLE),
-                PresetManager.resetCoralPresetCmd()),
+                new PrintCommand("[TOCORALSOOT3] (From PresetManager) Resetting Coral Preset"),
+                new InstantCommand(() -> PresetManager.resetCoralPreset())),
             new SequentialCommandGroup(Commodore.getSetStateCommand(CommodoreState.IDLE)),
             mortar::isLoaded));
   }
@@ -84,10 +87,11 @@ public class ToCoralShoot3 extends SequentialCommandGroup {
                     double elapsedTime = timer.get();
                     SmartDashboard.putNumber(
                         "Subsystem/CoralShooter/LastShotIn(ms)", (int) (elapsedTime * 1000));
+                    Dashboard.publishCoralShootTime((int) (elapsedTime * 1000));
                   }
                 },
                 Commodore.getSetStateCommand(CommodoreState.IDLE),
-                PresetManager.resetCoralPresetCmd()),
+                new InstantCommand(() -> PresetManager.resetCoralPreset())),
             new SequentialCommandGroup(Commodore.getSetStateCommand(CommodoreState.IDLE)),
             mortar::isLoaded));
   }

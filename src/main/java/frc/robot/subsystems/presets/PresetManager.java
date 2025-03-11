@@ -13,8 +13,6 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotConstants;
 import frc.robot.RobotConstants.UIConstants;
 import frc.robot.RobotConstants.UIConstants.AlgaeFace2;
@@ -250,6 +248,7 @@ public class PresetManager extends CS_SubsystemBase {
       uiSelectedCoralBranch2 = coralBranch;
       // Will be processed in UdatePresets()
       printf("Coral Branch: %s", uiSelectedCoralBranch2.toString());
+      Dashboard.setResetCoralBranch(false);
     }
 
     AlgaeFace2 algaeFace = Dashboard.getSelectedAlgaeFace();
@@ -257,6 +256,7 @@ public class PresetManager extends CS_SubsystemBase {
       uiSelectedAlgaeFace2 = algaeFace;
       // Will be processed in UdatePresets()
       printf("Algae: %s", uiSelectedAlgaeFace2.toString());
+      Dashboard.setResetAlgaeFace(false);
     }
 
     PickupSide intakeSide = Dashboard.getSelectedPickupSide();
@@ -560,13 +560,25 @@ public class PresetManager extends CS_SubsystemBase {
     return uiCurrentDtp2.getValue();
   }
 
-  public static Command resetCoralPresetCmd() {
-    return new InstantCommand(() -> currentCoralPreset.reset());
+  public static void resetCoralPreset() {
+    Dashboard.setResetCoralBranch(true);
+    currentCoralPreset.reset();
   }
 
-  public static Command resetAlgaePresetCmd() {
-    return new InstantCommand(() -> currentAlgaePreset.reset());
+  public static void resetAlgaePreset() {
+    Dashboard.setResetAlgaeFace(true);
+    currentAlgaePreset.reset();
   }
+
+  // public static Command resetCoralPresetCmd() {
+  //   Dashboard.resetCoralBranch();
+  //   return new InstantCommand(() -> currentCoralPreset.reset());
+  // }
+
+  // public static Command resetAlgaePresetCmd() {
+  //   Dashboard.resetAlgaeFace();
+  //   return new InstantCommand(() -> currentAlgaePreset.reset());
+  // }
 
   @Override
   public void updateDashboard() {
