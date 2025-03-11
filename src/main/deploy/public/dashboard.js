@@ -22,8 +22,11 @@ const matchTimeTopicName = "matchTime";
 const isAutoTopicName = "isAuto";
 const algaeStateTopicName = "algaeState";
 const coralStateTopicName = "coralState";
-const algaeShootTimeTopicName = "algaeShootTime";
-const coralShootTimeTopicName = "coralShootTime";
+const resetCoralBranchTopicName = "resetCoralBranch";
+const resetAlgaeFaceTopicName = "resetAlgaeFace";
+
+const algaeShootTimeTopicName = "algaeLastShootTime";
+const coralShootTimeTopicName = "coralLastShootTime";
 const autoPathTopicName = "/SmartDashboard/Auto Path";
 
 // ***** STATE CACHE *****
@@ -98,15 +101,23 @@ const ntClient = new NT4_Client(
     } else if (topic.name === toDashboardPrefix + algaeShootTimeTopicName) {
       algaeShootTime = value;
       updateAlgaeShootTime(algaeShootTime);
+      updateAlgaeFaceValue(0, true);
       console.log("Rx Algae shoot time: " + algaeShootTime);
     } else if (topic.name === toDashboardPrefix + coralShootTimeTopicName) {
       coralShootTime = value;
       updateCoralShootTime(coralShootTime);
+      updateCoralBranchValue(0, true);
       console.log("Rx Coral shoot time: " + coralShootTime);
     } else if (topic.name === autoPathTopicName) {
       console.log("Rx Auto Path: " + value);
       alert("Auto Path: " + value);
-    } 
+    } else if (topic.name === toDashboardPrefix + resetCoralBranchTopicName) {
+      console.log("Rx Reset Coral Branch (" + value + ")");
+      updateCoralBranchValue(0, true, value);
+    } else if (topic.name === toDashboardPrefix + resetAlgaeFaceTopicName) {
+      console.log("Rx Reset Algae Face (" + value + ")");
+      updateAlgaeFaceValue(0, true, value);
+    }
     else {
       return;
     }
@@ -145,10 +156,12 @@ window.addEventListener("load", () => {
       toDashboardPrefix + coralStateTopicName,
       toDashboardPrefix + algaeShootTimeTopicName,
       toDashboardPrefix + coralShootTimeTopicName,
+      toDashboardPrefix + resetAlgaeFaceTopicName,
+      toDashboardPrefix + resetCoralBranchTopicName,
       autoPathTopicName
     ],
     false,
-    false,
+    true,
     0.02
   );
 
@@ -229,8 +242,8 @@ function updateIntakeSideValue(newValue) {
  * Function to update the coral branch value and radio buttons
  * @param {*} newValue 
  */
-function updateCoralBranchValue(newValue, fromRobot = false) {
-  if(selectedCoralBranch == newValue && !fromRobot) {
+function updateCoralBranchValue(newValue, fromRobot = false, reset = false) {
+  if((selectedCoralBranch == newValue && !fromRobot) || reset) {
     $("input[name='coralGroup']").prop("checked", false); // Uncheck all radios
     selectedCoralBranch = 0;
   } else {
@@ -249,8 +262,8 @@ function updateCoralBranchValue(newValue, fromRobot = false) {
  * Function to update the algae face value and radio buttons
  * @param {*} newValue 
  */
-function updateAlgaeFaceValue(newValue, fromRobot = false) {
-  if(selectedAlgaeFace == newValue && !fromRobot) {
+function updateAlgaeFaceValue(newValue, fromRobot = false, reset = false) {
+  if((selectedAlgaeFace == newValue && !fromRobot) || reset) {
     $("input[name='algaeGroup']").prop("checked", false); // Uncheck all radios
     selectedAlgaeFace = 0;
   } else {

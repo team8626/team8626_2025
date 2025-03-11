@@ -18,6 +18,7 @@ import frc.robot.commands.setters.units.AlgaeShooterRampUp;
 import frc.robot.commands.setters.units.AlgaeShooterStop;
 import frc.robot.commands.setters.units.ElevatorSetHeight;
 import frc.robot.commands.setters.units.WristSetAngle;
+import frc.robot.subsystems.Dashboard;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterSubsystem;
 import frc.robot.subsystems.presets.Presets;
 
@@ -56,7 +57,8 @@ public class ToAlgaeShootFromReef extends SequentialCommandGroup {
                 super.initialize();
                 double elapsedTime = timer.get();
                 SmartDashboard.putNumber(
-                    "Subsystem/AlgaeShooter/Last Shot in (ms)", (int) (elapsedTime * 1000));
+                    "Subsystem/AlgaeShooter/LastShotIn(ms)", (int) (elapsedTime * 1000));
+                Dashboard.publishAlgaeShootTime((int) (elapsedTime * 1000));
               }
             },
             Commodore.getSetStateCommand(CommodoreState.IDLE),
