@@ -208,7 +208,7 @@ public class Dashboard extends CS_SubsystemBase {
 
     mainAutoChooser.setDefaultOption("TRAJECTORY", AutoOptions.TRAJECTORY);
 
-    SmartDashboard.putData("Autonomous Selection", mainAutoChooser);
+    SmartDashboard.putData("Autos/Autonomous Mode", mainAutoChooser);
 
     if (Robot.isSimulation()) {
       timer.start();

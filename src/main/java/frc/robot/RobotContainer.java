@@ -17,9 +17,9 @@ import frc.robot.RobotConstants.RobotType;
 import frc.robot.commands.setters.groups.ToAlgaeShootFrom10ft;
 import frc.robot.commands.setters.groups.ToAlgaeShootFromReef;
 import frc.robot.commands.setters.groups.ToCoralIntake;
-import frc.robot.commands.setters.groups.ToCoralShoot;
 import frc.robot.commands.setters.groups.ToCoralShoot3;
 import frc.robot.commands.setters.groups.ToPathAndCoralShoot;
+import frc.robot.commands.setters.groups.ToPathAndCoralShoot3;
 import frc.robot.commands.setters.groups.ToPathAndDeAlgaefy;
 import frc.robot.commands.setters.groups.ToSubsystemsPreset;
 import frc.robot.commands.setters.units.AlgaeShooterDiscard;
@@ -153,13 +153,11 @@ public class RobotContainer {
     }
 
     configureDefaultCommands();
+    configureNamedCommands();
 
     // Configure the autonomous path chooser
     autoChooser = AutoBuilder.buildAutoChooser();
-    SmartDashboard.putData("Auto Path", autoChooser);
-
-    // Configure NamedCommands for PathPlanner
-    configureNamedCommands();
+    SmartDashboard.putData("Autos/Pathplanner Trajectory", autoChooser);
   }
 
   // Public method to provide access to the singleton instance
@@ -181,7 +179,7 @@ public class RobotContainer {
 
   private void configureDriverBindings(CS_XboxController controller) {
     controller.btn_RightBumper.toggleOnTrue(new ToCoralIntake());
-    controller.btn_RightTrigger.toggleOnTrue(new ToPathAndCoralShoot());
+    controller.btn_RightTrigger.toggleOnTrue(new ToPathAndCoralShoot3());
 
     controller.btn_LeftBumper.toggleOnTrue(new ToPathAndDeAlgaefy());
     controller.btn_LeftTrigger.toggleOnTrue(new ToAlgaeShootFrom10ft());
@@ -263,7 +261,7 @@ public class RobotContainer {
   private void configureNamedCommands() {
     Supplier<CoralPreset> presetSupplier = () -> Presets.CORAL_L4;
     NamedCommands.registerCommand("Shoot", new ToCoralIntake());
-    NamedCommands.registerCommand("Intake", new ToCoralShoot(presetSupplier));
+    NamedCommands.registerCommand("Intake", new ToCoralShoot3(presetSupplier));
   }
 
   public Command getAutonomousCommand() {
