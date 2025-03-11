@@ -46,6 +46,12 @@ public class RobotConstants {
   public static double FrameWidthInches = 27;
 
   public static double FrameLengthInches = 27;
+
+  public static final double driveBaseRadius =
+      Math.hypot(FrameWidthInches / 2, FrameLengthInches / 2);
+  public static final double maxLinearSpeed = 6.77;
+  public static final double maxAngularSpeed = 6.77 / driveBaseRadius;
+
   public static double bumperThicknessInches = 3;
 
   //   public static double robotCenterToEdge = Units.inchesToMeters(FrameLength + bumperThickness /
@@ -160,7 +166,7 @@ public class RobotConstants {
             AlgaeFace2.KL);
 
     public static final List<CoralLevel> allowedCoralLevels2 =
-        Arrays.asList(CoralLevel.L1, CoralLevel.L3, CoralLevel.L4);
+        Arrays.asList(CoralLevel.L1, CoralLevel.L4);
 
     public static final DTP defaultDTP = DTP.OFF; // TODO
     public static final CoralLevel defaultCoralLevel = CoralLevel.L4;
