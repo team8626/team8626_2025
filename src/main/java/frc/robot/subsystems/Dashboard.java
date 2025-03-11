@@ -84,7 +84,10 @@ public class Dashboard extends CS_SubsystemBase {
   private static final String isAutoTimeTopicName = "isAuto";
   private static final String algaeStateTopicName = "algaeState";
   private static final String coralStateTopicName = "coralState";
-
+  private static final String coralShootTimeTopicName = "coralLastShootTime";
+  private static final String algaeShootTimeTopicName = "algaeLastShootTime";
+  private static final String resetCoralBranchTopicName = "resetCoralBranch";
+  private static final String resetAlgaeFaceTopicName = "resetAlgaeFace";
   private static final Timer timer = new Timer();
 
   // Values for the UIDashboard
@@ -117,6 +120,10 @@ public class Dashboard extends CS_SubsystemBase {
   private final BooleanPublisher isAutoOut;
   private final StringPublisher algaeStateOut;
   private final StringPublisher coralStateOut;
+  private static IntegerPublisher algaeShootTimeOut;
+  private static IntegerPublisher coralShootTimeOut;
+  private static BooleanPublisher resetCoralBranchOut;
+  private static BooleanPublisher resetAlgaeFaceOut;
 
   public Dashboard() {
     // Create subscribers
@@ -155,6 +162,10 @@ public class Dashboard extends CS_SubsystemBase {
     selectedMatchTimeOut = outputTable.getDoubleTopic(selectedMatchTimeTopicName).publish();
     algaeStateOut = outputTable.getStringTopic(algaeStateTopicName).publish();
     coralStateOut = outputTable.getStringTopic(coralStateTopicName).publish();
+    algaeShootTimeOut = outputTable.getIntegerTopic(algaeShootTimeTopicName).publish();
+    coralShootTimeOut = outputTable.getIntegerTopic(coralShootTimeTopicName).publish();
+    resetCoralBranchOut = outputTable.getBooleanTopic(resetCoralBranchTopicName).publish();
+    resetAlgaeFaceOut = outputTable.getBooleanTopic(resetAlgaeFaceTopicName).publish();
 
     // Start web server
     WebServer.start(
@@ -377,6 +388,14 @@ public class Dashboard extends CS_SubsystemBase {
     this.coralStateOut.set(Dashboard.getCoralState().toString());
   }
 
+  public static void publishCoralShootTime(int timeMs) {
+    coralShootTimeOut.set(timeMs);
+  }
+
+  public static void publishAlgaeShootTime(int timeMs) {
+    algaeShootTimeOut.set(timeMs);
+  }
+
   public static void setCoralState(GamePieceState new_state) {
     coralState = new_state;
   }
@@ -399,5 +418,25 @@ public class Dashboard extends CS_SubsystemBase {
 
   public static Command getSetAlgaeStateCommand(GamePieceState new_state) {
     return new InstantCommand(() -> Dashboard.setAlgaeState(new_state));
+  }
+
+  public AutoOptions getSelectedAuto() {
+    return mainAutoChooser.getSelected();
+  }
+
+  public static void resetCoralBranch() {
+    resetCoralBranchOut.set(true);
+  }
+
+  public static void resetAlgaeFace() {
+    resetAlgaeFaceOut.set(true);
+  }
+
+  public static void resetCoralBranch(boolean value) {
+    resetCoralBranchOut.set(value);
+  }
+
+  public static void resetAlgaeFace(boolean value) {
+    resetAlgaeFaceOut.set(value);
   }
 }

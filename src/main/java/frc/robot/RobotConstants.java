@@ -160,7 +160,7 @@ public class RobotConstants {
             AlgaeFace2.KL);
 
     public static final List<CoralLevel> allowedCoralLevels2 =
-        Arrays.asList(CoralLevel.L1, CoralLevel.L4);
+        Arrays.asList(CoralLevel.L1, CoralLevel.L3, CoralLevel.L4);
 
     public static final DTP defaultDTP = DTP.OFF; // TODO
     public static final CoralLevel defaultCoralLevel = CoralLevel.L4;

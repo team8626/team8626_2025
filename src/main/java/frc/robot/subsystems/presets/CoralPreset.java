@@ -77,6 +77,11 @@ public class CoralPreset {
     return hasPose ? this.robotPose : null;
   }
 
+  public String getName() {
+    // Get the Name of the Coral Shooter
+    return this.name;
+  }
+
   private boolean isReady() {
     // Get the Ready State of the Preset
     return this.hasLevel && this.hasPose;

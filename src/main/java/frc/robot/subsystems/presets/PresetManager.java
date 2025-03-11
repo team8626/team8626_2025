@@ -15,6 +15,8 @@ import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.RobotConstants;
 import frc.robot.RobotConstants.UIConstants;
 import frc.robot.RobotConstants.UIConstants.AlgaeFace2;
@@ -75,6 +77,12 @@ public class PresetManager extends CS_SubsystemBase {
 
     // Initialize the Presets
     currentCoralPreset.setLevel(uiSelectedCoralLevel2);
+    printf(
+        "Applying Level: %s (%s) %.0f/%.0f\n",
+        uiSelectedCoralLevel2.toString(),
+        currentCoralPreset.getName(),
+        currentCoralPreset.getRPMLeft(),
+        currentCoralPreset.getRPMRight());
     currentAlgaePreset.setSubsystems(uiSelectedAlgaeFace2);
   }
 
@@ -284,6 +292,12 @@ public class PresetManager extends CS_SubsystemBase {
       this.uiCurrentCoralLevel2 = uiSelectedCoralLevel2;
 
       currentCoralPreset.setLevel(this.uiCurrentCoralLevel2);
+      printf(
+          "Applying Level: %s (%s) %.0f/%.0f\n",
+          uiSelectedCoralLevel2.toString(),
+          currentCoralPreset.getName(),
+          currentCoralPreset.getRPMLeft(),
+          currentCoralPreset.getRPMRight());
       Dashboard.setSelectedCoralLevel(this.uiSelectedCoralLevel2.getValue());
     }
 
@@ -324,11 +338,13 @@ public class PresetManager extends CS_SubsystemBase {
             "New Robot Pose - x: %3f, y: %3f, theta: %3f",
             robotPose2.getX(), robotPose2.getY(), robotPose2.getRotation().getDegrees());
 
-        currentCoralPreset.setPose(robotPose2);
+        currentCoralPreset.setPose(AllianceFlipUtil.apply(robotPose2));
+        Dashboard.resetCoralBranch(false);
 
       } else if (uiSelectedCoralBranch2.equals(CoralBranch.NONE)) {
         this.uiCurrentCoralBranch2 = uiSelectedCoralBranch2;
         currentCoralPreset.reset();
+        Dashboard.resetCoralBranch();
       }
       Dashboard.setSelectedCoralBranch(this.uiSelectedCoralBranch2.getValue());
     }
@@ -370,6 +386,8 @@ public class PresetManager extends CS_SubsystemBase {
 
         currentAlgaePreset.setPose(robotPose2);
         currentAlgaePreset.setSubsystems(uiSelectedAlgaeFace2);
+        Dashboard.resetAlgaeFace(false);
+
       }
       // New Selected Value for ALGAE is around the REEF ==> FLOOR
       else if (uiSelectedAlgaeFace2.equals(AlgaeFace2.FLOOR)) {
@@ -377,6 +395,7 @@ public class PresetManager extends CS_SubsystemBase {
 
         this.uiCurrentAlgaeFace2 = uiSelectedAlgaeFace2;
         currentAlgaePreset.reset();
+        Dashboard.resetAlgaeFace();
       }
       Dashboard.setSelectedAlgaeFace(this.uiCurrentAlgaeFace2.getValue());
     } else {
@@ -498,11 +517,16 @@ public class PresetManager extends CS_SubsystemBase {
   }
 
   public static Command resetCoralPresetCmd() {
-    return new InstantCommand(() -> currentCoralPreset.reset());
+    return new SequentialCommandGroup(
+        new PrintCommand("[PRESERMANAGER] ****** RESET CORAL PRESET ******"),
+        new InstantCommand(() -> Dashboard.resetCoralBranch()),
+        new InstantCommand(() -> currentCoralPreset.reset()));
   }
 
   public static Command resetAlgaePresetCmd() {
-    return new InstantCommand(() -> currentAlgaePreset.reset());
+    return new SequentialCommandGroup(
+        new InstantCommand(() -> Dashboard.resetAlgaeFace()),
+        new InstantCommand(() -> currentAlgaePreset.reset()));
   }
 
   @Override

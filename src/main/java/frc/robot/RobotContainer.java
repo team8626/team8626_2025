@@ -14,11 +14,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotConstants.RobotType;
-import frc.robot.commands.setters.groups.ToAlgaeShootAuto;
 import frc.robot.commands.setters.groups.ToAlgaeShootFrom10ft;
 import frc.robot.commands.setters.groups.ToAlgaeShootFromReef;
 import frc.robot.commands.setters.groups.ToCoralIntake;
 import frc.robot.commands.setters.groups.ToCoralShoot;
+import frc.robot.commands.setters.groups.ToCoralShoot3;
 import frc.robot.commands.setters.groups.ToPathAndCoralShoot;
 import frc.robot.commands.setters.groups.ToPathAndDeAlgaefy;
 import frc.robot.commands.setters.groups.ToSubsystemsPreset;
@@ -227,10 +227,15 @@ public class RobotContainer {
   private void configureButtonBoxBindings(CS_ButtonBoxController controller) {
     controller.btn_1.toggleOnTrue(new ToAlgaeShootFromReef());
 
-    controller.btn_2.toggleOnTrue(new ToPathAndCoralShoot());
-    controller.btn_3.toggleOnTrue(new ToPathAndDeAlgaefy());
-    controller.btn_4.toggleOnTrue(
-        new ToAlgaeShootAuto(() -> PresetManager.getAimAndShootPreset(drivebase.getPose2d())));
+    controller.btn_1.toggleOnTrue(new ToCoralShoot3());
+    controller.btn_2.toggleOnTrue(new ToCoralShoot3(() -> Presets.CORAL_L1));
+    controller.btn_3.toggleOnTrue(new ToCoralShoot3(() -> Presets.CORAL_L2));
+    controller.btn_4.toggleOnTrue(new ToCoralShoot3(() -> Presets.CORAL_L3));
+    controller.btn_5.toggleOnTrue(new ToCoralShoot3(() -> Presets.CORAL_L4));
+
+    // controller.btn_3.toggleOnTrue(new ToPathAndDeAlgaefy());
+    // controller.btn_4.toggleOnTrue(
+    //     new ToAlgaeShootAuto(() -> PresetManager.getAimAndShootPreset(drivebase.getPose2d())));
 
     // controller.btn_3.toggleOnTrue(new ToCoralIntake());
     // controller.btn_4.toggleOnTrue(new ToCoralShoot());

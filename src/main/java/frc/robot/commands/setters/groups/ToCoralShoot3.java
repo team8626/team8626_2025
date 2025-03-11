@@ -14,43 +14,60 @@ import frc.robot.Commodore;
 import frc.robot.Commodore.CommodoreState;
 import frc.robot.RobotContainer;
 import frc.robot.commands.setters.units.CoralShooterLaunch;
-import frc.robot.commands.setters.units.CoralShooterRampUp;
+import frc.robot.commands.setters.units.CoralShooterRampUp3;
 import frc.robot.commands.setters.units.CoralShooterStop;
+import frc.robot.subsystems.Dashboard;
 import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
 import frc.robot.subsystems.presets.CoralPreset;
 import frc.robot.subsystems.presets.PresetManager;
-import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
-public class ToCoralShoot extends SequentialCommandGroup {
+public class ToCoralShoot3 extends SequentialCommandGroup {
   private final Timer timer = new Timer();
   private CoralShooterSubsystem mortar;
-  private DoubleSupplier rpmLeftSupplier = null;
-  private DoubleSupplier rpmRightSupplier = null;
 
-  public ToCoralShoot(Supplier<CoralPreset> presetSupplier) {
+  public ToCoralShoot3() {
     this.mortar = RobotContainer.mortar;
-    rpmLeftSupplier = () -> presetSupplier.get().getRPMLeft();
-    rpmRightSupplier = () -> presetSupplier.get().getRPMRight();
-    buildCommandGroup();
-  }
-
-  // public ToCoralShoot() {
-  //   this.mortar = RobotContainer.mortar;
-  //   System.out.println("[Cmd: TOALGAEINTAKE]");
-
-  //   rpmLeftSupplier = () -> Presets.CORAL_L4.getRPMLeft();
-  //   rpmRightSupplier = () -> Presets.CORAL_L4.getRPMRight();
-
-  //   buildCommandGroup();
-  // }
-
-  private void buildCommandGroup() {
+    Supplier<CoralPreset> presetSupplier = () -> PresetManager.getCoralPreset();
     addCommands(
         new ConditionalCommand(
             new SequentialCommandGroup(
                 Commodore.getSetStateCommand(CommodoreState.CORAL_SHOOT_RAMPINGUP),
-                new CoralShooterRampUp(rpmLeftSupplier, rpmRightSupplier) {
+                // new CoralShooterRampUp3(() -> Presets.CORAL_L3) {
+                new CoralShooterRampUp3() {
+                  @Override
+                  public void initialize() {
+                    super.initialize();
+                    timer.reset();
+                    timer.start();
+                  }
+                },
+                Commodore.getSetStateCommand(CommodoreState.CORAL_SHOOT_LAUNCHING),
+                new CoralShooterLaunch(),
+                new CoralShooterStop() {
+                  @Override
+                  public void initialize() {
+                    super.initialize();
+                    double elapsedTime = timer.get();
+                    SmartDashboard.putNumber(
+                        "Subsystem/CoralShooter/LastShotIn(ms)", (int) (elapsedTime * 1000));
+                    Dashboard.publishCoralShootTime((int) (elapsedTime * 1000));
+                  }
+                },
+                Commodore.getSetStateCommand(CommodoreState.IDLE),
+                PresetManager.resetCoralPresetCmd()),
+            new SequentialCommandGroup(Commodore.getSetStateCommand(CommodoreState.IDLE)),
+            mortar::isLoaded));
+  }
+
+  public ToCoralShoot3(Supplier<CoralPreset> coralPresetSupplier) {
+    this.mortar = RobotContainer.mortar;
+
+    addCommands(
+        new ConditionalCommand(
+            new SequentialCommandGroup(
+                Commodore.getSetStateCommand(CommodoreState.CORAL_SHOOT_RAMPINGUP),
+                new CoralShooterRampUp3(coralPresetSupplier) {
                   @Override
                   public void initialize() {
                     super.initialize();
