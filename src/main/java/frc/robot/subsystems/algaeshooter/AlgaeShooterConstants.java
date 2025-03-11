@@ -27,7 +27,7 @@ public class AlgaeShooterConstants {
   // Flywheel Config
   public static final FlywheelConfig flywheelConfig =
       switch (RobotConstants.robotType) {
-        case COMPBOT -> new FlywheelConfig(11, 10, 1, 2 * momentOfInertia, 6000.0);
+        case COMPBOT -> new FlywheelConfig(11, 10, 33.0 / 20.0, 2 * momentOfInertia, 6000.0);
         case SIMBOT -> new FlywheelConfig(11, 10, 1, 2 * momentOfInertia, 6000.0);
           // case COMPBOT -> new FlywheelConfig(11, 10, (30 / 24), 2 * momentOfInertia, 6000.0);
           // case SIMBOT -> new FlywheelConfig(11, 10, (30 / 24), 2 * momentOfInertia, 6000.0);
@@ -36,7 +36,7 @@ public class AlgaeShooterConstants {
 
   // Launcher FLywheel Config
   public static final FlywheelConfig launcherConfig =
-      new FlywheelConfig(9, 0, (1.0 / 1.0), 2 * momentOfInertia, 6000.0);
+      new FlywheelConfig(9, 0, (36 / 24), 2 * momentOfInertia, 6000.0);
 
   // InfraRed Port (Sensor to check if the ALGAE is loaded
   public static final int infraRedPort = 1; // DIO

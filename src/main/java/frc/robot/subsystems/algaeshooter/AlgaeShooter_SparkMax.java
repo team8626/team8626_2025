@@ -88,11 +88,6 @@ public class AlgaeShooter_SparkMax implements AlgaeShooterInterface, CS_Interfac
         .idleMode(IdleMode.kCoast)
         .smartCurrentLimit(AlgaeShooterConstants.maxCurrent);
 
-    leftConfig
-        .encoder
-        .positionConversionFactor(1 / flywheelConfig.reduction())
-        .velocityConversionFactor(1 / flywheelConfig.reduction());
-
     rightConfig
         .encoder
         .positionConversionFactor(1 / flywheelConfig.reduction())
@@ -119,6 +114,11 @@ public class AlgaeShooter_SparkMax implements AlgaeShooterInterface, CS_Interfac
     // Launcher Motor
     launchConfig = new SparkMaxConfig();
     launchConfig.inverted(false).smartCurrentLimit(AlgaeShooterConstants.maxCurrent);
+
+    launchConfig
+        .encoder
+        .positionConversionFactor(1 / launcherConfig.reduction())
+        .velocityConversionFactor(1 / launcherConfig.reduction());
 
     launchMotor = new SparkMax(launcherConfig.CANIdLeft(), MotorType.kBrushless);
     launchMotor.configure(
@@ -232,12 +232,12 @@ public class AlgaeShooter_SparkMax implements AlgaeShooterInterface, CS_Interfac
 
   @Override
   public double getShooterRPMLeft() {
-    return leftEncoder.getVelocity() / flywheelConfig.reduction();
+    return leftEncoder.getVelocity();
   }
 
   @Override
   public double getShooterRPMRight() {
-    return rightEncoder.getVelocity() / flywheelConfig.reduction();
+    return rightEncoder.getVelocity();
   }
 
   @Override
