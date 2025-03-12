@@ -20,8 +20,6 @@ public class Auto_PickupRight extends SequentialCommandGroup {
     addCommands(
         new PrintCommand("X: " + poseSupplier.get().getX() + " Y: " + poseSupplier.get().getY()),
         new FollowPathToPose(poseSupplier),
-        // new DriveFinalApproach(poseSupplier),
-        // TODO: UNCOMMENT THIS AND TEST
         new ToCoralIntake());
   }
 }
