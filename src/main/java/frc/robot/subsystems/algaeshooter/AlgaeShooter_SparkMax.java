@@ -65,10 +65,11 @@ public class AlgaeShooter_SparkMax implements AlgaeShooterInterface, CS_Interfac
         .closedLoop
         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
         // Set PID values for position control.
-        .p(AlgaeShooterConstants.gains.kP())
-        .i(AlgaeShooterConstants.gains.kI())
-        .d(AlgaeShooterConstants.gains.kD())
-        // .velocityFF(0.002)
+        .pid(
+            AlgaeShooterConstants.gains.kP(),
+            AlgaeShooterConstants.gains.kI(),
+            AlgaeShooterConstants.gains.kD(),
+            ClosedLoopSlot.kSlot0)
         .outputRange(-1, 1);
 
     // Disable limit switch. otherwise the loaded sensor causes the motor to stop!
@@ -96,11 +97,11 @@ public class AlgaeShooter_SparkMax implements AlgaeShooterInterface, CS_Interfac
     rightConfig
         .closedLoop
         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-        // Set PID values for position control.
-        .p(AlgaeShooterConstants.gains.kP())
-        .i(AlgaeShooterConstants.gains.kI())
-        .d(AlgaeShooterConstants.gains.kD())
-        // .velocityFF(0.002)
+        .pid(
+            AlgaeShooterConstants.gains.kP(),
+            AlgaeShooterConstants.gains.kI(),
+            AlgaeShooterConstants.gains.kD(),
+            ClosedLoopSlot.kSlot0)
         .outputRange(-1, 1);
 
     rightMotor = new SparkMax(flywheelConfig.CANIdRight(), MotorType.kBrushless);
@@ -256,9 +257,13 @@ public class AlgaeShooter_SparkMax implements AlgaeShooterInterface, CS_Interfac
 
   @Override
   public void setPID(double newkP, double newkI, double newkD) {
-    leftConfig.closedLoop.p(newkP).i(newkI).d(newkD);
-    rightConfig.closedLoop.p(newkP).i(newkI).d(newkD);
+    leftConfig.closedLoop.pid(newkP, newkI, newkD, ClosedLoopSlot.kSlot0);
+    rightConfig.closedLoop.pid(newkP, newkI, newkD, ClosedLoopSlot.kSlot0);
     printf("New PID: %f, %f, %f", newkP, newkI, newkD);
+    leftMotor.configure(
+        leftConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+    rightMotor.configure(
+        rightConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
   }
 
   @Override

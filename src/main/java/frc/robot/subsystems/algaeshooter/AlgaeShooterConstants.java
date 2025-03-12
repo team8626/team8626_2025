@@ -28,10 +28,10 @@ public class AlgaeShooterConstants {
   public static final FlywheelConfig flywheelConfig =
       switch (RobotConstants.robotType) {
         case COMPBOT -> new FlywheelConfig(11, 10, 33.0 / 20.0, 2 * momentOfInertia, 6000.0);
-        case SIMBOT -> new FlywheelConfig(11, 10, 1, 2 * momentOfInertia, 6000.0);
+        case SIMBOT -> new FlywheelConfig(11, 10, 33 / 20, 2 * momentOfInertia, 6000.0);
           // case COMPBOT -> new FlywheelConfig(11, 10, (30 / 24), 2 * momentOfInertia, 6000.0);
           // case SIMBOT -> new FlywheelConfig(11, 10, (30 / 24), 2 * momentOfInertia, 6000.0);
-        default -> new FlywheelConfig(0, 0, (30 / 24), 2 * momentOfInertia, 6000.0);
+        default -> new FlywheelConfig(0, 0, (33 / 20), 2 * momentOfInertia, 6000.0);
       };
 
   // Launcher FLywheel Config
@@ -44,9 +44,9 @@ public class AlgaeShooterConstants {
   // PID Constants
   public static final Gains gains =
       switch (RobotConstants.robotType) {
-        case COMPBOT -> new Gains(0.0001, 0.0, 0.0, 0.04712, 0.00186, 0);
-        case SIMBOT -> new Gains(0.05, 0.0, 0.0, 0.04712, 0.00186, 0.0);
-        default -> new Gains(0.05, 0.0, 0.0, 0.04712, 0.00186, 0.0);
+        case COMPBOT -> new Gains(0.0004, 0.0, 0.0, 0.10395, 0.00296, 0);
+        case SIMBOT -> new Gains(0.05, 0.0, 0.0, 0.10395, 0.00296, 0.0);
+        default -> new Gains(0.05, 0.0, 0.0, 0.10395, 0.00296, 0.0);
       };
 
   public record Gains(double kP, double kI, double kD, double kS, double kV, double kA) {}

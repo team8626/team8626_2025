@@ -8,7 +8,7 @@ import frc.utils.CS_Utils;
 public class AlgaeShooterSubsystem extends CS_SubsystemBase {
   private AlgaeShooterInterface algaeShooterInterface;
   private AlgaeShooterValues values;
-  private double shootingRPM = AlgaeShooterConstants.shootRPM;
+  private double shootingRPM;
 
   public AlgaeShooterSubsystem(AlgaeShooterInterface subsystem_interface) {
     super();
@@ -153,13 +153,13 @@ public class AlgaeShooterSubsystem extends CS_SubsystemBase {
 
     SmartDashboard.putBoolean("Subsystem/AlgaeShooter/isLoaded", values.isLoaded);
 
-    double newRPM =
-        SmartDashboard.getNumber(
-            "Subsystem/AlgaeShooter/Shooting RPM", AlgaeShooterConstants.shootRPM);
-    if (newRPM != shootingRPM) {
-      setShooterRPM(newRPM);
-    }
-    SmartDashboard.putNumber("Subsystem/AlgaeShooter/Shooting RPM", shootingRPM);
+    // double newRPM =
+    //     SmartDashboard.getNumber(
+    //         "Subsystem/AlgaeShooter/Shooting RPM", AlgaeShooterConstants.shootRPM);
+    // if (newRPM != shootingRPM) {
+    //   setShooterRPM(newRPM);
+    // }
+    // SmartDashboard.putNumber("Subsystem/AlgaeShooter/Shooting RPM", shootingRPM);
   }
 
   // Characterization methods
