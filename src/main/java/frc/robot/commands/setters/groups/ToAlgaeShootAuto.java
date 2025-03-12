@@ -9,7 +9,6 @@ package frc.robot.commands.setters.groups;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Commodore;
 import frc.robot.Commodore.CommodoreState;
@@ -17,11 +16,10 @@ import frc.robot.RobotContainer;
 import frc.robot.commands.setters.units.AlgaeShooterLaunch;
 import frc.robot.commands.setters.units.AlgaeShooterRampUp;
 import frc.robot.commands.setters.units.AlgaeShooterStop;
-import frc.robot.commands.setters.units.ElevatorSetHeight;
-import frc.robot.commands.setters.units.WristSetAngle;
 import frc.robot.subsystems.Dashboard;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterSubsystem;
 import frc.robot.subsystems.presets.AlgaePreset;
+import frc.robot.subsystems.presets.PresetManager;
 import frc.robot.subsystems.presets.Presets;
 import java.util.function.Supplier;
 
@@ -35,11 +33,8 @@ public class ToAlgaeShootAuto extends SequentialCommandGroup {
     addCommands(
         new ConditionalCommand(
             new SequentialCommandGroup(
-                new ParallelCommandGroup(
-                    new ElevatorSetHeight(() -> presetSupplier.get().getElevatorHeightInches()),
-                    new WristSetAngle(() -> presetSupplier.get().getWristAngleDegrees())),
                 Commodore.getSetStateCommand(CommodoreState.ALGAE_SHOOT_RAMPINGUP),
-                new AlgaeShooterRampUp(() -> Presets.ALGAE_NETFROM10FT.getRPM()) {
+                new AlgaeShooterRampUp(() -> PresetManager.getAlgaePreset().getRPM()) {
                   @Override
                   public void initialize() {
                     super.initialize();
