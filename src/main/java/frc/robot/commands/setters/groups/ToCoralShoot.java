@@ -23,6 +23,7 @@ import frc.robot.subsystems.presets.PresetManager;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
+@Deprecated
 public class ToCoralShoot extends SequentialCommandGroup {
   private final Timer timer = new Timer();
   private CoralShooterSubsystem mortar;

@@ -15,6 +15,7 @@ import frc.robot.subsystems.coralshooter.CoralShooterConstants;
 import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
 import frc.robot.subsystems.presets.Presets;
 
+@Deprecated
 public class CoralShooterRampUp2 extends CS_Command {
   private CoralShooterSubsystem mortar;
 

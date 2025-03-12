@@ -14,6 +14,7 @@ import frc.robot.subsystems.coralshooter.CoralShooterConstants;
 import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
 import java.util.function.DoubleSupplier;
 
+@Deprecated
 public class CoralShooterRampUp extends CS_Command {
   private CoralShooterSubsystem mortar;
 

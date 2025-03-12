@@ -20,6 +20,7 @@ import frc.robot.commands.setters.units.CoralShooterStop;
 import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
 import frc.robot.subsystems.presets.PresetManager;
 
+@Deprecated
 public class ToCoralShootL1Only extends SequentialCommandGroup {
   private final Timer timer = new Timer();
   private CoralShooterSubsystem mortar;

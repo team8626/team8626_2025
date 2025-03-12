@@ -22,6 +22,7 @@ import frc.robot.subsystems.Dashboard;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterSubsystem;
 import frc.robot.subsystems.presets.Presets;
 
+@Deprecated
 public class ToAlgaeShootFromReef extends SequentialCommandGroup {
   private final Timer timer = new Timer();
 

@@ -23,6 +23,7 @@ import frc.robot.subsystems.presets.PresetManager;
 import frc.robot.subsystems.presets.Presets;
 import java.util.function.Supplier;
 
+@Deprecated
 public class ToAlgaeShootAuto extends SequentialCommandGroup {
   private final Timer timer = new Timer();
 
