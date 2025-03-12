@@ -11,7 +11,6 @@ import frc.robot.subsystems.presets.PresetManager;
 import java.util.function.Supplier;
 
 public class ToPathAndCoralShoot3 extends SequentialCommandGroup {
-
   private Supplier<Pose2d> poseSupplier;
   private Supplier<CoralPreset> presetSupplier;
 
@@ -29,6 +28,6 @@ public class ToPathAndCoralShoot3 extends SequentialCommandGroup {
         // new DriveFinalApproach(poseSupplier),
         new WaitCommand(CoralShooterConstants.shooterTimerSeconds)
             .onlyIf(() -> PresetManager.usingDtp()),
-        new ToCoralShoot2());
+        new ToCoralShoot3());
   }
 }
