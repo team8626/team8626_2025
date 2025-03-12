@@ -11,6 +11,8 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Commodore;
+import frc.robot.Commodore.CommodoreState;
 import frc.robot.RobotConstants;
 import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
@@ -91,6 +93,7 @@ public class DriveToPose extends CS_Command {
   public void initialize() {
     Pose2d currentPose = drivebase.getPose2d();
     ChassisSpeeds fieldVelocity = drivebase.getRobotVelocity();
+    Commodore.setCommodoreState(CommodoreState.DRIVE_AUTO);
 
     Translation2d linearFieldVelocity =
         new Translation2d(fieldVelocity.vxMetersPerSecond, fieldVelocity.vyMetersPerSecond);
@@ -205,11 +208,19 @@ public class DriveToPose extends CS_Command {
     // Clear logs
     desiredPosePub.set(new Pose2d());
     setpointPub.set(new Pose2d());
+
+    Commodore.setCommodoreState(CommodoreState.IDLE);
   }
 
   /** Checks if the robot is stopped at the final pose. */
   @Override
   public boolean isFinished() {
+    // printf("I want: X: %3f Y: %3f Theta: %3f\n", desiredPoseSupplier.get().getX(),
+    // desiredPoseSupplier.get().getY(), desiredPoseSupplier.get().getRotation().getDegrees());
+    // printf("I have: X: %3f Y: %3f Theta: %3f (Pos: %b, Rot: %b)\n",
+    // desiredPoseSupplier.get().getX(), desiredPoseSupplier.get().getY(),
+    // desiredPoseSupplier.get().getRotation().getDegrees(), positionController.atGoal(),
+    // rotationController.atGoal());
     return running && positionController.atGoal() && rotationController.atGoal();
   }
 

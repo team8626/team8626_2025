@@ -53,6 +53,8 @@ public class Commodore extends CS_SubsystemBase {
     ALGAE_INTAKE,
     ALGAE_LOADED,
 
+    DRIVE_AUTO,
+
     ELEVATOR_ZEROING,
 
     TUNE_CORALSHOOTER,
@@ -159,31 +161,20 @@ public class Commodore extends CS_SubsystemBase {
           // Those cases are for launching commands
           // State will go to TRANSITION and then the command will update the state
         case CORAL_SHOOT:
-          applyState(newState);
-          // toCoralShoot();
-          break;
         case CORAL_INTAKE:
-          applyState(newState);
-          // toCoralIntake();
-          break;
         case ALGAE_SHOOT:
-          applyState(newState);
-          // toAlgaeShoot();
-          break;
         case ALGAE_INTAKE:
           applyState(newState);
-          // toAlgaeIntake();
           break;
+
           // Tuning States
         case TUNE_CORALSHOOTER:
-          applyState(newState);
-
-          // tuneCoralShooter();
-          break;
         case TUNE_ALGAESHOOTER:
           applyState(newState);
+          break;
 
-          // tuneCoralShooter();
+        case DRIVE_AUTO:
+          applyState(newState);
           break;
 
           // We shouldn't be there!

@@ -23,6 +23,9 @@ import frc.robot.RobotConstants.UIConstants.PickupSide;
 import frc.robot.subsystems.CS_SubsystemBase;
 import frc.robot.subsystems.Dashboard;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterConstants;
+import frc.robot.subsystems.elevator.ElevatorConstants;
+import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 import org.littletonrobotics.frc2025.FieldConstants.CoralStation;
 import org.littletonrobotics.frc2025.FieldConstants.Reef;
 import org.littletonrobotics.frc2025.FieldConstants.ReefLevel;
@@ -93,8 +96,15 @@ public class PresetManager extends CS_SubsystemBase {
     return currentAlgaePreset;
   }
 
-  public static AlgaePreset getAimAndShootPreset(Pose2d robotPose) {
+  public static AlgaePreset getAimAndShootPreset(Supplier<Pose2d> poseSupplier) {
 
+    return getAimAndShootPreset(poseSupplier, () -> ElevatorConstants.minHeightInches);
+  }
+
+  public static AlgaePreset getAimAndShootPreset(
+      Supplier<Pose2d> poseSupplier, DoubleSupplier elevatorHeightInches) {
+
+    Pose2d robotPose = poseSupplier.get();
     AlgaePreset aimPreset = new AlgaePreset("AimPreset", 0, 0, 0);
 
     Pose3d targetPoseOurSide =
@@ -144,7 +154,6 @@ public class PresetManager extends CS_SubsystemBase {
     double launchAngle = (x - 20) * (x - 20) / 11 + 55 + x / 5;
     double launchRpm = (launchVelocity * 12) / (2 * Math.PI * wheelRadius) * 60;
 
-    double elevatorHeightInches = 8; // Always Shooting from low position
     double wristAngleDegrees = 180 - launchAngle;
 
     SmartDashboard.putNumber(
@@ -158,78 +167,12 @@ public class PresetManager extends CS_SubsystemBase {
     SmartDashboard.putNumber("Subsystem/PresetManager/AimPreset/Launch Speed (RPM)", launchRpm);
     SmartDashboard.putNumber(
         "Subsystem/PresetManager/AimPreset/WristAngle (deg)", wristAngleDegrees);
-    SmartDashboard.putNumber("Presets/AimPreset/ElevatorHeight (in)", elevatorHeightInches);
+    SmartDashboard.putNumber(
+        "Presets/AimPreset/ElevatorHeight (in)", elevatorHeightInches.getAsDouble());
 
-    aimPreset.setElevatorHeightInches(elevatorHeightInches);
+    aimPreset.setElevatorHeightInches(elevatorHeightInches.getAsDouble());
     aimPreset.setWristAngleDegrees(wristAngleDegrees);
     aimPreset.setRPM(launchRpm);
-
-    // } else {
-    //   // We can't aim at the target
-    // }
-
-    //     double z0 = Units.inchesToMeters(20); // Shooting Height
-
-    //     double targetHeight = Units.inchesToMeters(80.5);
-    // double targetDistance =
-    //     Math.sqrt(
-    //         (targetX - robotX) * (targetX - robotX) + (targetY - robotY) * (targetY - robotY));
-
-    //     Rotation2d targetElevation =
-    //         new Rotation2d(Math.atan((FieldConstants.topRightSpeaker.getZ() / targetDistance)));
-
-    //     Rotation2d targetRotation =
-    //         AllianceFlipUtil.apply(
-    //             new Rotation2d(Math.acos((targetY - robotY) / targetDistance) - Math.PI / 2));
-
-    //     Rotation2d robotRotation = AllianceFlipUtil.apply(targetRotation);
-
-    //     // double ooomf = 0; // m.s-1
-
-    //     double vZ = Math.sqrt((m_ooomf * m_ooomf) + (targetHeight - z0) * 2 * 9.81);
-    //     double tm = (vZ - m_ooomf) / 9.81;
-    //     double vX = targetDistance / tm;
-
-    //     Rotation2d launchAngle = new Rotation2d(Math.atan(vZ / vX));
-    //     Rotation2d armAngle =
-    //         new Rotation2d(
-    //             Units.degreesToRadians(
-    //                 launchAngle.getDegrees()
-    //                     + 180
-    //                     - 30 /* Horizontal arm: 180deg, Shooter/Arm: -30deg */
-    //                     + m_angleAdjust)); /* Adjust after tuning */
-
-    //     if (armAngle.getDegrees() > maxArmRotationInsideFrame) {
-    //       armAngle = new Rotation2d(Units.degreesToRadians(maxArmRotationInsideFrame));
-    //     }
-
-    //     double launchVelocity = Math.sqrt((vX * vX) + (vZ * vZ));
-    //     double launchRPM =
-    //         Math.min(
-    //             (launchVelocity / (Math.PI * /*ShooterConstants.kFlywheelDiameterMeters / 2*/1))
-    // *
-    // 60,
-    //             /*ShooterConstants.kMaxRPM*/0);
-
-    // SmartDashboard.putNumber("Presets/AimPreset/ShooterZ (z0)", z0);
-
-    // SmartDashboard.putNumber("Presets/AimPreset/TargetX (m)", targetPose.getX());
-    // SmartDashboard.putNumber("Presets/AimPreset/TargetY (m)", targetPose.getY());
-    // SmartDashboard.putNumber("Presets/AimPreset/TargetZ (m)", targetPose.getZ());
-
-    //     SmartDashboard.putNumber("Presets/AimPreset/v0", targetHeight);
-    //     SmartDashboard.putNumber("Presets/AimPreset/Target Z", targetHeight);
-
-    // SmartDashboard.putNumber("Presets/AimPreset/TargetDistance (m)", targetDistance);
-
-    //     SmartDashboard.putNumber("Presets/AimPreset/vX", vX);
-    //     SmartDashboard.putNumber("Presets/AimPreset/vZ", vZ);
-    //     SmartDashboard.putNumber("Presets/AimPreset/tM", tm);
-
-    //     SmartDashboard.putNumber(
-    //         "Presets/AimPreset/Target Rotation (deg)", targetRotation.getDegrees());
-    //     SmartDashboard.putNumber(
-    //         "Presets/AimPreset/Target Elevation (deg)", targetElevation.getDegrees());
 
     return aimPreset;
   }

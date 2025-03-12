@@ -94,6 +94,11 @@ public class LEDManager extends CS_SubsystemBase {
         wave(currentColor).applyTo(m_right);
         break;
 
+      case DRIVE_AUTO:
+        rainbow().applyTo(m_left);
+        rainbow().applyTo(m_right);
+        break;
+
       case ESTOP:
         currentColor = new Color[] {Color.kGreen, Color.kGreenYellow};
         break;

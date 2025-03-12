@@ -4,6 +4,8 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Commodore;
+import frc.robot.Commodore.CommodoreState;
 import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
 import frc.robot.subsystems.drive.CS_DriveSubsystem;
@@ -29,8 +31,8 @@ public class FollowPathToPose extends CS_Command {
 
   @Override
   public void initialize() {
-
     targetPose = poseSupplier.get();
+    Commodore.setCommodoreState(CommodoreState.DRIVE_AUTO);
 
     if (this.targetPose != null) {
       println("X: " + targetPose.getX() + " Y: " + targetPose.getY());
@@ -51,7 +53,9 @@ public class FollowPathToPose extends CS_Command {
   public void execute() {}
 
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    Commodore.setCommodoreState(CommodoreState.IDLE);
+  }
 
   @Override
   public boolean isFinished() {
