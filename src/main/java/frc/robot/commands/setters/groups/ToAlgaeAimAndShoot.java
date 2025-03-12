@@ -64,7 +64,5 @@ public class ToAlgaeAimAndShoot extends SequentialCommandGroup {
                 Commodore.getSetStateCommand(CommodoreState.IDLE),
                 new ToSubsystemsPreset(() -> Presets.ALGAE_STOW))
             .handleInterrupt(() -> new ToSubsystemsPreset(() -> Presets.ALGAE_STOW)));
-    // Commodore.getSetStateCommand(CommodoreState.IDLE),
-    // algae501::isLoaded));
   }
 }
