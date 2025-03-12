@@ -16,7 +16,7 @@ public class ElevatorConstants {
   public static final double maxHeightInches = 48;
   public static final double initHeightInches = 8;
 
-  public static final int maxCurrent = 60; // Amps
+  public static final int maxCurrent = 40; // Amps
 
   public static final double carriageMassKg = Units.lbsToKilograms(20);
   public static final double velocityMetersPerSecond = Units.inchesToMeters(30);
