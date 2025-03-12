@@ -11,14 +11,13 @@ import frc.robot.subsystems.coralshooter.CoralShooterConstants;
 import frc.robot.subsystems.presets.PresetManager;
 import java.util.function.Supplier;
 
-public class Auto_H extends SequentialCommandGroup {
+public class Auto_D extends SequentialCommandGroup {
 
   private Supplier<Pose2d> poseSupplier;
 
-  public Auto_H() {
+  public Auto_D() {
     System.out.printf("[Cmd: %s] Loaded\n", this.getName().toUpperCase());
-    poseSupplier = () -> PresetManager.getCoralPreset().getPose();
-    poseSupplier = () -> PresetManager.getRobotPoseFromTarget(CoralBranch.H, CoralLevel.L4, 0);
+    poseSupplier = () -> PresetManager.getRobotPoseFromTarget(CoralBranch.D, CoralLevel.L4, 0);
 
     addCommands(
         new FollowPathToPose(poseSupplier),

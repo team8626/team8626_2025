@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.RobotConstants.UIConstants.CoralBranch;
 import frc.robot.RobotConstants.UIConstants.CoralLevel;
-import frc.robot.commands.setters.groups.ToCoralShoot2;
+import frc.robot.commands.setters.groups.ToCoralShoot3;
 import frc.robot.commands.setters.units.FollowPathToPose;
 import frc.robot.subsystems.coralshooter.CoralShooterConstants;
 import frc.robot.subsystems.presets.PresetManager;
@@ -18,13 +18,13 @@ public class Auto_K extends SequentialCommandGroup {
 
   public Auto_K() {
     System.out.printf("[Cmd: %s] Loaded\n", this.getName().toUpperCase());
-    poseSupplier = () -> PresetManager.getRobotPoseFromTarget(CoralBranch.K, CoralLevel.L4, 10);
+    poseSupplier = () -> PresetManager.getRobotPoseFromTarget(CoralBranch.K, CoralLevel.L4, 0);
     finalPoseSupplier =
         () -> PresetManager.getRobotPoseFromTarget(CoralBranch.K, CoralLevel.L4, -2);
 
     addCommands(
         new FollowPathToPose(finalPoseSupplier),
         new WaitCommand(CoralShooterConstants.shooterTimerSeconds),
-        new ToCoralShoot2());
+        new ToCoralShoot3());
   }
 }

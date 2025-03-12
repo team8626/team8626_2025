@@ -5,10 +5,11 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.RobotConstants.UIConstants.CoralBranch;
 import frc.robot.RobotConstants.UIConstants.CoralLevel;
-import frc.robot.commands.setters.groups.ToCoralShootL1Only;
+import frc.robot.commands.setters.groups.ToCoralShoot3;
 import frc.robot.commands.setters.units.FollowPathToPose;
 import frc.robot.subsystems.coralshooter.CoralShooterConstants;
 import frc.robot.subsystems.presets.PresetManager;
+import frc.robot.subsystems.presets.Presets;
 import java.util.function.Supplier;
 
 public class Auto_E_L1 extends SequentialCommandGroup {
@@ -21,9 +22,7 @@ public class Auto_E_L1 extends SequentialCommandGroup {
 
     addCommands(
         new FollowPathToPose(poseSupplier),
-        // new DriveFinalApproach(poseSupplier),
-        // TODO: UNCOMMENT THIS AND TEST
         new WaitCommand(CoralShooterConstants.shooterTimerSeconds),
-        new ToCoralShootL1Only());
+        new ToCoralShoot3(() -> Presets.CORAL_L1));
   }
 }
