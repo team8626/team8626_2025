@@ -21,7 +21,7 @@ import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 import org.littletonrobotics.frc2025.util.GeomUtil;
 
-public class DriveToPose extends CS_Command {
+public class DriveToPose6328 extends CS_Command {
   private Supplier<Pose2d> desiredPoseSupplier;
   private Supplier<Pose2d> robotPoseSupplier = () -> RobotContainer.drivebase.getPose2d();
   private CS_DriveSubsystem drivebase;
@@ -65,7 +65,7 @@ public class DriveToPose extends CS_Command {
           .getStructTopic("SmartDashboard/Commands/DriveToPose/setpointPose", Pose2d.struct)
           .publish();
 
-  public DriveToPose(Supplier<Pose2d> desiredPoseSupplier) {
+  public DriveToPose6328(Supplier<Pose2d> desiredPoseSupplier) {
     drivebase = RobotContainer.drivebase;
     this.desiredPoseSupplier = desiredPoseSupplier;
 
@@ -74,12 +74,12 @@ public class DriveToPose extends CS_Command {
     this.updateDashboard();
   }
 
-  public DriveToPose(Supplier<Pose2d> desiredPoseSupplier, Supplier<Pose2d> robotPoseSupplier) {
+  public DriveToPose6328(Supplier<Pose2d> desiredPoseSupplier, Supplier<Pose2d> robotPoseSupplier) {
     this(desiredPoseSupplier);
     this.robotPoseSupplier = robotPoseSupplier;
   }
 
-  public DriveToPose(
+  public DriveToPose6328(
       Supplier<Pose2d> desiredPoseSupplier,
       Supplier<Pose2d> robotPoseSupplier,
       Supplier<Translation2d> linearFFSupplier,
