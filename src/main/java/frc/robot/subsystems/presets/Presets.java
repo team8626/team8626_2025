@@ -1,7 +1,5 @@
 package frc.robot.subsystems.presets;
 
-import frc.robot.subsystems.algaeshooter.AlgaeShooterConstants;
-
 public class Presets {
 
   public static final AlgaePreset ALGAE_LOW = new AlgaePreset("LOW", 36, 190, -600);
@@ -10,17 +8,11 @@ public class Presets {
   public static final AlgaePreset ALGAE_SPIT = new AlgaePreset("SPIT", 8, 205, -1000);
   public static final AlgaePreset ALGAE_PROCESS = new AlgaePreset("PROCESS", 8, 170, 1000);
   public static final AlgaePreset ALGAE_NETFROMREEF =
-      new AlgaePreset(
-          "ALGAE_NETFROMREEEF", 48, 115, 2200 / AlgaeShooterConstants.flywheelConfig.reduction());
+      new AlgaePreset("ALGAE_NETFROMREEEF", 48, 115, 2200);
   public static final AlgaePreset ALGAE_NETFROM6FT =
-      new AlgaePreset(
-          "ALGAE_NETFROM6FT", 8, 180 - 74, 1433 / AlgaeShooterConstants.flywheelConfig.reduction());
+      new AlgaePreset("ALGAE_NETFROM6FT", 8, 180 - 74, 1433);
   public static final AlgaePreset ALGAE_NETFROM10FT =
-      new AlgaePreset(
-          "ALGAE_NETFROM10FT",
-          8,
-          180 - 66,
-          2200 / AlgaeShooterConstants.flywheelConfig.reduction());
+      new AlgaePreset("ALGAE_NETFROM10FT", 8, 180 - 66, 2200);
 
   public static final AlgaePreset ALGAE_STOW = new AlgaePreset("STOW", 8, 75, 0);
 
