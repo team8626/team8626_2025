@@ -23,6 +23,7 @@ public class CS_DriveSubsystemIO_Swerve extends SwerveSubsystem implements CS_Dr
 
   public CS_DriveSubsystemIO_Swerve(File directory) {
     super(directory);
+    super.replaceSwerveModuleFeedforward(.14329, 1.7823, .24978);
   }
   /**
    * Sets the drive command for the swerve subsystem using the provided Xbox controller. The command
@@ -47,8 +48,7 @@ public class CS_DriveSubsystemIO_Swerve extends SwerveSubsystem implements CS_Dr
                         * (isFlipped ? -1.0 : 1.0),
                     OperatorConstants.LEFT_X_DEADBAND),
             () -> -xboxController.getRightX(),
-            () -> xboxController.getLeftStickButtonPressed());
-
+            () -> !xboxController.getStartButton());
     setDefaultCommand(driveCommand);
   }
 
