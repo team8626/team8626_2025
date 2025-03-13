@@ -287,10 +287,10 @@ public class LEDManager extends CS_SubsystemBase {
     Optional<Alliance> ally = DriverStation.getAlliance();
     if (ally.isPresent()) {
       if (ally.get() == Alliance.Red) {
-        newColor = new Color[] {Color.kRed, Color.kBlack};
+        newColor = new Color[] {Color.kRed, Color.kBlack, Color.kBlack};
       }
       if (ally.get() == Alliance.Blue) {
-        newColor = new Color[] {Color.kNavy, Color.kBlack};
+        newColor = new Color[] {Color.kNavy, Color.kBlack, Color.kBlack};
       }
     }
     return newColor;
