@@ -88,7 +88,7 @@ public class WristSubsystem extends CS_SubsystemBase {
     SmartDashboard.putNumber("Subsystem/Wrist/Amps", values.amps);
     SmartDashboard.putNumber("Subsystem/Wrist/DesiredAngleDegrees", values.desiredAngleDegrees);
     SmartDashboard.putNumber("Subsystem/Wrist/AppliedOutput", values.appliedOutput);
-    SmartDashboard.putNumber("Subsystem/Wrist/Temperature", values.appliedOutput);
+    SmartDashboard.putNumber("Subsystem/Wrist/Temperature", values.temperature);
 
     //   double newAngle =
     //       SmartDashboard.getNumber(
