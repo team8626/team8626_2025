@@ -34,14 +34,14 @@ public class DriveToPose6328 extends CS_Command {
   private DoubleSupplier omegaFF = () -> 0.0;
 
   // Tunable parameters
-  private double kRotP = 0.03, kRotI = 0.0, kRotD = 0.0;
-  private double kPosP = 0.03, kPosI = 0.0, kPosD = 0.0;
+  // private double kRotP = 0.0003, kRotI = 0.0, kRotD = 0.0;
+  // private double kPosP = 0.0003, kPosI = 0.0, kPosD = 0.0;
 
   private double positionMaxVelocity = 3.8;
   private double positionMaxAcceleration = 3.0;
   private double rotationMaxVelocity = Units.degreesToRadians(360.0);
   private double rotationMaxAcceleration = 8.0; // deg.s-2
-  private double positionTolerance = 0.01; // meters
+  private double positionTolerance = 0.001; // meters
   private double rotationTolerance = Units.degreesToRadians(1.0);
 
   private double ffMinRadius = 0.05;
@@ -54,23 +54,44 @@ public class DriveToPose6328 extends CS_Command {
 
   private StructPublisher<Pose2d> desiredPosePub =
       NetworkTableInstance.getDefault()
-          .getStructTopic("SmartDashboard/Commands/DriveToPose/DesiredPose", Pose2d.struct)
+          .getStructTopic("SmartDashboard/Commands/DriveToPose6328/DesiredPose", Pose2d.struct)
           .publish();
   private StructPublisher<Pose2d> currentPosePub =
       NetworkTableInstance.getDefault()
-          .getStructTopic("SmartDashboard/Commands/DriveToPose/CurrentPose", Pose2d.struct)
+          .getStructTopic("SmartDashboard/Commands/DriveToPose6328/CurrentPose", Pose2d.struct)
           .publish();
   private StructPublisher<Pose2d> setpointPub =
       NetworkTableInstance.getDefault()
-          .getStructTopic("SmartDashboard/Commands/DriveToPose/setpointPose", Pose2d.struct)
+          .getStructTopic(
+              "SmartDashboard/Commands/DriveToPose6328/setpointTranslation", Pose2d.struct)
           .publish();
 
   public DriveToPose6328(Supplier<Pose2d> desiredPoseSupplier) {
     drivebase = RobotContainer.drivebase;
     this.desiredPoseSupplier = desiredPoseSupplier;
 
+    SmartDashboard.putNumber(
+        "Commands/DriveToPose6328/Gains/Position/P",
+        SmartDashboard.getNumber("Commands/DriveToPose6328/Gains/Position/P", 0.0003));
+    SmartDashboard.putNumber(
+        "Commands/DriveToPose6328/Gains/Position/I",
+        SmartDashboard.getNumber("Commands/DriveToPose6328/Gains/Position/I", 0.0));
+    SmartDashboard.putNumber(
+        "Commands/DriveToPose6328/Gains/Position/D",
+        SmartDashboard.getNumber("Commands/DriveToPose6328/Gains/Position/D", 0.0));
+
+    SmartDashboard.putNumber(
+        "Commands/DriveToPose6328/Gains/Rotation/P",
+        SmartDashboard.getNumber("Commands/DriveToPose6328/Gains/Rotation/P", 0.0003));
+    SmartDashboard.putNumber(
+        "Commands/DriveToPose6328/Gains/Rotation/I",
+        SmartDashboard.getNumber("Commands/DriveToPose6328/Gains/Rotation/I", 0.0));
+    SmartDashboard.putNumber(
+        "Commands/DriveToPose6328/Gains/Rotation/D",
+        SmartDashboard.getNumber("Commands/DriveToPose6328/Gains/Rotation/D", 0.0));
+
     addRequirements(drivebase);
-    this.setTAGString("DriveToPose");
+    this.setTAGString("DriveToPose6328");
     this.updateDashboard();
   }
 
@@ -87,6 +108,8 @@ public class DriveToPose6328 extends CS_Command {
     this(desiredPoseSupplier, robotPoseSupplier);
     this.linearFF = linearFF;
     this.omegaFF = omegaFF;
+
+    this.updateDashboard();
   }
 
   @Override
@@ -94,6 +117,16 @@ public class DriveToPose6328 extends CS_Command {
     Pose2d currentPose = drivebase.getPose2d();
     ChassisSpeeds fieldVelocity = drivebase.getRobotVelocity();
     Commodore.setCommodoreState(CommodoreState.DRIVE_AUTO);
+
+    double drivePValue =
+        SmartDashboard.getNumber("Commands/DriveToPose6328/Gains/Position/P", 0.0003);
+    double driveIValue = SmartDashboard.getNumber("Commands/DriveToPose6328/Gains/Position/I", 0);
+    double driveDValue = SmartDashboard.getNumber("Commands/DriveToPose6328/Gains/Position/D", 0);
+
+    double rotPValue =
+        SmartDashboard.getNumber("Commands/DriveToPose6328/Gains/Rotation/P", 0.0003);
+    double rotIValue = SmartDashboard.getNumber("Commands/DriveToPose6328/Gains/Rotation/I", 0);
+    double rotDValue = SmartDashboard.getNumber("Commands/DriveToPose6328/Gains/Rotation/D", 0);
 
     Translation2d linearFieldVelocity =
         new Translation2d(fieldVelocity.vxMetersPerSecond, fieldVelocity.vyMetersPerSecond);
@@ -112,18 +145,18 @@ public class DriveToPose6328 extends CS_Command {
                         .unaryMinus())
                 .getX()));
     positionController.setTolerance(positionTolerance);
-    positionController.setP(kPosP);
-    positionController.setI(kPosI);
-    positionController.setD(kPosD);
+    positionController.setP(drivePValue);
+    positionController.setI(driveIValue);
+    positionController.setD(driveDValue);
     positionController.setConstraints(
         new TrapezoidProfile.Constraints(positionMaxVelocity, positionMaxAcceleration));
 
     rotationController.reset(
         currentPose.getRotation().getRadians(), fieldVelocity.omegaRadiansPerSecond);
     rotationController.setTolerance(rotationTolerance);
-    rotationController.setP(kRotP);
-    rotationController.setI(kRotI);
-    rotationController.setD(kRotD);
+    rotationController.setP(rotPValue);
+    rotationController.setI(rotIValue);
+    rotationController.setD(rotDValue);
     rotationController.setConstraints(
         new TrapezoidProfile.Constraints(rotationMaxVelocity, rotationMaxAcceleration));
 
@@ -154,7 +187,10 @@ public class DriveToPose6328 extends CS_Command {
         positionController.getSetpoint().velocity * ffScaler
             + positionController.calculate(positionErrorAbs, 0.0);
 
-    if (currentDistance < positionController.getPositionTolerance()) driveVelocityScalar = 0.0;
+    if (currentDistance < positionController.getPositionTolerance()) {
+      driveVelocityScalar = 0.0;
+    }
+
     lastSetpointTranslation =
         new Pose2d(
                 desiredPose.getTranslation(),
@@ -231,19 +267,9 @@ public class DriveToPose6328 extends CS_Command {
         && Math.abs(rotationErrorAbs) < thetaTolerance.getRadians();
   }
 
-  public void updateDashboard() {
+  private void updateDashboard() {
     Pose2d currentPose = robotPoseSupplier.get();
     Pose2d desiredPose = desiredPoseSupplier.get();
-
-    // Using SmartDashboard to tune Rotation PIDs
-    SmartDashboard.putNumber("Commands/DriveToPose/Gains/Rotation/P", rotationController.getP());
-    SmartDashboard.putNumber("Commands/DriveToPose/Gains/Rotation/I", rotationController.getI());
-    SmartDashboard.putNumber("Commands/DriveToPose/Gains/Rotation/D", rotationController.getD());
-
-    // Using SmartDashboard to tune Position PIDs
-    SmartDashboard.putNumber("Commands/DriveToPose/Gains/Position/P", positionController.getP());
-    SmartDashboard.putNumber("Commands/DriveToPose/Gains/Position/I", positionController.getI());
-    SmartDashboard.putNumber("Commands/DriveToPose/Gains/Position/D", positionController.getD());
 
     // Display the target values
     desiredPosePub.set(desiredPose);
@@ -255,14 +281,20 @@ public class DriveToPose6328 extends CS_Command {
 
     // Display the tolerance values
     SmartDashboard.putNumber(
-        "Commands/DriveToPose/RotationTolerance (Deg)", rotationController.getPositionTolerance());
+        "Commands/DriveToPose6328/RotationTolerance (Deg)",
+        rotationController.getPositionTolerance());
     SmartDashboard.putNumber(
-        "Commands/DriveToPose/RotationVelocityTolerance (Deg.s-1)",
+        "Commands/DriveToPose6328/RotationVelocityTolerance (Deg.s-1)",
         rotationController.getVelocityTolerance());
     SmartDashboard.putNumber(
-        "Commands/DriveToPose/PositionTolerance (m)", positionController.getPositionTolerance());
+        "Commands/DriveToPose6328/PositionTolerance (m)",
+        positionController.getPositionTolerance());
     SmartDashboard.putNumber(
-        "Commands/DriveToPose/PositionVelocityTolerance (m.s-1)",
+        "Commands/DriveToPose6328/PositionVelocityTolerance (m.s-1)",
         positionController.getVelocityTolerance());
+
+    SmartDashboard.putNumber("Commands/DriveToPose6328/Using P", positionController.getP());
+    SmartDashboard.putNumber("Commands/DriveToPose6328/Using I", positionController.getI());
+    SmartDashboard.putNumber("Commands/DriveToPose6328/Using D", positionController.getD());
   }
 }
