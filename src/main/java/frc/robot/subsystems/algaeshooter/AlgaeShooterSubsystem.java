@@ -8,7 +8,7 @@ import frc.utils.CS_Utils;
 public class AlgaeShooterSubsystem extends CS_SubsystemBase {
   private AlgaeShooterInterface algaeShooterInterface;
   private AlgaeShooterValues values;
-  private double shootingRPM;
+  private double DesiredRPM;
 
   public AlgaeShooterSubsystem(AlgaeShooterInterface subsystem_interface) {
     super();
@@ -21,13 +21,13 @@ public class AlgaeShooterSubsystem extends CS_SubsystemBase {
   // Calls to the algaeShooter interface
   public void startRampUp(double newRPM) {
     // algaeShooterInterface.startLauncher(AlgaeShooterConstants.launcherIntakeSetpoint);
-    shootingRPM = newRPM;
-    algaeShooterInterface.startShooter(shootingRPM);
+    updateShooterRPM(newRPM);
+    algaeShooterInterface.startShooter(DesiredRPM);
   }
 
-  public void setShooterRPM(double new_RPM) {
-    shootingRPM = new_RPM;
-    algaeShooterInterface.updateShooterRPM(new_RPM);
+  public void setShooterRPM(double newRPM) {
+    updateShooterRPM(newRPM);
+    algaeShooterInterface.updateShooterRPM(newRPM);
   }
 
   public void startIntake() {
@@ -153,13 +153,14 @@ public class AlgaeShooterSubsystem extends CS_SubsystemBase {
 
     SmartDashboard.putBoolean("Subsystem/AlgaeShooter/isLoaded", values.isLoaded);
 
-    // double newRPM =
-    //     SmartDashboard.getNumber(
-    //         "Subsystem/AlgaeShooter/Shooting RPM", AlgaeShooterConstants.shootRPM);
-    // if (newRPM != shootingRPM) {
-    //   setShooterRPM(newRPM);
-    // }
-    // SmartDashboard.putNumber("Subsystem/AlgaeShooter/Shooting RPM", shootingRPM);
+    double newRPM =
+        SmartDashboard.getNumber(
+            "Subsystem/AlgaeShooter/Shooting RPM", AlgaeShooterConstants.shootRPM);
+    if (newRPM != DesiredRPM) {
+      updateShooterRPM(newRPM);
+      setShooterRPM(DesiredRPM);
+    }
+    // SmartDashboard.putNumber("Subsystem/AlgaeShooter/Shooting RPM", DesiredRPM);
   }
 
   // Characterization methods
@@ -170,5 +171,10 @@ public class AlgaeShooterSubsystem extends CS_SubsystemBase {
 
   public double getCharacterizationVelocity() {
     return (values.currentRPMLeft + values.currentRPMRight) / 2.0;
+  }
+
+  private void updateShooterRPM(double new_RPM) {
+    DesiredRPM = new_RPM;
+    SmartDashboard.putNumber("Subsystem/AlgaeShooter/Shooting RPM", DesiredRPM);
   }
 }
