@@ -20,6 +20,7 @@ import org.littletonrobotics.frc2025.util.AllianceFlipUtil;
 public class CS_DriveSubsystemIO_Swerve extends SwerveSubsystem implements CS_DriveSubsystemIO {
 
   private boolean isFlipped = false;
+  private DriveValues values;
 
   public CS_DriveSubsystemIO_Swerve(File directory) {
     super(directory);
@@ -78,5 +79,15 @@ public class CS_DriveSubsystemIO_Swerve extends SwerveSubsystem implements CS_Dr
   @Override
   public void toggleFlip() {
     isFlipped = !isFlipped;
+  }
+
+  @Override
+  public void updateInputs(DriveValues values) {
+    values.robotHeading = super.getHeading();
+    values.robotPitch = super.getPitch();
+    values.robotPose = super.getPose();
+    values.fieldVelocity = super.getFieldVelocity();
+    values.robotVelocity = super.getRobotVelocity();
+    values.isFipped = this.isFlipped;
   }
 }

@@ -7,11 +7,22 @@
 package frc.robot.subsystems.drive;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.utils.CS_XboxController;
 
 public interface CS_DriveSubsystemIO {
+
+  public static class DriveValues {
+    protected boolean isFipped = false;
+    protected Pose2d robotPose = new Pose2d();
+    protected Rotation2d robotHeading = new Rotation2d();
+    protected Rotation2d robotPitch = new Rotation2d();
+    protected ChassisSpeeds fieldVelocity = new ChassisSpeeds();
+    protected ChassisSpeeds robotVelocity = new ChassisSpeeds();
+  }
+
   public void setDefaultCommand(CS_XboxController xboxController);
 
   // public Command driveToPose(Supplier<Pose2d> poseSupplier);
@@ -31,4 +42,6 @@ public interface CS_DriveSubsystemIO {
   public Command centerModulesCommand();
 
   public Command driveToPose(Pose2d pose);
+
+  public default void updateInputs(DriveValues values) {}
 }
