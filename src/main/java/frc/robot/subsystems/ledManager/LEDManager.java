@@ -142,27 +142,25 @@ public class LEDManager extends CS_SubsystemBase {
     Color[] currentCoralColor = new Color[] {color, Color.kBlack};
 
     switch (Dashboard.getCoralState()) {
-      case RAMPING_UP:
       case LAUNCHING:
+        flash(currentCoralColor).applyTo(m_back_top);
+        break;
+      case RAMPING_UP:
         currentColor = new Color[] {color, Color.kBlack};
         breatheFast(currentCoralColor).applyTo(m_back_top);
         break;
-
       case IDLE:
         LEDPattern new_pattern = LEDPattern.solid(Color.kBlack);
         new_pattern.applyTo(m_back_top);
         break;
-
       case INTAKING:
         currentColor = new Color[] {color, Color.kBlack};
         breatheSlow(currentCoralColor).applyTo(m_back_top);
         break;
-
       case LOADED:
         new_pattern = LEDPattern.solid(color);
         new_pattern.applyTo(m_back_top);
         break;
-
       default:
         break;
     }
@@ -173,25 +171,23 @@ public class LEDManager extends CS_SubsystemBase {
     Color[] currentAlgaeColor = new Color[] {color, Color.kBlack};
 
     switch (Dashboard.getAlgaeState()) {
-      case RAMPING_UP:
       case LAUNCHING:
+        flash(currentAlgaeColor).applyTo(m_back_bottom);
+        break;
+      case RAMPING_UP:
         breatheFast(currentAlgaeColor).applyTo(m_back_bottom);
         break;
-
       case IDLE:
         LEDPattern new_pattern = LEDPattern.solid(Color.kBlack);
         new_pattern.applyTo(m_back_bottom);
         break;
-
       case INTAKING:
         breatheSlow(currentAlgaeColor).applyTo(m_back_bottom);
         break;
-
       case LOADED:
         new_pattern = LEDPattern.solid(color);
         new_pattern.applyTo(m_back_bottom);
         break;
-
       default:
         break;
     }
@@ -236,6 +232,13 @@ public class LEDManager extends CS_SubsystemBase {
     LEDBuffer.setRGB(i + 5, r, g, b);
     LEDBuffer.setRGB(j - 4, r, g, b);
     LEDBuffer.setRGB(j - 5, r, g, b);
+  }
+
+  private static LEDPattern flash(Color... colors) {
+    LEDPattern new_pattern =
+        LEDPattern.gradient(LEDPattern.GradientType.kContinuous, colors)
+            .blink(LEDConstants.flashDuration);
+    return new_pattern;
   }
 
   private static LEDPattern breatheFast(Color... colors) {

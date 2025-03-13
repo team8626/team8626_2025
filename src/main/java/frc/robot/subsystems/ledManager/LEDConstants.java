@@ -18,6 +18,7 @@ public class LEDConstants {
 
   public static final Time breathSlowDuration = Seconds.of(.8);
   public static final Time breathFastDuration = Seconds.of(.2);
+  public static final Time flashDuration = Seconds.of(.1);
   public static final LinearVelocity scrollVelocity = Centimeters.per(Second).of(6);
 
   public static final LEDSection kLEDSectionStatusLeft = new LEDSection(0, 5);
@@ -30,7 +31,7 @@ public class LEDConstants {
   public static final Distance ledSpacing = Meters.of(1.0 / 144.0); // 144 LEDs per Meter
 
   public static final int rainbowSaturation = 127;
-  public static final int rainbowValue = 255;
+  public static final int rainbowValue = 127;
 
   public static final Color CS_Pink = new Color("#FF69B4");
   public static final Color CS_DarkPink = new Color("#990033");
