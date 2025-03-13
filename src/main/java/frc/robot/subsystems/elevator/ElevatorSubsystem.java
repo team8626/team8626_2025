@@ -33,16 +33,16 @@ public class ElevatorSubsystem extends CS_SubsystemBase {
     elevatorInterface.reset();
   }
 
-  public void setkP(double new_value) {
-    elevatorInterface.setElevatorkP(new_value);
+  public void setkP(double newkP) {
+    elevatorInterface.setPID(newkP, values.kI, values.kD);
   }
 
-  public void setkI(double new_value) {
-    elevatorInterface.setElevatorkI(new_value);
+  public void setkI(double newkI) {
+    elevatorInterface.setPID(values.kP, values.kI, newkI);
   }
 
-  public void setkD(double new_value) {
-    elevatorInterface.setElevatorkD(new_value);
+  public void setkD(double newkD) {
+    elevatorInterface.setPID(values.kP, values.kI, newkD);
   }
 
   @Override

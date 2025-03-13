@@ -41,21 +41,6 @@ public class Elevator_SimulationRose implements ElevatorInterface, CS_InterfaceB
   }
 
   @Override
-  public void setElevatorkP(double new_value) {
-    printf("New kP: %f\n", new_value);
-  }
-
-  @Override
-  public void setElevatorkI(double new_value) {
-    printf("New kI: %f\n", new_value);
-  }
-
-  @Override
-  public void setElevatorkD(double new_value) {
-    printf("New kD: %f\n", new_value);
-  }
-
-  @Override
   public void setHeightInches(double heightInches) {
     desiredHeightInches = heightInches;
     println("Setting height to: " + heightInches);
