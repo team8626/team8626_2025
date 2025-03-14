@@ -6,6 +6,8 @@
 
 package frc.robot.subsystems.drive;
 
+import java.util.function.Supplier;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -79,7 +81,7 @@ public class CS_DriveSubsystemIO_Tank extends TankSubsystem implements CS_DriveS
   }
 
   @Override
-  public Command driveToPose(Pose2d pose) {
+  public Command driveToPose(Supplier<Pose2d> pose) {
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'driveToPose'");
   }

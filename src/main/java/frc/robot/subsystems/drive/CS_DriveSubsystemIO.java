@@ -6,6 +6,8 @@
 
 package frc.robot.subsystems.drive;
 
+import java.util.function.Supplier;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -41,7 +43,7 @@ public interface CS_DriveSubsystemIO {
 
   public Command centerModulesCommand();
 
-  public Command driveToPose(Pose2d pose);
+  public Command driveToPose(Supplier<Pose2d> pose);
 
   public default void updateInputs(DriveValues values) {}
 }

@@ -9,6 +9,7 @@ import frc.robot.subsystems.CS_SubsystemBase;
 import frc.robot.subsystems.drive.CS_DriveSubsystemIO.DriveValues;
 import frc.utils.CS_XboxController;
 import java.io.File;
+import java.util.function.Supplier;
 
 public class CS_DriveSubsystem extends CS_SubsystemBase {
   private CS_DriveSubsystemIO driveInterface;
@@ -27,10 +28,6 @@ public class CS_DriveSubsystem extends CS_SubsystemBase {
 
   public void setDefaultCommand(CS_XboxController xboxController) {
     driveInterface.setDefaultCommand(xboxController);
-  }
-
-  public void driveToPose() {
-    driveInterface.driveToPose(null);
   }
 
   public Pose2d getPose2d() {
@@ -65,7 +62,7 @@ public class CS_DriveSubsystem extends CS_SubsystemBase {
     return driveInterface.centerModulesCommand();
   }
 
-  public Command driveToPose(Pose2d pose) {
+  public Command driveToPose(Supplier<Pose2d> pose) {
     return driveInterface.driveToPose(pose);
   }
 
