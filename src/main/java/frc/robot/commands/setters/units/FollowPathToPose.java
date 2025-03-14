@@ -22,20 +22,17 @@ public class FollowPathToPose extends CS_Command {
   private Pose2d targetPose;
   private PathConstraints constraints;
   private Command pathfindingCommand;
-  private boolean hasValidPose = false;
   private double offsetInches = 0;
 
-  public FollowPathToPose(Supplier<Pose2d> poseSupplier) {
-    drivebase = RobotContainer.drivebase;
-    this.poseSupplier = poseSupplier;
+  private boolean hasValidPose = false;
 
-    addRequirements(drivebase);
-    this.setTAGString("FOLLOWPATHTOPOSE");
+  public FollowPathToPose(Supplier<Pose2d> desiredPoseSupplier) {
+    this(desiredPoseSupplier, () -> 0);
   }
 
-  public FollowPathToPose(Supplier<Pose2d> poseSupplier, DoubleSupplier newOffsetInches) {
+  public FollowPathToPose(Supplier<Pose2d> desiredPoseSupplier, DoubleSupplier newOffsetInches) {
     drivebase = RobotContainer.drivebase;
-    this.poseSupplier = poseSupplier;
+    this.poseSupplier = desiredPoseSupplier;
     this.offsetInches = newOffsetInches.getAsDouble();
 
     addRequirements(drivebase);
