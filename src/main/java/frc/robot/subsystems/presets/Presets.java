@@ -3,7 +3,7 @@ package frc.robot.subsystems.presets;
 public class Presets {
 
   public static final AlgaePreset ALGAE_LOW = new AlgaePreset("LOW", 35, 200, -600);
-  public static final AlgaePreset ALGAE_HIGH = new AlgaePreset("HIGH", 47, 200, -600);
+  public static final AlgaePreset ALGAE_HIGH = new AlgaePreset("HIGH", 45, 200, -600);
   public static final AlgaePreset ALGAE_FLOOR = new AlgaePreset("FLOOR", 8, 195, -1000);
   public static final AlgaePreset ALGAE_SPIT = new AlgaePreset("SPIT", 8, 205, -1000);
   public static final AlgaePreset ALGAE_PROCESS = new AlgaePreset("PROCESS", 8, 170, 1000);
@@ -12,7 +12,7 @@ public class Presets {
   public static final AlgaePreset ALGAE_NETFROM6FT =
       new AlgaePreset("ALGAE_NETFROM6FT", 8, 180 - 74, 1433);
   public static final AlgaePreset ALGAE_NETFROM10FT =
-      new AlgaePreset("ALGAE_NETFROM10FT", 8, 180 - 66, 2200);
+      new AlgaePreset("ALGAE_NETFROM10FT", 8, 180 - 66, 3000);
 
   public static final AlgaePreset ALGAE_STOW = new AlgaePreset("STOW", 8, 75, 0);
 

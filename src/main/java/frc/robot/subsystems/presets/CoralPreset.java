@@ -1,6 +1,9 @@
 package frc.robot.subsystems.presets;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.util.Units;
 import frc.robot.RobotConstants.UIConstants.CoralLevel;
 
 public class CoralPreset {
@@ -70,6 +73,19 @@ public class CoralPreset {
   public double getRPMRight() {
     // Get the RPM of the Coral Shooter
     return this.RPMRight;
+  }
+
+  public Pose2d getPose(double offsetInches) {
+    Pose2d retVal = null;
+    if (hasPose) {
+      retVal =
+          this.robotPose.plus(
+              new Transform2d(
+                  Units.inchesToMeters(offsetInches),
+                  0,
+                  new Rotation2d())); /// branchPose.getRotation()));
+    }
+    return retVal;
   }
 
   public Pose2d getPose() {

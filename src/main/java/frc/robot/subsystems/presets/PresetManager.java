@@ -328,6 +328,10 @@ public class PresetManager extends CS_SubsystemBase {
     }
   }
 
+  public static Pose2d getRobotPoseFromTarget(CoralBranch newBranch, CoralLevel newLevel) {
+    return getRobotPoseFromTarget(newBranch, newLevel, 0);
+  }
+
   public static Pose2d getRobotPoseFromTarget(
       CoralBranch newBranch, CoralLevel newLevel, double newOffsetInches) {
     Pose2d retValue = new Pose2d();
@@ -340,7 +344,7 @@ public class PresetManager extends CS_SubsystemBase {
                     + Units.inchesToMeters(1.625)
                     + Units.inchesToMeters(
                         newOffsetInches), //  1.625 for Branch inset to face distance...
-                Units.inchesToMeters(newOffsetInches),
+                0,
                 new Rotation2d())); /// branchPose.getRotation()));
 
     Pose2d robotPose2 =
