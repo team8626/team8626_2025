@@ -5,6 +5,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.CS_SubsystemBase;
 import frc.robot.subsystems.drive.CS_DriveSubsystemIO.DriveValues;
 import frc.utils.CS_XboxController;
@@ -62,8 +63,12 @@ public class CS_DriveSubsystem extends CS_SubsystemBase {
     return driveInterface.centerModulesCommand();
   }
 
-  public Command driveToPose(Supplier<Pose2d> pose) {
-    return driveInterface.driveToPose(pose);
+  public Command driveToPose(Supplier<Pose2d> newPoseSupplier) {
+    if ((newPoseSupplier == null) || newPoseSupplier.get() == null) {
+      return new InstantCommand();
+    } else {
+      return driveInterface.driveToPose(newPoseSupplier);
+    }
   }
 
   @Override
