@@ -22,10 +22,8 @@ import frc.robot.commands.setters.groups.ToCoralShoot3;
 import frc.robot.commands.setters.groups.ToPathAndCoralShoot3;
 import frc.robot.commands.setters.groups.ToSubsystemsPreset;
 import frc.robot.commands.setters.units.AlgaeShooterDiscard;
-import frc.robot.commands.setters.units.AlgaeShooterLaunch;
-import frc.robot.commands.setters.units.DriveToPose6328;
-import frc.robot.commands.setters.units.FollowPathToPose;
 import frc.robot.commands.setters.units.DriveToPoseFinkle;
+import frc.robot.commands.setters.units.FollowPathToPose;
 import frc.robot.commands.tuning.Tune_AlgaeShooter;
 import frc.robot.subsystems.Dashboard;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterSubsystem;
@@ -297,17 +295,35 @@ public class RobotContainer {
 
     // controller.btn_B.toggleOnTrue(new AlgaeShooterLaunch());
 
-    controller.btn_X.toggleOnTrue(
-        new DriveToPose6328(() -> PresetManager.getCoralPreset().getPose())
-            .onlyIf(() -> PresetManager.getCoralPreset().getPose() != null));
+    // controller.btn_X.toggleOnTrue(
+    //     new DriveToPose6328(() -> PresetManager.getCoralPreset().getPose())
+    //         .onlyIf(() -> PresetManager.getCoralPreset().getPose() != null));
 
     controller.btn_Y.toggleOnTrue(
+        new FollowPathToPose(() -> PresetManager.getCoralPreset().getPose(24))
+            .onlyIf(() -> PresetManager.getCoralPreset().getPose() != null)
+            .andThen(
+                new DriveToPoseFinkle(() -> PresetManager.getCoralPreset().getPose(), true)
+                    .onlyIf(() -> PresetManager.getCoralPreset().getPose() != null))
+            .andThen(new ToCoralShoot3()));
+
+    controller.btn_A.toggleOnTrue(
+        new FollowPathToPose(() -> PresetManager.getCoralPreset().getPose(24))
+            .onlyIf(() -> PresetManager.getCoralPreset().getPose() != null));
+
+    controller.btn_Back.toggleOnTrue(
+        drivebase
+            .driveToPose(() -> PresetManager.getCoralPreset().getPose(24))
+            .onlyIf(() -> PresetManager.getCoralPreset().getPose() != null));
+
+    controller.btn_X.toggleOnTrue(
         new DriveToPoseFinkle(() -> PresetManager.getCoralPreset().getPose(), true)
             .onlyIf(() -> PresetManager.getCoralPreset().getPose() != null));
 
-    controller.btn_A.toggleOnTrue(new Tune_AlgaeShooter());
+    // .onlyIf(() -> PresetManager.getCoralPreset().getPose() != null));
 
-    controller.btn_B.toggleOnTrue(new AlgaeShooterLaunch());
+    // controller.btn_A.toggleOnTrue(new Tune_AlgaeShooter());
+    // controller.btn_B.toggleOnTrue(new AlgaeShooterLaunch());
 
     // controller.btn_B.toggleOnTrue(new ToAlgaeShootAuto());
 
