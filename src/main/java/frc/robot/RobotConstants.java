@@ -52,7 +52,7 @@ public class RobotConstants {
   public static final double maxLinearSpeed = 6.77;
   public static final double maxAngularSpeed = 6.77 / driveBaseRadius;
 
-  public static double bumperThicknessInches = 3;
+  public static double bumperThicknessInches = 2.5;
 
   //   public static double robotCenterToEdge = Units.inchesToMeters(FrameLength + bumperThickness /
   // 2);
