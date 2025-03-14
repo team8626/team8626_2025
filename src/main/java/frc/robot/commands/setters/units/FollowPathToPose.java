@@ -22,7 +22,7 @@ public class FollowPathToPose extends CS_Command {
   private Pose2d targetPose;
   private PathConstraints constraints;
   private Command pathfindingCommand;
-  private boolean hasPose = false;
+  private boolean hasValidPose = false;
   private double offsetInches = 0;
 
   public FollowPathToPose(Supplier<Pose2d> poseSupplier) {
@@ -44,11 +44,17 @@ public class FollowPathToPose extends CS_Command {
 
   @Override
   public void initialize() {
-    targetPose = poseSupplier.get();
 
-    Commodore.setCommodoreState(CommodoreState.DRIVE_AUTO);
+    if ((this.poseSupplier != null) && (this.poseSupplier.get() != null)) {
+      hasValidPose = true;
+    }
 
-    if (this.targetPose != null) {
+    if (hasValidPose) {
+
+      targetPose = poseSupplier.get();
+
+      Commodore.setCommodoreState(CommodoreState.DRIVE_AUTO);
+
       println(
           "X: "
               + targetPose.getX()
@@ -68,9 +74,6 @@ public class FollowPathToPose extends CS_Command {
 
       pathfindingCommand = AutoBuilder.pathfindToPose(offsetPose, constraints, 0.0);
       pathfindingCommand.schedule();
-      hasPose = true;
-    } else {
-      hasPose = false;
     }
   }
 
@@ -84,6 +87,6 @@ public class FollowPathToPose extends CS_Command {
 
   @Override
   public boolean isFinished() {
-    return hasPose && pathfindingCommand.isFinished();
+    return hasValidPose && pathfindingCommand.isFinished();
   }
 }
