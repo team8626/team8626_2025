@@ -9,6 +9,8 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -45,8 +47,17 @@ public class DriveToPoseFinkle extends Command {
   private double rotationToleranceRadians = Units.degreesToRadians(1.0);
   private double rotationVelocityTolerance = Units.degreesToRadians(1.0);
 
-  private double defaultDriveP = 0.51;
-  private double defaultRotP = 0.005;
+  private double defaultDriveP = 0.55;
+  private double defaultRotP = 0.01;
+
+  private StructPublisher<Pose2d> targetPosePub =
+      NetworkTableInstance.getDefault()
+          .getStructTopic("SmartDashboard/Commands/DriveToPoseFinkle/DesiredPose", Pose2d.struct)
+          .publish();
+  private StructPublisher<Pose2d> currentPosePub =
+      NetworkTableInstance.getDefault()
+          .getStructTopic("SmartDashboard/Commands/DriveToPoseFinkle/CurrentPose", Pose2d.struct)
+          .publish();
 
   // Will only work when atSetpoint() set
   private boolean m_finish;
@@ -55,12 +66,10 @@ public class DriveToPoseFinkle extends Command {
     m_drive = RobotContainer.drivebase;
 
     m_desiredPoseSupplier = desiredPoseSupplier;
-
     m_finish = finish;
 
     addRequirements(m_drive);
-
-    setName("TranslateToPosition");
+    setName("DRIVETOPOSEFINKLE");
 
     SmartDashboard.putNumber(
         "Commands/TranslateToPosition/Gains/Position/P",
@@ -91,14 +100,19 @@ public class DriveToPoseFinkle extends Command {
         "Commands/TranslateToPosition/DriveVelocityConstraint", defaultPositionMaxVelocity);
     SmartDashboard.putNumber(
         "Commands/TranslateToPosition/DriveAccelerationConstraint", defaultPositionMaxAcceleration);
+
+    targetPosePub.set(new Pose2d());
+    currentPosePub.set(new Pose2d());
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     Commodore.setCommodoreState(CommodoreState.DRIVE_AUTO);
-
     m_pose = m_drive.getPose2d();
+
+    targetPosePub.set(m_desiredPoseSupplier.get());
+    currentPosePub.set(m_pose);
 
     m_xDesiredPos = m_desiredPoseSupplier.get().getX();
     m_yDesiredPos = m_desiredPoseSupplier.get().getY();
@@ -113,7 +127,8 @@ public class DriveToPoseFinkle extends Command {
     double driveDValue =
         SmartDashboard.getNumber("Commands/TranslateToPosition/Gains/Position/D", 0);
 
-    double rotPValue = SmartDashboard.getNumber("Commands/TranslateToPosition/Gains/Position/P", defaultRotP);
+    double rotPValue =
+        SmartDashboard.getNumber("Commands/TranslateToPosition/Gains/Position/P", defaultRotP);
     double rotIValue = SmartDashboard.getNumber("Commands/TranslateToPosition/Gains/Position/I", 0);
     double rotDValue = SmartDashboard.getNumber("Commands/TranslateToPosition/Gains/Position/D", 0);
 
@@ -146,6 +161,9 @@ public class DriveToPoseFinkle extends Command {
   @Override
   public void execute() {
     m_pose = m_drive.getPose2d();
+
+    targetPosePub.set(m_desiredPoseSupplier.get());
+    currentPosePub.set(m_pose);
 
     m_drive.drive(
         new ChassisSpeeds(
