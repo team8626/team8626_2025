@@ -103,31 +103,6 @@ public class LEDManager extends CS_SubsystemBase {
         currentColor = new Color[] {Color.kGreen, Color.kGreenYellow};
         break;
 
-        // case TUNE_CORALSHOOTER:
-        //   breatheSlow(Color.kCoral, Color.kBlack).applyTo(m_left);
-        //   breatheSlow(Color.kCoral, Color.kBlack).applyTo(m_right);
-        //   break;
-
-        // case TUNE_ALGAESHOOTER:
-        //   breatheSlow(Color.kAquamarine, Color.kBlack).applyTo(m_left);
-        //   breatheSlow(Color.kAquamarine, Color.kBlack).applyTo(m_right);
-        //   break;
-
-        // case CLIMB_PREP:
-        //   progressrainbow().applyTo(m_left);
-        //   progressrainbow().applyTo(m_right);
-        //   break;
-
-        // case CLIMB_READY:
-        //   rainbow().blink(Seconds.of(1)).applyTo(m_left);
-        //   rainbow().blink(Seconds.of(1)).applyTo(m_right);
-        //   break;
-
-        // case CLIMB_NOW:
-        //   rainbow().applyTo(m_left);
-        //   rainbow().applyTo(m_right);
-        //   break;
-
       case UNKNOWN:
       case TRANSITION:
       default:
@@ -302,7 +277,7 @@ public class LEDManager extends CS_SubsystemBase {
     updateMainLeds();
     updateCoralLEDs();
     updateAlgaeLEDs();
-    updateStatusLEDs();
+    // updateStatusLEDs();
 
     LEDs.setData(LEDBuffer);
   }
