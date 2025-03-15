@@ -14,17 +14,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotConstants.RobotType;
-import frc.robot.commands.setters.groups.ToAlgaeAimAndShoot;
-import frc.robot.commands.setters.groups.ToAlgaeIntake;
+import frc.robot.commands.setters.autos.Auto_G;
 import frc.robot.commands.setters.groups.ToAlgaeShoot;
 import frc.robot.commands.setters.groups.ToCoralIntake;
 import frc.robot.commands.setters.groups.ToCoralShoot3;
+import frc.robot.commands.setters.groups.ToPathAndAlgaeShoot;
 import frc.robot.commands.setters.groups.ToPathAndCoralShoot3;
+import frc.robot.commands.setters.groups.ToPathAndDeAlgaefy;
 import frc.robot.commands.setters.groups.ToSubsystemsPreset;
 import frc.robot.commands.setters.units.AlgaeShooterDiscard;
-import frc.robot.commands.setters.units.DriveToPoseFinkle;
-import frc.robot.commands.setters.units.FollowPathToPose;
-import frc.robot.commands.tuning.Tune_AlgaeShooter;
 import frc.robot.subsystems.Dashboard;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterSubsystem;
 import frc.robot.subsystems.algaeshooter.AlgaeShooter_Sim;
@@ -86,11 +84,11 @@ public class RobotContainer {
   public static ClimberSubsystem climber = null;
 
   // Controllers
-  private final CS_XboxController driverController =
+  public static final CS_XboxController driverController =
       new CS_XboxController(OperatorConstants.kXboxControllerPort);
-  private final CS_XboxController operatorController =
+  private static final CS_XboxController operatorController =
       new CS_XboxController(OperatorConstants.kTestControllerPort);
-  private final CS_ButtonBoxController buttonBox =
+  private static final CS_ButtonBoxController buttonBox =
       new CS_ButtonBoxController(OperatorConstants.kButtonBoxPort);
 
   private SendableChooser<Command> autoChooser;
@@ -194,27 +192,13 @@ public class RobotContainer {
 
     // ---------------------------------------- Left Bumper
     //                                          Algae Intake (based on Dashboard Selection)
-    controller.btn_LeftBumper.toggleOnTrue(
-        new FollowPathToPose(() -> PresetManager.getAlgaePreset().getPose())
-            .onlyIf(() -> PresetManager.usingDtp())
-            .andThen(new ToSubsystemsPreset(() -> PresetManager.getAlgaePreset()))
-            .andThen(new ToAlgaeIntake(() -> PresetManager.getAlgaePreset().getRPM()))
-            .andThen(new InstantCommand(() -> PresetManager.resetAlgaePreset()))
-            .finallyDo(
-                interrupted -> {
-                  new ToSubsystemsPreset(() -> Presets.ALGAE_STOW).schedule();
-                }));
+    controller.btn_LeftBumper.toggleOnTrue(new ToPathAndDeAlgaefy());
 
     // ---------------------------------------- Left Trigger
     //                                          Algae Shoot Preset from 10ft
     controller.btn_LeftTrigger.toggleOnTrue(
-        new ToSubsystemsPreset(() -> Presets.ALGAE_NETFROM10FT)
-            .andThen(new ToAlgaeShoot(() -> Presets.ALGAE_NETFROM10FT.getRPM()))
-            .onlyIf(algae501::isLoaded)
-            .finallyDo(
-                interrupted -> {
-                  new ToSubsystemsPreset(() -> Presets.ALGAE_STOW).schedule();
-                }));
+        new ToPathAndAlgaeShoot(
+            () -> PresetManager.getBargeShootPreset(() -> drivebase.getPose2d())));
 
     // ---------------------------------------- Y Button
     //                                          Stow Algae Manipulator
@@ -245,15 +229,11 @@ public class RobotContainer {
                   new ToSubsystemsPreset(() -> Presets.ALGAE_STOW).schedule();
                 }));
 
-    // // ---------------------------------------- A-B Button
-    // //                                          Drivetrain Characterization
-    // controller.btn_A.whileTrue(drivebase.sysIdDriveMotorCommand());
-    // controller.btn_B.whileTrue(drivebase.sysIdAngleMotorCommand());
-
     // ---------------------------------------- Back Button
     //                                          Flip Drivebase directon
     controller.btn_Back.onTrue(new InstantCommand(() -> drivebase.flipToggle()));
 
+    // ---------------------------------------- POV UP/DOWN/LEFT/RIGHT -- FOR TESTING ONLY
     controller.btn_South.onTrue(new InstantCommand(() -> elevator.setHeight(8)));
     controller.btn_East.onTrue(new InstantCommand(() -> elevator.setHeight(22)));
     controller.btn_North.onTrue(new InstantCommand(() -> elevator.setHeight(33)));
@@ -263,10 +243,6 @@ public class RobotContainer {
   // ------------------------------------ OPERATOR CONTROLLER -------------------------
   // ----------------------------------------------------------------------------------
   private void configureOperatorBindings(CS_XboxController controller) {
-    // controller.btn_A.onTrue(
-    //     new InstantCommand(() -> Commodore.setCommodoreState(CommodoreState.CORAL_SHOOT, true)));
-    // controller.btn_A.toggleOnTrue(new ToPathAndDeAlgaefy());
-
     // ---------------------------------------- POV UP/DOWN
     //                                          Elevator up/down 1"
     controller.btn_North.onTrue(new InstantCommand(() -> elevator.goUp(1.0)));
@@ -277,63 +253,13 @@ public class RobotContainer {
     controller.btn_West.onTrue(new InstantCommand(() -> wrist.goUp(5.0)));
     controller.btn_East.onTrue(new InstantCommand(() -> wrist.goDown(5.0)));
 
-    // // ---------------------------------------- X Button
-    // //                                          Zero Elevator
-    // controller.btn_X.onTrue(new InstantCommand(() -> elevator.reset()));
+    // ---------------------------------------- X Button
+    //                                          Zero Elevator
+    controller.btn_X.onTrue(new InstantCommand(() -> elevator.reset()));
 
     // ---------------------------------------- Back Button
     //                                          Flip Drivebase directon
     controller.btn_Back.onTrue(new InstantCommand(() -> drivebase.flipToggle()));
-
-    // controller.btn_A.toggleOnTrue(
-    //     new ToSubsystemsPreset(() -> Presets.ALGAE_NETFROM10FT)
-    //         .andThen(new Tune_CoralShooter())
-    //         .finallyDo(
-    //             interrupted -> {
-    //               new ToSubsystemsPreset(() -> Presets.ALGAE_STOW).schedule();
-    //             }));
-
-    // controller.btn_B.toggleOnTrue(new AlgaeShooterLaunch());
-
-    // controller.btn_X.toggleOnTrue(
-    //     new DriveToPose6328(() -> PresetManager.getCoralPreset().getPose())
-    //         .onlyIf(() -> PresetManager.getCoralPreset().getPose() != null));
-
-    controller.btn_Y.toggleOnTrue(
-        new FollowPathToPose(() -> PresetManager.getCoralPreset().getPose(24))
-            .onlyIf(() -> PresetManager.getCoralPreset().getPose() != null)
-            .andThen(
-                new DriveToPoseFinkle(() -> PresetManager.getCoralPreset().getPose(), true)
-                    .onlyIf(() -> PresetManager.getCoralPreset().getPose() != null))
-            .andThen(new ToCoralShoot3()));
-
-    controller.btn_A.toggleOnTrue(
-        new FollowPathToPose(() -> PresetManager.getCoralPreset().getPose(24))
-            .onlyIf(() -> PresetManager.getCoralPreset().getPose() != null));
-
-    controller.btn_Back.toggleOnTrue(
-        drivebase
-            .driveToPose(() -> PresetManager.getCoralPreset().getPose(24))
-            .onlyIf(() -> PresetManager.getCoralPreset().getPose() != null));
-
-    controller.btn_X.toggleOnTrue(
-        new DriveToPoseFinkle(() -> PresetManager.getCoralPreset().getPose(), true)
-            .onlyIf(() -> PresetManager.getCoralPreset().getPose() != null));
-
-    // .onlyIf(() -> PresetManager.getCoralPreset().getPose() != null));
-
-    // controller.btn_A.toggleOnTrue(new Tune_AlgaeShooter());
-    // controller.btn_B.toggleOnTrue(new AlgaeShooterLaunch());
-
-    // controller.btn_B.toggleOnTrue(new ToAlgaeShootAuto());
-
-    // controller.btn_A.whileTrue(drivebase.sysIdDriveMotorCommand());
-    // controller.btn_B.whileTrue(drivebase.sysIdAngleMotorCommand());
-
-    // controller.btn_South.onTrue(new InstantCommand(() -> elevator.setHeight(8)));
-    // controller.btn_East.onTrue(new InstantCommand(() -> elevator.setHeight(28)));
-    // controller.btn_North.onTrue(new InstantCommand(() -> elevator.setHeight(36)));
-    // controller.btn_West.onTrue(new InstantCommand(() -> elevator.setHeight(48)));
   }
 
   private void configureTestOperatorBindings(CS_XboxController controller) {}
@@ -341,74 +267,65 @@ public class RobotContainer {
   // ---------------------------------------- BUTTON BOX ------------------------------
   //
   //           +-----------------+
-  //           |  1  |  4  |  7  |
+  //           |  1  |  2  |  3  |
   //           |-----+-----+-----|
-  //           |  2  |  5  |  8  |
+  //           |  4  |  5  |  6  |
   //           |-----+-----+-----|
-  //           |  3  |  6  |  9  |
+  //           |  7  |  8  |  9  |
   //           +-----------------+
   //
   // ----------------------------------------------------------------------------------
   private void configureButtonBoxBindings(CS_ButtonBoxController controller) {
 
-    // controller.btn_1.toggleOnTrue(new ToPathAndCoralShoot3());
+    // controller.btn_1.toggleOnTrue(
+    //     new FollowPathToPose(() -> PresetManager.getCoralPreset().getPose(24)));
+    // controller.btn_2.toggleOnTrue(
+    //     new DriveToPoseFinkle(() -> PresetManager.getCoralPreset().getPose(), true));
 
-    // Follow Path and DeAlgify / Intake
-    controller.btn_1.toggleOnTrue(
-        new FollowPathToPose(() -> PresetManager.getAlgaePreset().getPose())
-            .onlyIf(() -> PresetManager.usingDtp())
-            .andThen(new ToSubsystemsPreset(() -> PresetManager.getAlgaePreset()))
-            .andThen(new ToAlgaeIntake(() -> PresetManager.getAlgaePreset().getRPM()))
-            .andThen(new InstantCommand(() -> PresetManager.resetAlgaePreset()))
-            .finallyDo(
-                interrupted -> {
-                  new ToSubsystemsPreset(() -> Presets.ALGAE_STOW).schedule();
-                }));
+    // controller.btn_3.toggleOnTrue(
+    //     drivebase.driveToPose(() -> PresetManager.getCoralPreset().getPose(24)));
 
-    // Shoot Up From Reef
-    controller.btn_2.toggleOnTrue(
-        new ToSubsystemsPreset(() -> Presets.ALGAE_NETFROMREEF)
-            .andThen(new ToAlgaeShoot(() -> Presets.ALGAE_NETFROMREEF.getRPM()))
-            .onlyIf(algae501::isLoaded)
-            .finallyDo(
-                interrupted -> {
-                  new ToSubsystemsPreset(() -> Presets.ALGAE_STOW).schedule();
-                }));
+    // controller.btn_4.toggleOnTrue(
+    //     new ToSubsystemsPreset(() -> Presets.ALGAE_Test1)
+    //         .andThen(new ToAlgaeShoot(() -> Presets.ALGAE_Test1.getRPM()))
+    //         .onlyIf(algae501::isLoaded)
+    //         .finallyDo(
+    //             interrupted -> {
+    //               new ToSubsystemsPreset(() -> Presets.ALGAE_STOW).schedule();
+    //             }));
 
-    // Shoot Low From 6ft
-    controller.btn_3.toggleOnTrue(
-        new ToSubsystemsPreset(() -> Presets.ALGAE_NETFROM6FT)
-            .andThen(new ToAlgaeShoot(() -> Presets.ALGAE_NETFROM6FT.getRPM()))
-            .onlyIf(algae501::isLoaded)
-            .finallyDo(
-                interrupted -> {
-                  new ToSubsystemsPreset(() -> Presets.ALGAE_STOW).schedule();
-                }));
+    // controller.btn_5.toggleOnTrue(
+    //     drivebase
+    //         .driveToPose(() -> PresetManager.getCoralPreset().getPose(24))
+    //         // .andThen(drivebase.reset())
+    //         .andThen(new DriveToPoseFinkle(() -> PresetManager.getCoralPreset().getPose(), true))
+    //         .andThen(new ToCoralShoot3()));
 
-    // Shoot Low From 6ft
-    controller.btn_4.toggleOnTrue(
-        new ToSubsystemsPreset(() -> Presets.ALGAE_NETFROM10FT)
-            .andThen(new ToAlgaeShoot(() -> Presets.ALGAE_NETFROM10FT.getRPM()))
-            .onlyIf(algae501::isLoaded)
-            .finallyDo(
-                interrupted -> {
-                  new ToSubsystemsPreset(() -> Presets.ALGAE_STOW).schedule();
-                }));
+    // controller.btn_7.toggleOnTrue(
+    //     new ToSubsystemsPreset(() -> Presets.ALGAE_Test2)
+    //         .andThen(new ToAlgaeShoot(() -> Presets.ALGAE_Test2.getRPM()))
+    //         .onlyIf(algae501::isLoaded)
+    //         .finallyDo(
+    //             interrupted -> {
+    //               new ToSubsystemsPreset(() -> Presets.ALGAE_STOW).schedule();
+    //             }));
 
-    // Auto Shoot (Elevator 24" Up)
-    controller.btn_5.toggleOnTrue(
-        new ToAlgaeAimAndShoot(
-                () -> PresetManager.getAimAndShootPreset(() -> drivebase.getPose2d(), () -> 24.0))
-            .handleInterrupt(() -> new ToSubsystemsPreset(() -> Presets.ALGAE_STOW))
-            .finallyDo(
-                interrupted -> {
-                  new ToSubsystemsPreset(() -> Presets.ALGAE_STOW).schedule();
-                }));
-
-    controller.btn_6.onTrue(new ToSubsystemsPreset(() -> Presets.ALGAE_STOW));
-
-    controller.btn_8.toggleOnTrue(new Tune_AlgaeShooter());
-    controller.btn_9.toggleOnTrue(new ToPathAndCoralShoot3());
+    // controller.btn_8.toggleOnTrue(
+    //     new ToSubsystemsPreset(() -> Presets.ALGAE_Test3)
+    //         .andThen(new ToAlgaeShoot(() -> Presets.ALGAE_Test3.getRPM()))
+    //         .onlyIf(algae501::isLoaded)
+    //         .finallyDo(
+    //             interrupted -> {
+    //               new ToSubsystemsPreset(() -> Presets.ALGAE_STOW).schedule();
+    //             }));
+    // controller.btn_9.toggleOnTrue(
+    //     new ToSubsystemsPreset(() -> Presets.ALGAE_Test4)
+    //         .andThen(new ToAlgaeShoot(() -> Presets.ALGAE_Test4.getRPM()))
+    //         .onlyIf(algae501::isLoaded)
+    //         .finallyDo(
+    //             interrupted -> {
+    //               new ToSubsystemsPreset(() -> Presets.ALGAE_STOW).schedule();
+    //             }));
   }
 
   private void configureTestButtonBoxBindings(CS_ButtonBoxController controller) {
@@ -431,6 +348,7 @@ public class RobotContainer {
     Supplier<CoralPreset> presetSupplier = () -> Presets.CORAL_L4;
     NamedCommands.registerCommand("Intake", new ToCoralIntake());
     NamedCommands.registerCommand("Shoot", new ToCoralShoot3(presetSupplier));
+    NamedCommands.registerCommand("FinkleAndShoot", new Auto_G());
   }
 
   public Command getAutonomousCommand() {
