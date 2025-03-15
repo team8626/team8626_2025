@@ -11,7 +11,7 @@ public class ElevatorConstants {
   public static final double cascadingRatio = 3;
 
   public static final double positionConversionFactor =
-      1 / (Units.inchesToMeters(2 * Math.PI * drumRadiusInches) * cascadingRatio);
+      2 * Math.PI * drumRadiusInches * cascadingRatio;
   // public static final double positionConversionFactor =
   //     (2 * Math.PI * drumRadiusInches) * cascadingRatio;
   public static final double velocityConversionFactor = positionConversionFactor / 60;

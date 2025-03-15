@@ -52,7 +52,7 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
         .positionConversionFactor(ElevatorConstants.positionConversionFactor)
         .velocityConversionFactor(ElevatorConstants.velocityConversionFactor)
         .inverted(true)
-        .countsPerRevolution(2048);
+        .countsPerRevolution(8192);
 
     rightConfig
         .closedLoop
