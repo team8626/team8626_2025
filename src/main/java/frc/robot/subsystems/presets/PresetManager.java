@@ -543,7 +543,7 @@ public class PresetManager extends CS_SubsystemBase {
     SmartDashboard.putNumber(
         "Subsystem/PresetManager/CoralPreset/RPMRight", currentCoralPreset.getRPMRight());
 
-        algaePresetPosePub.set(currentAlgaePreset.getPose());
+    algaePresetPosePub.set(currentAlgaePreset.getPose());
     SmartDashboard.putNumber(
         "Subsystem/PresetManager/AlgaePreset/ElevatorHeight",
         currentAlgaePreset.getElevatorHeightInches());
