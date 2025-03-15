@@ -18,7 +18,6 @@ public class Auto_PickupRight extends SequentialCommandGroup {
     poseSupplier = () -> PresetManager.getRobotPoseFromPickupSide(PickupSide.RIGHT);
 
     addCommands(
-        new PrintCommand("X: " + poseSupplier.get().getX() + " Y: " + poseSupplier.get().getY()),
         new FollowPathToPose(poseSupplier),
         new ToCoralIntake());
   }
