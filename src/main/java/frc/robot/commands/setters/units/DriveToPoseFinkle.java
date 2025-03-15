@@ -18,6 +18,7 @@ import frc.robot.Commodore.CommodoreState;
 import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
 import frc.robot.subsystems.drive.CS_DriveSubsystem;
+import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
 public class DriveToPoseFinkle extends CS_Command {
@@ -38,19 +39,19 @@ public class DriveToPoseFinkle extends CS_Command {
   private double m_yDesiredPos;
   private double m_desiredRotRadians;
 
-  private double defaultPositionMaxVelocity = 3.8;
-  private double defaultPositionMaxAcceleration = 3.0;
+  private double defaultPositionMaxVelocity = 6;
+  private double defaultPositionMaxAcceleration = 8;
 
-  private double defaultRotationMaxVelocity = Units.degreesToRadians(360.0);
-  private double defaultRotationMaxAcceleration = 8.0; // deg.s-2
+  private double defaultRotationMaxVelocity = Units.degreesToRadians(720);
+  private double defaultRotationMaxAcceleration = Units.degreesToRadians(360);
 
-  private double positionTolerance = 0.01; // meters
-  private double positionVelocityTolerance = 0.01; // meters
-  private double rotationToleranceRadians = Units.degreesToRadians(1.0);
-  private double rotationVelocityTolerance = Units.degreesToRadians(1.0);
+  private final double defaultPositionTolerance = 0.01; // meters
+  private final double defaultPositionVelocityTolerance = 0.01; // meters
+  private final double defaultRotationToleranceRadians = Units.degreesToRadians(1.0);
+  private final double defaultRotationVelocityTolerance = Units.degreesToRadians(1.0);
 
-  private double defaultDriveP = 0.55;
-  private double defaultRotP = 0.01;
+  private double defaultDriveP = 0.57;
+  private double defaultRotP = Units.degreesToRadians(1);
 
   private StructPublisher<Pose2d> targetPosePub =
       NetworkTableInstance.getDefault()
@@ -61,9 +62,21 @@ public class DriveToPoseFinkle extends CS_Command {
           .getStructTopic("SmartDashboard/Commands/DriveToPoseFinkle/CurrentPose", Pose2d.struct)
           .publish();
 
-  // Will only work when atSetpoint() set
   private boolean m_finish;
   private boolean hasValidPose = false;
+
+  private double positionTolerance = defaultPositionTolerance;
+  private double rotationToleranceRadians = defaultPositionVelocityTolerance;
+
+  public DriveToPoseFinkle(
+      Supplier<Pose2d> desiredPoseSupplier,
+      DoubleSupplier posToleranceSupplier,
+      DoubleSupplier rotToleranceDegreeSupplier) {
+    this(desiredPoseSupplier, true);
+
+    positionTolerance = posToleranceSupplier.getAsDouble();
+    rotationToleranceRadians = Units.degreesToRadians(rotToleranceDegreeSupplier.getAsDouble());
+  }
 
   public DriveToPoseFinkle(Supplier<Pose2d> desiredPoseSupplier, boolean finish) {
     m_drive = RobotContainer.drivebase;
@@ -83,7 +96,6 @@ public class DriveToPoseFinkle extends CS_Command {
     SmartDashboard.putNumber(
         "Commands/DriveToPoseFinkle/Gains/Position/D",
         SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/Position/D", 0.0));
-
     SmartDashboard.putNumber(
         "Commands/DriveToPoseFinkle/Gains/Rotation/P",
         SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/Rotation/P", defaultRotP));
@@ -96,13 +108,15 @@ public class DriveToPoseFinkle extends CS_Command {
 
     SmartDashboard.putNumber("Commands/DriveToPoseFinkle/PositionTolerance(m)", positionTolerance);
     SmartDashboard.putNumber(
-        "Commands/DriveToPoseFinkle/PositionVelocityTolerance(m.s-2)", positionVelocityTolerance);
-
+        "Commands/DriveToPoseFinkle/RotationTolerance(m)",
+        Units.radiansToDegrees(rotationToleranceRadians));
+    SmartDashboard.putNumber(
+        "Commands/DriveToPoseFinkle/PositionVelocityTolerance(m.s-2)",
+        defaultPositionVelocityTolerance);
     SmartDashboard.putNumber(
         "Commands/DriveToPoseFinkle/DriveVelocityConstraint", defaultPositionMaxVelocity);
     SmartDashboard.putNumber(
         "Commands/DriveToPoseFinkle/DriveAccelerationConstraint", defaultPositionMaxAcceleration);
-
     SmartDashboard.putNumber(
         "Commands/DriveToPoseFinkle/RotationVelocityConstraint", defaultRotationMaxVelocity);
     SmartDashboard.putNumber(
@@ -117,11 +131,14 @@ public class DriveToPoseFinkle extends CS_Command {
   @Override
   public void initialize() {
 
-    if ((m_desiredPoseSupplier != null) || m_desiredPoseSupplier.get() != null) {
-      hasValidPose = true;
+    hasValidPose = false;
+    if (m_desiredPoseSupplier != null) {
+      if (m_desiredPoseSupplier.get() != null) {
+        hasValidPose = true;
+      }
     }
 
-    if (hasValidPose) {
+    if (hasValidPose == true) {
       Commodore.setCommodoreState(CommodoreState.DRIVE_AUTO);
       m_pose = m_drive.getPose2d();
 
@@ -173,9 +190,9 @@ public class DriveToPoseFinkle extends CS_Command {
       m_yPID.setPID(drivePValue, driveIValue, driveDValue);
       m_rotPID.setPID(rotPValue, rotIValue, rotDValue);
 
-      m_xPID.setTolerance(positionTolerance, positionVelocityTolerance);
-      m_yPID.setTolerance(positionTolerance, positionVelocityTolerance);
-      m_rotPID.setTolerance(rotationToleranceRadians, rotationVelocityTolerance);
+      m_xPID.setTolerance(positionTolerance, defaultPositionVelocityTolerance);
+      m_yPID.setTolerance(positionTolerance, defaultPositionVelocityTolerance);
+      m_rotPID.setTolerance(rotationToleranceRadians, defaultRotationVelocityTolerance);
 
       m_xPID.reset(m_pose.getX());
       m_yPID.reset(m_pose.getY());
@@ -209,6 +226,10 @@ public class DriveToPoseFinkle extends CS_Command {
   @Override
   public void end(boolean interrupted) {
     Commodore.setCommodoreState(CommodoreState.IDLE);
+
+    // Reset Values
+    positionTolerance = defaultPositionTolerance;
+    rotationToleranceRadians = defaultRotationToleranceRadians;
   }
 
   @Override
