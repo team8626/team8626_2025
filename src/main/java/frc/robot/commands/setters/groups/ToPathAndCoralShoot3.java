@@ -1,6 +1,8 @@
 package frc.robot.commands.setters.groups;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.setters.units.DriveToPoseFinkle;
@@ -18,12 +20,10 @@ public class ToPathAndCoralShoot3 extends SequentialCommandGroup {
     presetSupplier = () -> PresetManager.getCoralPreset();
 
     addCommands(
-        new PrintCommand("ToPathAndCoralShoot3 : Using DTP ")
-            .onlyIf(() -> PresetManager.usingDtp()),
-        new PrintCommand("ToPathAndCoralShoot3 : NOT Using DTP ")
-            .onlyIf(() -> !PresetManager.usingDtp()),
-        // new FollowPathToPose(poseSupplier, () -> 24).onlyIf(() -> PresetManager.usingDtp()),
-        new DriveToPoseFinkle(poseSupplier, true).onlyIf(() -> PresetManager.usingDtp()),
+        new ConditionalCommand(
+            new DriveToPoseFinkle(poseSupplier, true),
+            new InstantCommand(),
+            () -> PresetManager.usingDtp()),
         new ToCoralShoot3());
   }
 }
