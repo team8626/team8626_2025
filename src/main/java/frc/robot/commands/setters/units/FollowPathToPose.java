@@ -23,6 +23,7 @@ public class FollowPathToPose extends CS_Command {
   private PathConstraints constraints;
   private Command pathfindingCommand;
   private double offsetInches = 0;
+  private double endSpeed = 0;
 
   private boolean hasValidPose = false;
 
@@ -31,9 +32,24 @@ public class FollowPathToPose extends CS_Command {
   }
 
   public FollowPathToPose(Supplier<Pose2d> desiredPoseSupplier, DoubleSupplier newOffsetInches) {
+    this(desiredPoseSupplier, newOffsetInches, () -> 0.0);
+  }
+
+  /**
+   * Follows a path to a desired pose.
+   *
+   * @param desiredPoseSupplier The desired pose to follow
+   * @param newOffsetInches The offset from the desired pose (inches)
+   * @param newEndSpeed The speed at the end of the path (m.s^-1)
+   */
+  public FollowPathToPose(
+      Supplier<Pose2d> desiredPoseSupplier,
+      DoubleSupplier newOffsetInches,
+      DoubleSupplier newEndSpeed) {
     drivebase = RobotContainer.drivebase;
     this.poseSupplier = desiredPoseSupplier;
     this.offsetInches = newOffsetInches.getAsDouble();
+    this.endSpeed = newEndSpeed.getAsDouble();
 
     addRequirements(drivebase);
     this.setTAGString("FOLLOWPATHTOPOSE");
@@ -41,7 +57,7 @@ public class FollowPathToPose extends CS_Command {
 
   @Override
   public void initialize() {
-
+    hasValidPose = false;
     if ((this.poseSupplier != null) && (this.poseSupplier.get() != null)) {
       hasValidPose = true;
     }
@@ -69,7 +85,7 @@ public class FollowPathToPose extends CS_Command {
           new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI); // The constraints for this path.
       // constraints = PathConstraints.unlimitedConstraints(12.0); // You can also use unlimited
 
-      pathfindingCommand = AutoBuilder.pathfindToPose(offsetPose, constraints, 0.0);
+      pathfindingCommand = AutoBuilder.pathfindToPose(offsetPose, constraints, this.endSpeed);
       pathfindingCommand.schedule();
     }
   }
@@ -80,6 +96,8 @@ public class FollowPathToPose extends CS_Command {
   @Override
   public void end(boolean interrupted) {
     Commodore.setCommodoreState(CommodoreState.IDLE);
+    this.offsetInches = 0;
+    this.endSpeed = 0;
   }
 
   @Override
