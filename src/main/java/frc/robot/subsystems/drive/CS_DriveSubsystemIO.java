@@ -45,4 +45,6 @@ public interface CS_DriveSubsystemIO {
   public Command driveToPose(Supplier<Pose2d> pose);
 
   public default void updateInputs(DriveValues values) {}
+
+  public void resetOdometry(Supplier<Pose2d> initialHolonomicPose);
 }

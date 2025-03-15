@@ -84,4 +84,10 @@ public class CS_DriveSubsystemIO_Tank extends TankSubsystem implements CS_DriveS
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'driveToPose'");
   }
+
+  @Override
+  public void resetOdometry(Supplier<Pose2d> initialHolonomicPose) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'resetOdometry'");
+  }
 }
