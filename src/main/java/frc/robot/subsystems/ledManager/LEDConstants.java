@@ -37,8 +37,8 @@ public class LEDConstants {
 
   public static final Distance ledSpacing = Meters.of(1.0 / 144.0); // 144 LEDs per Meter
 
-  public static final int rainbowSaturation = 64;
-  public static final int rainbowValue = 127;
+  public static final int rainbowSaturation = 32;
+  public static final int rainbowValue = 64;
 
   public static final Color CS_Pink = new Color("#FF69B4");
   public static final Color CS_DarkPink = new Color("#990033");
