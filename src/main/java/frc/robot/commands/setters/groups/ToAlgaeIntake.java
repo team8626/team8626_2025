@@ -8,10 +8,12 @@ package frc.robot.commands.setters.groups;
 
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Commodore;
 import frc.robot.Commodore.CommodoreState;
 import frc.robot.RobotContainer;
+import frc.robot.commands.RumbleCommand;
 import frc.robot.commands.setters.units.AlgaeShooterIntake;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterSubsystem;
 import frc.robot.subsystems.presets.Presets;
@@ -24,18 +26,6 @@ public class ToAlgaeIntake extends SequentialCommandGroup {
   public ToAlgaeIntake(DoubleSupplier newRMP) {
     this.algae501 = RobotContainer.algae501;
     rpmSupplier = newRMP;
-    buildCommandGroup();
-  }
-
-  public ToAlgaeIntake() {
-    this.algae501 = RobotContainer.algae501;
-    System.out.println("[Cmd: TOALGAEINTAKE]");
-
-    rpmSupplier = () -> Presets.ALGAE_FLOOR.getRPM();
-    buildCommandGroup();
-  }
-
-  private void buildCommandGroup() {
     addCommands(
         new ConditionalCommand(
             new SequentialCommandGroup(
@@ -44,7 +34,8 @@ public class ToAlgaeIntake extends SequentialCommandGroup {
             new InstantCommand(), // empty command
             () -> !algae501.isLoaded()),
         new ConditionalCommand(
-            Commodore.getSetStateCommand(CommodoreState.ALGAE_LOADED),
+            new ParallelCommandGroup(
+                Commodore.getSetStateCommand(CommodoreState.ALGAE_LOADED), new RumbleCommand()),
             Commodore.getSetStateCommand(CommodoreState.IDLE),
             () -> algae501.isLoaded()),
         new ToSubsystemsPreset(() -> Presets.ALGAE_STOW));
