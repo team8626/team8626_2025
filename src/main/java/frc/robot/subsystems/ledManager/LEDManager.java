@@ -99,6 +99,11 @@ public class LEDManager extends CS_SubsystemBase {
         rainbow().applyTo(m_right);
         break;
 
+      case DRIVE_FINKLE:
+        rainbowFlash().applyTo(m_left);
+        rainbowFlash().applyTo(m_right);
+        break;
+
       case ESTOP:
         currentColor = new Color[] {Color.kGreen, Color.kGreenYellow};
         break;
@@ -241,6 +246,14 @@ public class LEDManager extends CS_SubsystemBase {
     LEDPattern rainbow =
         LEDPattern.rainbow(LEDConstants.rainbowSaturation, LEDConstants.rainbowValue)
             .scrollAtAbsoluteSpeed(LEDConstants.scrollVelocity, LEDConstants.ledSpacing);
+
+    return rainbow;
+  }
+
+  private static LEDPattern rainbowFlash() {
+    LEDPattern rainbow =
+        LEDPattern.rainbow(LEDConstants.rainbowSaturation, LEDConstants.rainbowValue)
+            .blink(LEDConstants.flashDuration);
 
     return rainbow;
   }

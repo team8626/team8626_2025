@@ -54,6 +54,7 @@ public class Commodore extends CS_SubsystemBase {
     ALGAE_LOADED,
 
     DRIVE_AUTO,
+    DRIVE_FINKLE,
 
     ELEVATOR_ZEROING,
 
@@ -174,6 +175,7 @@ public class Commodore extends CS_SubsystemBase {
           break;
 
         case DRIVE_AUTO:
+        case DRIVE_FINKLE:
           applyState(newState);
           break;
 
