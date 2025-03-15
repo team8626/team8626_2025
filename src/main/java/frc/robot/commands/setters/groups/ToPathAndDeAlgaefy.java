@@ -1,7 +1,8 @@
 package frc.robot.commands.setters.groups;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.setters.units.FollowPathToPose;
 import frc.robot.subsystems.presets.AlgaePreset;
@@ -19,10 +20,10 @@ public class ToPathAndDeAlgaefy extends SequentialCommandGroup {
     presetSupplier = () -> PresetManager.getAlgaePreset();
 
     addCommands(
-        new PrintCommand("ToPathAndDeAlgaefy : Using DTP ").onlyIf(() -> PresetManager.usingDtp()),
-        new PrintCommand("ToPathAndDeAlgaefy : NOT Using DTP ")
-            .onlyIf(() -> !PresetManager.usingDtp()),
-        new FollowPathToPose(poseSupplier).onlyIf(() -> PresetManager.usingDtp()),
+        new ConditionalCommand(
+            new FollowPathToPose(poseSupplier, () -> 12), // 12 inches Offset
+            new InstantCommand(),
+            () -> PresetManager.usingDtp()),
         new ToDeAlgaefy(presetSupplier));
   }
 }
