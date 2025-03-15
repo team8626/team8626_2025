@@ -9,6 +9,7 @@ package frc.robot.commands.setters.units;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
+import frc.robot.commands.RumbleCommand;
 import frc.robot.subsystems.Dashboard;
 import frc.robot.subsystems.Dashboard.GamePieceState;
 import frc.robot.subsystems.coralshooter.CoralShooterConstants;
@@ -64,6 +65,8 @@ public class CoralShooterIntake2 extends CS_Command {
   public void end(boolean interrupted) {
     if (mortar.isLoaded()) {
       Dashboard.setCoralState(GamePieceState.LOADED);
+      new RumbleCommand().schedule();
+
     } else {
       Dashboard.setCoralState(GamePieceState.IDLE);
     }
