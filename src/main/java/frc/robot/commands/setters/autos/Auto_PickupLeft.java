@@ -1,7 +1,6 @@
 package frc.robot.commands.setters.autos;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.RobotConstants.UIConstants.PickupSide;
 import frc.robot.commands.setters.groups.ToCoralIntake;
@@ -17,8 +16,6 @@ public class Auto_PickupLeft extends SequentialCommandGroup {
     System.out.printf("[Cmd: %s] Loaded\n", this.getName().toUpperCase());
     poseSupplier = () -> PresetManager.getRobotPoseFromPickupSide(PickupSide.LEFT);
 
-    addCommands(
-        new FollowPathToPose(poseSupplier),
-        new ToCoralIntake());
+    addCommands(new FollowPathToPose(poseSupplier), new ToCoralIntake());
   }
 }
