@@ -21,6 +21,17 @@ public class AlgaePreset {
   }
 
   public AlgaePreset(
+      String name, Pose2d pose, double elevatorHeightInches, double wristAngleDegrees, double RPM) {
+    this.name = name;
+    this.robotPose = pose;
+    this.elevatorHeightInches = elevatorHeightInches;
+    this.wristAngleDegrees = wristAngleDegrees;
+    this.RPM = RPM;
+    this.hasSubsystemsReady = true;
+    this.hasPose = true;
+  }
+
+  public AlgaePreset(
       String name, double elevatorHeightInches, double wristAngleDegrees, double RPM) {
     this.name = name;
     this.elevatorHeightInches = elevatorHeightInches;
@@ -28,7 +39,7 @@ public class AlgaePreset {
     this.RPM = RPM;
 
     this.hasSubsystemsReady = true;
-    this.hasPose = true;
+    this.hasPose = false;
   }
 
   public void setPose(Pose2d newPose) {
