@@ -26,6 +26,7 @@ import frc.robot.subsystems.algaeshooter.AlgaeShooterConstants;
 import frc.robot.subsystems.elevator.ElevatorConstants;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
+import org.littletonrobotics.frc2025.FieldConstants;
 import org.littletonrobotics.frc2025.FieldConstants.CoralStation;
 import org.littletonrobotics.frc2025.FieldConstants.Reef;
 import org.littletonrobotics.frc2025.FieldConstants.ReefLevel;
@@ -175,6 +176,23 @@ public class PresetManager extends CS_SubsystemBase {
     aimPreset.setRPM(launchRpm);
 
     return aimPreset;
+  }
+
+  public static AlgaePreset getBargeShootPreset() {
+    return getBargeShootPreset(() -> new Pose2d());
+  }
+
+  public static AlgaePreset getBargeShootPreset(Supplier<Pose2d> robotPoseSupplier) {
+    AlgaePreset retVal = Presets.ALGAE_SHOOTBARGE_OURSIDE;
+    Pose2d robotPose = robotPoseSupplier.get();
+
+    if (robotPose.getX() > (FieldConstants.fieldLength / 2)) {
+      // We are on their side
+      retVal = Presets.ALGAE_SHOOTBARGE_THEIRSIDE;
+    }
+
+    retVal.setPose(AllianceFlipUtil.apply(retVal.getPose()));
+    return retVal;
   }
 
   public void updateUIData() {
@@ -517,24 +535,15 @@ public class PresetManager extends CS_SubsystemBase {
     currentAlgaePreset.reset();
   }
 
-  // public static Command resetCoralPresetCmd() {
-  //   Dashboard.resetCoralBranch();
-  //   return new InstantCommand(() -> currentCoralPreset.reset());
-  // }
-
-  // public static Command resetAlgaePresetCmd() {
-  //   Dashboard.resetAlgaeFace();
-  //   return new InstantCommand(() -> currentAlgaePreset.reset());
-  // }
-
   @Override
   public void updateDashboard() {
+    coralPresetPosePub.set(currentCoralPreset.getPose());
     SmartDashboard.putNumber(
         "Subsystem/PresetManager/CoralPreset/RPMLeft", currentCoralPreset.getRPMLeft());
     SmartDashboard.putNumber(
         "Subsystem/PresetManager/CoralPreset/RPMRight", currentCoralPreset.getRPMRight());
-    coralPresetPosePub.set(currentCoralPreset.getPose());
 
+        algaePresetPosePub.set(currentAlgaePreset.getPose());
     SmartDashboard.putNumber(
         "Subsystem/PresetManager/AlgaePreset/ElevatorHeight",
         currentAlgaePreset.getElevatorHeightInches());
@@ -543,6 +552,5 @@ public class PresetManager extends CS_SubsystemBase {
     SmartDashboard.putNumber(
         "Subsystem/PresetManager/AlgaePreset/WristAngle",
         currentAlgaePreset.getWristAngleDegrees());
-    algaePresetPosePub.set(currentAlgaePreset.getPose());
   }
 }
