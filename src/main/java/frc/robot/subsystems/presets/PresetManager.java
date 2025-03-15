@@ -178,10 +178,6 @@ public class PresetManager extends CS_SubsystemBase {
     return aimPreset;
   }
 
-  public static AlgaePreset getBargeShootPreset() {
-    return getBargeShootPreset(() -> new Pose2d());
-  }
-
   public static AlgaePreset getBargeShootPreset(Supplier<Pose2d> robotPoseSupplier) {
     AlgaePreset retVal = Presets.ALGAE_SHOOTBARGE_OURSIDE;
     Pose2d robotPose = robotPoseSupplier.get();
