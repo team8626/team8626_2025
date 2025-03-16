@@ -147,6 +147,7 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
           this.isZeroed = true;
           this.isZeroing = false;
           this.desiredHeightInches = ElevatorConstants.initHeightInches;
+          encoder.setPosition(ElevatorConstants.minHeightInches);
         }
       } else {
         // Not Zeroed and not Zeroing yet...

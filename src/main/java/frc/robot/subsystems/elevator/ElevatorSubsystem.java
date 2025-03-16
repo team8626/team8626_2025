@@ -113,4 +113,18 @@ public class ElevatorSubsystem extends CS_SubsystemBase {
   public void goDown(double offsetInches) {
     elevatorInterface.goDown(offsetInches);
   }
+  // private void log(SysIdRoutineLog log) {
+  //   System.out.println("logging");
+  //   log.motor("left")
+  //       .voltage(Voltage.ofRelativeUnits(left`Motor.get() * 12, Volts))
+  //       .linearPosition(Distance.ofRelativeUnits(leftMotor.getEncoder().getPosition(), Inches))
+  //       .linearVelocity(LinearVelocity.ofRelativeUnits(leftMotor.getEncoder().getVelocity(),
+  // InchesPerSecond));
+  //   log.motor("right")
+  //       .voltage(Voltage.ofRelativeUnits(rightMotor.get() * 12, Volts))
+  //       .linearPosition(Distance.ofRelativeUnits(rightMotor.getEncoder().getPosition(), Inches))
+  //       .linearVelocity(LinearVelocity.ofRelativeUnits(rightMotor.getEncoder().getVelocity(),
+  // InchesPerSecond));
+  // }
+
 }
