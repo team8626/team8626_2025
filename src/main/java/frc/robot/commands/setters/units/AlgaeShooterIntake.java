@@ -10,10 +10,12 @@ import edu.wpi.first.wpilibj.Timer;
 import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
 import frc.robot.commands.RumbleCommand;
+import frc.robot.commands.setters.groups.ToSubsystemsPreset;
 import frc.robot.subsystems.Dashboard;
 import frc.robot.subsystems.Dashboard.GamePieceState;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterConstants;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterSubsystem;
+import frc.robot.subsystems.presets.Presets;
 import java.util.function.DoubleSupplier;
 
 public class AlgaeShooterIntake extends CS_Command {
@@ -74,6 +76,7 @@ public class AlgaeShooterIntake extends CS_Command {
       timer.start();
       algaeDetected = true;
       new RumbleCommand().schedule();
+      new ToSubsystemsPreset(() -> Presets.ALGAE_STOW).schedule();
     }
     return timer.hasElapsed(AlgaeShooterConstants.intakeTimerSeconds);
   }
