@@ -18,6 +18,8 @@ const selectedCoralBranchTopicName = "selectedCoralBranch";
 const selectedAlgaeFaceTopicName = "selectedAlgaeFace";
 const selectedPickupSideTopicName = "selectedPickupSide";
 const selectedDtpTopicName = "selectedDtp";
+const selectedDealgaefyDtpTopicName = "selectedDealgaefyDtp";
+const selectedAlgaeShootDtpTopicName = "selectedAlgaeShootDtp";
 const matchTimeTopicName = "matchTime";
 const isAutoTopicName = "isAuto";
 const algaeStateTopicName = "algaeState";
@@ -37,6 +39,8 @@ let selectedCoralBranch = 0; // int
 let selectedAlgaeFace = 0; // int
 let selectedPickupSide = 0; // int (0 = Unselected, 1 = Left, 2 = Right)
 let selectedDtp = false; // boolean
+let selectedDealgaefyDtp = false; // boolean
+let selectedAlgaeShootDtp = false; // boolean
 let matchTime = 0; // double (seconds)
 let isAuto = true; // double (seconds)
 let algaeStatus = "---"; // string
@@ -90,6 +94,14 @@ const ntClient = new NT4_Client(
       selectedDtp = value;
       updateDtpValue(selectedDtp);
       console.log("Rx Input DTP: " + selectedDtp);
+    } else if (topic.name === toDashboardPrefix + selectedDealgaefyDtpTopicName) {
+      selectedDealgaefyDtp = value;
+      updateDealgaefyDtpValue(selectedDealgaefyDtp);
+      console.log("Rx Input Dealgaefy DTP: " + selectedDealgaefyDtp);
+    } else if (topic.name === toDashboardPrefix + selectedAlgaeShootDtpTopicName) {
+      selectedAlgaeShootDtp = value;
+      updateAlgaeShootDtpValue(selectedAlgaeShootDtp);
+      console.log("Rx Input Shoot Algae DTP: " + selectedAlgaeShootDtp);
     } else if (topic.name === toDashboardPrefix + algaeStateTopicName) {
       algaeStatus = value;
       updateAlgaeState(algaeStatus);
@@ -150,6 +162,8 @@ window.addEventListener("load", () => {
       toDashboardPrefix + selectedAlgaeFaceTopicName,
       toDashboardPrefix + selectedPickupSideTopicName,
       toDashboardPrefix + selectedDtpTopicName,
+      toDashboardPrefix + selectedDealgaefyDtpTopicName,
+      toDashboardPrefix + selectedAlgaeShootDtpTopicName,
       toDashboardPrefix + matchTimeTopicName,
       toDashboardPrefix + isAutoTopicName,
       toDashboardPrefix + algaeStateTopicName,
@@ -170,6 +184,8 @@ window.addEventListener("load", () => {
   ntClient.publishTopic(toRobotPrefix + selectedAlgaeFaceTopicName, "int");
   ntClient.publishTopic(toRobotPrefix + selectedPickupSideTopicName, "int");
   ntClient.publishTopic(toRobotPrefix + selectedDtpTopicName, "boolean");
+  ntClient.publishTopic(toRobotPrefix + selectedDealgaefyDtpTopicName, "boolean");
+  ntClient.publishTopic(toRobotPrefix + selectedAlgaeShootDtpTopicName, "boolean");
   ntClient.connect();
 });
 
@@ -216,6 +232,46 @@ function updateDtpValue(newValue) {
   }
   // Send the updated value over NetworkTables
   sendBooleanToRobot(selectedDtpTopicName, selectedDtp);
+}
+
+/**
+ * Function to update the DEalgaefy DTP value and radio buttons
+ * @param {*} newValue 
+ */
+function updateDealgaefyDtpValue(newValue) {
+  $("input[name='dealgaefydrivetopose'] + label").css("background", "");
+
+  // Update the radio buttons and labels based on the new value
+  if (selectedDealgaefyDtp === newValue) {
+      $("label[for='dealgaefydrivetopose_" + String(newValue) + "']").css("background", "red");
+  } else {
+      $("input[name='dealgaefydrivetopose'][id='dealgaefydrivetopose_" + newValue + "']").prop('checked', true);
+      $("label[for='dealgaefydrivetopose_" + String(newValue) + "']").css("background", "red");
+      // currentDtpValue = newValue;
+      selectedDealgaefyDtp = newValue;
+  }
+  // Send the updated value over NetworkTables
+  sendBooleanToRobot(selectedDealgaefyDtpTopicName, selectedDealgaefyDtp);
+}
+
+/**
+ * Function to update the Shoot Algae DTP value and radio buttons
+ * @param {*} newValue
+ */
+function updateAlgaeShootDtpValue(newValue) {
+  $("input[name='algaeshootdrivetopose'] + label").css("background", "");
+
+  // Update the radio buttons and labels based on the new value
+  if (selectedAlgaeShootDtp === newValue) {
+      $("label[for='algaeshootdrivetopose_" + String(newValue) + "']").css("background", "red");
+  } else {
+      $("input[name='algaeshootdrivetopose'][id='algaeshootdrivetopose_" + newValue + "']").prop('checked', true);
+      $("label[for='algaeshootdrivetopose_" + String(newValue) + "']").css("background", "red");
+      // currentDtpValue = newValue;
+      selectedAlgaeShootDtp = newValue;
+  }
+  // Send the updated value over NetworkTables
+  sendBooleanToRobot(selectedAlgaeShootDtpTopicName, selectedAlgaeShootDtp);
 }
 
 /**
@@ -451,6 +507,17 @@ $(document).ready(function () {
     console.log("DTP button clicked");
       updateDtpValue($(this).attr("value"));
   });
+
+  $("input[name='dealgaefydrivetopose']").click(function (event) {
+    console.log("DealgaefyDTP button clicked");
+      updateDealgaefyDtpValue($(this).attr("value"));
+  });
+
+  $("input[name='algaeshootdrivetopose']").click(function (event) {
+    console.log("AlgaeShoot DTP button clicked");
+      updateAlgaeShootDtpValue($(this).attr("value"));
+  });
+
 
   // When any radio button in the intakeside group is clicked
   $("input[name='intakeside']").click(function (event) {
