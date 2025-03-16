@@ -71,10 +71,9 @@ public class CS_DriveSubsystem extends CS_SubsystemBase {
     }
   }
 
-  public void resetOdometry(){
+  public void resetOdometry() {
     driveInterface.resetOdometry(() -> this.getPose2d());
   }
-
 
   @Override
   public void CS_periodic() {
