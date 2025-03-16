@@ -169,6 +169,8 @@ public class RobotConstants {
         Arrays.asList(CoralLevel.L1, CoralLevel.L3, CoralLevel.L4);
 
     public static final DTP defaultDTP = DTP.OFF; // TODO
+    public static final DTP defaultDealgaefyDTP = DTP.OFF; // TODO
+    public static final DTP defaultAlgaeShootDTP = DTP.OFF; // TODO
     public static final CoralLevel defaultCoralLevel = CoralLevel.L4;
     public static final PickupSide defaultPickupSide = PickupSide.NONE;
     public static final CoralBranch defaultCoralBranch = CoralBranch.NONE;
