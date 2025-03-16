@@ -45,10 +45,10 @@ public class DriveToPoseFinkle extends CS_Command {
   private double defaultRotationMaxVelocity = Units.degreesToRadians(720);
   private double defaultRotationMaxAcceleration = Units.degreesToRadians(360);
 
-  private final double defaultPositionTolerance = 0.01; // meters
-  private final double defaultPositionVelocityTolerance = 0.01; // meters
-  private final double defaultRotationToleranceRadians = Units.degreesToRadians(2.0);
-  private final double defaultRotationVelocityTolerance = Units.degreesToRadians(1.0);
+  private static final double defaultPositionTolerance = 0.01; // meters
+  private static final double defaultPositionVelocityTolerance = 0.01; // meters
+  private static final double defaultRotationToleranceRadians = Units.degreesToRadians(2.0);
+  private static final double defaultRotationVelocityTolerance = Units.degreesToRadians(1.0);
 
   private double defaultDriveP_X = 0.7555;
   private double defaultDriveP_Y = 0.46;
@@ -63,31 +63,168 @@ public class DriveToPoseFinkle extends CS_Command {
           .getStructTopic("SmartDashboard/Commands/DriveToPoseFinkle/CurrentPose", Pose2d.struct)
           .publish();
 
-  private boolean m_finish;
   private boolean hasValidPose = false;
 
   private double positionTolerance = defaultPositionTolerance;
-  private double rotationToleranceRadians = defaultPositionVelocityTolerance;
+  private double rotationToleranceRadians = defaultRotationToleranceRadians;
+
+  public DriveToPoseFinkle(Supplier<Pose2d> desiredPoseSupplier) {
+    this(
+        desiredPoseSupplier, () -> defaultPositionTolerance, () -> defaultRotationToleranceRadians);
+  }
 
   public DriveToPoseFinkle(
       Supplier<Pose2d> desiredPoseSupplier,
       DoubleSupplier posToleranceSupplier,
       DoubleSupplier rotToleranceDegreeSupplier) {
-    this(desiredPoseSupplier, true);
-
-    positionTolerance = posToleranceSupplier.getAsDouble();
-    rotationToleranceRadians = Units.degreesToRadians(rotToleranceDegreeSupplier.getAsDouble());
-  }
-
-  public DriveToPoseFinkle(Supplier<Pose2d> desiredPoseSupplier, boolean finish) {
     m_drive = RobotContainer.drivebase;
 
-    m_desiredPoseSupplier = desiredPoseSupplier;
-    m_finish = finish;
+    positionTolerance = posToleranceSupplier.getAsDouble();
+    rotationToleranceRadians = rotToleranceDegreeSupplier.getAsDouble();
 
-    addRequirements(m_drive);
+    m_desiredPoseSupplier = desiredPoseSupplier;
+
     setName("DRIVETOPOSEFINKLE");
 
+    targetPosePub.set(new Pose2d());
+    currentPosePub.set(new Pose2d());
+
+    this.initDashboard();
+    addRequirements(m_drive);
+  }
+
+  // Called when the command is initially scheduled.
+  @Override
+  public void initialize() {
+    // m_drive.resetOdometry();
+
+    hasValidPose = false;
+    if (m_desiredPoseSupplier != null) {
+      if (m_desiredPoseSupplier.get() != null) {
+        hasValidPose = true;
+      }
+    }
+
+    if (hasValidPose == true) {
+      Commodore.setCommodoreState(CommodoreState.DRIVE_FINKLE);
+      m_pose = m_drive.getPose2d();
+
+      targetPosePub.set(m_desiredPoseSupplier.get());
+      currentPosePub.set(m_pose);
+
+      m_xDesiredPos = m_desiredPoseSupplier.get().getX();
+      m_yDesiredPos = m_desiredPoseSupplier.get().getY();
+      m_desiredRotRadians = m_desiredPoseSupplier.get().getRotation().getRadians();
+
+      Commands.print("(" + m_xDesiredPos + "  " + m_yDesiredPos + ")").schedule();
+
+      double drivePValueX =
+          SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/PositionX/P", defaultDriveP_X);
+      double driveIValueX =
+          SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/PositionX/I", 0);
+      double driveDValueX =
+          SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/PositionX/D", 0);
+
+      double drivePValueY =
+          SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/PositionY/P", defaultDriveP_Y);
+      double driveIValueY =
+          SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/PositionY/I", 0);
+      double driveDValueY =
+          SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/PositionY/D", 0);
+
+      double rotPValue =
+          SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/Rotation/P", defaultRotP);
+      double rotIValue = SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/Rotation/I", 0);
+      double rotDValue = SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/Rotation/D", 0);
+
+      // Max Velocity and Acceleration
+      double newDriveMaxVelocity =
+          SmartDashboard.getNumber(
+              "Commands/DriveToPoseFinkle/DriveVelocityConstraint", defaultPositionMaxVelocity);
+      double newDriveMaxAcceleration =
+          SmartDashboard.getNumber(
+              "Commands/DriveToPoseFinkle/DriveAccelerationConstraint",
+              defaultPositionMaxAcceleration);
+
+      double newRotMaxVelocity =
+          SmartDashboard.getNumber(
+              "Commands/DriveToPoseFinkle/RotationVelocityConstraint", defaultRotationMaxVelocity);
+      double newRotMaxAcceleration =
+          SmartDashboard.getNumber(
+              "Commands/DriveToPoseFinkle/RotationAccelerationConstraint",
+              defaultRotationMaxAcceleration);
+
+      // Set the constraints for the PID controllers
+      m_xPID.setConstraints(
+          new TrapezoidProfile.Constraints(newDriveMaxVelocity, newDriveMaxAcceleration));
+      m_yPID.setConstraints(
+          new TrapezoidProfile.Constraints(newDriveMaxVelocity, newDriveMaxAcceleration));
+      m_rotPID.setConstraints(
+          new TrapezoidProfile.Constraints(newRotMaxVelocity, newRotMaxAcceleration));
+
+      // Set the PID values
+      m_xPID.setPID(drivePValueX, driveIValueX, driveDValueX);
+      m_yPID.setPID(drivePValueY, driveIValueY, driveDValueY);
+      m_rotPID.setPID(rotPValue, rotIValue, rotDValue);
+
+      // Set the tolerances
+      m_xPID.setTolerance(positionTolerance, defaultPositionVelocityTolerance);
+      m_yPID.setTolerance(positionTolerance, defaultPositionVelocityTolerance);
+      m_rotPID.setTolerance(rotationToleranceRadians, defaultRotationVelocityTolerance);
+
+      // Reset the PID controllers
+      m_xPID.reset(m_pose.getX());
+      m_yPID.reset(m_pose.getY());
+      m_rotPID.reset(m_pose.getRotation().getRadians());
+    }
+  }
+
+  @Override
+  public void execute() {
+    if (hasValidPose) {
+
+      m_pose = m_drive.getPose2d();
+
+      targetPosePub.set(m_desiredPoseSupplier.get());
+      currentPosePub.set(m_pose);
+
+      SmartDashboard.putNumber(
+          "Commands/DriveToPoseFinkle/CalculateX", m_xPID.calculate(m_pose.getX(), m_xDesiredPos));
+      SmartDashboard.putNumber(
+          "Commands/DriveToPoseFinkle/CalculateY", m_yPID.calculate(m_pose.getY(), m_yDesiredPos));
+      SmartDashboard.putNumber(
+          "Commands/DriveToPoseFinkle/CalculateTheta",
+          m_rotPID.calculate(m_pose.getRotation().getRadians(), m_desiredRotRadians));
+
+      m_drive.drive(
+          new ChassisSpeeds(
+              m_xPID.calculate(m_pose.getX(), m_xDesiredPos),
+              m_yPID.calculate(m_pose.getY(), m_yDesiredPos),
+              0)); // m_rotPID.calculate(m_pose.getRotation().getRadians(), m_desiredRotRadians)));
+
+      SmartDashboard.putNumber("Commands/DriveToPoseFinkle/ErrorX", m_xPID.getPositionError());
+      SmartDashboard.putNumber("Commands/DriveToPoseFinkle/ErrorY", m_yPID.getPositionError());
+      SmartDashboard.putNumber(
+          "Commands/DriveToPoseFinkle/ErrorTheta",
+          Units.radiansToDegrees(m_rotPID.getPositionError()));
+    }
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+    Commodore.setCommodoreState(CommodoreState.IDLE);
+  }
+
+  @Override
+  public boolean isFinished() {
+    SmartDashboard.putBoolean("Commands/DriveToPoseFinkle/XAtSetpoint", m_xPID.atSetpoint());
+    SmartDashboard.putBoolean("Commands/DriveToPoseFinkle/YAtSetpoint", m_yPID.atSetpoint());
+    SmartDashboard.putBoolean("Commands/DriveToPoseFinkle/RotAtSetpoint", m_rotPID.atSetpoint());
+
+    return hasValidPose && (m_xPID.atSetpoint() && m_yPID.atSetpoint() && m_rotPID.atSetpoint());
+  }
+
+  void initDashboard() {
     SmartDashboard.putNumber(
         "Commands/DriveToPoseFinkle/Gains/PositionX/P",
         SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/PositionX/P", defaultDriveP_X));
@@ -135,131 +272,5 @@ public class DriveToPoseFinkle extends CS_Command {
     SmartDashboard.putNumber(
         "Commands/DriveToPoseFinkle/RotationAccelerationConstraint",
         defaultRotationMaxAcceleration);
-
-    targetPosePub.set(new Pose2d());
-    currentPosePub.set(new Pose2d());
-  }
-
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-
-    hasValidPose = false;
-    if (m_desiredPoseSupplier != null) {
-      if (m_desiredPoseSupplier.get() != null) {
-        hasValidPose = true;
-      }
-    }
-
-    if (hasValidPose == true) {
-      Commodore.setCommodoreState(CommodoreState.DRIVE_FINKLE);
-      m_pose = m_drive.getPose2d();
-
-      targetPosePub.set(m_desiredPoseSupplier.get());
-      currentPosePub.set(m_pose);
-
-      m_xDesiredPos = m_desiredPoseSupplier.get().getX();
-      m_yDesiredPos = m_desiredPoseSupplier.get().getY();
-      m_desiredRotRadians = m_desiredPoseSupplier.get().getRotation().getRadians();
-
-      Commands.print("(" + m_xDesiredPos + "  " + m_yDesiredPos + ")").schedule();
-
-      double drivePValueX =
-          SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/PositionX/P", defaultDriveP_X);
-      double driveIValueX =
-          SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/PositionX/I", 0);
-      double driveDValueX =
-          SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/PositionX/D", 0);
-
-      double drivePValueY =
-          SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/PositionY/P", defaultDriveP_Y);
-      double driveIValueY =
-          SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/PositionY/I", 0);
-      double driveDValueY =
-          SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/PositionY/D", 0);
-
-      double rotPValue =
-          SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/Rotation/P", defaultRotP);
-      double rotIValue = SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/Rotation/I", 0);
-      double rotDValue = SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/Rotation/D", 0);
-
-      double newDriveMaxVelocity =
-          SmartDashboard.getNumber(
-              "Commands/DriveToPoseFinkle/DriveVelocityConstraint", defaultPositionMaxVelocity);
-      double newDriveMaxAcceleration =
-          SmartDashboard.getNumber(
-              "Commands/DriveToPoseFinkle/DriveAccelerationConstraint",
-              defaultPositionMaxAcceleration);
-
-      double newRotMaxVelocity =
-          SmartDashboard.getNumber(
-              "Commands/DriveToPoseFinkle/RotationVelocityConstraint", defaultRotationMaxVelocity);
-      double newRotMaxAcceleration =
-          SmartDashboard.getNumber(
-              "Commands/DriveToPoseFinkle/RotationAccelerationConstraint",
-              defaultRotationMaxAcceleration);
-
-      m_xPID.setConstraints(
-          new TrapezoidProfile.Constraints(newDriveMaxVelocity, newDriveMaxAcceleration));
-      m_yPID.setConstraints(
-          new TrapezoidProfile.Constraints(newDriveMaxVelocity, newDriveMaxAcceleration));
-      m_rotPID.setConstraints(
-          new TrapezoidProfile.Constraints(newRotMaxVelocity, newRotMaxAcceleration));
-
-      m_xPID.setPID(drivePValueX, driveIValueX, driveDValueX);
-      m_yPID.setPID(drivePValueY, driveIValueY, driveDValueY);
-      m_rotPID.setPID(rotPValue, rotIValue, rotDValue);
-
-      m_xPID.setTolerance(positionTolerance, defaultPositionVelocityTolerance);
-      m_yPID.setTolerance(positionTolerance, defaultPositionVelocityTolerance);
-      m_rotPID.setTolerance(rotationToleranceRadians, defaultRotationVelocityTolerance);
-
-      m_xPID.reset(m_pose.getX());
-      m_yPID.reset(m_pose.getY());
-      m_rotPID.reset(m_pose.getRotation().getRadians());
-    }
-  }
-
-  @Override
-  public void execute() {
-    if (hasValidPose) {
-
-      m_pose = m_drive.getPose2d();
-
-      targetPosePub.set(m_desiredPoseSupplier.get());
-      currentPosePub.set(m_pose);
-
-      m_drive.drive(
-          new ChassisSpeeds(
-              m_xPID.calculate(m_pose.getX(), m_xDesiredPos),
-              m_yPID.calculate(m_pose.getY(), m_yDesiredPos),
-              m_rotPID.calculate(m_pose.getRotation().getRadians(), m_desiredRotRadians)));
-
-      SmartDashboard.putNumber("Commands/DriveToPoseFinkle/ErrorX", m_xPID.getPositionError());
-      SmartDashboard.putNumber("Commands/DriveToPoseFinkle/ErrorY", m_yPID.getPositionError());
-      SmartDashboard.putNumber(
-          "Commands/DriveToPoseFinkle/ErrorTheta",
-          Units.radiansToDegrees(m_rotPID.getPositionError()));
-    }
-  }
-
-  @Override
-  public void end(boolean interrupted) {
-    Commodore.setCommodoreState(CommodoreState.IDLE);
-
-    // Reset Values
-    positionTolerance = defaultPositionTolerance;
-    rotationToleranceRadians = defaultRotationToleranceRadians;
-  }
-
-  @Override
-  public boolean isFinished() {
-    SmartDashboard.putBoolean("Commands/DriveToPoseFinkle/XAtSetpoint", m_xPID.atSetpoint());
-
-    SmartDashboard.putBoolean("Commands/DriveToPoseFinkle/YAtSetpoint", m_yPID.atSetpoint());
-    SmartDashboard.putBoolean("Commands/DriveToPoseFinkle/RotAtSetpoint", m_rotPID.atSetpoint());
-
-    return hasValidPose
-        && (m_finish && m_xPID.atSetpoint() && m_yPID.atSetpoint() && m_rotPID.atSetpoint());
   }
 }
