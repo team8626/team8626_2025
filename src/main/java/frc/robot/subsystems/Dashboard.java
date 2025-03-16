@@ -97,6 +97,8 @@ public class Dashboard extends CS_SubsystemBase {
   private static final String selectedAlgaeFaceTopicName = "selectedAlgaeFace";
   private static final String selectedPickupSideTopicName = "selectedPickupSide";
   private static final String selectedDtpTopicName = "selectedDtp";
+  private static final String selectedDealgaefyDtpTopicName = "selectedDealgaefyDtp";
+  private static final String selectedAlgaeShootDtpTopicName = "selectedAlgaeShootDtp";
   private static final String selectedMatchTimeTopicName = "matchTime";
   private static final String isAutoTimeTopicName = "isAuto";
   private static final String algaeStateTopicName = "algaeState";
@@ -118,6 +120,8 @@ public class Dashboard extends CS_SubsystemBase {
     public int[] selectedAlgaeFace = new int[] {}; // Bitfield
     public int[] selectedPickupSide = new int[] {}; // Bitfield
     public boolean[] selectedDtp = new boolean[] {}; // Boolean
+    public boolean[] selectedDealgaefyDtp = new boolean[] {}; // Boolean
+    public boolean[] selectedAlgaeShootDtp = new boolean[] {}; // Boolean
   }
 
   // Subscribers and Publishers
@@ -126,6 +130,8 @@ public class Dashboard extends CS_SubsystemBase {
   private final IntegerSubscriber selectedAlgaeFaceIn;
   private final IntegerSubscriber selectedPickupSideIn;
   private final BooleanSubscriber selectedDtpIn;
+  private final BooleanSubscriber selectedDeaglaefyDtpIn;
+  private final BooleanSubscriber selectedAlgaeShootDtpIn;
 
   private final IntegerPublisher allianceColorOut;
   private final IntegerPublisher allowedCoralLevelsOut;
@@ -134,6 +140,8 @@ public class Dashboard extends CS_SubsystemBase {
   private static IntegerPublisher selectedAlgaeFaceOut;
   private final IntegerPublisher selectedPickupSideOut;
   private final BooleanPublisher selectedDtpOut;
+  private final BooleanPublisher selectedDeaglaefyDtpOut;
+  private final BooleanPublisher selectedAlgaeShootDtpOut;
   private final DoublePublisher selectedMatchTimeOut;
   private final BooleanPublisher isAutoOut;
   private final StringPublisher algaeStateOut;
@@ -166,6 +174,14 @@ public class Dashboard extends CS_SubsystemBase {
         inputTable
             .getBooleanTopic(selectedDtpTopicName)
             .subscribe(false, PubSubOption.keepDuplicates(true));
+    selectedDeaglaefyDtpIn =
+        inputTable
+            .getBooleanTopic(selectedDealgaefyDtpTopicName)
+            .subscribe(false, PubSubOption.keepDuplicates(true));
+    selectedAlgaeShootDtpIn =
+        inputTable
+            .getBooleanTopic(selectedAlgaeShootDtpTopicName)
+            .subscribe(false, PubSubOption.keepDuplicates(true));
 
     // Create publishers
     var outputTable = NetworkTableInstance.getDefault().getTable(toDashboardTable);
@@ -175,6 +191,9 @@ public class Dashboard extends CS_SubsystemBase {
     selectedCoralBranchOut = outputTable.getIntegerTopic(selectedCoralBranchTopicName).publish();
     selectedAlgaeFaceOut = outputTable.getIntegerTopic(selectedAlgaeFaceTopicName).publish();
     selectedDtpOut = outputTable.getBooleanTopic(selectedDtpTopicName).publish();
+    selectedDeaglaefyDtpOut = outputTable.getBooleanTopic(selectedDealgaefyDtpTopicName).publish();
+    selectedAlgaeShootDtpOut =
+        outputTable.getBooleanTopic(selectedAlgaeShootDtpTopicName).publish();
     selectedPickupSideOut = outputTable.getIntegerTopic(selectedPickupSideTopicName).publish();
     isAutoOut = outputTable.getBooleanTopic(isAutoTimeTopicName).publish();
     selectedMatchTimeOut = outputTable.getDoubleTopic(selectedMatchTimeTopicName).publish();
@@ -277,6 +296,16 @@ public class Dashboard extends CS_SubsystemBase {
         selectedDtpIn.readQueue().length > 0
             ? new boolean[] {selectedDtpIn.get()}
             : new boolean[] {};
+
+    inputs.selectedDealgaefyDtp =
+        selectedDeaglaefyDtpIn.readQueue().length > 0
+            ? new boolean[] {selectedDeaglaefyDtpIn.get()}
+            : new boolean[] {};
+
+    inputs.selectedAlgaeShootDtp =
+        selectedAlgaeShootDtpIn.readQueue().length > 0
+            ? new boolean[] {selectedAlgaeShootDtpIn.get()}
+            : new boolean[] {};
   }
 
   private void setAllianceColor(int value) {
@@ -305,6 +334,14 @@ public class Dashboard extends CS_SubsystemBase {
 
   private void setSelectedDtp(boolean value) {
     selectedDtpOut.set(value);
+  }
+
+  private void setSelectedDeaglaefyDtp(boolean value) {
+    selectedDeaglaefyDtpOut.set(value);
+  }
+
+  private void setSelectedAlgaeShootDtp(boolean value) {
+    selectedAlgaeShootDtpOut.set(value);
   }
 
   private void setMatchTime(double value) {
@@ -342,6 +379,8 @@ public class Dashboard extends CS_SubsystemBase {
     setSelectedAlgaeFace(UIConstants.defaultAlgaeFace.getValue());
     setSelectedPickupSide(UIConstants.defaultPickupSide.getValue());
     setSelectedDtp(UIConstants.defaultDTP.getValue());
+    setSelectedDeaglaefyDtp(UIConstants.defaultDealgaefyDTP.getValue());
+    setSelectedAlgaeShootDtp(UIConstants.defaultAlgaeShootDTP.getValue());
     setResetCoralBranch(false);
     setResetAlgaeFace(false);
     setMatchTime(0);
@@ -373,6 +412,18 @@ public class Dashboard extends CS_SubsystemBase {
 
   public static DTP getSelectedDtp() {
     return inputs.selectedDtp.length > 0 ? DTP.getByValue(inputs.selectedDtp[0]) : null;
+  }
+
+  public static DTP getSelectedDeaglaefyDtp() {
+    return inputs.selectedDealgaefyDtp.length > 0
+        ? DTP.getByValue(inputs.selectedDealgaefyDtp[0])
+        : null;
+  }
+
+  public static DTP getSelectedAlgaeShootDtp() {
+    return inputs.selectedAlgaeShootDtp.length > 0
+        ? DTP.getByValue(inputs.selectedAlgaeShootDtp[0])
+        : null;
   }
 
   @Override
