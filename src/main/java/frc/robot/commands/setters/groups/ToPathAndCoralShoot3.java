@@ -20,7 +20,7 @@ public class ToPathAndCoralShoot3 extends SequentialCommandGroup {
 
     addCommands(
         new ConditionalCommand(
-            new DriveToPoseFinkle(poseSupplier, true),
+            new DriveToPoseFinkle(poseSupplier),
             new InstantCommand(),
             () -> PresetManager.usingDtp()),
         new ToCoralShoot3());
