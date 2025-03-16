@@ -9,12 +9,12 @@ import frc.robot.commands.setters.units.DriveToPoseFinkle;
 import frc.robot.subsystems.presets.PresetManager;
 import java.util.function.Supplier;
 
-public class Auto_L extends SequentialCommandGroup {
+public class Auto_E extends SequentialCommandGroup {
 
   private Supplier<Pose2d> poseSupplier;
 
-  public Auto_L() {
-    poseSupplier = () -> PresetManager.getRobotPoseFromTarget(CoralBranch.L, CoralLevel.L4, 0);
+  public Auto_E() {
+    poseSupplier = () -> PresetManager.getRobotPoseFromTarget(CoralBranch.E, CoralLevel.L4, 0);
     addCommands(new DriveToPoseFinkle(poseSupplier), new ToCoralShoot3());
   }
 }

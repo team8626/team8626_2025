@@ -14,9 +14,7 @@ public class Auto_G extends SequentialCommandGroup {
   private Supplier<Pose2d> poseSupplier;
 
   public Auto_G() {
-    System.out.printf("[Cmd: %s] Loaded\n", this.getName().toUpperCase());
     poseSupplier = () -> PresetManager.getRobotPoseFromTarget(CoralBranch.G, CoralLevel.L4, 0);
-
-    addCommands(new DriveToPoseFinkle(poseSupplier, true), new ToCoralShoot3());
+    addCommands(new DriveToPoseFinkle(poseSupplier), new ToCoralShoot3());
   }
 }
