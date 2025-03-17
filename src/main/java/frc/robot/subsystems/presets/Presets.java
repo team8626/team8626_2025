@@ -40,10 +40,10 @@ public class Presets {
 
   public static final AlgaePreset ALGAE_STOW = new AlgaePreset("STOW", 8, 75, 0);
 
-  public static final CoralPreset CORAL_L1 = new CoralPreset("L1", 700, 800);
+  public static final CoralPreset CORAL_L1 = new CoralPreset("L1", 900, 1000);
   public static final CoralPreset CORAL_L2 = new CoralPreset("L2", 900, 1000);
   public static final CoralPreset CORAL_L3 = new CoralPreset("L3", 550, 1335);
-  public static final CoralPreset CORAL_L4 = new CoralPreset("L4", 1250, 1250);
+  public static final CoralPreset CORAL_L4 = new CoralPreset("L4", 1275, 1275);
 
   public static final Pose2d Test3Pose =
       new Pose2d(7, 5, new Rotation2d(Units.degreesToRadians(37)));
