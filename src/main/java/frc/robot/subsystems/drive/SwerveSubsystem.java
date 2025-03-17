@@ -19,6 +19,7 @@ import com.pathplanner.lib.util.swerve.SwerveSetpoint;
 import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -31,9 +32,12 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
+import frc.robot.OperatorConstants;
 import frc.robot.subsystems.CS_SubsystemBase;
 import frc.robot.subsystems.drive.Vision.Cameras;
+import frc.utils.CS_XboxController;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
@@ -43,6 +47,7 @@ import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 import org.json.simple.parser.ParseException;
+import org.littletonrobotics.frc2025.util.AllianceFlipUtil;
 import org.photonvision.targeting.PhotonPipelineResult;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
@@ -65,6 +70,8 @@ public class SwerveSubsystem extends CS_SubsystemBase {
   private final boolean visionDriveTest = true;
   /** PhotonVision class to keep an accurate odometry. */
   private Vision vision;
+
+  private boolean isFlipped = false;
 
   /**
    * Initialize {@link SwerveDrive} with the directory provided.
@@ -108,6 +115,7 @@ public class SwerveSubsystem extends CS_SubsystemBase {
       swerveDrive.stopOdometryThread();
     }
     setupPathPlanner();
+    RobotModeTriggers.autonomous().onTrue(Commands.runOnce(this::zeroGyro));
   }
 
   /**
@@ -734,5 +742,103 @@ public class SwerveSubsystem extends CS_SubsystemBase {
    */
   public SwerveDrive getSwerveDrive() {
     return swerveDrive;
+  }
+
+  /**
+   * Sets the drive command for the swerve subsystem using the provided Xbox controller. The command
+   * uses the left joystick for forward/backward and strafe movements, and the right joystick for
+   * rotation.
+   *
+   * @param xboxController The Xbox controller to use for driving the robot.
+   */
+  public void setDefaultCommand_NOK(CS_XboxController xboxController) {
+    Command driveCommand =
+        this.CS_driveCommand(
+            () ->
+                MathUtil.applyDeadband(
+                    -xboxController.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
+            () ->
+                MathUtil.applyDeadband(
+                    -xboxController.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
+            () -> -xboxController.getRightX(),
+            () -> !xboxController.getStartButton());
+    setDefaultCommand(driveCommand);
+  }
+
+  public void setDefaultCommand(CS_XboxController xboxController) {
+    Command driveCommand =
+        this.driveCommand(
+            () ->
+                MathUtil.applyDeadband(
+                    -xboxController.getLeftY()
+                        * (AllianceFlipUtil.shouldFlip() ? -1.0 : 1.0)
+                        * (isFlipped ? -1.0 : 1.0),
+                    OperatorConstants.LEFT_Y_DEADBAND),
+            () ->
+                MathUtil.applyDeadband(
+                    -xboxController.getLeftX()
+                        * (AllianceFlipUtil.shouldFlip() ? -1.0 : 1.0)
+                        * (isFlipped ? -1.0 : 1.0),
+                    OperatorConstants.LEFT_X_DEADBAND),
+            () -> -xboxController.getRightX(),
+            () -> !xboxController.getStartButton());
+    setDefaultCommand(driveCommand);
+  }
+
+  public void flipToggle() {
+    isFlipped = !isFlipped;
+  }
+
+  public Command CS_driveCommand(
+      DoubleSupplier translationX,
+      DoubleSupplier translationY,
+      DoubleSupplier angularRotationX,
+      BooleanSupplier fieldRelative) {
+
+    double X =
+        translationX.getAsDouble()
+            * swerveDrive.getMaximumChassisVelocity()
+            * (AllianceFlipUtil.shouldFlip() ? -1.0 : 1.0)
+            * (isFlipped ? -1.0 : 1.0);
+
+    double Y =
+        translationY.getAsDouble()
+            * swerveDrive.getMaximumChassisVelocity()
+            * (AllianceFlipUtil.shouldFlip() ? -1.0 : 1.0)
+            * (isFlipped ? -1.0 : 1.0);
+    double theta =
+        Math.pow(angularRotationX.getAsDouble(), 3)
+            * swerveDrive.getMaximumChassisAngularVelocity();
+
+    return run(
+        () -> {
+          // Make the robot move
+          swerveDrive.drive(
+              SwerveMath.scaleTranslation(new Translation2d(X, Y), 0.8),
+              theta,
+              fieldRelative.getAsBoolean(),
+              false);
+        });
+  }
+
+  public Command yadriveCommand(
+      DoubleSupplier translationX,
+      DoubleSupplier translationY,
+      DoubleSupplier angularRotationX,
+      BooleanSupplier fieldRelative) {
+    return run(
+        () -> {
+          // Make the robot move
+          swerveDrive.drive(
+              SwerveMath.scaleTranslation(
+                  new Translation2d(
+                      translationX.getAsDouble() * swerveDrive.getMaximumChassisVelocity(),
+                      translationY.getAsDouble() * swerveDrive.getMaximumChassisVelocity()),
+                  0.8),
+              Math.pow(angularRotationX.getAsDouble(), 3)
+                  * swerveDrive.getMaximumChassisAngularVelocity(),
+              fieldRelative.getAsBoolean(),
+              false);
+        });
   }
 }

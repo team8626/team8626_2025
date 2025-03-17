@@ -42,7 +42,7 @@ public class Visualization extends CS_SubsystemBase {
 
   @Override
   public void CS_periodic() {
-    robotPose = new Pose3d(RobotContainer.drivebase.getPose2d());
+    robotPose = new Pose3d(RobotContainer.drivebase.getPose());
 
     mastPose = RobotConstants.mastPoseOffset;
     stage2Pose =

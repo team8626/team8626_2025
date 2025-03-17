@@ -6,7 +6,6 @@ package frc.robot.commands.setters.units;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -17,13 +16,13 @@ import frc.robot.Commodore;
 import frc.robot.Commodore.CommodoreState;
 import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
-import frc.robot.subsystems.drive.CS_DriveSubsystem;
+import frc.robot.subsystems.drive.SwerveSubsystem;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
 public class DriveToPoseFinkle extends CS_Command {
 
-  private final CS_DriveSubsystem m_drive;
+  private final SwerveSubsystem m_drive;
 
   private final ProfiledPIDController m_xPID =
       new ProfiledPIDController(0, 0, 0, new TrapezoidProfile.Constraints(0, 0));
@@ -50,9 +49,9 @@ public class DriveToPoseFinkle extends CS_Command {
   private static final double defaultRotationToleranceRadians = Units.degreesToRadians(2.0);
   private static final double defaultRotationVelocityTolerance = Units.degreesToRadians(1.0);
 
-  private double defaultDriveP_X = 0.7555;
-  private double defaultDriveP_Y = 0.46;
-  private double defaultRotP = 0.6;
+  private double defaultDriveP_X = 0.75556;
+  private double defaultDriveP_Y = 0.7555;
+  private double defaultRotP = 4;
 
   private StructPublisher<Pose2d> targetPosePub =
       NetworkTableInstance.getDefault()
@@ -107,7 +106,7 @@ public class DriveToPoseFinkle extends CS_Command {
 
     if (hasValidPose == true) {
       Commodore.setCommodoreState(CommodoreState.DRIVE_FINKLE);
-      m_pose = m_drive.getPose2d();
+      m_pose = m_drive.getPose();
 
       targetPosePub.set(m_desiredPoseSupplier.get());
       currentPosePub.set(m_pose);
@@ -176,14 +175,14 @@ public class DriveToPoseFinkle extends CS_Command {
       m_xPID.reset(m_pose.getX());
       m_yPID.reset(m_pose.getY());
       m_rotPID.reset(m_pose.getRotation().getRadians());
+      m_rotPID.enableContinuousInput(-Math.PI, Math.PI);
     }
   }
 
   @Override
   public void execute() {
     if (hasValidPose) {
-
-      m_pose = m_drive.getPose2d();
+      m_pose = m_drive.getPose();
 
       targetPosePub.set(m_desiredPoseSupplier.get());
       currentPosePub.set(m_pose);
@@ -196,11 +195,18 @@ public class DriveToPoseFinkle extends CS_Command {
           "Commands/DriveToPoseFinkle/CalculateTheta",
           m_rotPID.calculate(m_pose.getRotation().getRadians(), m_desiredRotRadians));
 
-      m_drive.drive(
-          new ChassisSpeeds(
-              m_xPID.calculate(m_pose.getX(), m_xDesiredPos),
-              m_yPID.calculate(m_pose.getY(), m_yDesiredPos),
-              0)); // m_rotPID.calculate(m_pose.getRotation().getRadians(), m_desiredRotRadians)));
+      //   m_drive.drive(
+      //       new ChassisSpeeds(
+      //           m_xPID.calculate(m_pose.getX(), m_xDesiredPos),
+      //           m_yPID.calculate(m_pose.getY(), m_yDesiredPos),
+      //           m_rotPID.calculate(m_pose.getRotation().getRadians(), m_desiredRotRadians)));
+      m_drive
+          .driveCommand(
+              () -> m_xPID.calculate(m_pose.getX(), m_xDesiredPos),
+              () -> m_yPID.calculate(m_pose.getY(), m_yDesiredPos),
+              () -> m_rotPID.calculate(m_pose.getRotation().getRadians(), m_desiredRotRadians),
+              () -> true)
+          .execute();
 
       SmartDashboard.putNumber("Commands/DriveToPoseFinkle/ErrorX", m_xPID.getPositionError());
       SmartDashboard.putNumber("Commands/DriveToPoseFinkle/ErrorY", m_yPID.getPositionError());

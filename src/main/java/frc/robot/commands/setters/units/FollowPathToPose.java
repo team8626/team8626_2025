@@ -11,13 +11,13 @@ import frc.robot.Commodore;
 import frc.robot.Commodore.CommodoreState;
 import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
-import frc.robot.subsystems.drive.CS_DriveSubsystem;
+import frc.robot.subsystems.drive.SwerveSubsystem;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
 public class FollowPathToPose extends CS_Command {
   private Supplier<Pose2d> poseSupplier;
-  private CS_DriveSubsystem drivebase;
+  private SwerveSubsystem drivebase;
 
   private Pose2d targetPose;
   private PathConstraints constraints;

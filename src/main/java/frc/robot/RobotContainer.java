@@ -47,9 +47,7 @@ import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
 import frc.robot.subsystems.coralshooter.CoralShooter_Sim;
 import frc.robot.subsystems.coralshooter.CoralShooter_SparkMax;
-import frc.robot.subsystems.drive.CS_DriveSubsystem;
-import frc.robot.subsystems.drive.CS_DriveSubsystemIO_Swerve;
-import frc.robot.subsystems.drive.CS_DriveSubsystemIO_Tank;
+import frc.robot.subsystems.drive.SwerveSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.elevator.Elevator_LinearSparkMax;
 import frc.robot.subsystems.elevator.Elevator_SimulationRose;
@@ -92,7 +90,7 @@ public class RobotContainer {
   // Define subsystems and commands here
   // private final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
   // private final ExampleCommand exampleCommand = new ExampleCommand(exampleSubsystem);
-  public static CS_DriveSubsystem drivebase = null;
+  public static SwerveSubsystem drivebase = null;
   public static ElevatorSubsystem elevator = null;
   public static WristSubsystem wrist = null;
   public static CoralShooterSubsystem mortar = null;
@@ -117,21 +115,11 @@ public class RobotContainer {
     }
 
     switch (RobotConstants.robotType) {
-      case KITBOT:
-        drivebase = new CS_DriveSubsystem(new CS_DriveSubsystemIO_Tank());
-        // elevator = new ElevatorArm();
-        break;
       case DART:
-        drivebase =
-            new CS_DriveSubsystem(
-                new CS_DriveSubsystemIO_Swerve(
-                    new File(Filesystem.getDeployDirectory(), "swerve_dart")));
+        drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(), "swerve_dart"));
         break;
       case SIMBOT:
-        drivebase =
-            new CS_DriveSubsystem(
-                new CS_DriveSubsystemIO_Swerve(
-                    new File(Filesystem.getDeployDirectory(), "swerve_devbot")));
+        drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(), "swerve_devbot"));
 
         elevator = new ElevatorSubsystem(new Elevator_SimulationRose());
         wrist = new WristSubsystem(new Wrist_Sim());
@@ -142,10 +130,7 @@ public class RobotContainer {
         break;
       case COMPBOT:
       default:
-        drivebase =
-            new CS_DriveSubsystem(
-                new CS_DriveSubsystemIO_Swerve(
-                    new File(Filesystem.getDeployDirectory(), "swerve_devbot")));
+        drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(), "swerve_devbot"));
         elevator = new ElevatorSubsystem(new Elevator_LinearSparkMax());
         wrist = new WristSubsystem(new Wrist_SparkFlex());
         mortar = new CoralShooterSubsystem(new CoralShooter_SparkMax());
@@ -218,8 +203,7 @@ public class RobotContainer {
     // ---------------------------------------- Left Trigger
     //                                          Algae Shoot Preset from 10ft
     controller.btn_LeftTrigger.toggleOnTrue(
-        new ToPathAndAlgaeShoot(
-                () -> PresetManager.getBargeShootPreset(() -> drivebase.getPose2d()))
+        new ToPathAndAlgaeShoot(() -> PresetManager.getBargeShootPreset(() -> drivebase.getPose()))
             .finallyDo(
                 interrupted -> {
                   new ToSubsystemsPreset(() -> Presets.ALGAE_STOW).schedule();
@@ -304,7 +288,7 @@ public class RobotContainer {
   private void configureButtonBoxBindings(CS_ButtonBoxController controller) {
 
     controller.btn_1.toggleOnTrue(
-        new FollowPathToPose(() -> PresetManager.getCoralPreset().getPose(), () -> 12, () -> 1)
+        new FollowPathToPose(() -> PresetManager.getCoralPreset().getPose(), () -> 36, () -> 1)
             .andThen(new DriveToPoseFinkle(() -> PresetManager.getCoralPreset().getPose()))
             .andThen(new ToCoralShoot3()));
 
@@ -315,7 +299,7 @@ public class RobotContainer {
         new DriveToPoseFinkle(() -> PresetManager.getCoralPreset().getPose())
             .andThen(new ToCoralShoot3()));
 
-    Pose2d testPose = new Pose2d(3, 2, new Rotation2d(Units.degreesToRadians(120)));
+    Pose2d testPose = new Pose2d(3, 2, new Rotation2d(Units.degreesToRadians(-120)));
     controller.btn_9.toggleOnTrue(new DriveToPoseFinkle(() -> testPose));
 
     // controller.btn_2.toggleOnTrue(

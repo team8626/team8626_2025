@@ -9,7 +9,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
-import frc.robot.subsystems.drive.CS_DriveSubsystem;
+import frc.robot.subsystems.drive.SwerveSubsystem;
 import java.util.function.Supplier;
 
 /**
@@ -18,7 +18,7 @@ import java.util.function.Supplier;
 @Deprecated
 public class DriveRotateToAngle extends CS_Command {
   private Supplier<Pose2d> poseSupplier;
-  private CS_DriveSubsystem drivebase;
+  private SwerveSubsystem drivebase;
 
   private static final double POSITION_TOLERANCE_DEGREES = 2.0;
   private static final double VELOCITY_TOLERANCE_DEG_PER_SEC = 2.0;
@@ -71,7 +71,7 @@ public class DriveRotateToAngle extends CS_Command {
 
   @Override
   public void execute() {
-    currentRotation = drivebase.getPose2d().getRotation();
+    currentRotation = drivebase.getPose().getRotation();
     errorDegrees = currentRotation.getDegrees() - desiredRotation.getDegrees();
 
     drivebase.drive(
