@@ -5,6 +5,7 @@
 package frc.robot.subsystems.drive;
 
 import static edu.wpi.first.units.Units.Meter;
+import static edu.wpi.first.units.Units.MetersPerSecond;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -22,19 +23,24 @@ import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.OperatorConstants;
+import frc.robot.RobotConstants;
 import frc.robot.subsystems.CS_SubsystemBase;
 import frc.robot.subsystems.drive.Vision.Cameras;
 import frc.utils.CS_XboxController;
@@ -72,6 +78,10 @@ public class SwerveSubsystem extends CS_SubsystemBase {
   private Vision vision;
 
   private boolean isFlipped = false;
+  StructPublisher<Pose3d> robotPosePub =
+      NetworkTableInstance.getDefault()
+          .getStructTopic("SmartDashboard/Subsystem/Drive/RobotPose", Pose3d.struct)
+          .publish();
 
   /**
    * Initialize {@link SwerveDrive} with the directory provided.
@@ -86,7 +96,7 @@ public class SwerveSubsystem extends CS_SubsystemBase {
       swerveDrive =
           new SwerveParser(directory)
               .createSwerveDrive(
-                  Constants.MAX_SPEED,
+                  RobotConstants.MAX_LINEAR_VELOCITY.in(MetersPerSecond),
                   new Pose2d(
                       new Translation2d(Meter.of(1), Meter.of(4)), Rotation2d.fromDegrees(0)));
       // Alternative method if you don't want to supply the conversion factor via JSON files.
@@ -130,7 +140,7 @@ public class SwerveSubsystem extends CS_SubsystemBase {
         new SwerveDrive(
             driveCfg,
             controllerCfg,
-            Constants.MAX_SPEED,
+            RobotConstants.MAX_LINEAR_VELOCITY.in(MetersPerSecond),
             new Pose2d(new Translation2d(Meter.of(2), Meter.of(0)), Rotation2d.fromDegrees(0)));
   }
 
@@ -656,7 +666,7 @@ public class SwerveSubsystem extends CS_SubsystemBase {
         headingX,
         headingY,
         getHeading().getRadians(),
-        Constants.MAX_SPEED);
+        RobotConstants.MAX_LINEAR_VELOCITY.in(MetersPerSecond));
   }
 
   /**
@@ -676,7 +686,7 @@ public class SwerveSubsystem extends CS_SubsystemBase {
         scaledInputs.getY(),
         angle.getRadians(),
         getHeading().getRadians(),
-        Constants.MAX_SPEED);
+        RobotConstants.MAX_LINEAR_VELOCITY.in(MetersPerSecond));
   }
 
   /**
@@ -744,27 +754,6 @@ public class SwerveSubsystem extends CS_SubsystemBase {
     return swerveDrive;
   }
 
-  /**
-   * Sets the drive command for the swerve subsystem using the provided Xbox controller. The command
-   * uses the left joystick for forward/backward and strafe movements, and the right joystick for
-   * rotation.
-   *
-   * @param xboxController The Xbox controller to use for driving the robot.
-   */
-  public void setDefaultCommand_NOK(CS_XboxController xboxController) {
-    Command driveCommand =
-        this.CS_driveCommand(
-            () ->
-                MathUtil.applyDeadband(
-                    -xboxController.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
-            () ->
-                MathUtil.applyDeadband(
-                    -xboxController.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
-            () -> -xboxController.getRightX(),
-            () -> !xboxController.getStartButton());
-    setDefaultCommand(driveCommand);
-  }
-
   public void setDefaultCommand(CS_XboxController xboxController) {
     Command driveCommand =
         this.driveCommand(
@@ -789,56 +778,14 @@ public class SwerveSubsystem extends CS_SubsystemBase {
     isFlipped = !isFlipped;
   }
 
-  public Command CS_driveCommand(
-      DoubleSupplier translationX,
-      DoubleSupplier translationY,
-      DoubleSupplier angularRotationX,
-      BooleanSupplier fieldRelative) {
-
-    double X =
-        translationX.getAsDouble()
-            * swerveDrive.getMaximumChassisVelocity()
-            * (AllianceFlipUtil.shouldFlip() ? -1.0 : 1.0)
-            * (isFlipped ? -1.0 : 1.0);
-
-    double Y =
-        translationY.getAsDouble()
-            * swerveDrive.getMaximumChassisVelocity()
-            * (AllianceFlipUtil.shouldFlip() ? -1.0 : 1.0)
-            * (isFlipped ? -1.0 : 1.0);
-    double theta =
-        Math.pow(angularRotationX.getAsDouble(), 3)
-            * swerveDrive.getMaximumChassisAngularVelocity();
-
-    return run(
-        () -> {
-          // Make the robot move
-          swerveDrive.drive(
-              SwerveMath.scaleTranslation(new Translation2d(X, Y), 0.8),
-              theta,
-              fieldRelative.getAsBoolean(),
-              false);
-        });
-  }
-
-  public Command yadriveCommand(
-      DoubleSupplier translationX,
-      DoubleSupplier translationY,
-      DoubleSupplier angularRotationX,
-      BooleanSupplier fieldRelative) {
-    return run(
-        () -> {
-          // Make the robot move
-          swerveDrive.drive(
-              SwerveMath.scaleTranslation(
-                  new Translation2d(
-                      translationX.getAsDouble() * swerveDrive.getMaximumChassisVelocity(),
-                      translationY.getAsDouble() * swerveDrive.getMaximumChassisVelocity()),
-                  0.8),
-              Math.pow(angularRotationX.getAsDouble(), 3)
-                  * swerveDrive.getMaximumChassisAngularVelocity(),
-              fieldRelative.getAsBoolean(),
-              false);
-        });
+  /**
+   * Method to initialize the Dashboard. This method is called once by the {@link
+   * #CS_SubsystemBase()} constructor.
+   */
+  public void updateDashboard() {
+    SmartDashboard.putNumber("Subsystem/Drive/Heading", getHeading().getDegrees());
+    SmartDashboard.putNumber("Subsystem/Drive/Pitch", getPitch().getDegrees());
+    SmartDashboard.putBoolean("Subsystem/Drive/IsFlipped", isFlipped);
+    robotPosePub.set(new Pose3d(getPose()));
   }
 }

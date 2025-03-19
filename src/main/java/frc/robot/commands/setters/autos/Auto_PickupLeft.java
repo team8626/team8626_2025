@@ -2,7 +2,7 @@ package frc.robot.commands.setters.autos;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.RobotConstants.UIConstants.PICKUP_SIDE;
+import frc.robot.UIConstants.PICKUP_SIDE;
 import frc.robot.commands.setters.groups.ToCoralIntake;
 import frc.robot.commands.setters.units.DriveToPoseFinkle;
 import frc.robot.subsystems.presets.PresetManager;
