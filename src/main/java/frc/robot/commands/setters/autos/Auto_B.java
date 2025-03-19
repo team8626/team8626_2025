@@ -2,8 +2,8 @@ package frc.robot.commands.setters.autos;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.RobotConstants.UIConstants.CoralBranch;
-import frc.robot.RobotConstants.UIConstants.CoralLevel;
+import frc.robot.RobotConstants.UIConstants.CORAL_BRANCH;
+import frc.robot.RobotConstants.UIConstants.CORAL_LEVEL;
 import frc.robot.commands.setters.groups.ToCoralShoot3;
 import frc.robot.commands.setters.units.DriveToPoseFinkle;
 import frc.robot.subsystems.presets.PresetManager;
@@ -14,7 +14,7 @@ public class Auto_B extends SequentialCommandGroup {
   private Supplier<Pose2d> poseSupplier;
 
   public Auto_B() {
-    poseSupplier = () -> PresetManager.getRobotPoseFromTarget(CoralBranch.B, CoralLevel.L4, 0);
+    poseSupplier = () -> PresetManager.getRobotPoseFromTarget(CORAL_BRANCH.B, CORAL_LEVEL.L4, 0);
     addCommands(new DriveToPoseFinkle(poseSupplier), new ToCoralShoot3());
   }
 }
