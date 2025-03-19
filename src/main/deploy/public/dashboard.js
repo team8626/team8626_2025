@@ -29,7 +29,14 @@ const resetAlgaeFaceTopicName = "resetAlgaeFace";
 
 const algaeShootTimeTopicName = "algaeLastShootTime";
 const coralShootTimeTopicName = "coralLastShootTime";
-const autoPathTopicName = "/SmartDashboard/Auto Path";
+// const autoPathTopicName = "/SmartDashboard/Autos/Pathplanner Trajectory";
+const autoPathOptionsTopicName = "/SmartDashboard/Autos/Pathplanner Trajectory/options";
+const autoPathDefaultTopicName = "/SmartDashboard/Autos/Pathplanner Trajectory/default";
+const autoPathSelectedTopicName = "/SmartDashboard/Autos/Pathplanner Trajectory/selected";
+// const autoModeTopicName = "/SmartDashboard/Autos/Autonomous Mode";
+const autoModeOptionsTopicName = "/SmartDashboard/Autos/Autonomous Mode/options";
+const autoModeDefaultTopicName = "/SmartDashboard/Autos/Autonomous Mode/default";
+const autoModeSelectedTopicName = "/SmartDashboard/Autos/Autonomous Mode/selected";
 
 // ***** STATE CACHE *****
 let allianceColor = 0; // int (0 = Unknown, 1 = Red, 2 Blue)
@@ -47,7 +54,9 @@ let algaeStatus = "---"; // string
 let coralStatus = "---"; // string
 let algaeShootTime = 0; // double (ms)
 let coralShootTime = 0; // double (ms)
-let isConnectionActive = false;
+let isConnectionSelected = false;
+let selectedAutoMode = "";
+let selectedPath = "";
 
 const ntClient = new NT4_Client(
   window.location.hostname,
@@ -120,10 +129,43 @@ const ntClient = new NT4_Client(
       updateCoralShootTime(coralShootTime);
       updateCoralBranchValue(0, true);
       console.log("Rx Coral shoot time: " + coralShootTime);
-    } else if (topic.name === autoPathTopicName) {
-      console.log("Rx Auto Path: " + value);
-      alert("Auto Path: " + value);
-    } else if (topic.name === toDashboardPrefix + resetCoralBranchTopicName) {
+    } 
+    
+    // else if (topic.name === autoModeTopicName) {
+    //   console.log("Rx Auto Mode: " + value);
+    //   alert("Auto Path: " + value);
+    // } 
+    else if (topic.name === autoModeOptionsTopicName) {
+      console.log("Rx Auto Mode Options: " + value);
+      updateAutoMode(value);
+    } else if (topic.name === autoModeDefaultTopicName) {
+      console.log("Rx Auto Mode Default: " + value);
+      selectedAutoMode = value;
+      updateAutoModeSelected(value);
+    } else if (topic.name === autoModeSelectedTopicName) {
+      console.log("Rx Auto Mode Selected: " + value);
+      selectedAutoMode = value;
+      updateAutoModeSelected(value);
+    } 
+    // else if (topic.name === autoPathTopicName) {
+    //   console.log("Rx Auto Path: " + value);
+    //   alert("Auto Path: " + value);
+    // } 
+    
+    else if (topic.name === autoPathOptionsTopicName) {
+      console.log("Rx Auto Path Options: " + value);
+      updatePaths(value);
+    } else if (topic.name === autoPathDefaultTopicName) {
+      console.log("Rx Auto Path Default: " + value);
+      selectedPath = value;
+      updatePathsSelected(value);
+    } else if (topic.name === autoPathSelectedTopicName) {
+      console.log("Rx Auto Path Selected: " + value);
+      selectedPath = value;
+      updatePathsSelected(value);
+    } 
+
+    else if (topic.name === toDashboardPrefix + resetCoralBranchTopicName) {
       console.log("Rx Reset Coral Branch (" + value + ")");
       updateCoralBranchValue(0, true, value);
     } else if (topic.name === toDashboardPrefix + resetAlgaeFaceTopicName) {
@@ -137,16 +179,16 @@ const ntClient = new NT4_Client(
   },
   () => {
     // Connected
-    if(!isConnectionActive) {
+    if(!isConnectionSelected) {
       $("body").css("background-color", "#111529");
-      isConnectionActive = true;
+      isConnectionSelected = true;
     }
   },
   () => {
     // Disconnected
-    if(isConnectionActive) {
+    if(isConnectionSelected) {
       $("body").css("background-color", "red"); 
-      isConnectionActive = false;
+      isConnectionSelected = false;
     }
   }
 );
@@ -172,7 +214,14 @@ window.addEventListener("load", () => {
       toDashboardPrefix + coralShootTimeTopicName,
       toDashboardPrefix + resetAlgaeFaceTopicName,
       toDashboardPrefix + resetCoralBranchTopicName,
-      autoPathTopicName
+      // autoPathTopicName,
+      autoPathOptionsTopicName,
+      autoPathDefaultTopicName,
+      autoPathSelectedTopicName,
+      // autoModeTopicName,
+      autoModeOptionsTopicName,
+      autoModeDefaultTopicName,
+      autoModeSelectedTopicName,
     ],
     false,
     true,
@@ -186,6 +235,8 @@ window.addEventListener("load", () => {
   ntClient.publishTopic(toRobotPrefix + selectedDtpTopicName, "boolean");
   ntClient.publishTopic(toRobotPrefix + selectedDealgaefyDtpTopicName, "boolean");
   ntClient.publishTopic(toRobotPrefix + selectedAlgaeShootDtpTopicName, "boolean");
+  ntClient.publishTopic(autoModeSelectedTopicName, "string");
+  ntClient.publishTopic(autoPathSelectedTopicName, "string");
   ntClient.connect();
 });
 
@@ -462,6 +513,66 @@ function udateAlliance(newValue) {
   }
 }
 
+  // Predefined default value
+  // const defaultAutoMode = "Auto Mode C";
+
+  function updateAutoMode(newAutoModes) {
+    // Populate the dropdown
+    const $selectAutoMode = $("#selectautomode");
+    newAutoModes.forEach((mode) => {
+      const isSelected = mode === selectedAutoMode ? "selected" : "";
+      $selectAutoMode.append(`<option value="${mode}" ${isSelected}>${mode}</option>`);
+  });
+
+    // Optional: Log the selected value when it changes
+    $selectAutoMode.on("change", function () {
+        console.log("Selected Auto Mode:", $(this).val());
+        sendStringAbsoluteTopicToRobot(autoModeSelectedTopicName, $(this).val());
+
+    });
+  }
+
+  function updateAutoModeSelected(newAutoModeDefault) {
+    const $selectAutoMode = $("#selectautomode");
+
+    // Check if the new value exists in the dropdown options
+    if ($selectAutoMode.find(`option[value="${newAutoModeDefault}"]`).length > 0) {
+        // Set the new value as selected
+        $selectAutoMode.val(newAutoModeDefault).change(); // Trigger change event if needed
+        console.log(`Updated default auto mode to: ${newAutoModeDefault}`);
+    } else {
+        console.error(`Value "${newAutoModeDefault}" not found in #selectautomode options.`);
+    }
+  }
+
+  function updatePaths(newPaths) {
+    // Populate the dropdown
+    const $selectPath = $("#selectautopath");
+    newPaths.forEach((mode) => {
+      const isSelected = mode === selectedPath ? "selected" : "";
+      $selectPath.append(`<option value="${mode}" ${isSelected}>${mode}</option>`);
+  });
+
+    // Optional: Log the selected value when it changes
+    $selectPath.on("change", function () {
+        console.log("Selected Path:", $(this).val());
+        sendStringAbsoluteTopicToRobot(autoPathSelectedTopicName, $(this).val());
+    });
+  }
+
+  function updatePathsSelected(newPath) {
+    const $selectPath = $("#selectautopath");
+
+    // Check if the new value exists in the dropdown options
+    if ($selectPath.find(`option[value="${newPath}"]`).length > 0) {
+        // Set the new value as selected
+        $selectPath.val(newPath).change(); // Trigger change event if needed
+        console.log(`Updated default path to: ${newPath}`);
+    } else {
+        console.error(`Value "${newPath}" not found in #selectautopath options.`);
+    }
+  }
+
 /**
  * Send an integer value to the robot
  * @param {*} topic 
@@ -499,7 +610,33 @@ function sendBooleanToRobot(topic, value) {
   }
 }
 
+/**
+ * Send a boolean value to the robot
+ * @param {*} topic 
+ * @param {*} value 
+ */
+function sendStringToRobot(topic, value) {  
+  if (typeof ntClient !== 'undefined' && ntClient.addSample) {
+    ntClient.addSample(toRobotPrefix + topic, value);
+    console.log("Sending to robot: ", toRobotPrefix + topic, value);
+  } else {
+    console.error("ntClient or ntClient.addSample is not defined");
+  }
+}
 
+/**
+ * Send a boolean value to the robot
+ * @param {*} topic 
+ * @param {*} value 
+ */
+function sendStringAbsoluteTopicToRobot(topic, value) {  
+  if (typeof ntClient !== 'undefined' && ntClient.addSample) {
+    ntClient.addSample(topic, value);
+    console.log("Sending to robot: ", topic, value);
+  } else {
+    console.error("ntClient or ntClient.addSample is not defined");
+  }
+}
 // Bind UI buttons
 $(document).ready(function () {
   // When any radio button in the drivetopose group is clicked

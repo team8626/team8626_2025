@@ -29,17 +29,21 @@
   <body>
     <div class="container-fluid text-center full-screen-container">
         <!-- First Row -->
-        <!-- <div class="row">
+        <div class="row">
             <div class="col-md-4">
-                <h2>General Status</h2>
+                <h2>Autonomous Mode</h2>
+                <select class="form-select" id="selectautomode">
+                </select>              
             </div>
             <div class="col-md-4">
-                <h2>AutoChooser</h2>
+                <h2>Trajectory</h2>
+                <select class="form-select" id="selectautopath">
+                  </select>
             </div>
             <div class="col-md-4">
-                <h2>Commodore States</h2>
+                <h2>---</h2>
             </div>
-        </div> -->
+        </div>
 
         <!-- Second Row -->
         <div class="row equal-height">
@@ -47,7 +51,7 @@
             <div class="col-md-3">
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-12">
+                        <div class="col-12 mb-4">
                             <h2>Coral Level</h2>
                             <form id="coralLevelForm" class="btn-group-vertical">
                             <input type="radio" class="btn-check" name="corallevel" id="corallevel_4" value="4" autocomplete="off" checked>
@@ -64,20 +68,9 @@
                             </form>
                         </div>
                     </div>
-                    <!-- <div class="row">
-                        <div class="col-12">
-                            <h2>Pickup Side</h2>
-                            <form id="intakeSideForm">
-                            <input type="radio" class="btn-check" name="intakeside" id="intakeside_1" value="1" autocomplete="off">
-                            <label class="btn btn-secondary" for="intakeside_1">LEFT</label>
 
-                            <input type="radio" class="btn-check" name="intakeside" id="intakeside_2" value="2" autocomplete="off">
-                            <label class="btn btn-secondary" for="intakeside_2">RIGHT</label>
-                            </form>
-                        </div>
-                    </div> -->
                     <div class="row">
-                        <div class="col-12 mb-4">
+                        <!-- <div class="col-12 mb-4">
                             <h2>Coral Shoot DTP</h2>
                             <form id="drivetoposeForm">
                             <input type="radio" class="btn-check" name="drivetopose" id="drivetopose_false" value="false" autocomplete="off">
@@ -86,15 +79,15 @@
                             <input type="radio" class="btn-check" name="drivetopose" id="drivetopose_true" value="true" autocomplete="off">
                             <label class="btn btn-secondary" for="drivetopose_true">ON</label>
                             </form>
-                        </div>
+                        </div> -->
                         <div class="col-12 mb-4">
                             <h2>DeAlgefy DTP</h2>
-                            <form id="dealgefydrivetoposeForm">
-                            <input type="radio" class="btn-check" name="dealgefydrivetopose" id="dealgefydrivetopose_false" value="false" autocomplete="off">
-                            <label class="btn btn-secondary" for="dealgefydrivetopose_false">OFF</label>
+                            <form id="dealgaefydrivetoposeForm">
+                            <input type="radio" class="btn-check" name="dealgaefydrivetopose" id="dealgaefydrivetopose_false" value="false" autocomplete="off">
+                            <label class="btn btn-secondary" for="dealgaefydrivetopose_false">OFF</label>
 
-                            <input type="radio" class="btn-check" name="dealgefydrivetopose" id="dealgefydrivetopose_true" value="true" autocomplete="off">
-                            <label class="btn btn-secondary" for="dealgefydrivetopose_true">ON</label>
+                            <input type="radio" class="btn-check" name="dealgaefydrivetopose" id="dealgaefydrivetopose_true" value="true" autocomplete="off">
+                            <label class="btn btn-secondary" for="dealgaefydrivetopose_true">ON</label>
                             </form>
                         </div>
                         <div class="col-12 mb-4">
@@ -136,7 +129,7 @@
                         </div>
             
                         <!-- Algae Box -->
-                        <div class="col-12 w-100">
+                        <div class="col-12 mb-4 w-100">
                             <div id="algae-box" class="status-box algae-box">
                                 <h3>ALGAE</h3>
                                 <div class="row">
@@ -154,7 +147,7 @@
                         </div>
             
                         <!-- Coral Box -->
-                        <div class="col-12 w-100">
+                        <div class="col-12 mb-4 w-100">
                             <div id="coral-box" class="status-box coral-box">
                                 <h3>CORAL</h3>
                                 <div class="row">
@@ -170,6 +163,20 @@
                                 <p>Shoot in: <span id="coral-shoot-time">0</span>ms</p>
                             </div>
                         </div>
+
+                        <div class="row">
+                            <div class="col-12 mb4 w-100">
+                                <h2>Pickup Side</h2>
+                                <form id="intakeSideForm">
+                                <input type="radio" class="btn-check" name="intakeside" id="intakeside_1" value="1" autocomplete="off">
+                                <label class="btn btn-secondary" for="intakeside_1">LEFT</label>
+    
+                                <input type="radio" class="btn-check" name="intakeside" id="intakeside_2" value="2" autocomplete="off">
+                                <label class="btn btn-secondary" for="intakeside_2">RIGHT</label>
+                                </form>
+                            </div>
+                        </div>
+
                     </div>  
                 </div>
             </div>
