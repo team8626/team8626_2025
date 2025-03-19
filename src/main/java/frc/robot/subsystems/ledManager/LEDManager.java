@@ -94,6 +94,12 @@ public class LEDManager extends CS_SubsystemBase {
         wave(currentColor).applyTo(m_right);
         break;
 
+      case SUBSYSTEMS_ADJUST:
+        currentColor = getAllianceColor();
+        flash(currentColor).applyTo(m_left);
+        flash(currentColor).applyTo(m_right);
+        break;
+
       case DRIVE_AUTO:
         rainbow().applyTo(m_left);
         rainbow().applyTo(m_right);

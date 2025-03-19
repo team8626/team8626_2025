@@ -41,20 +41,23 @@ public class Commodore extends CS_SubsystemBase {
     UNKNOWN,
     TRANSITION,
 
-    CORAL_SHOOT,
-    CORAL_SHOOT_RAMPINGUP,
-    CORAL_SHOOT_LAUNCHING,
-    CORAL_INTAKE,
+    // CORAL_SHOOT,
+    // CORAL_SHOOT_RAMPINGUP,
+    // CORAL_SHOOT_LAUNCHING,
+    // CORAL_INTAKE,
+    // CORAL_LOADED,
 
-    ALGAE_SHOOT_SETTINGSUBSYSTEMS,
-    ALGAE_SHOOT,
-    ALGAE_SHOOT_RAMPINGUP,
-    ALGAE_SHOOT_LAUNCHING,
-    ALGAE_INTAKE,
-    ALGAE_LOADED,
+    // ALGAE_SHOOT_SETTINGSUBSYSTEMS,
+    // ALGAE_SHOOT,
+    // ALGAE_SHOOT_RAMPINGUP,
+    // ALGAE_SHOOT_LAUNCHING,
+    // ALGAE_INTAKE,
+    // ALGAE_LOADED,
 
     DRIVE_AUTO,
     DRIVE_FINKLE,
+
+    SUBSYSTEMS_ADJUST,
 
     ELEVATOR_ZEROING,
 
@@ -111,23 +114,23 @@ public class Commodore extends CS_SubsystemBase {
             "Setting State: Requested: %s%s, Current %s\n",
             newState.toString(), override ? "(OVERRIDE)" : "", currentState.toString());
 
-    // If we are in a TOGGLE state
-    if (isToggleState == true) {
-      // If we are in the same state and it's a toggle, go back to IDLE
-      if ((currentState == newState)
-          // If we are in a CORAL_SHOOT_* state, we can toggle to IDLE
-          || ((newState == CommodoreState.CORAL_SHOOT)
-              && ((currentState == CommodoreState.CORAL_SHOOT_LAUNCHING)
-                  || (currentState == CommodoreState.CORAL_SHOOT_RAMPINGUP)))
-          // If we are in a ALGAE_SHOOT* state, we can toggle to IDLE
-          || ((newState == CommodoreState.ALGAE_SHOOT)
-              && ((currentState == CommodoreState.ALGAE_SHOOT_LAUNCHING)
-                  || (currentState == CommodoreState.ALGAE_SHOOT_RAMPINGUP)))) {
-        newState = CommodoreState.IDLE;
-        override = true;
-        isToggleState = false;
-      }
-    }
+    // // If we are in a TOGGLE state
+    // if (isToggleState == true) {
+    //   // If we are in the same state and it's a toggle, go back to IDLE
+    //   if ((currentState == newState)
+    //       // If we are in a CORAL_SHOOT_* state, we can toggle to IDLE
+    //       || ((newState == CommodoreState.CORAL_SHOOT)
+    //           && ((currentState == CommodoreState.CORAL_SHOOT_LAUNCHING)
+    //               || (currentState == CommodoreState.CORAL_SHOOT_RAMPINGUP)))
+    //       // If we are in a ALGAE_SHOOT* state, we can toggle to IDLE
+    //       || ((newState == CommodoreState.ALGAE_SHOOT)
+    //           && ((currentState == CommodoreState.ALGAE_SHOOT_LAUNCHING)
+    //               || (currentState == CommodoreState.ALGAE_SHOOT_RAMPINGUP)))) {
+    //     newState = CommodoreState.IDLE;
+    //     override = true;
+    //     isToggleState = false;
+    //   }
+    // }
 
     // Reset the toggle state
     isToggleState = false;
@@ -161,12 +164,20 @@ public class Commodore extends CS_SubsystemBase {
 
           // Those cases are for launching commands
           // State will go to TRANSITION and then the command will update the state
-        case CORAL_SHOOT:
-        case CORAL_INTAKE:
-        case ALGAE_SHOOT:
-        case ALGAE_INTAKE:
-          applyState(newState);
-          break;
+          // case CORAL_SHOOT:
+          // case CORAL_INTAKE:
+          // case CORAL_SHOOT_RAMPINGUP:
+          // case CORAL_SHOOT_LAUNCHING:
+          // case CORAL_LOADED:
+
+          // case ALGAE_SHOOT_SETTINGSUBSYSTEMS:
+          // case ALGAE_SHOOT:
+          // case ALGAE_INTAKE:
+          // case ALGAE_SHOOT_RAMPINGUP:
+          // case ALGAE_SHOOT_LAUNCHING:
+          // case ALGAE_LOADED:
+          //   applyState(newState);
+          //   break;
 
           // Tuning States
         case TUNE_CORALSHOOTER:
@@ -174,6 +185,7 @@ public class Commodore extends CS_SubsystemBase {
           applyState(newState);
           break;
 
+        case SUBSYSTEMS_ADJUST:
         case DRIVE_AUTO:
         case DRIVE_FINKLE:
           applyState(newState);
@@ -186,9 +198,7 @@ public class Commodore extends CS_SubsystemBase {
                   "########## Check your code, TRANSITION state should be overwritten by commands ##########");
           break;
         default:
-          getInstance()
-              .printf(
-                  "########## Check your code, %s not handled ##########\n", newState.toString());
+          applyState(newState);
           break;
       }
     }
