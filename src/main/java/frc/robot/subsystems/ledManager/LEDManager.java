@@ -88,6 +88,7 @@ public class LEDManager extends CS_SubsystemBase {
         breatheSlow(currentColor).applyTo(m_right);
         break;
 
+      case SUBSYSTEMS_AT_SETPOINT:
       case IDLE:
         currentColor = getAllianceColor();
         wave(currentColor).applyTo(m_left);

@@ -11,7 +11,7 @@ import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.util.Color;
 
 public class LEDConstants {
-  public static final int kLEDStripLength = 250;
+  public static final int kLEDStripLength = 247;
   public static final int kLEDPort = 1;
 
   record LEDSection(int startId, int endId) {}
@@ -28,12 +28,12 @@ public class LEDConstants {
   // public static final LEDSection kLEDSectionRight = new LEDSection(177, 239);
   // public static final LEDSection kLEDSectionStatusRight = new LEDSection(240, 245);
 
-  public static final LEDSection kLEDSectionStatusLeft = new LEDSection(63, 68);
-  public static final LEDSection kLEDSectionLeft = new LEDSection(0, 68);
-  public static final LEDSection kLEDSectionCoral = new LEDSection(69, 122);
-  public static final LEDSection kLEDSectionAlgae = new LEDSection(123, 176);
-  public static final LEDSection kLEDSectionRight = new LEDSection(177, 245);
-  public static final LEDSection kLEDSectionStatusRight = new LEDSection(177, 182);
+  public static final LEDSection kLEDSectionStatusLeft = new LEDSection(62, 67);
+  public static final LEDSection kLEDSectionLeft = new LEDSection(0, 67);
+  public static final LEDSection kLEDSectionCoral = new LEDSection(68, 120);
+  public static final LEDSection kLEDSectionAlgae = new LEDSection(121, 173);
+  public static final LEDSection kLEDSectionRight = new LEDSection(174, 242);
+  public static final LEDSection kLEDSectionStatusRight = new LEDSection(174, 179);
 
   public static final Distance ledSpacing = Meters.of(1.0 / 144.0); // 144 LEDs per Meter
 
