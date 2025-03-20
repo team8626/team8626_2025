@@ -137,7 +137,7 @@ public class PresetManager extends CS_SubsystemBase {
     }
 
     // Compute Distance to Target (Only using X, assuming we are facing the NET)
-    double x=0, launchVelocity=0, launchAngle=0, launchRpm=0, wristAngleDegrees=0;
+    double x = 0, launchVelocity = 0, launchAngle = 0, launchRpm = 0, wristAngleDegrees = 0;
     double wheelRadius = Units.metersToInches(AlgaeShooterConstants.wheelRadiusMeters);
 
     if (targetPose != new Pose2d()) {
@@ -148,9 +148,9 @@ public class PresetManager extends CS_SubsystemBase {
       launchVelocity = 24.1 + (x + 2) * (x + 2) / 70;
 
       launchAngle = (x - 20) * (x - 20) / 11 + 55 + x / 5;
-       launchRpm = (launchVelocity * 12) / (2 * Math.PI * wheelRadius) * 60;
+      launchRpm = (launchVelocity * 12) / (2 * Math.PI * wheelRadius) * 60;
 
-       wristAngleDegrees = 180 - launchAngle;
+      wristAngleDegrees = 180 - launchAngle;
     }
 
     SmartDashboard.putString("Subsystem/Presets/AimPreset/Side", side);
