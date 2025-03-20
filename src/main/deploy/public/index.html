@@ -28,109 +28,137 @@
 </head>
   <body>
     <div class="container-fluid text-center full-screen-container">
-        <!-- First Row -->
-        <div class="row">
-            <div class="col-md-4">
-                <h2>Autonomous Mode</h2>
-                <select class="form-select" id="selectautomode">
-                </select>              
-            </div>
-            <div class="col-md-4">
-                <h2>Trajectory</h2>
-                <select class="form-select" id="selectautopath">
-                  </select>
-            </div>
-            <div class="col-md-4">
-                <h2>---</h2>
-            </div>
-        </div>
-
-        <!-- Second Row -->
-        <div class="row equal-height">
-            <!-- Left Section: Each heading in its own row -->
-            <div class="col-md-3">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-12 mb-4">
-                            <h2>Coral Level</h2>
-                            <form id="coralLevelForm" class="btn-group-vertical">
-                            <input type="radio" class="btn-check" name="corallevel" id="corallevel_4" value="4" autocomplete="off" checked>
-                            <label class="btn btn-secondary rounded mb-2" for="corallevel_4">L4</label>
-
-                            <input type="radio" class="btn-check" name="corallevel" id="corallevel_3" value="3" autocomplete="off">
-                            <label class="btn btn-secondary rounded mb-2" for="corallevel_3">L3</label>
-
-                            <input type="radio" class="btn-check" name="corallevel" id="corallevel_2" value="2" autocomplete="off" disabled>
-                            <label class="btn btn-secondary rounded mb-2" for="corallevel_2">L2</label>
-
-                            <input type="radio" class="btn-check" name="corallevel" id="corallevel_1" value="1" autocomplete="off">
-                            <label class="btn btn-secondary rounded mb-2" for="corallevel_1">L1</label>
-                            </form>
+        <div class="row w-100">
+            <div class="col-md-10 mt-2">
+                <div class="container-fluid text-center">
+                    <div class="row w-100 mb-4 justify-content-between">
+                        <div class="col-md-6 col-12"  id="automode-wrapper">
+                            <h2>Autonomous Mode</h2>
+                            <div class="dropdown" id="automode-wrapper">
+                                <button class="btn btn-alert dropdown-toggle" type="button" id="automode" data-bs-toggle="dropdown" aria-expanded="false">
+                                </button>
+                                <ul class="dropdown-menu w-100" id="dropdown-menu-automode">
+                                </ul>                    
+                                <!-- Hidden input for Auto Mode -->
+                                <input type="hidden" id="selectedAutoMode" name="selectedAutoMode">
+                            </div>
                         </div>
+                        <div class="col-md-6 col-12" id="trajectory-wrapper">
+                            <div class="dropdown">
+                                <h2>Trajectory</h2>
+                                <button class="btn btn-alert dropdown-toggle" type="button" id="trajectory" data-bs-toggle="dropdown" aria-expanded="false">
+                                </button>
+                                <ul class="dropdown-menu w-100" id="dropdown-menu-trajectory"></ul>
+                                    <!-- Hidden input for Auto Mode -->
+                                <input type="hidden" id="selectedTrajectory" name="selectedTrajectory">
+                            </div>  
+                        </div>  
                     </div>
-
-                    <div class="row">
-                        <!-- <div class="col-12 mb-4">
-                            <h2>Coral Shoot DTP</h2>
-                            <form id="drivetoposeForm">
-                            <input type="radio" class="btn-check" name="drivetopose" id="drivetopose_false" value="false" autocomplete="off">
-                            <label class="btn btn-secondary" for="drivetopose_false">OFF</label>
-
-                            <input type="radio" class="btn-check" name="drivetopose" id="drivetopose_true" value="true" autocomplete="off">
-                            <label class="btn btn-secondary" for="drivetopose_true">ON</label>
-                            </form>
-                        </div> -->
-                        <div class="col-12 mb-4">
-                            <h2>DeAlgefy DTP</h2>
-                            <form id="dealgaefydrivetoposeForm">
-                            <input type="radio" class="btn-check" name="dealgaefydrivetopose" id="dealgaefydrivetopose_false" value="false" autocomplete="off">
-                            <label class="btn btn-secondary" for="dealgaefydrivetopose_false">OFF</label>
-
-                            <input type="radio" class="btn-check" name="dealgaefydrivetopose" id="dealgaefydrivetopose_true" value="true" autocomplete="off">
-                            <label class="btn btn-secondary" for="dealgaefydrivetopose_true">ON</label>
-                            </form>
-                        </div>
-                        <div class="col-12 mb-4">
-                            <h2>AlgaeShoot DTP</h2>
-                            <form id="algaeshootdrivetoposeForm">
-                            <input type="radio" class="btn-check" name="algaeshootdrivetopose" id="algaeshootdrivetopose_false" value="false" autocomplete="off">
-                            <label class="btn btn-secondary" for="algaeshootdrivetopose_false">OFF</label>
-
-                            <input type="radio" class="btn-check" name="algaeshootdrivetopose" id="algaeshootdrivetopose_true" value="true" autocomplete="off">
-                            <label class="btn btn-secondary" for="algaeshootdrivetopose_true">ON</label>
-                            </form>
-                        </div>
-
-                    </div>
-                </div>  
-            </div>
-
-            <!-- Ensure the Reef container takes full height -->
-            <div class="col-md-6 d-flex align-items-center justify-content-center reef_container h-100">
-
-                <div class="position-relative hexagon-container">
-                    <div class="hexagon-outline"></div>
-                    <div class="hexagon-line"></div>
-                    <div class="hexagon-line" style="transform: translateX(-50%)  rotate(60deg);"></div>
-                    <div class="hexagon-line" style="transform: translateX(-50%)  rotate(120deg);"></div>
-                    <!-- <div className="absolute w-[8px] h-full transform bg-gray-800 origin-center" style={{transform: 'translateY(-50%) rotate(90deg)' }} />
-                    <div className="absolute w-[8px] h-full transform bg-gray-800 origin-center" style={{transform: 'translateY(-50%) rotate(150deg)' }} /> -->
                 </div>
-            </div>
+                    <div class="row">
+                        <!-- Second Row -->
+                        <div class="row equal-height">
+                            <!-- Left Section: Each heading in its own row -->
+                            <div class="col-12 col-md-4">
+                                <div class="container-fluid">
+                                    <div class="row">
+                                        <div class="col-12 mb-4">
+                                            <h2>Coral Level</h2>
+                                            <form id="coralLevelForm" class="btn-group-vertical">
+                                            <input type="radio" class="btn-check" name="corallevel" id="corallevel_4" value="4" autocomplete="off" checked>
+                                            <label class="btn btn-secondary rounded mb-2" for="corallevel_4">L4</label>
 
-            <!-- Right Section -->
-            <!-- <div class="col-md-3 d-flex align-items-center justify-content-center"> -->
-            <div class="col-md-3">
+                                            <input type="radio" class="btn-check" name="corallevel" id="corallevel_3" value="3" autocomplete="off">
+                                            <label class="btn btn-secondary rounded mb-2" for="corallevel_3">L3</label>
+
+                                            <input type="radio" class="btn-check" name="corallevel" id="corallevel_2" value="2" autocomplete="off" disabled>
+                                            <label class="btn btn-secondary rounded mb-2" for="corallevel_2">L2</label>
+
+                                            <input type="radio" class="btn-check" name="corallevel" id="corallevel_1" value="1" autocomplete="off">
+                                            <label class="btn btn-secondary rounded mb-2" for="corallevel_1">L1</label>
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <!-- <div class="col-12 mb-4">
+                                            <h2>Coral Shoot DTP</h2>
+                                            <form id="drivetoposeForm">
+                                            <input type="radio" class="btn-check" name="drivetopose" id="drivetopose_false" value="false" autocomplete="off">
+                                            <label class="btn btn-secondary" for="drivetopose_false">OFF</label>
+
+                                            <input type="radio" class="btn-check" name="drivetopose" id="drivetopose_true" value="true" autocomplete="off">
+                                            <label class="btn btn-secondary" for="drivetopose_true">ON</label>
+                                            </form>
+                                        </div> -->
+                                        <div class="col-12 mb-4">
+                                            <h2>DeAlgefy DTP</h2>
+                                            <form id="dealgaefydrivetoposeForm">
+                                            <input type="radio" class="btn-check" name="dealgaefydrivetopose" id="dealgaefydrivetopose_false" value="false" autocomplete="off">
+                                            <label class="btn btn-secondary" for="dealgaefydrivetopose_false">OFF</label>
+
+                                            <input type="radio" class="btn-check" name="dealgaefydrivetopose" id="dealgaefydrivetopose_true" value="true" autocomplete="off">
+                                            <label class="btn btn-secondary" for="dealgaefydrivetopose_true">ON</label>
+                                            </form>
+                                        </div>
+                                        <div class="col-12 mb-4">
+                                            <h2>AlgaeShoot DTP</h2>
+                                            <form id="algaeshootdrivetoposeForm">
+                                            <input type="radio" class="btn-check" name="algaeshootdrivetopose" id="algaeshootdrivetopose_false" value="false" autocomplete="off">
+                                            <label class="btn btn-secondary" for="algaeshootdrivetopose_false">OFF</label>
+
+                                            <input type="radio" class="btn-check" name="algaeshootdrivetopose" id="algaeshootdrivetopose_true" value="true" autocomplete="off">
+                                            <label class="btn btn-secondary" for="algaeshootdrivetopose_true">ON</label>
+                                            </form>
+                                        </div>
+                                        <div class="col-12 mb-4">
+                                            <h2>Pickup Side</h2>
+                                            <form id="intakeSideForm">
+                                            <input type="radio" class="btn-check" name="intakeside" id="intakeside_1" value="1" autocomplete="off">
+                                            <label class="btn btn-secondary" for="intakeside_1">LEFT</label>
+                
+                                            <input type="radio" class="btn-check" name="intakeside" id="intakeside_2" value="2" autocomplete="off">
+                                            <label class="btn btn-secondary" for="intakeside_2">RIGHT</label>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>  
+                            </div>
+
+                            <!-- Ensure the Reef container takes full height -->
+                            <div class="col-8 d-flex align-items-start justify-content-center reef_container h-100">
+
+                                <div class="position-relative hexagon-container">
+                                    <div class="hexagon-outline"></div>
+                                    <div class="hexagon-line"></div>
+                                    <div class="hexagon-line" style="transform: translateX(-50%)  rotate(60deg);"></div>
+                                    <div class="hexagon-line" style="transform: translateX(-50%)  rotate(120deg);"></div>
+                                    <!-- <div className="absolute w-[8px] h-full transform bg-gray-800 origin-center" style={{transform: 'translateY(-50%) rotate(90deg)' }} />
+                                    <div className="absolute w-[8px] h-full transform bg-gray-800 origin-center" style={{transform: 'translateY(-50%) rotate(150deg)' }} /> -->
+                                </div>
+                            </div>
+                        </div>
+                    <!-- </div> -->
+                </div> 
+            </div>
+            <div class="col-md-2  mt-2">
                 <div class="container-fluid">
                     <!-- Status Containers -->
                     <div class="row w-100 gy-3">
                         <div class="col-12">
-                            <h2>Game Pieces</h2>
+                            <h2>Robot States</h2>
                         </div>
-            
+                        <div class="col-12 mb-4 w-100">
+                            <div id="states-log-container" class="states-log">
+                                <ul id="states-list" class="list-group"></ul>
+                            </div>
+                        </div>
+                        <!-- <div class="col-12">
+                            <h2>Game Pieces</h2>
+                        </div> -->
                         <!-- Algae Box -->
                         <div class="col-12 mb-4 w-100">
-                            <div id="algae-box" class="status-box algae-box">
+                            <div id="algae-box" class="status-box algae-box p-2">
                                 <h3>ALGAE</h3>
                                 <div class="row">
                                     <div class="col-6 text-center">
@@ -148,7 +176,7 @@
             
                         <!-- Coral Box -->
                         <div class="col-12 mb-4 w-100">
-                            <div id="coral-box" class="status-box coral-box">
+                            <div id="coral-box" class="status-box coral-box p-2">
                                 <h3>CORAL</h3>
                                 <div class="row">
                                     <div class="col-6 text-center">
@@ -163,24 +191,15 @@
                                 <p>Shoot in: <span id="coral-shoot-time">0</span>ms</p>
                             </div>
                         </div>
-
-                        <div class="row">
-                            <div class="col-12 mb4 w-100">
-                                <h2>Pickup Side</h2>
-                                <form id="intakeSideForm">
-                                <input type="radio" class="btn-check" name="intakeside" id="intakeside_1" value="1" autocomplete="off">
-                                <label class="btn btn-secondary" for="intakeside_1">LEFT</label>
-    
-                                <input type="radio" class="btn-check" name="intakeside" id="intakeside_2" value="2" autocomplete="off">
-                                <label class="btn btn-secondary" for="intakeside_2">RIGHT</label>
-                                </form>
-                            </div>
-                        </div>
-
                     </div>  
                 </div>
             </div>
-        </div>
+        </div> 
+        <!-- First Row -->
+
+
+
+ 
         <!-- Match Time Box at Bottom Right -->
         <div class="match-time">
             <h2>Match Time</h2>

@@ -3,6 +3,17 @@
  *******************************************************************************************************/
 h2 {
     margin-bottom: 10px;
+    font-size: 24px;
+}
+
+h3 {
+    margin-bottom: 10px;
+    font-size: 24px;
+}
+
+h4 {
+    margin-bottom: 10px;
+    font-size: 18px;
 }
 
 html, body {
@@ -35,6 +46,11 @@ html, body {
     flex-direction: column;
     align-items: stretch; /* Ensure rows stay together */
     position: relative;
+}
+
+.equal-height {
+    display: flex;
+    flex-wrap: wrap;
 }
 
 /********************************************************************************************************
@@ -104,11 +120,6 @@ html, body {
     transform: translate(-50%, -50%) rotate(var(--angle)) translate(0, -280px);
 }
 
-.hexagon-coral:hover .coral {
-    background-color: #f0f0f0;
-    color: black
-}
-
 /********************************************************************************************************
  * Coral and Algae Styling
  *******************************************************************************************************/
@@ -156,12 +167,19 @@ html, body {
 }
 
 .hexagon-algae:hover .algae {
-    background-color: #f0f0f0;
+    background-color: aquamarine;
     color: black
 }
 
+.hexagon-coral:hover .coral {
+    background-color: transparent;
+    border: 10px solid lightcoral;
+    color: lightgray;
+}
+
+
 /********************************************************************************************************
- * Coral Styling
+ * Algae Styling
  *******************************************************************************************************/
 .algae {
     width: 120px;
@@ -287,4 +305,50 @@ html, body {
     color: white;
 }
 
+.match-time h2 {
+    font-size: 48px;
+    font-weight: bold;
+}
 
+.match-time h3 {
+    font-size: 32px;
+}
+/********************************************************************************************************
+ * States Log
+ *******************************************************************************************************/
+.states-log {
+    height: 150px; /* Fixed height */
+    overflow-y: auto; /* Enable vertical scrolling */
+    border: 1px solid #ccc;
+    padding: 10px;
+    background: #111122;
+}
+
+.list-group-item {
+    font-size: 14px;
+    padding: 1px;
+    color: wheat;
+    background-color: transparent;
+    border: none;
+}
+
+/********************************************************************************************************
+ * Dropdown Styling
+ *******************************************************************************************************/
+.dropdown {
+    width: 100%;
+}
+.dropdown-toggle {
+    width: 100%;
+    text-align: right; /* Ensures text aligns properly */
+}
+.dropdown-menu {
+    width: 100%;
+}
+.badge-status {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+    border: 2px solid white;
+}

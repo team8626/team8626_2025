@@ -13,7 +13,6 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.net.WebServer;
 import edu.wpi.first.networktables.BooleanPublisher;
 import edu.wpi.first.networktables.BooleanSubscriber;
 import edu.wpi.first.networktables.DoublePublisher;
@@ -24,21 +23,20 @@ import edu.wpi.first.networktables.PubSubOption;
 import edu.wpi.first.networktables.StringPublisher;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Robot;
-import frc.robot.RobotConstants.UIConstants;
-import frc.robot.RobotConstants.UIConstants.AlgaeFace2;
-import frc.robot.RobotConstants.UIConstants.CoralBranch;
-import frc.robot.RobotConstants.UIConstants.CoralLevel;
-import frc.robot.RobotConstants.UIConstants.DTP;
-import frc.robot.RobotConstants.UIConstants.PickupSide;
 import frc.robot.RobotContainer;
-import java.nio.file.Paths;
+import frc.robot.UIConstants;
+import frc.robot.UIConstants.ALGAE_FACE;
+import frc.robot.UIConstants.CORAL_BRANCH;
+import frc.robot.UIConstants.CORAL_LEVEL;
+import frc.robot.UIConstants.DTP;
+import frc.robot.UIConstants.PICKUP_SIDE;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -144,6 +142,7 @@ public class Dashboard extends CS_SubsystemBase {
   private final BooleanPublisher selectedAlgaeShootDtpOut;
   private final DoublePublisher selectedMatchTimeOut;
   private final BooleanPublisher isAutoOut;
+  private final BooleanPublisher isTeleopOut;
   private final StringPublisher algaeStateOut;
   private final StringPublisher coralStateOut;
   private static IntegerPublisher algaeShootTimeOut;
@@ -196,6 +195,7 @@ public class Dashboard extends CS_SubsystemBase {
         outputTable.getBooleanTopic(selectedAlgaeShootDtpTopicName).publish();
     selectedPickupSideOut = outputTable.getIntegerTopic(selectedPickupSideTopicName).publish();
     isAutoOut = outputTable.getBooleanTopic(isAutoTimeTopicName).publish();
+    isTeleopOut = outputTable.getBooleanTopic("isTeleop").publish();
     selectedMatchTimeOut = outputTable.getDoubleTopic(selectedMatchTimeTopicName).publish();
     algaeStateOut = outputTable.getStringTopic(algaeStateTopicName).publish();
     coralStateOut = outputTable.getStringTopic(coralStateTopicName).publish();
@@ -204,11 +204,11 @@ public class Dashboard extends CS_SubsystemBase {
     resetCoralBranchOut = outputTable.getBooleanTopic(resetCoralBranchTopicName).publish();
     resetAlgaeFaceOut = outputTable.getBooleanTopic(resetAlgaeFaceTopicName).publish();
 
-    // Start web server
-    WebServer.start(
-        5801,
-        Paths.get(Filesystem.getDeployDirectory().getAbsolutePath().toString(), "public")
-            .toString());
+    // // Start web server
+    // WebServer.start(
+    //     5801,
+    //     Paths.get(Filesystem.getDeployDirectory().getAbsolutePath().toString(), "public")
+    //         .toString());
 
     // Set default values
     this.setDefaultValues();
@@ -247,12 +247,12 @@ public class Dashboard extends CS_SubsystemBase {
     } else {
       subsystemsShortInterval.add(subsystem);
     }
-    System.out.println(
-        "[DASHBOARD] Registered "
-            + subsystem.getClass().getName()
-            + " for "
-            + interval
-            + " updates");
+    // System.out.println(
+    //     "[DASHBOARD] Registered "
+    //         + subsystem.getClass().getName()
+    //         + " for "
+    //         + interval
+    //         + " updates");
   }
 
   /**
@@ -312,7 +312,7 @@ public class Dashboard extends CS_SubsystemBase {
     allianceColorOut.set(getAllianceColorAsInt());
   }
 
-  private void setAllowedCoralLevels(List<CoralLevel> allowedcorallevels2) {
+  private void setAllowedCoralLevels(List<CORAL_LEVEL> allowedcorallevels2) {
     // TODO: allowedCoralLevelsOut.set(allowedcorallevels2);
   }
 
@@ -373,7 +373,7 @@ public class Dashboard extends CS_SubsystemBase {
   }
 
   private void setDefaultValues() {
-    setAllowedCoralLevels(UIConstants.allowedCoralLevels2);
+    setAllowedCoralLevels(UIConstants.ALLOWED_CORAL_LEVELS);
     setSelectedCoralLevel(UIConstants.defaultCoralLevel.getValue());
     setSelectedCoralBranch(UIConstants.defaultCoralBranch.getValue());
     setSelectedAlgaeFace(UIConstants.defaultAlgaeFace.getValue());
@@ -386,27 +386,27 @@ public class Dashboard extends CS_SubsystemBase {
     setMatchTime(0);
   }
 
-  public static CoralLevel getSelectedCoralLevel() {
+  public static CORAL_LEVEL getSelectedCoralLevel() {
     return inputs.selectedCoralLevel.length > 0
-        ? CoralLevel.getByValue(inputs.selectedCoralLevel[0])
+        ? CORAL_LEVEL.getByValue(inputs.selectedCoralLevel[0])
         : null;
   }
 
-  public static CoralBranch getSelectedCoralBranch() {
+  public static CORAL_BRANCH getSelectedCoralBranch() {
     return inputs.selectedCoralBranch.length > 0
-        ? CoralBranch.getByValue(inputs.selectedCoralBranch[0])
+        ? CORAL_BRANCH.getByValue(inputs.selectedCoralBranch[0])
         : null;
   }
 
-  public static AlgaeFace2 getSelectedAlgaeFace() {
+  public static ALGAE_FACE getSelectedAlgaeFace() {
     return inputs.selectedAlgaeFace.length > 0
-        ? AlgaeFace2.getByValue(inputs.selectedAlgaeFace[0])
+        ? ALGAE_FACE.getByValue(inputs.selectedAlgaeFace[0])
         : null;
   }
 
-  public static PickupSide getSelectedPickupSide() {
+  public static PICKUP_SIDE getSelectedPickupSide() {
     return inputs.selectedPickupSide.length > 0
-        ? PickupSide.getByValue(inputs.selectedPickupSide[0])
+        ? PICKUP_SIDE.getByValue(inputs.selectedPickupSide[0])
         : null;
   }
 
@@ -414,7 +414,7 @@ public class Dashboard extends CS_SubsystemBase {
     return inputs.selectedDtp.length > 0 ? DTP.getByValue(inputs.selectedDtp[0]) : null;
   }
 
-  public static DTP getSelectedDeaglaefyDtp() {
+  public static DTP getSelectedDealgaefyDtp() {
     return inputs.selectedDealgaefyDtp.length > 0
         ? DTP.getByValue(inputs.selectedDealgaefyDtp[0])
         : null;
@@ -478,7 +478,9 @@ public class Dashboard extends CS_SubsystemBase {
     } else {
       this.selectedMatchTimeOut.set(DriverStation.getMatchTime());
     }
-    this.isAutoOut.set(DriverStation.isAutonomous());
+    this.isAutoOut.set(RobotState.isAutonomous());
+    this.isTeleopOut.set(
+        RobotState.isDisabled() || RobotState.isAutonomous() || RobotState.isTest());
     this.algaeStateOut.set(Dashboard.getAlgaeState().toString());
     this.coralStateOut.set(Dashboard.getCoralState().toString());
   }

@@ -22,6 +22,7 @@ const selectedDealgaefyDtpTopicName = "selectedDealgaefyDtp";
 const selectedAlgaeShootDtpTopicName = "selectedAlgaeShootDtp";
 const matchTimeTopicName = "matchTime";
 const isAutoTopicName = "isAuto";
+const isTeleopTopicName = "isTeleop";
 const algaeStateTopicName = "algaeState";
 const coralStateTopicName = "coralState";
 const resetCoralBranchTopicName = "resetCoralBranch";
@@ -31,12 +32,13 @@ const algaeShootTimeTopicName = "algaeLastShootTime";
 const coralShootTimeTopicName = "coralLastShootTime";
 // const autoPathTopicName = "/SmartDashboard/Autos/Pathplanner Trajectory";
 const autoPathOptionsTopicName = "/SmartDashboard/Autos/Pathplanner Trajectory/options";
-const autoPathDefaultTopicName = "/SmartDashboard/Autos/Pathplanner Trajectory/default";
+const autoPathActiveTopicName = "/SmartDashboard/Autos/Pathplanner Trajectory/active";
 const autoPathSelectedTopicName = "/SmartDashboard/Autos/Pathplanner Trajectory/selected";
 // const autoModeTopicName = "/SmartDashboard/Autos/Autonomous Mode";
 const autoModeOptionsTopicName = "/SmartDashboard/Autos/Autonomous Mode/options";
-const autoModeDefaultTopicName = "/SmartDashboard/Autos/Autonomous Mode/default";
+const autoModeActiveTopicName = "/SmartDashboard/Autos/Autonomous Mode/active";
 const autoModeSelectedTopicName = "/SmartDashboard/Autos/Autonomous Mode/selected";
+const commodoreStateTopicName = "/SmartDashboard/Commodore/Current State";
 
 // ***** STATE CACHE *****
 let allianceColor = 0; // int (0 = Unknown, 1 = Red, 2 Blue)
@@ -49,14 +51,15 @@ let selectedDtp = false; // boolean
 let selectedDealgaefyDtp = false; // boolean
 let selectedAlgaeShootDtp = false; // boolean
 let matchTime = 0; // double (seconds)
-let isAuto = true; // double (seconds)
+let isAuto = false; // boolean
+let isTeleop = false; // boolean
 let algaeStatus = "---"; // string
 let coralStatus = "---"; // string
 let algaeShootTime = 0; // double (ms)
 let coralShootTime = 0; // double (ms)
 let isConnectionSelected = false;
-let selectedAutoMode = "";
-let selectedPath = "";
+// let selectedAutoMode = "";
+// let selectedPath = "";
 
 const ntClient = new NT4_Client(
   window.location.hostname,
@@ -77,6 +80,10 @@ const ntClient = new NT4_Client(
       isAuto = value;
       updateMatchTime(matchTime, isAuto);
       console.log("Rx Is Auto: " + isAuto);
+    } else if (topic.name === toDashboardPrefix + isTeleopTopicName) {
+      isTeleop = value;
+      toggleAutoDropdown(isTeleop);
+      console.log("Rx IsTelop: " + isTeleop);
     } else if (topic.name === toDashboardPrefix + matchTimeTopicName) {
       matchTime = value;
       updateMatchTime(matchTime, isAuto);
@@ -129,43 +136,23 @@ const ntClient = new NT4_Client(
       updateCoralShootTime(coralShootTime);
       updateCoralBranchValue(0, true);
       console.log("Rx Coral shoot time: " + coralShootTime);
-    } 
-    
-    // else if (topic.name === autoModeTopicName) {
-    //   console.log("Rx Auto Mode: " + value);
-    //   alert("Auto Path: " + value);
-    // } 
-    else if (topic.name === autoModeOptionsTopicName) {
+    } else if (topic.name === autoModeOptionsTopicName) {
       console.log("Rx Auto Mode Options: " + value);
-      updateAutoMode(value);
-    } else if (topic.name === autoModeDefaultTopicName) {
-      console.log("Rx Auto Mode Default: " + value);
-      selectedAutoMode = value;
-      updateAutoModeSelected(value);
-    } else if (topic.name === autoModeSelectedTopicName) {
+      populateDropdown("#dropdown-menu-automode", "#selectedAutoMode", value);
+    } else if (topic.name === autoModeActiveTopicName) {
       console.log("Rx Auto Mode Selected: " + value);
-      selectedAutoMode = value;
-      updateAutoModeSelected(value);
-    } 
-    // else if (topic.name === autoPathTopicName) {
-    //   console.log("Rx Auto Path: " + value);
-    //   alert("Auto Path: " + value);
-    // } 
-    
-    else if (topic.name === autoPathOptionsTopicName) {
+      // selectedAutoMode = value;
+      updateDropdownSelection("#dropdown-menu-automode", "#selectedAutoMode", value);
+    } else if (topic.name === commodoreStateTopicName) {
+      UpdateRobotState(value);
+    } else if (topic.name === autoPathOptionsTopicName) {
       console.log("Rx Auto Path Options: " + value);
-      updatePaths(value);
-    } else if (topic.name === autoPathDefaultTopicName) {
-      console.log("Rx Auto Path Default: " + value);
-      selectedPath = value;
-      updatePathsSelected(value);
-    } else if (topic.name === autoPathSelectedTopicName) {
+      populateDropdown("#dropdown-menu-trajectory", "#selectedTrajectory", value);
+    } else if (topic.name === autoPathActiveTopicName) {
       console.log("Rx Auto Path Selected: " + value);
-      selectedPath = value;
-      updatePathsSelected(value);
-    } 
-
-    else if (topic.name === toDashboardPrefix + resetCoralBranchTopicName) {
+      // selectedPath = value;
+      updateDropdownSelection("#dropdown-menu-trajectory", "#selectedTrajectory", value);
+    } else if (topic.name === toDashboardPrefix + resetCoralBranchTopicName) {
       console.log("Rx Reset Coral Branch (" + value + ")");
       updateCoralBranchValue(0, true, value);
     } else if (topic.name === toDashboardPrefix + resetAlgaeFaceTopicName) {
@@ -208,6 +195,7 @@ window.addEventListener("load", () => {
       toDashboardPrefix + selectedAlgaeShootDtpTopicName,
       toDashboardPrefix + matchTimeTopicName,
       toDashboardPrefix + isAutoTopicName,
+      toDashboardPrefix + isTeleopTopicName,
       toDashboardPrefix + algaeStateTopicName,
       toDashboardPrefix + coralStateTopicName,
       toDashboardPrefix + algaeShootTimeTopicName,
@@ -216,12 +204,13 @@ window.addEventListener("load", () => {
       toDashboardPrefix + resetCoralBranchTopicName,
       // autoPathTopicName,
       autoPathOptionsTopicName,
-      autoPathDefaultTopicName,
-      autoPathSelectedTopicName,
+      // autoPathDefaultTopicName,
+      autoPathActiveTopicName,
       // autoModeTopicName,
       autoModeOptionsTopicName,
-      autoModeDefaultTopicName,
-      autoModeSelectedTopicName,
+      // autoModeDefaultTopicName,
+      autoModeActiveTopicName,
+      commodoreStateTopicName
     ],
     false,
     true,
@@ -513,65 +502,80 @@ function udateAlliance(newValue) {
   }
 }
 
-  // Predefined default value
-  // const defaultAutoMode = "Auto Mode C";
 
-  function updateAutoMode(newAutoModes) {
-    // Populate the dropdown
-    const $selectAutoMode = $("#selectautomode");
-    newAutoModes.forEach((mode) => {
-      const isSelected = mode === selectedAutoMode ? "selected" : "";
-      $selectAutoMode.append(`<option value="${mode}" ${isSelected}>${mode}</option>`);
+// Function to populate dropdowns dynamically
+function populateDropdown(dropdownId, hiddenInputId, options) {
+  let dropdownMenu = $(dropdownId);
+  dropdownMenu.empty(); // Clear existing items
+  options.forEach(option => {
+      let newValue = option.toLowerCase().replace(/\s+/g, "-"); // Convert text to a safe value
+      let newItem = `<li><a class="dropdown-item" href="#" data-value="${newValue}">${option}</a></li>`;
+      dropdownMenu.append(newItem);
   });
 
-    // Optional: Log the selected value when it changes
-    $selectAutoMode.on("change", function () {
-        console.log("Selected Auto Mode:", $(this).val());
-        sendStringAbsoluteTopicToRobot(autoModeSelectedTopicName, $(this).val());
+  // Ensure all dropdown items update the button text & hidden input
+  dropdownMenu.find(".dropdown-item").off("click").on("click", function () {
+      let selectedText = $(this).text();
+      let selectedValue = $(this).attr("data-value");
 
-    });
-  }
+      let button = $(dropdownId).closest(".dropdown").find(".dropdown-toggle");
 
-  function updateAutoModeSelected(newAutoModeDefault) {
-    const $selectAutoMode = $("#selectautomode");
+      // Update button text and store the selected value
+      button.text(selectedText);
+      $(hiddenInputId).val(selectedValue);
 
-    // Check if the new value exists in the dropdown options
-    if ($selectAutoMode.find(`option[value="${newAutoModeDefault}"]`).length > 0) {
-        // Set the new value as selected
-        $selectAutoMode.val(newAutoModeDefault).change(); // Trigger change event if needed
-        console.log(`Updated default auto mode to: ${newAutoModeDefault}`);
-    } else {
-        console.error(`Value "${newAutoModeDefault}" not found in #selectautomode options.`);
-    }
-  }
-
-  function updatePaths(newPaths) {
-    // Populate the dropdown
-    const $selectPath = $("#selectautopath");
-    newPaths.forEach((mode) => {
-      const isSelected = mode === selectedPath ? "selected" : "";
-      $selectPath.append(`<option value="${mode}" ${isSelected}>${mode}</option>`);
+      console.log("Selected ("+dropdownId+")", selectedValue);
   });
+}
 
-    // Optional: Log the selected value when it changes
-    $selectPath.on("change", function () {
-        console.log("Selected Path:", $(this).val());
-        sendStringAbsoluteTopicToRobot(autoPathSelectedTopicName, $(this).val());
-    });
+// Function to update dropdown selection from the network
+function updateDropdownSelection(dropdownId, hiddenInputId, option) {
+  let button = $(dropdownId).closest(".dropdown").find(".dropdown-toggle");
+  let newValue = option.toLowerCase().replace(/\s+/g, "-"); // Convert text to a safe value
+
+  // Find the matching option in the dropdown
+  let matchingOption = $(dropdownId).find(`.dropdown-item[data-value="${newValue}"]`);
+  console.log("Matching Option:", matchingOption);
+  if (matchingOption.length > 0) {
+      let selectedText = matchingOption.text();
+
+      // Update button text and hidden input
+      button.text(selectedText);
+
+      $(hiddenInputId).val(newValue);
+
+      button.removeClass("btn-danger").addClass("btn-success");
+
+      console.log("Network Updated:", newValue, "-- Dirty Flag OFF --");
+  } else {
+      console.warn("Value not found in dropdown:", newValue);
+  }
+}
+
+function UpdateRobotState(newState) {
+  let $eventList = $("#states-list");
+  
+  // Add new event to the end of the list
+  $eventList.append(`<li class="list-group-item">${newState}</li>`);
+
+  // Keep only the last 10 events
+  if ($eventList.children().length > 10) {
+      $eventList.children().first().remove();
   }
 
-  function updatePathsSelected(newPath) {
-    const $selectPath = $("#selectautopath");
+  // Scroll to the latest event
+  let container = $("#states-log-container");
+  container.scrollTop(container[0].scrollHeight);
+}
 
-    // Check if the new value exists in the dropdown options
-    if ($selectPath.find(`option[value="${newPath}"]`).length > 0) {
-        // Set the new value as selected
-        $selectPath.val(newPath).change(); // Trigger change event if needed
-        console.log(`Updated default path to: ${newPath}`);
-    } else {
-        console.error(`Value "${newPath}" not found in #selectautopath options.`);
-    }
+function toggleAutoDropdown(isTeleop) {
+  if (isTeleop) {
+      $("#automode-wrapper, #trajectory-wrapper").show(); // Show dropdowns
+  } else {
+      $("#automode-wrapper, #trajectory-wrapper").hide(); // Hide dropdowns
   }
+}
+
 
 /**
  * Send an integer value to the robot
@@ -637,8 +641,10 @@ function sendStringAbsoluteTopicToRobot(topic, value) {
     console.error("ntClient or ntClient.addSample is not defined");
   }
 }
+
 // Bind UI buttons
 $(document).ready(function () {
+  
   // When any radio button in the drivetopose group is clicked
   $("input[name='drivetopose']").click(function (event) {
     console.log("DTP button clicked");
@@ -654,7 +660,6 @@ $(document).ready(function () {
     console.log("AlgaeShoot DTP button clicked");
       updateAlgaeShootDtpValue($(this).attr("value"));
   });
-
 
   // When any radio button in the intakeside group is clicked
   $("input[name='intakeside']").click(function (event) {
@@ -677,4 +682,37 @@ $(document).ready(function () {
     console.log("Algae: ", $(this).attr("id"));
     updateAlgaeFaceValue($(this).attr("value"));
   });
+
+  // Handle the dropdowns
+  $(document).on("click", ".dropdown-menu .dropdown-item", function () {
+    let selectedText = $(this).text(); 
+    let selectedValue = $(this).attr("data-value"); 
+    let dropdownButton = $(this).closest(".dropdown").find(".dropdown-toggle"); 
+    let hiddenInput = $(this).closest(".dropdown").next("input[type='hidden']"); 
+
+    // Update the button text and store the value
+    dropdownButton.text(selectedText);
+    hiddenInput.val(selectedValue);
+    console.log("Selected Value:", selectedText);
+
+    // Change button color to warning (red)
+    dropdownButton.removeClass("btn-success").addClass("btn-danger");
+
+    // Get the dropdown ID to differentiate
+    let dropdownId = dropdownButton.attr("id");
+
+    // Call the mock server with different arguments based on dropdown
+    if (dropdownId === "automode") {
+        console.log("Sending Auto Mode Selection to Server:", selectedText, "-- Dirty Flag ON --");
+        sendStringAbsoluteTopicToRobot(autoModeSelectedTopicName, selectedText);
+    } else if (dropdownId === "trajectory") {
+        console.log("Sending Trajectory Selection to Server:", selectedText, "-- Dirty Flag ON --");
+        sendStringAbsoluteTopicToRobot(autoPathSelectedTopicName, selectedText);
+    } else {
+        console.log("Unknown dropdown selected:", selectedText, "-- Dirty Flag ON --");
+    }
+
+        
+});
+
 });
