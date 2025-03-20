@@ -6,8 +6,10 @@
 
 package frc.robot;
 
+import edu.wpi.first.net.WebServer;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -30,7 +32,10 @@ public class Robot extends TimedRobot {
     DataLogManager.start();
     DriverStation.startDataLog(DataLogManager.getLog());
 
-    Commodore.setCommodoreState(CommodoreState.BOOT, true);
+    // start web server
+    WebServer.start(5800, Filesystem.getDeployDirectory().getPath());
+
+    Commodore.setCommodoreState(CommodoreState.BOOT);
     isReady = true;
   }
 
@@ -66,7 +71,7 @@ public class Robot extends TimedRobot {
     System.out.println("------------------------------ Autonomous ------------------------------");
 
     if (DriverStation.isDSAttached() || DriverStation.isFMSAttached()) {
-      Commodore.setCommodoreState(CommodoreState.IDLE, true);
+      Commodore.setCommodoreState(CommodoreState.IDLE);
     }
     Command autonomousCommand = robotContainer.getAutonomousCommand();
 
@@ -85,7 +90,7 @@ public class Robot extends TimedRobot {
     System.out.println("------------------------------ Teleop ------------------------------");
 
     if ((DriverStation.isDSAttached() || DriverStation.isFMSAttached())) {
-      Commodore.setCommodoreState(CommodoreState.IDLE, true);
+      Commodore.setCommodoreState(CommodoreState.IDLE);
     }
   }
 
@@ -104,11 +109,11 @@ public class Robot extends TimedRobot {
   public void disabledPeriodic() {
     if (!(DriverStation.isDSAttached())) {
       if (Commodore.getCurrentState() != CommodoreState.DISCONNECTED) {
-        Commodore.setCommodoreState(CommodoreState.DISCONNECTED, true);
+        Commodore.setCommodoreState(CommodoreState.DISCONNECTED);
       }
     } else {
       if (Commodore.getCurrentState() != CommodoreState.DISABLED) {
-        Commodore.setCommodoreState(CommodoreState.DISABLED, true);
+        Commodore.setCommodoreState(CommodoreState.DISABLED);
       }
     }
   }

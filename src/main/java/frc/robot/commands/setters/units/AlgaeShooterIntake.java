@@ -6,6 +6,7 @@
 
 package frc.robot.commands.setters.units;
 
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
 import frc.robot.subsystems.Dashboard;
@@ -17,6 +18,8 @@ import java.util.function.DoubleSupplier;
 public class AlgaeShooterIntake extends CS_Command {
   private AlgaeShooterSubsystem algae501;
 
+  private Timer timer = new Timer();
+  private boolean algaeDetected = false;
   private DoubleSupplier desiredRPM;
 
   public AlgaeShooterIntake() {
@@ -40,6 +43,10 @@ public class AlgaeShooterIntake extends CS_Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    timer.stop();
+    timer.reset();
+    algaeDetected = false;
+
     Dashboard.setAlgaeState(GamePieceState.INTAKING);
     algae501.startIntake(desiredRPM.getAsDouble());
   }
@@ -62,6 +69,10 @@ public class AlgaeShooterIntake extends CS_Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return algae501.isLoaded();
+    if ((algae501.isLoaded()) && (!algaeDetected)) {
+      timer.start();
+      algaeDetected = true;
+    }
+    return timer.hasElapsed(AlgaeShooterConstants.intakeTimerSeconds);
   }
 }

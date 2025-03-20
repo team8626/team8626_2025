@@ -41,11 +41,7 @@ public interface ElevatorInterface {
 
   public abstract void setHeightInches(double heightInches);
 
-  public abstract void setElevatorkP(double kP);
-
-  public abstract void setElevatorkI(double kI);
-
-  public abstract void setElevatorkD(double kD);
+  default void setPID(double kP, double kI, double kD) {}
 
   public abstract void reset();
 

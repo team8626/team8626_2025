@@ -110,19 +110,23 @@ public class CoralShooterSubsystem extends CS_SubsystemBase {
     // Using SmartDashboard to tune PIDs
     // --------------------------------------------------
     SmartDashboard.putNumber(
-        "Subsystem/CoralShooter/Gains/P_Left", CoralShooterConstants.gainsLeft.kP());
+        "Subsystem/CoralShooter/Gains/Left/P", CoralShooterConstants.gainsLeft.kP());
     SmartDashboard.putNumber(
-        "Subsystem/CoralShooter/Gains/I_Left", CoralShooterConstants.gainsLeft.kI());
+        "Subsystem/CoralShooter/Gains/Left/I", CoralShooterConstants.gainsLeft.kI());
     SmartDashboard.putNumber(
-        "Subsystem/CoralShooter/Gains/D_Left", CoralShooterConstants.gainsLeft.kD());
+        "Subsystem/CoralShooter/Gains/Left/D", CoralShooterConstants.gainsLeft.kD());
     SmartDashboard.putNumber(
-        "Subsystem/CoralShooter/Gains/P_Right", CoralShooterConstants.gainsRight.kP());
+        "Subsystem/CoralShooter/Gains/Right/P", CoralShooterConstants.gainsRight.kP());
     SmartDashboard.putNumber(
-        "Subsystem/CoralShooter/Gains/I_Right", CoralShooterConstants.gainsRight.kI());
+        "Subsystem/CoralShooter/Gains/Right/I", CoralShooterConstants.gainsRight.kI());
     SmartDashboard.putNumber(
-        "Subsystem/CoralShooter/Gains/D_Right", CoralShooterConstants.gainsRight.kD());
+        "Subsystem/CoralShooter/Gains/Right/D", CoralShooterConstants.gainsRight.kD());
 
     SmartDashboard.putNumber("Subsystem/CoralShooter/LastShotIn(ms)", 0);
+
+    SmartDashboard.putBoolean("Commands/CoralShooterRampUp/OverrideRPM", false);
+    SmartDashboard.putNumber("Commands/CoralShooterRampUp/ForcedRMPLeft", 1275);
+    SmartDashboard.putNumber("Commands/CoralShooterRampUp/ForcedRMPRight", 1275);
   }
 
   @Override
@@ -130,17 +134,17 @@ public class CoralShooterSubsystem extends CS_SubsystemBase {
     // Using SmartDashboard to tune PIDs
     // --------------------------------------------------
     double newkPLeft =
-        SmartDashboard.getNumber("Subsystem/CoralShooter/Gains/P_Left", values.kPLeft);
+        SmartDashboard.getNumber("Subsystem/CoralShooter/Gains/Left/P", values.kPLeft);
     double newkILeft =
-        SmartDashboard.getNumber("Subsystem/CoralShooter/Gains/I_Left", values.kILeft);
+        SmartDashboard.getNumber("Subsystem/CoralShooter/Gains/Left/I", values.kILeft);
     double newkDLeft =
-        SmartDashboard.getNumber("Subsystem/CoralShooter/Gains/D_Left", values.kDLeft);
+        SmartDashboard.getNumber("Subsystem/CoralShooter/Gains/Left/D", values.kDLeft);
     double newkPRight =
-        SmartDashboard.getNumber("Subsystem/CoralShooter/Gains/P_Right", values.kPRight);
+        SmartDashboard.getNumber("Subsystem/CoralShooter/Gains/Right/P", values.kPRight);
     double newkIRight =
-        SmartDashboard.getNumber("Subsystem/CoralShooter/Gains/I_Right", values.kIRight);
+        SmartDashboard.getNumber("Subsystem/CoralShooter/Gains/Right/I", values.kIRight);
     double newkDRight =
-        SmartDashboard.getNumber("Subsystem/CoralShooter/Gains/D_Right", values.kDRight);
+        SmartDashboard.getNumber("Subsystem/CoralShooter/Gains/Right/D", values.kDRight);
 
     // Coefficients on SmartDashboard have changed, save new values to the PID controller
     // --------------------------------------------------

@@ -1,7 +1,7 @@
 package frc.robot.subsystems.presets;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import frc.robot.RobotConstants.UIConstants.CoralLevel;
+import frc.robot.UIConstants.CORAL_LEVEL;
 
 public class CoralPreset {
   public String name = "-";
@@ -32,7 +32,7 @@ public class CoralPreset {
         robotPose.getX(), robotPose.getY(), robotPose.getRotation().getDegrees());
   }
 
-  public void setLevel(CoralLevel newLevel) {
+  public void setLevel(CORAL_LEVEL newLevel) {
     // Set the Level of the Coral Shooter
     switch (newLevel) {
       case L1:
@@ -74,12 +74,18 @@ public class CoralPreset {
 
   public Pose2d getPose() {
     // Get the Pose of the Coral Shooter
-    return hasPose ? this.robotPose : null;
+    Pose2d retVal = new Pose2d();
+
+    // if (hasPose && PresetManager.usingCoralShootDtp().getAsBoolean()) {
+    if (hasPose) {
+      retVal = this.robotPose;
+    }
+    return retVal;
   }
 
-  private boolean isReady() {
-    // Get the Ready State of the Preset
-    return this.hasLevel && this.hasPose;
+  public String getName() {
+    // Get the Name of the Coral Shooter
+    return this.name;
   }
 
   public void reset() {

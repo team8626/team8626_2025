@@ -6,6 +6,7 @@
 
 package frc.robot.commands.setters.units;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
 import frc.robot.subsystems.Dashboard;
@@ -19,38 +20,38 @@ public class AlgaeShooterRampUp extends CS_Command {
 
   private double desiredRPM = AlgaeShooterConstants.shootRPM;
   private final double RPMTolerance = AlgaeShooterConstants.shooterRPMTolerance;
-
-  // public AlgaeShooterRampUp() {
-  //   algae501 = RobotContainer.algae501;
-
-  //   addRequirements(algae501);
-
-  //   this.desiredRPM = AlgaeShooterConstants.shootRPM;
-  //   this.setTAGString("ALGAESHOOTER_RAMPUP");
-  // }
+  private boolean overrideRPM = false;
+  private double dashboardRPM = 0;
 
   public AlgaeShooterRampUp(DoubleSupplier newRPM) {
     algae501 = RobotContainer.algae501;
 
     addRequirements(algae501);
+    SmartDashboard.putBoolean("Commands/AlgaeShooterRampUp/leftAtSetPoint", false);
+    SmartDashboard.putBoolean("Commands/AlgaeShooterRampUp/rightAtSetPoint", false);
 
     this.desiredRPM = newRPM.getAsDouble();
     this.setTAGString("ALGAESHOOTER_RAMPUP");
   }
-  // Called when the command is initially scheduled.
+
   @Override
   public void initialize() {
     printf("RPM: %f", desiredRPM);
 
     Dashboard.setAlgaeState(GamePieceState.RAMPING_UP);
+
+    overrideRPM = SmartDashboard.getBoolean("Commands/AlgaeShooterRampUp/OverrideRPM", false);
+    dashboardRPM = SmartDashboard.getNumber("Commands/AlgaeShooterRampUp/ForcedRMP", 0);
+
+    if (overrideRPM) {
+      desiredRPM = dashboardRPM;
+    }
     algae501.startRampUp(desiredRPM);
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {}
 
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     if (interrupted) {
@@ -58,18 +59,19 @@ public class AlgaeShooterRampUp extends CS_Command {
     }
   }
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    boolean atSetpoint = false;
+    boolean leftAtSetpoint = false;
+    boolean rightAtSetpoint = false;
 
     double currentRPMLeft = algae501.getShooterRPMLeft();
     double currentRPMRight = algae501.getShooterRPMRight();
 
-    atSetpoint =
-        Math.abs(Math.abs(currentRPMLeft) - desiredRPM) <= RPMTolerance
-            && Math.abs(Math.abs(currentRPMRight) - desiredRPM) <= RPMTolerance;
+    leftAtSetpoint = Math.abs(Math.abs(currentRPMLeft) - desiredRPM) <= RPMTolerance;
+    rightAtSetpoint = Math.abs(Math.abs(currentRPMRight) - desiredRPM) <= RPMTolerance;
 
-    return atSetpoint;
+    SmartDashboard.putBoolean("Commands/AlgaeShooterRampUp/leftAtSetPoint", leftAtSetpoint);
+    SmartDashboard.putBoolean("Commands/AlgaeShooterRampUp/rightAtSetPoint", rightAtSetpoint);
+    return leftAtSetpoint && rightAtSetpoint;
   }
 }

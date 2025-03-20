@@ -74,8 +74,8 @@ public class CoralShooter_Sim implements CoralShooterInterface, CS_InterfaceBase
 
   @Override
   public void startShooter(double new_RPMLeft, double new_RPMRight) {
-    rightSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_RPMLeft));
-    leftSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_RPMRight));
+    leftSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_RPMLeft));
+    rightSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_RPMRight));
     shooterIsEnabled = true;
     printf("Shooter RPM: %f / %f", new_RPMLeft, new_RPMRight);
   }

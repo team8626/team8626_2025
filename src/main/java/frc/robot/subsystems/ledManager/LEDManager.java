@@ -88,40 +88,32 @@ public class LEDManager extends CS_SubsystemBase {
         breatheSlow(currentColor).applyTo(m_right);
         break;
 
+      case SUBSYSTEMS_AT_SETPOINT:
       case IDLE:
         currentColor = getAllianceColor();
         wave(currentColor).applyTo(m_left);
         wave(currentColor).applyTo(m_right);
         break;
 
+      case SUBSYSTEMS_ADJUST:
+        currentColor = getAllianceColor();
+        flash(currentColor).applyTo(m_left);
+        flash(currentColor).applyTo(m_right);
+        break;
+
+      case DRIVE_AUTO:
+        rainbow().applyTo(m_left);
+        rainbow().applyTo(m_right);
+        break;
+
+      case DRIVE_FINKLE:
+        rainbowFlash().applyTo(m_left);
+        rainbowFlash().applyTo(m_right);
+        break;
+
       case ESTOP:
         currentColor = new Color[] {Color.kGreen, Color.kGreenYellow};
         break;
-
-        // case TUNE_CORALSHOOTER:
-        //   breatheSlow(Color.kCoral, Color.kBlack).applyTo(m_left);
-        //   breatheSlow(Color.kCoral, Color.kBlack).applyTo(m_right);
-        //   break;
-
-        // case TUNE_ALGAESHOOTER:
-        //   breatheSlow(Color.kAquamarine, Color.kBlack).applyTo(m_left);
-        //   breatheSlow(Color.kAquamarine, Color.kBlack).applyTo(m_right);
-        //   break;
-
-        // case CLIMB_PREP:
-        //   progressrainbow().applyTo(m_left);
-        //   progressrainbow().applyTo(m_right);
-        //   break;
-
-        // case CLIMB_READY:
-        //   rainbow().blink(Seconds.of(1)).applyTo(m_left);
-        //   rainbow().blink(Seconds.of(1)).applyTo(m_right);
-        //   break;
-
-        // case CLIMB_NOW:
-        //   rainbow().applyTo(m_left);
-        //   rainbow().applyTo(m_right);
-        //   break;
 
       case UNKNOWN:
       case TRANSITION:
@@ -137,27 +129,25 @@ public class LEDManager extends CS_SubsystemBase {
     Color[] currentCoralColor = new Color[] {color, Color.kBlack};
 
     switch (Dashboard.getCoralState()) {
-      case RAMPING_UP:
       case LAUNCHING:
+        flash(currentCoralColor).applyTo(m_back_top);
+        break;
+      case RAMPING_UP:
         currentColor = new Color[] {color, Color.kBlack};
         breatheFast(currentCoralColor).applyTo(m_back_top);
         break;
-
       case IDLE:
         LEDPattern new_pattern = LEDPattern.solid(Color.kBlack);
         new_pattern.applyTo(m_back_top);
         break;
-
       case INTAKING:
         currentColor = new Color[] {color, Color.kBlack};
         breatheSlow(currentCoralColor).applyTo(m_back_top);
         break;
-
       case LOADED:
         new_pattern = LEDPattern.solid(color);
         new_pattern.applyTo(m_back_top);
         break;
-
       default:
         break;
     }
@@ -168,25 +158,23 @@ public class LEDManager extends CS_SubsystemBase {
     Color[] currentAlgaeColor = new Color[] {color, Color.kBlack};
 
     switch (Dashboard.getAlgaeState()) {
-      case RAMPING_UP:
       case LAUNCHING:
+        flash(currentAlgaeColor).applyTo(m_back_bottom);
+        break;
+      case RAMPING_UP:
         breatheFast(currentAlgaeColor).applyTo(m_back_bottom);
         break;
-
       case IDLE:
         LEDPattern new_pattern = LEDPattern.solid(Color.kBlack);
         new_pattern.applyTo(m_back_bottom);
         break;
-
       case INTAKING:
         breatheSlow(currentAlgaeColor).applyTo(m_back_bottom);
         break;
-
       case LOADED:
         new_pattern = LEDPattern.solid(color);
         new_pattern.applyTo(m_back_bottom);
         break;
-
       default:
         break;
     }
@@ -233,6 +221,13 @@ public class LEDManager extends CS_SubsystemBase {
     LEDBuffer.setRGB(j - 5, r, g, b);
   }
 
+  private static LEDPattern flash(Color... colors) {
+    LEDPattern new_pattern =
+        LEDPattern.gradient(LEDPattern.GradientType.kContinuous, colors)
+            .blink(LEDConstants.flashDuration);
+    return new_pattern;
+  }
+
   private static LEDPattern breatheFast(Color... colors) {
     LEDPattern new_pattern =
         LEDPattern.gradient(LEDPattern.GradientType.kContinuous, colors)
@@ -262,6 +257,14 @@ public class LEDManager extends CS_SubsystemBase {
     return rainbow;
   }
 
+  private static LEDPattern rainbowFlash() {
+    LEDPattern rainbow =
+        LEDPattern.rainbow(LEDConstants.rainbowSaturation, LEDConstants.rainbowValue)
+            .blink(LEDConstants.flashDuration);
+
+    return rainbow;
+  }
+
   private static LEDPattern progressrainbow() {
     Map<Double, Color> maskSteps = Map.of(0.0, Color.kWhite, 0.2, Color.kBlack);
 
@@ -279,10 +282,10 @@ public class LEDManager extends CS_SubsystemBase {
     Optional<Alliance> ally = DriverStation.getAlliance();
     if (ally.isPresent()) {
       if (ally.get() == Alliance.Red) {
-        newColor = new Color[] {Color.kRed, Color.kBlack};
+        newColor = new Color[] {Color.kRed, Color.kBlack, Color.kBlack};
       }
       if (ally.get() == Alliance.Blue) {
-        newColor = new Color[] {Color.kNavy, Color.kBlack};
+        newColor = new Color[] {Color.kNavy, Color.kBlack, Color.kBlack};
       }
     }
     return newColor;
@@ -294,7 +297,7 @@ public class LEDManager extends CS_SubsystemBase {
     updateMainLeds();
     updateCoralLEDs();
     updateAlgaeLEDs();
-    updateStatusLEDs();
+    // updateStatusLEDs();
 
     LEDs.setData(LEDBuffer);
   }

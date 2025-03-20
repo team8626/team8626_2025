@@ -18,13 +18,27 @@ const selectedCoralBranchTopicName = "selectedCoralBranch";
 const selectedAlgaeFaceTopicName = "selectedAlgaeFace";
 const selectedPickupSideTopicName = "selectedPickupSide";
 const selectedDtpTopicName = "selectedDtp";
+const selectedDealgaefyDtpTopicName = "selectedDealgaefyDtp";
+const selectedAlgaeShootDtpTopicName = "selectedAlgaeShootDtp";
 const matchTimeTopicName = "matchTime";
 const isAutoTopicName = "isAuto";
+const isTeleopTopicName = "isTeleop";
 const algaeStateTopicName = "algaeState";
 const coralStateTopicName = "coralState";
-const algaeShootTimeTopicName = "algaeShootTime";
-const coralShootTimeTopicName = "coralShootTime";
-const autoPathTopicName = "/SmartDashboard/Auto Path";
+const resetCoralBranchTopicName = "resetCoralBranch";
+const resetAlgaeFaceTopicName = "resetAlgaeFace";
+
+const algaeShootTimeTopicName = "algaeLastShootTime";
+const coralShootTimeTopicName = "coralLastShootTime";
+// const autoPathTopicName = "/SmartDashboard/Autos/Pathplanner Trajectory";
+const autoPathOptionsTopicName = "/SmartDashboard/Autos/Pathplanner Trajectory/options";
+const autoPathActiveTopicName = "/SmartDashboard/Autos/Pathplanner Trajectory/active";
+const autoPathSelectedTopicName = "/SmartDashboard/Autos/Pathplanner Trajectory/selected";
+// const autoModeTopicName = "/SmartDashboard/Autos/Autonomous Mode";
+const autoModeOptionsTopicName = "/SmartDashboard/Autos/Autonomous Mode/options";
+const autoModeActiveTopicName = "/SmartDashboard/Autos/Autonomous Mode/active";
+const autoModeSelectedTopicName = "/SmartDashboard/Autos/Autonomous Mode/selected";
+const commodoreStateTopicName = "/SmartDashboard/Commodore/Current State";
 
 // ***** STATE CACHE *****
 let allianceColor = 0; // int (0 = Unknown, 1 = Red, 2 Blue)
@@ -34,13 +48,18 @@ let selectedCoralBranch = 0; // int
 let selectedAlgaeFace = 0; // int
 let selectedPickupSide = 0; // int (0 = Unselected, 1 = Left, 2 = Right)
 let selectedDtp = false; // boolean
+let selectedDealgaefyDtp = false; // boolean
+let selectedAlgaeShootDtp = false; // boolean
 let matchTime = 0; // double (seconds)
-let isAuto = true; // double (seconds)
+let isAuto = false; // boolean
+let isTeleop = false; // boolean
 let algaeStatus = "---"; // string
 let coralStatus = "---"; // string
 let algaeShootTime = 0; // double (ms)
 let coralShootTime = 0; // double (ms)
-let isConnectionActive = false;
+let isConnectionSelected = false;
+// let selectedAutoMode = "";
+// let selectedPath = "";
 
 const ntClient = new NT4_Client(
   window.location.hostname,
@@ -61,6 +80,10 @@ const ntClient = new NT4_Client(
       isAuto = value;
       updateMatchTime(matchTime, isAuto);
       console.log("Rx Is Auto: " + isAuto);
+    } else if (topic.name === toDashboardPrefix + isTeleopTopicName) {
+      isTeleop = value;
+      toggleAutoDropdown(isTeleop);
+      console.log("Rx IsTelop: " + isTeleop);
     } else if (topic.name === toDashboardPrefix + matchTimeTopicName) {
       matchTime = value;
       updateMatchTime(matchTime, isAuto);
@@ -87,6 +110,14 @@ const ntClient = new NT4_Client(
       selectedDtp = value;
       updateDtpValue(selectedDtp);
       console.log("Rx Input DTP: " + selectedDtp);
+    } else if (topic.name === toDashboardPrefix + selectedDealgaefyDtpTopicName) {
+      selectedDealgaefyDtp = value;
+      updateDealgaefyDtpValue(selectedDealgaefyDtp);
+      console.log("Rx Input Dealgaefy DTP: " + selectedDealgaefyDtp);
+    } else if (topic.name === toDashboardPrefix + selectedAlgaeShootDtpTopicName) {
+      selectedAlgaeShootDtp = value;
+      updateAlgaeShootDtpValue(selectedAlgaeShootDtp);
+      console.log("Rx Input Shoot Algae DTP: " + selectedAlgaeShootDtp);
     } else if (topic.name === toDashboardPrefix + algaeStateTopicName) {
       algaeStatus = value;
       updateAlgaeState(algaeStatus);
@@ -98,15 +129,36 @@ const ntClient = new NT4_Client(
     } else if (topic.name === toDashboardPrefix + algaeShootTimeTopicName) {
       algaeShootTime = value;
       updateAlgaeShootTime(algaeShootTime);
+      updateAlgaeFaceValue(0, true);
       console.log("Rx Algae shoot time: " + algaeShootTime);
     } else if (topic.name === toDashboardPrefix + coralShootTimeTopicName) {
       coralShootTime = value;
       updateCoralShootTime(coralShootTime);
+      updateCoralBranchValue(0, true);
       console.log("Rx Coral shoot time: " + coralShootTime);
-    } else if (topic.name === autoPathTopicName) {
-      console.log("Rx Auto Path: " + value);
-      alert("Auto Path: " + value);
-    } 
+    } else if (topic.name === autoModeOptionsTopicName) {
+      console.log("Rx Auto Mode Options: " + value);
+      populateDropdown("#dropdown-menu-automode", "#selectedAutoMode", value);
+    } else if (topic.name === autoModeActiveTopicName) {
+      console.log("Rx Auto Mode Selected: " + value);
+      // selectedAutoMode = value;
+      updateDropdownSelection("#dropdown-menu-automode", "#selectedAutoMode", value);
+    } else if (topic.name === commodoreStateTopicName) {
+      UpdateRobotState(value);
+    } else if (topic.name === autoPathOptionsTopicName) {
+      console.log("Rx Auto Path Options: " + value);
+      populateDropdown("#dropdown-menu-trajectory", "#selectedTrajectory", value);
+    } else if (topic.name === autoPathActiveTopicName) {
+      console.log("Rx Auto Path Selected: " + value);
+      // selectedPath = value;
+      updateDropdownSelection("#dropdown-menu-trajectory", "#selectedTrajectory", value);
+    } else if (topic.name === toDashboardPrefix + resetCoralBranchTopicName) {
+      console.log("Rx Reset Coral Branch (" + value + ")");
+      updateCoralBranchValue(0, true, value);
+    } else if (topic.name === toDashboardPrefix + resetAlgaeFaceTopicName) {
+      console.log("Rx Reset Algae Face (" + value + ")");
+      updateAlgaeFaceValue(0, true, value);
+    }
     else {
       return;
     }
@@ -114,16 +166,16 @@ const ntClient = new NT4_Client(
   },
   () => {
     // Connected
-    if(!isConnectionActive) {
+    if(!isConnectionSelected) {
       $("body").css("background-color", "#111529");
-      isConnectionActive = true;
+      isConnectionSelected = true;
     }
   },
   () => {
     // Disconnected
-    if(isConnectionActive) {
+    if(isConnectionSelected) {
       $("body").css("background-color", "red"); 
-      isConnectionActive = false;
+      isConnectionSelected = false;
     }
   }
 );
@@ -139,16 +191,29 @@ window.addEventListener("load", () => {
       toDashboardPrefix + selectedAlgaeFaceTopicName,
       toDashboardPrefix + selectedPickupSideTopicName,
       toDashboardPrefix + selectedDtpTopicName,
+      toDashboardPrefix + selectedDealgaefyDtpTopicName,
+      toDashboardPrefix + selectedAlgaeShootDtpTopicName,
       toDashboardPrefix + matchTimeTopicName,
       toDashboardPrefix + isAutoTopicName,
+      toDashboardPrefix + isTeleopTopicName,
       toDashboardPrefix + algaeStateTopicName,
       toDashboardPrefix + coralStateTopicName,
       toDashboardPrefix + algaeShootTimeTopicName,
       toDashboardPrefix + coralShootTimeTopicName,
-      autoPathTopicName
+      toDashboardPrefix + resetAlgaeFaceTopicName,
+      toDashboardPrefix + resetCoralBranchTopicName,
+      // autoPathTopicName,
+      autoPathOptionsTopicName,
+      // autoPathDefaultTopicName,
+      autoPathActiveTopicName,
+      // autoModeTopicName,
+      autoModeOptionsTopicName,
+      // autoModeDefaultTopicName,
+      autoModeActiveTopicName,
+      commodoreStateTopicName
     ],
     false,
-    false,
+    true,
     0.02
   );
 
@@ -157,6 +222,10 @@ window.addEventListener("load", () => {
   ntClient.publishTopic(toRobotPrefix + selectedAlgaeFaceTopicName, "int");
   ntClient.publishTopic(toRobotPrefix + selectedPickupSideTopicName, "int");
   ntClient.publishTopic(toRobotPrefix + selectedDtpTopicName, "boolean");
+  ntClient.publishTopic(toRobotPrefix + selectedDealgaefyDtpTopicName, "boolean");
+  ntClient.publishTopic(toRobotPrefix + selectedAlgaeShootDtpTopicName, "boolean");
+  ntClient.publishTopic(autoModeSelectedTopicName, "string");
+  ntClient.publishTopic(autoPathSelectedTopicName, "string");
   ntClient.connect();
 });
 
@@ -206,6 +275,46 @@ function updateDtpValue(newValue) {
 }
 
 /**
+ * Function to update the DEalgaefy DTP value and radio buttons
+ * @param {*} newValue 
+ */
+function updateDealgaefyDtpValue(newValue) {
+  $("input[name='dealgaefydrivetopose'] + label").css("background", "");
+
+  // Update the radio buttons and labels based on the new value
+  if (selectedDealgaefyDtp === newValue) {
+      $("label[for='dealgaefydrivetopose_" + String(newValue) + "']").css("background", "red");
+  } else {
+      $("input[name='dealgaefydrivetopose'][id='dealgaefydrivetopose_" + newValue + "']").prop('checked', true);
+      $("label[for='dealgaefydrivetopose_" + String(newValue) + "']").css("background", "red");
+      // currentDtpValue = newValue;
+      selectedDealgaefyDtp = newValue;
+  }
+  // Send the updated value over NetworkTables
+  sendBooleanToRobot(selectedDealgaefyDtpTopicName, selectedDealgaefyDtp);
+}
+
+/**
+ * Function to update the Shoot Algae DTP value and radio buttons
+ * @param {*} newValue
+ */
+function updateAlgaeShootDtpValue(newValue) {
+  $("input[name='algaeshootdrivetopose'] + label").css("background", "");
+
+  // Update the radio buttons and labels based on the new value
+  if (selectedAlgaeShootDtp === newValue) {
+      $("label[for='algaeshootdrivetopose_" + String(newValue) + "']").css("background", "red");
+  } else {
+      $("input[name='algaeshootdrivetopose'][id='algaeshootdrivetopose_" + newValue + "']").prop('checked', true);
+      $("label[for='algaeshootdrivetopose_" + String(newValue) + "']").css("background", "red");
+      // currentDtpValue = newValue;
+      selectedAlgaeShootDtp = newValue;
+  }
+  // Send the updated value over NetworkTables
+  sendBooleanToRobot(selectedAlgaeShootDtpTopicName, selectedAlgaeShootDtp);
+}
+
+/**
  * Function to update the intake side value and radio buttons
  * @param {*} newValue
  */
@@ -229,8 +338,8 @@ function updateIntakeSideValue(newValue) {
  * Function to update the coral branch value and radio buttons
  * @param {*} newValue 
  */
-function updateCoralBranchValue(newValue, fromRobot = false) {
-  if(selectedCoralBranch == newValue && !fromRobot) {
+function updateCoralBranchValue(newValue, fromRobot = false, reset = false) {
+  if((selectedCoralBranch == newValue && !fromRobot) || reset) {
     $("input[name='coralGroup']").prop("checked", false); // Uncheck all radios
     selectedCoralBranch = 0;
   } else {
@@ -249,8 +358,8 @@ function updateCoralBranchValue(newValue, fromRobot = false) {
  * Function to update the algae face value and radio buttons
  * @param {*} newValue 
  */
-function updateAlgaeFaceValue(newValue, fromRobot = false) {
-  if(selectedAlgaeFace == newValue && !fromRobot) {
+function updateAlgaeFaceValue(newValue, fromRobot = false, reset = false) {
+  if((selectedAlgaeFace == newValue && !fromRobot) || reset) {
     $("input[name='algaeGroup']").prop("checked", false); // Uncheck all radios
     selectedAlgaeFace = 0;
   } else {
@@ -393,6 +502,81 @@ function udateAlliance(newValue) {
   }
 }
 
+
+// Function to populate dropdowns dynamically
+function populateDropdown(dropdownId, hiddenInputId, options) {
+  let dropdownMenu = $(dropdownId);
+  dropdownMenu.empty(); // Clear existing items
+  options.forEach(option => {
+      let newValue = option.toLowerCase().replace(/\s+/g, "-"); // Convert text to a safe value
+      let newItem = `<li><a class="dropdown-item" href="#" data-value="${newValue}">${option}</a></li>`;
+      dropdownMenu.append(newItem);
+  });
+
+  // Ensure all dropdown items update the button text & hidden input
+  dropdownMenu.find(".dropdown-item").off("click").on("click", function () {
+      let selectedText = $(this).text();
+      let selectedValue = $(this).attr("data-value");
+
+      let button = $(dropdownId).closest(".dropdown").find(".dropdown-toggle");
+
+      // Update button text and store the selected value
+      button.text(selectedText);
+      $(hiddenInputId).val(selectedValue);
+
+      console.log("Selected ("+dropdownId+")", selectedValue);
+  });
+}
+
+// Function to update dropdown selection from the network
+function updateDropdownSelection(dropdownId, hiddenInputId, option) {
+  let button = $(dropdownId).closest(".dropdown").find(".dropdown-toggle");
+  let newValue = option.toLowerCase().replace(/\s+/g, "-"); // Convert text to a safe value
+
+  // Find the matching option in the dropdown
+  let matchingOption = $(dropdownId).find(`.dropdown-item[data-value="${newValue}"]`);
+  console.log("Matching Option:", matchingOption);
+  if (matchingOption.length > 0) {
+      let selectedText = matchingOption.text();
+
+      // Update button text and hidden input
+      button.text(selectedText);
+
+      $(hiddenInputId).val(newValue);
+
+      button.removeClass("btn-danger").addClass("btn-success");
+
+      console.log("Network Updated:", newValue, "-- Dirty Flag OFF --");
+  } else {
+      console.warn("Value not found in dropdown:", newValue);
+  }
+}
+
+function UpdateRobotState(newState) {
+  let $eventList = $("#states-list");
+  
+  // Add new event to the end of the list
+  $eventList.append(`<li class="list-group-item">${newState}</li>`);
+
+  // Keep only the last 10 events
+  if ($eventList.children().length > 10) {
+      $eventList.children().first().remove();
+  }
+
+  // Scroll to the latest event
+  let container = $("#states-log-container");
+  container.scrollTop(container[0].scrollHeight);
+}
+
+function toggleAutoDropdown(isTeleop) {
+  if (isTeleop) {
+      $("#automode-wrapper, #trajectory-wrapper").show(); // Show dropdowns
+  } else {
+      $("#automode-wrapper, #trajectory-wrapper").hide(); // Hide dropdowns
+  }
+}
+
+
 /**
  * Send an integer value to the robot
  * @param {*} topic 
@@ -430,13 +614,51 @@ function sendBooleanToRobot(topic, value) {
   }
 }
 
+/**
+ * Send a boolean value to the robot
+ * @param {*} topic 
+ * @param {*} value 
+ */
+function sendStringToRobot(topic, value) {  
+  if (typeof ntClient !== 'undefined' && ntClient.addSample) {
+    ntClient.addSample(toRobotPrefix + topic, value);
+    console.log("Sending to robot: ", toRobotPrefix + topic, value);
+  } else {
+    console.error("ntClient or ntClient.addSample is not defined");
+  }
+}
+
+/**
+ * Send a boolean value to the robot
+ * @param {*} topic 
+ * @param {*} value 
+ */
+function sendStringAbsoluteTopicToRobot(topic, value) {  
+  if (typeof ntClient !== 'undefined' && ntClient.addSample) {
+    ntClient.addSample(topic, value);
+    console.log("Sending to robot: ", topic, value);
+  } else {
+    console.error("ntClient or ntClient.addSample is not defined");
+  }
+}
 
 // Bind UI buttons
 $(document).ready(function () {
+  
   // When any radio button in the drivetopose group is clicked
   $("input[name='drivetopose']").click(function (event) {
     console.log("DTP button clicked");
       updateDtpValue($(this).attr("value"));
+  });
+
+  $("input[name='dealgaefydrivetopose']").click(function (event) {
+    console.log("DealgaefyDTP button clicked");
+      updateDealgaefyDtpValue($(this).attr("value"));
+  });
+
+  $("input[name='algaeshootdrivetopose']").click(function (event) {
+    console.log("AlgaeShoot DTP button clicked");
+      updateAlgaeShootDtpValue($(this).attr("value"));
   });
 
   // When any radio button in the intakeside group is clicked
@@ -460,4 +682,37 @@ $(document).ready(function () {
     console.log("Algae: ", $(this).attr("id"));
     updateAlgaeFaceValue($(this).attr("value"));
   });
+
+  // Handle the dropdowns
+  $(document).on("click", ".dropdown-menu .dropdown-item", function () {
+    let selectedText = $(this).text(); 
+    let selectedValue = $(this).attr("data-value"); 
+    let dropdownButton = $(this).closest(".dropdown").find(".dropdown-toggle"); 
+    let hiddenInput = $(this).closest(".dropdown").next("input[type='hidden']"); 
+
+    // Update the button text and store the value
+    dropdownButton.text(selectedText);
+    hiddenInput.val(selectedValue);
+    console.log("Selected Value:", selectedText);
+
+    // Change button color to warning (red)
+    dropdownButton.removeClass("btn-success").addClass("btn-danger");
+
+    // Get the dropdown ID to differentiate
+    let dropdownId = dropdownButton.attr("id");
+
+    // Call the mock server with different arguments based on dropdown
+    if (dropdownId === "automode") {
+        console.log("Sending Auto Mode Selection to Server:", selectedText, "-- Dirty Flag ON --");
+        sendStringAbsoluteTopicToRobot(autoModeSelectedTopicName, selectedText);
+    } else if (dropdownId === "trajectory") {
+        console.log("Sending Trajectory Selection to Server:", selectedText, "-- Dirty Flag ON --");
+        sendStringAbsoluteTopicToRobot(autoPathSelectedTopicName, selectedText);
+    } else {
+        console.log("Unknown dropdown selected:", selectedText, "-- Dirty Flag ON --");
+    }
+
+        
+});
+
 });

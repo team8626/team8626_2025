@@ -301,16 +301,18 @@ public class Vision {
         "Arducam_AT001",
         // new Rotation3d(26.033445, Units.degreesToRadians(-20),
         // Units.degreesToRadians(143.308536)),
-        new Rotation3d(13.4678342, Units.degreesToRadians(-20), Units.degreesToRadians(123.34411)),
-        new Translation3d(-0.294805, -0.280851, 0.237332),
+        new Rotation3d(
+            Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(180)),
+        new Translation3d(-0.092444, -0.285114, 0.164375 + 0.127933),
         VecBuilder.fill(4, 4, 8),
         VecBuilder.fill(0.5, 0.5, 1)),
     Arducam_AT002(
         "Arducam_AT002",
         // new Rotation3d(-26.033445, Units.degreesToRadians(-20),
         // Units.degreesToRadians(216.691464)),
-        new Rotation3d(-13.4678342, Units.degreesToRadians(-20), Units.degreesToRadians(236.65589)),
-        new Translation3d(-0.294805, 0.280851, 0.237332),
+        new Rotation3d(
+            Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(180)),
+        new Translation3d(-0.092444, 0.285114, 0.164375 + 0.127933),
         VecBuilder.fill(4, 4, 8),
         VecBuilder.fill(0.5, 0.5, 1));
 

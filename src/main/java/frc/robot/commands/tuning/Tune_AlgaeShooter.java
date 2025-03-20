@@ -6,26 +6,38 @@
 
 package frc.robot.commands.tuning;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
+import frc.robot.subsystems.Dashboard;
+import frc.robot.subsystems.Dashboard.GamePieceState;
+import frc.robot.subsystems.algaeshooter.AlgaeShooterConstants;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterSubsystem;
 import frc.robot.subsystems.presets.Presets;
 
 public class Tune_AlgaeShooter extends CS_Command {
   private AlgaeShooterSubsystem algae501;
+  private double desiredRPM = AlgaeShooterConstants.shootRPM;
 
   public Tune_AlgaeShooter() {
     algae501 = RobotContainer.algae501;
 
     addRequirements(algae501);
 
-    this.setTAGString("TUNE_ALGAESHOOTER");
+    this.desiredRPM = Presets.ALGAE_NETFROM10FT.getRPM();
+    this.setTAGString("ALGAESHOOTER_RAMPUP");
   }
-
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    algae501.startRampUp(Presets.ALGAE_NETFROM10FT.getRPM());
+    double newRPM =
+        SmartDashboard.getNumber(
+            "Subsystem/AlgaeShooter/Shooting RPM", AlgaeShooterConstants.shootRPM);
+    desiredRPM = newRPM;
+    printf("RPM: %f", desiredRPM);
+
+    Dashboard.setAlgaeState(GamePieceState.RAMPING_UP);
+    algae501.startRampUp(desiredRPM);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -36,7 +48,8 @@ public class Tune_AlgaeShooter extends CS_Command {
   @Override
   public void end(boolean interrupted) {
     if (interrupted) {
-      algae501.stopShooter();
+      algae501.stopAll();
+      Dashboard.setAlgaeState(GamePieceState.IDLE);
     }
   }
 

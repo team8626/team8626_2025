@@ -6,76 +6,106 @@
 
 package frc.robot.commands.setters.units;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
 import frc.robot.subsystems.Dashboard;
 import frc.robot.subsystems.Dashboard.GamePieceState;
 import frc.robot.subsystems.coralshooter.CoralShooterConstants;
 import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
+import frc.robot.subsystems.presets.CoralPreset;
+import frc.robot.subsystems.presets.PresetManager;
 import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 
 public class CoralShooterRampUp extends CS_Command {
   private CoralShooterSubsystem mortar;
-
-  private double desiredRPMLeft;
-  private double desiredRPMRight;
+  private boolean overrideRPM = false;
+  private double dashboardRPMLeft = 0;
+  private double dashboardRPMRight = 0;
+  private DoubleSupplier desiredRpmLeft;
+  private DoubleSupplier desiredRpmRight;
   private final double RPMTolerance = CoralShooterConstants.RPMTolerance;
-  private final double RPMDifferentialTolerance = CoralShooterConstants.RPMDifferentialTolerance;
+  private String coralPresetName = "";
 
-  public CoralShooterRampUp() {}
+  public CoralShooterRampUp() {
+    this(PresetManager.getCoralPreset());
+  }
 
-  // public CoralShooterRampUp(DoubleSupplier new_RPMLeft, DoubleSupplier new_RPMRight) {
-  //   mortar = RobotContainer.mortar;
-
-  //   desiredRPMLeft = new_RPMLeft.getAsDouble();
-  //   desiredRPMRight = new_RPMRight.getAsDouble();
-
-  //   addRequirements(mortar);
-  //   this.setTAGString("CORALSHOOTER_RAMPUP");
-  // }
-
-  public CoralShooterRampUp(
-      DoubleSupplier new_RPMLeftSupplier, DoubleSupplier new_RPMRightSupplier) {
+  public CoralShooterRampUp(Supplier<CoralPreset> newPreset) {
     mortar = RobotContainer.mortar;
 
-    desiredRPMLeft = new_RPMLeftSupplier.getAsDouble();
-    desiredRPMRight = new_RPMRightSupplier.getAsDouble();
+    desiredRpmLeft = () -> newPreset.get().RPMLeft;
+    desiredRpmRight = () -> newPreset.get().RPMRight;
+    coralPresetName = "From Supplier - " + newPreset.get().name;
+
+    SmartDashboard.putBoolean("Commands/CoralShooterRampUp/leftAtSetPoint", false);
+    SmartDashboard.putBoolean("Commands/CoralShooterRampUp/rightAtSetPoint", false);
+    addRequirements(mortar);
+    this.setTAGString("CORALSHOOTER_RAMPUP3");
+  }
+
+  public CoralShooterRampUp(DoubleSupplier newRPMLeft, DoubleSupplier newRPMRight) {
+    mortar = RobotContainer.mortar;
+
+    desiredRpmLeft = newRPMLeft;
+    desiredRpmRight = newRPMRight;
+    coralPresetName =
+        "From DoubleSuppliers"
+            + desiredRpmLeft.getAsDouble()
+            + " / "
+            + desiredRpmRight.getAsDouble();
 
     addRequirements(mortar);
-    this.setTAGString("CORALSHOOTER_RAMPUP");
+    this.setTAGString("CORALSHOOTER_RAMPUP3");
   }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    printf("[CORALSHOOTER_RAMPUP] RPM Left: %f, RPM Right: %f", desiredRPMLeft, desiredRPMRight);
     Dashboard.setCoralState(GamePieceState.RAMPING_UP);
-    mortar.startRampUp(desiredRPMLeft, desiredRPMRight);
+
+    overrideRPM = SmartDashboard.getBoolean("Commands/CoralShooterRampUp/OverrideRPM", false);
+    dashboardRPMLeft = SmartDashboard.getNumber("Commands/CoralShooterRampUp/ForcedRMPLeft", 0);
+    dashboardRPMRight = SmartDashboard.getNumber("Commands/CoralShooterRampUp/ForcedRMPRight", 0);
+
+    if (overrideRPM) {
+      desiredRpmLeft = () -> dashboardRPMLeft;
+      desiredRpmRight = () -> dashboardRPMRight;
+    }
+
+    printf(
+        "(%s) RPM Left: %f, RPM Right: %f",
+        coralPresetName, desiredRpmLeft.getAsDouble(), desiredRpmRight.getAsDouble());
+    mortar.startRampUp(desiredRpmLeft.getAsDouble(), desiredRpmRight.getAsDouble());
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {}
 
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    Dashboard.setCoralState(GamePieceState.IDLE);
     if (interrupted) {
       mortar.stopAll();
     }
   }
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    boolean atSetpoint = false;
+    boolean leftAtSetpoint = false;
+    boolean rightAtSetpoint = false;
 
     double currentRPMLeft = mortar.getShooterRPMLeft();
     double currentRPMRight = mortar.getShooterRPMRight();
 
-    atSetpoint =
-        Math.abs(Math.abs(currentRPMLeft) - desiredRPMLeft) <= RPMTolerance
-            && Math.abs(Math.abs(currentRPMRight) - desiredRPMRight) <= RPMTolerance;
-    return atSetpoint;
+    leftAtSetpoint =
+        Math.abs(Math.abs(currentRPMLeft) - desiredRpmLeft.getAsDouble()) <= RPMTolerance;
+    rightAtSetpoint =
+        Math.abs(Math.abs(currentRPMRight) - desiredRpmRight.getAsDouble()) <= RPMTolerance;
+
+    SmartDashboard.putBoolean("Commands/CoralShooterRampUp/leftAtSetPoint", leftAtSetpoint);
+    SmartDashboard.putBoolean("Commands/CoralShooterRampUp/rightAtSetPoint", rightAtSetpoint);
+
+    return leftAtSetpoint && rightAtSetpoint;
   }
 }

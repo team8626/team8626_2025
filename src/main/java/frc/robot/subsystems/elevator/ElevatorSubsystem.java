@@ -33,16 +33,16 @@ public class ElevatorSubsystem extends CS_SubsystemBase {
     elevatorInterface.reset();
   }
 
-  public void setkP(double new_value) {
-    elevatorInterface.setElevatorkP(new_value);
+  public void setkP(double newkP) {
+    elevatorInterface.setPID(newkP, values.kI, values.kD);
   }
 
-  public void setkI(double new_value) {
-    elevatorInterface.setElevatorkI(new_value);
+  public void setkI(double newkI) {
+    elevatorInterface.setPID(values.kP, values.kI, newkI);
   }
 
-  public void setkD(double new_value) {
-    elevatorInterface.setElevatorkD(new_value);
+  public void setkD(double newkD) {
+    elevatorInterface.setPID(values.kP, values.kI, newkD);
   }
 
   @Override
@@ -88,6 +88,8 @@ public class ElevatorSubsystem extends CS_SubsystemBase {
     values.kI = CS_Utils.updateFromSmartDashboard(newkI, values.kI, (value) -> setkI(value));
     values.kD = CS_Utils.updateFromSmartDashboard(newkD, values.kD, (value) -> setkD(value));
 
+    SmartDashboard.putData(this);
+
     // double newHeight = SmartDashboard.getNumber("Subsystem/Elevator/DesiredHeight",
     // desiredHeight);
     // if (newHeight != desiredHeight) {
@@ -113,4 +115,18 @@ public class ElevatorSubsystem extends CS_SubsystemBase {
   public void goDown(double offsetInches) {
     elevatorInterface.goDown(offsetInches);
   }
+  // private void log(SysIdRoutineLog log) {
+  //   System.out.println("logging");
+  //   log.motor("left")
+  //       .voltage(Voltage.ofRelativeUnits(left`Motor.get() * 12, Volts))
+  //       .linearPosition(Distance.ofRelativeUnits(leftMotor.getEncoder().getPosition(), Inches))
+  //       .linearVelocity(LinearVelocity.ofRelativeUnits(leftMotor.getEncoder().getVelocity(),
+  // InchesPerSecond));
+  //   log.motor("right")
+  //       .voltage(Voltage.ofRelativeUnits(rightMotor.get() * 12, Volts))
+  //       .linearPosition(Distance.ofRelativeUnits(rightMotor.getEncoder().getPosition(), Inches))
+  //       .linearVelocity(LinearVelocity.ofRelativeUnits(rightMotor.getEncoder().getVelocity(),
+  // InchesPerSecond));
+  // }
+
 }

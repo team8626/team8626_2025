@@ -54,21 +54,6 @@ public class Elevator_Simulation implements ElevatorInterface, CS_InterfaceBase 
   }
 
   @Override
-  public void setElevatorkP(double new_value) {
-    printf("New kP: %f\n", new_value);
-  }
-
-  @Override
-  public void setElevatorkI(double new_value) {
-    printf("New kI: %f\n", new_value);
-  }
-
-  @Override
-  public void setElevatorkD(double new_value) {
-    printf("New kD: %f\n", new_value);
-  }
-
-  @Override
   public void setHeightInches(double heightInches) {
     elevator.setState(
         Units.inchesToMeters(heightInches), ElevatorConstants.velocityMetersPerSecond);

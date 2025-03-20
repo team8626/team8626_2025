@@ -17,29 +17,45 @@ import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
 public class CoralShooterIntake extends CS_Command {
   private CoralShooterSubsystem mortar;
   private final Timer timer = new Timer();
+  private final Timer intakeTimer = new Timer();
+  private boolean intakePaused = false;
 
   public CoralShooterIntake() {
     mortar = RobotContainer.mortar;
 
     addRequirements(mortar);
-
     this.setTAGString("CORALSHOOTER_INTAKE");
   }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     Dashboard.setCoralState(GamePieceState.INTAKING);
     mortar.startIntake();
+    intakeTimer.stop();
+    intakeTimer.reset();
+    intakeTimer.start();
+
     timer.stop();
     timer.reset();
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    if (intakePaused) {
+      if (intakeTimer.hasElapsed(0.25)) {
+        mortar.startIntake();
+        intakePaused = false;
+        intakeTimer.reset();
+      }
+    } else {
+      if (intakeTimer.hasElapsed(3.0)) {
+        mortar.stopAll();
+        intakePaused = true;
+        intakeTimer.reset();
+      }
+    }
+  }
 
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     if (mortar.isLoaded()) {
@@ -51,7 +67,6 @@ public class CoralShooterIntake extends CS_Command {
     timer.stop();
   }
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     if (mortar.isLoaded()) {

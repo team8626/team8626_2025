@@ -6,6 +6,7 @@
 
 package frc.robot.commands.setters.units;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
 import frc.robot.subsystems.wrist.WristConstants;
@@ -21,6 +22,7 @@ public class WristSetAngle extends CS_Command {
     angle = newAngle;
 
     addRequirements(wrist);
+    SmartDashboard.putBoolean("Commands/WristSetAngle/atSetPoint", false);
 
     this.setTAGString("WRIST_SETANGLE");
   }
@@ -42,13 +44,14 @@ public class WristSetAngle extends CS_Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    boolean retVal = false;
+    boolean atSetPoint = false;
 
     double currentAngle = wrist.getAngleDegrees();
 
     if (Math.abs(currentAngle - angle.getAsDouble()) <= WristConstants.toleranceDegrees) {
-      retVal = true;
+      atSetPoint = true;
     }
-    return retVal;
+    SmartDashboard.putBoolean("Commands/WristSetAngle/atSetPoint", atSetPoint);
+    return atSetPoint;
   }
 }

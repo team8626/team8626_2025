@@ -5,6 +5,7 @@
 package frc.robot.subsystems.drive;
 
 import static edu.wpi.first.units.Units.Meter;
+import static edu.wpi.first.units.Units.MetersPerSecond;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -19,29 +20,40 @@ import com.pathplanner.lib.util.swerve.SwerveSetpoint;
 import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
+import frc.robot.OperatorConstants;
+import frc.robot.RobotConstants;
 import frc.robot.subsystems.CS_SubsystemBase;
 import frc.robot.subsystems.drive.Vision.Cameras;
+import frc.utils.CS_XboxController;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 import org.json.simple.parser.ParseException;
+import org.littletonrobotics.frc2025.util.AllianceFlipUtil;
 import org.photonvision.targeting.PhotonPipelineResult;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
@@ -65,6 +77,12 @@ public class SwerveSubsystem extends CS_SubsystemBase {
   /** PhotonVision class to keep an accurate odometry. */
   private Vision vision;
 
+  private boolean isFlipped = false;
+  StructPublisher<Pose3d> robotPosePub =
+      NetworkTableInstance.getDefault()
+          .getStructTopic("SmartDashboard/Subsystem/Drive/RobotPose", Pose3d.struct)
+          .publish();
+
   /**
    * Initialize {@link SwerveDrive} with the directory provided.
    *
@@ -78,7 +96,7 @@ public class SwerveSubsystem extends CS_SubsystemBase {
       swerveDrive =
           new SwerveParser(directory)
               .createSwerveDrive(
-                  Constants.MAX_SPEED,
+                  RobotConstants.MAX_LINEAR_VELOCITY.in(MetersPerSecond),
                   new Pose2d(
                       new Translation2d(Meter.of(1), Meter.of(4)), Rotation2d.fromDegrees(0)));
       // Alternative method if you don't want to supply the conversion factor via JSON files.
@@ -107,6 +125,7 @@ public class SwerveSubsystem extends CS_SubsystemBase {
       swerveDrive.stopOdometryThread();
     }
     setupPathPlanner();
+    RobotModeTriggers.autonomous().onTrue(Commands.runOnce(this::zeroGyro));
   }
 
   /**
@@ -121,7 +140,7 @@ public class SwerveSubsystem extends CS_SubsystemBase {
         new SwerveDrive(
             driveCfg,
             controllerCfg,
-            Constants.MAX_SPEED,
+            RobotConstants.MAX_LINEAR_VELOCITY.in(MetersPerSecond),
             new Pose2d(new Translation2d(Meter.of(2), Meter.of(0)), Rotation2d.fromDegrees(0)));
   }
 
@@ -250,7 +269,7 @@ public class SwerveSubsystem extends CS_SubsystemBase {
    * @param pose Target {@link Pose2d} to go to.
    * @return PathFinding command
    */
-  public Command driveToPose(Pose2d pose) {
+  public Command driveToPose(Supplier<Pose2d> pose) {
     // Create the constraints to use while pathfinding
     PathConstraints constraints =
         new PathConstraints(
@@ -261,7 +280,7 @@ public class SwerveSubsystem extends CS_SubsystemBase {
 
     // Since AutoBuilder is configured, we can use it to build pathfinding commands
     return AutoBuilder.pathfindToPose(
-        pose,
+        pose.get(),
         constraints,
         edu.wpi.first.units.Units.MetersPerSecond.of(0) // Goal end velocity in meters/sec
         );
@@ -410,6 +429,36 @@ public class SwerveSubsystem extends CS_SubsystemBase {
   }
 
   /**
+   * Command to drive the robot using translative values and heading as angular velocity.
+   *
+   * @param translationX Translation in the X direction. Cubed for smoother controls.
+   * @param translationY Translation in the Y direction. Cubed for smoother controls.
+   * @param angularRotationX Angular velocity of the robot to set. Cubed for smoother controls.
+   * @param fieldRelative Field relative mode.
+   * @return Drive command.
+   */
+  public Command driveCommand(
+      DoubleSupplier translationX,
+      DoubleSupplier translationY,
+      DoubleSupplier angularRotationX,
+      BooleanSupplier fieldRelative) {
+    return run(
+        () -> {
+          // Make the robot move
+          swerveDrive.drive(
+              SwerveMath.scaleTranslation(
+                  new Translation2d(
+                      translationX.getAsDouble() * swerveDrive.getMaximumChassisVelocity(),
+                      translationY.getAsDouble() * swerveDrive.getMaximumChassisVelocity()),
+                  0.8),
+              Math.pow(angularRotationX.getAsDouble(), 3)
+                  * swerveDrive.getMaximumChassisAngularVelocity(),
+              fieldRelative.getAsBoolean(),
+              false);
+        });
+  }
+
+  /**
    * Command to drive the robot using translative values and heading as a setpoint.
    *
    * @param translationX Translation in the X direction. Cubed for smoother controls.
@@ -516,6 +565,9 @@ public class SwerveSubsystem extends CS_SubsystemBase {
     swerveDrive.resetOdometry(initialHolonomicPose);
   }
 
+  public void resetOdometry(Supplier<Pose2d> initialHolonomicPose) {
+    swerveDrive.resetOdometry(initialHolonomicPose.get());
+  }
   /**
    * Gets the current pose (position and rotation) of the robot, as reported by odometry.
    *
@@ -614,7 +666,7 @@ public class SwerveSubsystem extends CS_SubsystemBase {
         headingX,
         headingY,
         getHeading().getRadians(),
-        Constants.MAX_SPEED);
+        RobotConstants.MAX_LINEAR_VELOCITY.in(MetersPerSecond));
   }
 
   /**
@@ -634,7 +686,7 @@ public class SwerveSubsystem extends CS_SubsystemBase {
         scaledInputs.getY(),
         angle.getRadians(),
         getHeading().getRadians(),
-        Constants.MAX_SPEED);
+        RobotConstants.MAX_LINEAR_VELOCITY.in(MetersPerSecond));
   }
 
   /**
@@ -700,5 +752,40 @@ public class SwerveSubsystem extends CS_SubsystemBase {
    */
   public SwerveDrive getSwerveDrive() {
     return swerveDrive;
+  }
+
+  public void setDefaultCommand(CS_XboxController xboxController) {
+    Command driveCommand =
+        this.driveCommand(
+            () ->
+                MathUtil.applyDeadband(
+                    -xboxController.getLeftY()
+                        * (AllianceFlipUtil.shouldFlip() ? -1.0 : 1.0)
+                        * (isFlipped ? -1.0 : 1.0),
+                    OperatorConstants.LEFT_Y_DEADBAND),
+            () ->
+                MathUtil.applyDeadband(
+                    -xboxController.getLeftX()
+                        * (AllianceFlipUtil.shouldFlip() ? -1.0 : 1.0)
+                        * (isFlipped ? -1.0 : 1.0),
+                    OperatorConstants.LEFT_X_DEADBAND),
+            () -> -xboxController.getRightX(),
+            () -> !xboxController.getStartButton());
+    setDefaultCommand(driveCommand);
+  }
+
+  public void flipToggle() {
+    isFlipped = !isFlipped;
+  }
+
+  /**
+   * Method to initialize the Dashboard. This method is called once by the {@link
+   * #CS_SubsystemBase()} constructor.
+   */
+  public void updateDashboard() {
+    SmartDashboard.putNumber("Subsystem/Drive/Heading", getHeading().getDegrees());
+    SmartDashboard.putNumber("Subsystem/Drive/Pitch", getPitch().getDegrees());
+    SmartDashboard.putBoolean("Subsystem/Drive/IsFlipped", isFlipped);
+    robotPosePub.set(new Pose3d(getPose()));
   }
 }
