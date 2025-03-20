@@ -61,7 +61,7 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
         .p(gains.kP(), ClosedLoopSlot.kSlot1)
         .i(gains.kI(), ClosedLoopSlot.kSlot1)
         .d(gains.kD(), ClosedLoopSlot.kSlot1)
-        .outputRange(-0.8, 0.3, ClosedLoopSlot.kSlot1);
+        .outputRange(-0.5, 0.15, ClosedLoopSlot.kSlot1); // Down, Up
 
     rightConfig
         .closedLoop
@@ -142,12 +142,12 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
     } else {
       if (this.isZeroing) {
         if (this.rightMotor.getOutputCurrent() > 30) {
+          this.desiredHeightInches = ElevatorConstants.initHeightInches;
+          encoder.setPosition(ElevatorConstants.initHeightInches);
           rightController.setReference(0, ControlType.kDutyCycle);
 
           this.isZeroed = true;
           this.isZeroing = false;
-          this.desiredHeightInches = ElevatorConstants.initHeightInches;
-          encoder.setPosition(ElevatorConstants.minHeightInches);
         }
       } else {
         // Not Zeroed and not Zeroing yet...
@@ -164,7 +164,7 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
   public void reset() {
     this.isZeroed = false;
     this.isZeroing = true;
-    rightController.setReference(-.25, ControlType.kDutyCycle);
+    rightController.setReference(-.1, ControlType.kDutyCycle);
   }
 
   @Override
