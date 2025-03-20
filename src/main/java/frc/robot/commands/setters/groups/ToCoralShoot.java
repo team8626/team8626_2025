@@ -9,34 +9,29 @@ package frc.robot.commands.setters.groups;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Commodore;
 import frc.robot.Commodore.CommodoreState;
 import frc.robot.RobotContainer;
 import frc.robot.commands.setters.units.CoralShooterLaunch;
-import frc.robot.commands.setters.units.CoralShooterRampUp3;
+import frc.robot.commands.setters.units.CoralShooterRampUp;
 import frc.robot.commands.setters.units.CoralShooterStop;
 import frc.robot.subsystems.Dashboard;
 import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
 import frc.robot.subsystems.presets.CoralPreset;
-import frc.robot.subsystems.presets.PresetManager;
 import java.util.function.Supplier;
 
-public class ToCoralShoot3 extends SequentialCommandGroup {
+public class ToCoralShoot extends SequentialCommandGroup {
   private final Timer timer = new Timer();
   private CoralShooterSubsystem mortar;
+  Supplier<CoralPreset> coralPreset = () -> new CoralPreset("empty");
 
-  public ToCoralShoot3() {
+  public ToCoralShoot() {
     this.mortar = RobotContainer.mortar;
-    Supplier<CoralPreset> presetSupplier = () -> PresetManager.getCoralPreset();
     addCommands(
         new ConditionalCommand(
             new SequentialCommandGroup(
-                Commodore.getSetStateCommand(CommodoreState.CORAL_SHOOT_RAMPINGUP),
-                // new CoralShooterRampUp3(() -> Presets.CORAL_L3) {
-                new CoralShooterRampUp3() {
+                new CoralShooterRampUp() {
                   @Override
                   public void initialize() {
                     super.initialize();
@@ -44,7 +39,6 @@ public class ToCoralShoot3 extends SequentialCommandGroup {
                     timer.start();
                   }
                 },
-                Commodore.getSetStateCommand(CommodoreState.CORAL_SHOOT_LAUNCHING),
                 new CoralShooterLaunch(),
                 new CoralShooterStop() {
                   @Override
@@ -56,21 +50,22 @@ public class ToCoralShoot3 extends SequentialCommandGroup {
                     Dashboard.publishCoralShootTime((int) (elapsedTime * 1000));
                   }
                 },
-                Commodore.getSetStateCommand(CommodoreState.IDLE),
-                new PrintCommand("[TOCORALSOOT3] (From PresetManager) Resetting Coral Preset"),
-                new InstantCommand(() -> PresetManager.resetCoralPreset())),
+                Commodore.getSetStateCommand(CommodoreState.IDLE)
+                // ,new InstantCommand(() -> PresetManager.resetCoralPreset())
+
+                ),
             new SequentialCommandGroup(Commodore.getSetStateCommand(CommodoreState.IDLE)),
             mortar::isLoaded));
   }
 
-  public ToCoralShoot3(Supplier<CoralPreset> coralPresetSupplier) {
+  public ToCoralShoot(Supplier<CoralPreset> newCoralPreset) {
     this.mortar = RobotContainer.mortar;
+    coralPreset = newCoralPreset;
 
     addCommands(
         new ConditionalCommand(
             new SequentialCommandGroup(
-                Commodore.getSetStateCommand(CommodoreState.CORAL_SHOOT_RAMPINGUP),
-                new CoralShooterRampUp3(coralPresetSupplier) {
+                new CoralShooterRampUp(coralPreset) {
                   @Override
                   public void initialize() {
                     super.initialize();
@@ -78,7 +73,6 @@ public class ToCoralShoot3 extends SequentialCommandGroup {
                     timer.start();
                   }
                 },
-                Commodore.getSetStateCommand(CommodoreState.CORAL_SHOOT_LAUNCHING),
                 new CoralShooterLaunch(),
                 new CoralShooterStop() {
                   @Override
@@ -90,8 +84,10 @@ public class ToCoralShoot3 extends SequentialCommandGroup {
                     Dashboard.publishCoralShootTime((int) (elapsedTime * 1000));
                   }
                 },
-                Commodore.getSetStateCommand(CommodoreState.IDLE),
-                new InstantCommand(() -> PresetManager.resetCoralPreset())),
+                Commodore.getSetStateCommand(CommodoreState.IDLE)
+                // ,new InstantCommand(() -> PresetManager.resetCoralPreset())
+
+                ),
             new SequentialCommandGroup(Commodore.getSetStateCommand(CommodoreState.IDLE)),
             mortar::isLoaded));
   }

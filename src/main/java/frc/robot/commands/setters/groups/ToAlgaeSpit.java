@@ -7,6 +7,7 @@
 package frc.robot.commands.setters.groups;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Commodore;
 import frc.robot.RobotContainer;
 import frc.robot.commands.setters.units.AlgaeShooterSpit;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterSubsystem;
@@ -15,19 +16,18 @@ import java.util.function.DoubleSupplier;
 
 public class ToAlgaeSpit extends SequentialCommandGroup {
   private AlgaeShooterSubsystem algae501;
-  private DoubleSupplier rpmSupplier = null;
+  private DoubleSupplier rpm = null;
 
   public ToAlgaeSpit(DoubleSupplier newRMP) {
     this.algae501 = RobotContainer.algae501;
-    rpmSupplier = newRMP;
+    rpm = newRMP;
     buildCommandGroup();
   }
 
   public ToAlgaeSpit() {
     this.algae501 = RobotContainer.algae501;
-    System.out.println("[Cmd: TOALGAESPIT]");
 
-    rpmSupplier = () -> Presets.ALGAE_FLOOR.getRPM();
+    rpm = () -> Presets.ALGAE_FLOOR.getRPM();
     buildCommandGroup();
   }
 
@@ -35,6 +35,7 @@ public class ToAlgaeSpit extends SequentialCommandGroup {
     addCommands(
         new ToSubsystemsPreset(() -> Presets.ALGAE_SPIT),
         new AlgaeShooterSpit().withTimeout(1.0),
-        new ToSubsystemsPreset(() -> Presets.ALGAE_STOW));
+        new ToSubsystemsPreset(() -> Presets.ALGAE_STOW),
+        Commodore.getSetStateCommand(Commodore.CommodoreState.IDLE));
   }
 }

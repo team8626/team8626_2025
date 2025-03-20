@@ -20,6 +20,7 @@ public class FollowPathToPose extends CS_Command {
   private SwerveSubsystem drivebase;
 
   private Pose2d targetPose;
+  private Pose2d offsetPose;
   private PathConstraints constraints;
   private Command pathfindingCommand;
   private double offsetInches = 0;
@@ -46,7 +47,9 @@ public class FollowPathToPose extends CS_Command {
       Supplier<Pose2d> desiredPoseSupplier,
       DoubleSupplier newOffsetInches,
       DoubleSupplier newEndSpeed) {
+
     drivebase = RobotContainer.drivebase;
+
     this.poseSupplier = desiredPoseSupplier;
     this.offsetInches = newOffsetInches.getAsDouble();
     this.endSpeed = newEndSpeed.getAsDouble();
@@ -58,15 +61,15 @@ public class FollowPathToPose extends CS_Command {
   @Override
   public void initialize() {
     hasValidPose = false;
+
     if ((this.poseSupplier != null) && (this.poseSupplier.get() != null)) {
       hasValidPose = true;
     }
 
     if (hasValidPose) {
+      println("--------- Starting Pathfinding ---------");
 
       targetPose = poseSupplier.get();
-
-      Commodore.setCommodoreState(CommodoreState.DRIVE_AUTO);
 
       println(
           "X: "
@@ -77,10 +80,11 @@ public class FollowPathToPose extends CS_Command {
               + offsetInches
               + "in");
 
-      Pose2d offsetPose =
+      offsetPose =
           targetPose.plus(
               new Transform2d(Units.inchesToMeters(this.offsetInches), 0, new Rotation2d()));
 
+      println("With Offset X: " + offsetPose.getX() + " Y: " + offsetPose.getY());
       constraints =
           new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI); // The constraints for this path.
       // constraints = PathConstraints.unlimitedConstraints(12.0); // You can also use unlimited
@@ -91,17 +95,25 @@ public class FollowPathToPose extends CS_Command {
   }
 
   @Override
-  public void execute() {}
+  public void execute() {
+    Commodore.setCommodoreState(CommodoreState.DRIVE_AUTO);
+  }
 
   @Override
   public void end(boolean interrupted) {
     Commodore.setCommodoreState(CommodoreState.IDLE);
-    this.offsetInches = 0;
-    this.endSpeed = 0;
   }
 
   @Override
   public boolean isFinished() {
-    return hasValidPose && pathfindingCommand.isFinished();
+    boolean retVal = false;
+    if (hasValidPose
+        && ((Math.abs(offsetPose.getX() - drivebase.getPose().getX()) < 0.10)
+            && (Math.abs(offsetPose.getY() - drivebase.getPose().getY()) < 0.10))) {
+      retVal = true;
+    } else if (!hasValidPose) {
+      retVal = true;
+    }
+    return retVal;
   }
 }

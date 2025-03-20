@@ -46,12 +46,12 @@ public class DriveToPoseFinkle extends CS_Command {
 
   private static final double defaultPositionTolerance = 0.01; // meters
   private static final double defaultPositionVelocityTolerance = 0.01; // meters
-  private static final double defaultRotationToleranceRadians = Units.degreesToRadians(2.0);
+  private static final double defaultRotationToleranceRadians = Units.degreesToRadians(1.0);
   private static final double defaultRotationVelocityTolerance = Units.degreesToRadians(1.0);
 
-  private double defaultDriveP_X = 0.75556;
-  private double defaultDriveP_Y = 0.7555;
-  private double defaultRotP = 4;
+  private double defaultDriveP_X = 0.76;
+  private double defaultDriveP_Y = 0.76;
+  private double defaultRotP = 5;
 
   private StructPublisher<Pose2d> targetPosePub =
       NetworkTableInstance.getDefault()
@@ -72,6 +72,13 @@ public class DriveToPoseFinkle extends CS_Command {
         desiredPoseSupplier, () -> defaultPositionTolerance, () -> defaultRotationToleranceRadians);
   }
 
+  /**
+   * Creates a new DriveToPoseFinkle command.
+   *
+   * @param desiredPoseSupplier
+   * @param posToleranceSupplier in inches
+   * @param rotToleranceDegreeSupplier in Degrees
+   */
   public DriveToPoseFinkle(
       Supplier<Pose2d> desiredPoseSupplier,
       DoubleSupplier posToleranceSupplier,
@@ -195,11 +202,6 @@ public class DriveToPoseFinkle extends CS_Command {
           "Commands/DriveToPoseFinkle/CalculateTheta",
           m_rotPID.calculate(m_pose.getRotation().getRadians(), m_desiredRotRadians));
 
-      //   m_drive.drive(
-      //       new ChassisSpeeds(
-      //           m_xPID.calculate(m_pose.getX(), m_xDesiredPos),
-      //           m_yPID.calculate(m_pose.getY(), m_yDesiredPos),
-      //           m_rotPID.calculate(m_pose.getRotation().getRadians(), m_desiredRotRadians)));
       m_drive
           .driveCommand(
               () -> m_xPID.calculate(m_pose.getX(), m_xDesiredPos),
@@ -235,19 +237,18 @@ public class DriveToPoseFinkle extends CS_Command {
         "Commands/DriveToPoseFinkle/Gains/PositionX/P",
         SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/PositionX/P", defaultDriveP_X));
     SmartDashboard.putNumber(
-        "Commands/DriveToPoseFinkle/Gains/PositionY/P",
-        SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/PositionY/P", defaultDriveP_Y));
-
-    SmartDashboard.putNumber(
         "Commands/DriveToPoseFinkle/Gains/PositionX/I",
         SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/PositionX/I", 0.0));
     SmartDashboard.putNumber(
-        "Commands/DriveToPoseFinkle/Gains/PositionY/I",
-        SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/PositionY/I", 0.0));
-
-    SmartDashboard.putNumber(
         "Commands/DriveToPoseFinkle/Gains/PositionX/D",
         SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/PositionX/D", 0.0));
+
+    SmartDashboard.putNumber(
+        "Commands/DriveToPoseFinkle/Gains/PositionY/P",
+        SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/PositionY/P", defaultDriveP_Y));
+    SmartDashboard.putNumber(
+        "Commands/DriveToPoseFinkle/Gains/PositionY/I",
+        SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/PositionY/I", 0.0));
     SmartDashboard.putNumber(
         "Commands/DriveToPoseFinkle/Gains/PositionY/D",
         SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/PositionY/D", 0.0));
