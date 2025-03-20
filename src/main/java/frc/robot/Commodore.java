@@ -28,8 +28,6 @@ public class Commodore extends CS_SubsystemBase {
   private static CommodoreState currentState = CommodoreState.UNKNOWN;
   private static Queue<CommodoreState> stateHistory;
 
-  private static Boolean isToggleState = false;
-
   public enum CommodoreState {
     BOOT,
     ESTOP,
@@ -58,6 +56,7 @@ public class Commodore extends CS_SubsystemBase {
     DRIVE_FINKLE,
 
     SUBSYSTEMS_ADJUST,
+    SUBSYSTEMS_AT_SETPOINT,
 
     ELEVATOR_ZEROING,
 
@@ -98,118 +97,8 @@ public class Commodore extends CS_SubsystemBase {
    * @param newState The state to set the robot to
    */
   public static Commodore setCommodoreState(CommodoreState newState) {
-    return setCommodoreState(newState, false);
-  }
-
-  /**
-   * Set the robot state
-   *
-   * @param newState The state to set the robot to
-   * @param override Whether to override the current state
-   */
-  public static Commodore setCommodoreState(CommodoreState newState, boolean override) {
-
-    getInstance()
-        .printf(
-            "Setting State: Requested: %s%s, Current %s\n",
-            newState.toString(), override ? "(OVERRIDE)" : "", currentState.toString());
-
-    // // If we are in a TOGGLE state
-    // if (isToggleState == true) {
-    //   // If we are in the same state and it's a toggle, go back to IDLE
-    //   if ((currentState == newState)
-    //       // If we are in a CORAL_SHOOT_* state, we can toggle to IDLE
-    //       || ((newState == CommodoreState.CORAL_SHOOT)
-    //           && ((currentState == CommodoreState.CORAL_SHOOT_LAUNCHING)
-    //               || (currentState == CommodoreState.CORAL_SHOOT_RAMPINGUP)))
-    //       // If we are in a ALGAE_SHOOT* state, we can toggle to IDLE
-    //       || ((newState == CommodoreState.ALGAE_SHOOT)
-    //           && ((currentState == CommodoreState.ALGAE_SHOOT_LAUNCHING)
-    //               || (currentState == CommodoreState.ALGAE_SHOOT_RAMPINGUP)))) {
-    //     newState = CommodoreState.IDLE;
-    //     override = true;
-    //     isToggleState = false;
-    //   }
-    // }
-
-    // Reset the toggle state
-    isToggleState = false;
-
-    // If we are in a NOT in a TRANSITION state
-    // OR we are overriding the current state
-    //
-    // ==> Launch the appropriate command (through local methods)
-    //     the currentState will be updated by the command using the applyState() method
-    //     (which will also update the stateHistory queue)
-    if (override || currentState != CommodoreState.TRANSITION) {
-      switch (newState) {
-          // This is the resting state, robot is enabled, but not doing anything
-        case IDLE:
-          applyState(newState);
-
-          // isToggleState = false;
-          // toIdle();
-          break;
-
-          // Those cases are just for LED update
-          // The Robot is disabled in those states, there will be no command launched.
-        case BOOT:
-        case ESTOP:
-        case DISCONNECTED:
-        case DISABLED:
-        case ERROR_CRITICAL:
-        case UNKNOWN:
-          applyState(newState);
-          break;
-
-          // Those cases are for launching commands
-          // State will go to TRANSITION and then the command will update the state
-          // case CORAL_SHOOT:
-          // case CORAL_INTAKE:
-          // case CORAL_SHOOT_RAMPINGUP:
-          // case CORAL_SHOOT_LAUNCHING:
-          // case CORAL_LOADED:
-
-          // case ALGAE_SHOOT_SETTINGSUBSYSTEMS:
-          // case ALGAE_SHOOT:
-          // case ALGAE_INTAKE:
-          // case ALGAE_SHOOT_RAMPINGUP:
-          // case ALGAE_SHOOT_LAUNCHING:
-          // case ALGAE_LOADED:
-          //   applyState(newState);
-          //   break;
-
-          // Tuning States
-        case TUNE_CORALSHOOTER:
-        case TUNE_ALGAESHOOTER:
-          applyState(newState);
-          break;
-
-        case SUBSYSTEMS_ADJUST:
-        case DRIVE_AUTO:
-        case DRIVE_FINKLE:
-          applyState(newState);
-          break;
-
-          // We shouldn't be there!
-        case TRANSITION:
-          getInstance()
-              .println(
-                  "########## Check your code, TRANSITION state should be overwritten by commands ##########");
-          break;
-        default:
-          applyState(newState);
-          break;
-      }
-    }
-    return instance;
-  }
-
-  public Commodore withToggleState() {
-
-    isToggleState = true;
-
-    return this;
+    applyState(newState);
+    return getInstance();
   }
 
   private static void applyState(CommodoreState newState) {
@@ -217,21 +106,10 @@ public class Commodore extends CS_SubsystemBase {
       pushLastState(currentState);
       currentState = newState;
 
-      if (newState == CommodoreState.IDLE) {
-        isToggleState = false;
-      }
-
-      getInstance()
-          .printf(
-              "New State to %s %s(was %s)\n",
-              newState.toString(),
-              isToggleState == true ? "--TOGGLE " : "",
-              getLastState().toString());
-      // displayStateHistory();
+      getInstance().printf("New State: %s\n", newState.toString());
     }
     // Same state, nothing to do
     else {
-      // getInstance().printf("Same state (%s) -- Do Nothing\n", newState.toString());
     }
   }
 
@@ -249,15 +127,6 @@ public class Commodore extends CS_SubsystemBase {
       stateHistory.poll(); // Remove the oldest state
     }
     stateHistory.add(state);
-  }
-
-  // Method to display the content of the last states queue
-  private static void displayStateHistory() {
-    getInstance().printf("Last States:");
-    for (CommodoreState state : stateHistory) {
-      getInstance().printf("  - %s", state);
-    }
-    getInstance().println("");
   }
 
   // Method to get the n-th element of the last states queue
@@ -288,50 +157,13 @@ public class Commodore extends CS_SubsystemBase {
   public void updateDashboard() {
     SmartDashboard.putString("Commodore/Last State", getLastState(0).toString());
     SmartDashboard.putString("Commodore/Current State", Commodore.currentState.toString());
-    SmartDashboard.putString("Commodore/isToggle", isToggleState.toString());
   }
 
   @Override
   public void CS_periodic() {
     // Check for E-Stop
     if (DriverStation.isEStopped()) {
-      setCommodoreState(CommodoreState.ESTOP, true);
+      setCommodoreState(CommodoreState.ESTOP);
     }
   }
-
-  // private static void toIdle() {
-  //   // applyState(CommodoreState.TRANSITION);
-  //   // CommandScheduler.getInstance().schedule(new ToIdle());
-  // }
-
-  // private static void toCoralShoot() {
-  //   applyState(CommodoreState.TRANSITION);
-  //   CommandScheduler.getInstance().schedule(new ToCoralShoot());
-  // }
-
-  // private static void toCoralIntake() {
-  //   applyState(CommodoreState.TRANSITION);
-  //   CommandScheduler.getInstance().schedule(new ToCoralIntake());
-  // }
-
-  // private static void tuneCoralShooter() {
-  //   applyState(CommodoreState.TUNE_CORALSHOOTER);
-  //   CommandScheduler.getInstance().schedule(new Tune_CoralShooter());
-  // }
-
-  // private static void toAlgaeShoot() {
-  //   applyState(CommodoreState.TRANSITION);
-  //   CommandScheduler.getInstance().schedule(new ToAlgaeShootFromReef());
-  // }
-
-  // private static void toAlgaeIntake() {
-  //   applyState(CommodoreState.TRANSITION);
-  //   // TODO : Implement the ToAlgaeIntake command
-  //   // CommandScheduler.getInstance().schedule(new ToAlgaeIntake());
-  // }
-
-  // private static void tuneAlgaeShooter() {
-  //   applyState(CommodoreState.TUNE_ALGAESHOOTER);
-  //   CommandScheduler.getInstance().schedule(new Tune_AlgaeShooter());
-  // }
 }
