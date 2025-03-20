@@ -1,7 +1,7 @@
 package frc.robot.subsystems.presets;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import frc.robot.RobotConstants.UIConstants.AlgaeFace2;
+import frc.robot.UIConstants.ALGAE_FACE;
 
 public class AlgaePreset {
   private Pose2d robotPose = null;
@@ -47,11 +47,11 @@ public class AlgaePreset {
     this.robotPose = newPose;
     this.hasPose = true;
     System.out.printf(
-        "[ALGAE PRESET] New Pose Set to - x: %3f, y: %3f, theta: %3f",
+        "[ALGAEPRESET] New Pose Set to - x: %3f, y: %3f, theta: %3f",
         robotPose.getX(), robotPose.getY(), robotPose.getRotation().getDegrees());
   }
 
-  public void setSubsystems(AlgaeFace2 newPosition) {
+  public void setSubsystems(ALGAE_FACE newPosition) {
     switch (newPosition) {
       case AB:
       case EF:
@@ -78,7 +78,7 @@ public class AlgaePreset {
     }
 
     System.out.printf(
-        "[ALGAE] New Algae Preset - %s - %s In, %s Deg, %s RPM\n",
+        "[ALGAEPRESET] New Algae Preset - %s - %s In, %s Deg, %s RPM\n",
         this.toString(), elevatorHeightInches, wristAngleDegrees, RPM);
   }
 
@@ -115,7 +115,7 @@ public class AlgaePreset {
     }
 
     System.out.printf(
-        "[ALGAE] New Algae Preset - %s - %s In, %s Deg, %s RPM\n",
+        "[ALGAEPRESET] New Algae Preset - %s - %s In, %s Deg, %s RPM\n",
         this.toString(), elevatorHeightInches, wristAngleDegrees, RPM);
   }
 
@@ -147,21 +147,35 @@ public class AlgaePreset {
   /**
    * Get the Pose of the Robot
    *
-   * @return <null>> if the Pose is not set, otherwise the Pose of the Robot
+   * @return new Pose if the Pose is not set, otherwise the Pose of the Robot
    */
-  public Pose2d getPose() {
-    return hasPose ? this.robotPose : null;
+  public Pose2d getShootingPose() {
+    Pose2d retVal = new Pose2d();
+
+    if (hasPose && PresetManager.usingAlgaeShootDtp().getAsBoolean()) {
+      retVal = this.robotPose;
+    }
+    return retVal;
   }
 
-  private boolean isReady() {
-    // Get the Ready State of the Preset
-    return this.hasSubsystemsReady && this.hasPose;
+  /**
+   * Get the Pose of the Robot
+   *
+   * @return new Pose if the Pose is not set, otherwise the Pose of the Robot
+   */
+  public Pose2d getDealgaefyPose() {
+    Pose2d retVal = new Pose2d();
+
+    if (hasPose && PresetManager.usingDealgaefyDtp().getAsBoolean()) {
+      retVal = this.robotPose;
+    }
+    return retVal;
   }
 
   public void reset() {
     this.hasPose = false;
 
     // Reset to NONE (Floor)
-    this.setSubsystems(AlgaeFace2.FLOOR);
+    this.setSubsystems(ALGAE_FACE.FLOOR);
   }
 }

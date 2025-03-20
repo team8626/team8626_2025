@@ -6,17 +6,20 @@ import edu.wpi.first.math.util.Units;
 
 public class Presets {
 
-  public static final AlgaePreset ALGAE_LOW = new AlgaePreset("LOW", 37, 200, -600);
-  public static final AlgaePreset ALGAE_HIGH = new AlgaePreset("HIGH", 58, 200, -600);
+  public static final AlgaePreset ALGAE_LOW = new AlgaePreset("LOW", 37.5, 200, -600);
+  public static final AlgaePreset ALGAE_HIGH = new AlgaePreset("HIGH", 55, 200, -600);
   public static final AlgaePreset ALGAE_FLOOR = new AlgaePreset("FLOOR", 8, 195, -1000);
   public static final AlgaePreset ALGAE_SPIT = new AlgaePreset("SPIT", 8, 205, -1000);
-  public static final AlgaePreset ALGAE_PROCESS = new AlgaePreset("PROCESS", 8, 170, 1000);
+  public static final AlgaePreset ALGAE_PROCESS = new AlgaePreset("PROCESS", 8, 170, 500);
+  public static final AlgaePreset ALGAE_STOW = new AlgaePreset("STOW", 9, 80, 0);
+
   public static final AlgaePreset ALGAE_NETFROMREEF =
-      new AlgaePreset("ALGAE_NETFROMREEEF", 45, 115, 2200);
+      new AlgaePreset("ALGAE_NETFROMREEF", 50, 115, 2200);
   public static final AlgaePreset ALGAE_NETFROM6FT =
       new AlgaePreset("ALGAE_NETFROM6FT", 8, 180 - 74, 1433);
   public static final AlgaePreset ALGAE_NETFROM10FT =
       new AlgaePreset("ALGAE_NETFROM10FT", 8, 180 - 66, 3000);
+
   public static final AlgaePreset ALGAE_Test2 = new AlgaePreset("ALGAE_Test2", 20, 180 - 74, 2500);
   public static final AlgaePreset ALGAE_Test3 = new AlgaePreset("ALGAE_Test3", 20, 180 - 80, 2500);
   public static final AlgaePreset ALGAE_Test4 = new AlgaePreset("ALGAE_Test4", 8, 180 - 80, 3000);
@@ -38,12 +41,10 @@ public class Presets {
           180 - 80,
           2500);
 
-  public static final AlgaePreset ALGAE_STOW = new AlgaePreset("STOW", 8, 75, 0);
-
   public static final CoralPreset CORAL_L1 = new CoralPreset("L1", 900, 1000);
   public static final CoralPreset CORAL_L2 = new CoralPreset("L2", 900, 1000);
   public static final CoralPreset CORAL_L3 = new CoralPreset("L3", 550, 1335);
-  public static final CoralPreset CORAL_L4 = new CoralPreset("L4", 1275, 1275);
+  public static final CoralPreset CORAL_L4 = new CoralPreset("L4", 1300, 1300);
 
   public static final Pose2d Test3Pose =
       new Pose2d(7, 5, new Rotation2d(Units.degreesToRadians(37)));
