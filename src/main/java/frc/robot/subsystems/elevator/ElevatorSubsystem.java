@@ -88,6 +88,8 @@ public class ElevatorSubsystem extends CS_SubsystemBase {
     values.kI = CS_Utils.updateFromSmartDashboard(newkI, values.kI, (value) -> setkI(value));
     values.kD = CS_Utils.updateFromSmartDashboard(newkD, values.kD, (value) -> setkD(value));
 
+    SmartDashboard.putData(this);
+
     // double newHeight = SmartDashboard.getNumber("Subsystem/Elevator/DesiredHeight",
     // desiredHeight);
     // if (newHeight != desiredHeight) {

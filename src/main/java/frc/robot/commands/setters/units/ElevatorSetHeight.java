@@ -6,6 +6,7 @@
 
 package frc.robot.commands.setters.units;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
 import frc.robot.subsystems.elevator.ElevatorConstants;
@@ -21,6 +22,7 @@ public class ElevatorSetHeight extends CS_Command {
     height = newHeight;
 
     addRequirements(elevator);
+    SmartDashboard.putBoolean("Commands/ElevatorSetHeight/atSetPoint", false);
 
     this.setTAGString("ELEVATOR_SETHEIGHT");
   }
@@ -42,13 +44,15 @@ public class ElevatorSetHeight extends CS_Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    boolean retVal = false;
+    boolean atSetpoint = false;
 
     double current_height = elevator.getHeight();
 
     if (Math.abs(current_height - height.getAsDouble()) <= ElevatorConstants.toleranceInches) {
-      retVal = true;
+      atSetpoint = true;
     }
-    return retVal;
+    SmartDashboard.putBoolean("Commands/ElevatorSetHeight/atSetPoint", atSetpoint);
+
+    return atSetpoint;
   }
 }

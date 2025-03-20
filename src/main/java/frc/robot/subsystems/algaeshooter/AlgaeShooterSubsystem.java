@@ -110,6 +110,8 @@ public class AlgaeShooterSubsystem extends CS_SubsystemBase {
     SmartDashboard.putNumber("Subsystem/AlgaeShooter/Gains/D", AlgaeShooterConstants.gains.kD());
 
     SmartDashboard.putNumber("Subsystem/AlgaeShooter/Last Shot in (ms)", 0);
+    SmartDashboard.putBoolean("Commands/AlgaeShooterRampUp/OverrideRPM", false);
+    SmartDashboard.putNumber("Commands/AlgaeShooterRampUp/ForcedRMP", 2200);
   }
 
   @Override
@@ -160,6 +162,9 @@ public class AlgaeShooterSubsystem extends CS_SubsystemBase {
       updateShooterRPM(newRPM);
       setShooterRPM(DesiredRPM);
     }
+
+    SmartDashboard.putData(this);
+
     // SmartDashboard.putNumber("Subsystem/AlgaeShooter/Shooting RPM", DesiredRPM);
   }
 
