@@ -50,7 +50,7 @@ $(document).ready(function () {
         // Create the visual dot with letter inside
         // let dot = $("<span>").addClass("dot").text(labels[i]); // Add label inside button
         // let dot = $("<label>").addClass("btn btn-secondary").for(`branch_${labels[i]}`).text(labels[i]); // Add label inside button
-        let algae = $("<span>").addClass("btn btn-secondary rounded-circle algae").append($("<span>").addClass("algae-wrapper").text(algaelabels[i]));
+        let algae = $("<span>").addClass("btn btn-secondary rounded-circle algae").append($("<span>").addClass("algae-wrapper").text(i+1));
 
         // Append elements
         label.append(radio).append(algae);

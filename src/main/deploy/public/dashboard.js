@@ -136,23 +136,30 @@ const ntClient = new NT4_Client(
       updateCoralShootTime(coralShootTime);
       updateCoralBranchValue(0, true);
       console.log("Rx Coral shoot time: " + coralShootTime);
-    } else if (topic.name === autoModeOptionsTopicName) {
-      console.log("Rx Auto Mode Options: " + value);
-      populateDropdown("#dropdown-menu-automode", "#selectedAutoMode", value);
-    } else if (topic.name === autoModeActiveTopicName) {
-      console.log("Rx Auto Mode Selected: " + value);
-      // selectedAutoMode = value;
-      updateDropdownSelection("#dropdown-menu-automode", "#selectedAutoMode", value);
-    } else if (topic.name === commodoreStateTopicName) {
+    } 
+    
+    // else if (topic.name === autoModeOptionsTopicName) {
+    //   console.log("Rx Auto Mode Options: " + value);
+    //   populateDropdown("#dropdown-menu-automode", "#selectedAutoMode", value);
+    // } else if (topic.name === autoModeActiveTopicName) {
+    //   console.log("Rx Auto Mode Selected: " + value);
+    //   // selectedAutoMode = value;
+    //   updateDropdownSelection("#dropdown-menu-automode", "#selectedAutoMode", value);
+    // }
+    
+    else if (topic.name === commodoreStateTopicName) {
       UpdateRobotState(value);
-    } else if (topic.name === autoPathOptionsTopicName) {
-      console.log("Rx Auto Path Options: " + value);
-      populateDropdown("#dropdown-menu-trajectory", "#selectedTrajectory", value);
-    } else if (topic.name === autoPathActiveTopicName) {
-      console.log("Rx Auto Path Selected: " + value);
-      // selectedPath = value;
-      updateDropdownSelection("#dropdown-menu-trajectory", "#selectedTrajectory", value);
-    } else if (topic.name === toDashboardPrefix + resetCoralBranchTopicName) {
+    } 
+    // else if (topic.name === autoPathOptionsTopicName) {
+    //   console.log("Rx Auto Path Options: " + value);
+    //   populateDropdown("#dropdown-menu-trajectory", "#selectedTrajectory", value);
+    // } else if (topic.name === autoPathActiveTopicName) {
+    //   console.log("Rx Auto Path Selected: " + value);
+    //   // selectedPath = value;
+    //   updateDropdownSelection("#dropdown-menu-trajectory", "#selectedTrajectory", value);
+    // }
+    
+    else if (topic.name === toDashboardPrefix + resetCoralBranchTopicName) {
       console.log("Rx Reset Coral Branch (" + value + ")");
       updateCoralBranchValue(0, true, value);
     } else if (topic.name === toDashboardPrefix + resetAlgaeFaceTopicName) {
@@ -452,7 +459,8 @@ function updateAlgaeTarget(newValue) {
   if (textelement) {
     let target = "Ground"
     if(newValue > 0){
-      target  = String.fromCharCode(64+(newValue*2)-1)+ String.fromCharCode(64+(newValue*2));
+      target  = newValue;
+      // target  = String.fromCharCode(64+(newValue*2)-1)+ String.fromCharCode(64+(newValue*2));
     
     }
     textelement.text(target);
