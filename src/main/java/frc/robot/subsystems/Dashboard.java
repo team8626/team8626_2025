@@ -74,14 +74,9 @@ public class Dashboard extends CS_SubsystemBase {
   private SendableChooser<AutoOptions> mainAutoChooser = new SendableChooser<AutoOptions>();
 
   public enum AutoOptions {
-    F_RIGHT_C,
-    E1_RIGHT_C,
-    H,
-    H_LEFT_L,
-    J_LEFT_K,
-    G_RIGHT_C,
+    G,
+    Practice_L,
     DO_NOTHING,
-    SOURCE,
     TRAJECTORY,
   };
 
@@ -215,16 +210,8 @@ public class Dashboard extends CS_SubsystemBase {
 
     // Create auto chooser drop down
     mainAutoChooser.addOption("DO NOTHING", AutoOptions.DO_NOTHING);
-    mainAutoChooser.addOption("E1_RIGHT_C", AutoOptions.E1_RIGHT_C);
-    mainAutoChooser.addOption("F_RIGHT_C", AutoOptions.F_RIGHT_C);
-    mainAutoChooser.addOption("G_RIGHT_C", AutoOptions.G_RIGHT_C);
-    mainAutoChooser.addOption("J_LEFT_K", AutoOptions.J_LEFT_K);
-    mainAutoChooser.addOption("H", AutoOptions.H);
-    mainAutoChooser.addOption("H_LEFT_L", AutoOptions.H_LEFT_L);
-    mainAutoChooser.addOption("SOURCE", AutoOptions.SOURCE);
-
-    mainAutoChooser.setDefaultOption("TRAJECTORY", AutoOptions.TRAJECTORY);
-
+    mainAutoChooser.addOption("Practice_L", AutoOptions.Practice_L);
+    mainAutoChooser.addOption("G", AutoOptions.G);
     mainAutoChooser.setDefaultOption("TRAJECTORY", AutoOptions.TRAJECTORY);
 
     SmartDashboard.putData("Autos/Autonomous Mode", mainAutoChooser);

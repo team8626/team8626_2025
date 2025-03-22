@@ -44,7 +44,7 @@ public class DriveToPoseFinkle extends CS_Command {
   private double defaultRotationMaxVelocity = Units.degreesToRadians(720);
   private double defaultRotationMaxAcceleration = Units.degreesToRadians(360);
 
-  private static final double defaultPositionTolerance = 0.01; // meters
+  private static final double defaultPositionToleranceMeters = 0.01; // meters
   private static final double defaultPositionVelocityTolerance = 0.01; // meters
   private static final double defaultRotationToleranceRadians = Units.degreesToRadians(1.0);
   private static final double defaultRotationVelocityTolerance = Units.degreesToRadians(1.0);
@@ -64,12 +64,14 @@ public class DriveToPoseFinkle extends CS_Command {
 
   private boolean hasValidPose = false;
 
-  private double positionTolerance = defaultPositionTolerance;
+  private double positionToleranceMeters = defaultPositionToleranceMeters;
   private double rotationToleranceRadians = defaultRotationToleranceRadians;
 
   public DriveToPoseFinkle(Supplier<Pose2d> desiredPoseSupplier) {
     this(
-        desiredPoseSupplier, () -> defaultPositionTolerance, () -> defaultRotationToleranceRadians);
+        desiredPoseSupplier,
+        () -> Units.metersToInches(defaultPositionToleranceMeters),
+        () -> Units.radiansToDegrees(defaultRotationToleranceRadians));
   }
 
   /**
@@ -81,12 +83,12 @@ public class DriveToPoseFinkle extends CS_Command {
    */
   public DriveToPoseFinkle(
       Supplier<Pose2d> desiredPoseSupplier,
-      DoubleSupplier posToleranceSupplier,
+      DoubleSupplier posToleranceInchesSupplier,
       DoubleSupplier rotToleranceDegreeSupplier) {
     m_drive = RobotContainer.drivebase;
 
-    positionTolerance = posToleranceSupplier.getAsDouble();
-    rotationToleranceRadians = rotToleranceDegreeSupplier.getAsDouble();
+    positionToleranceMeters = Units.inchesToMeters(posToleranceInchesSupplier.getAsDouble());
+    rotationToleranceRadians = Units.degreesToRadians(rotToleranceDegreeSupplier.getAsDouble());
 
     m_desiredPoseSupplier = desiredPoseSupplier;
 
@@ -174,8 +176,8 @@ public class DriveToPoseFinkle extends CS_Command {
       m_rotPID.setPID(rotPValue, rotIValue, rotDValue);
 
       // Set the tolerances
-      m_xPID.setTolerance(positionTolerance, defaultPositionVelocityTolerance);
-      m_yPID.setTolerance(positionTolerance, defaultPositionVelocityTolerance);
+      m_xPID.setTolerance(positionToleranceMeters, defaultPositionVelocityTolerance);
+      m_yPID.setTolerance(positionToleranceMeters, defaultPositionVelocityTolerance);
       m_rotPID.setTolerance(rotationToleranceRadians, defaultRotationVelocityTolerance);
 
       // Reset the PID controllers
@@ -263,7 +265,8 @@ public class DriveToPoseFinkle extends CS_Command {
         "Commands/DriveToPoseFinkle/Gains/Rotation/D",
         SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/Rotation/D", 0.0));
 
-    SmartDashboard.putNumber("Commands/DriveToPoseFinkle/PositionTolerance(m)", positionTolerance);
+    SmartDashboard.putNumber(
+        "Commands/DriveToPoseFinkle/PositionTolerance(m)", positionToleranceMeters);
     SmartDashboard.putNumber(
         "Commands/DriveToPoseFinkle/RotationTolerance(deg)",
         Units.radiansToDegrees(rotationToleranceRadians));

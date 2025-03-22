@@ -57,8 +57,8 @@ public class ToPathAndFinkleAndAlgaeShoot extends SequentialCommandGroup {
                 // Drive to Target Pose while setting subsystems
                 new ParallelCommandGroup(
                     // Drive to Target Pose
-                    new SequentialCommandGroup(new DriveToPoseFinkle(offsetPose))
-                        .onlyIf(() -> offsetPose.get().equals(new Pose2d())),
+                    new SequentialCommandGroup(new DriveToPoseFinkle(targetPose))
+                        .onlyIf(() -> !targetPose.get().equals(new Pose2d())),
 
                     // Adjust Subsystems & Start Rampup
                     new ToSubsystemsPreset(algaePreset)),

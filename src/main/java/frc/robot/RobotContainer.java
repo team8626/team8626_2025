@@ -40,6 +40,7 @@ import frc.robot.commands.setters.groups.ToPathAndFinleAndAlgaeIntake;
 import frc.robot.commands.setters.groups.ToSubsystemsPreset;
 import frc.robot.commands.setters.units.AlgaeShooterDiscard;
 import frc.robot.subsystems.Dashboard;
+import frc.robot.subsystems.Dashboard.AutoOptions;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterSubsystem;
 import frc.robot.subsystems.algaeshooter.AlgaeShooter_Sim;
 import frc.robot.subsystems.algaeshooter.AlgaeShooter_SparkMax;
@@ -415,7 +416,27 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     // Return the path to follow in autonomous mode
-    return this.autoChooser.getSelected();
+    Command retVal = new InstantCommand();
+
+    AutoOptions autoOption = dashboard.getSelectedAuto();
+    switch (autoOption) {
+      case G:
+        retVal = new Auto_G();
+        break;
+
+      case Practice_L:
+        retVal = new Auto_L();
+        break;
+
+      case DO_NOTHING:
+        retVal = new InstantCommand();
+        break;
+
+      case TRAJECTORY:
+        this.autoChooser.getSelected();
+        break;
+    }
+    return retVal;
   }
 
   public RobotType getRobotType() {

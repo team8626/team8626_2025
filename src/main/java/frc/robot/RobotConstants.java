@@ -62,7 +62,7 @@ public class RobotConstants {
   public static final AngularVelocity MAX_ANGULAR_VELOCITY =
       Radians.per(Second).of(6.77 / driveBaseRadius);
 
-  public static double bumperThicknessInches = 2.5;
+  public static double bumperThicknessInches = 3;
 
   //   public static double robotCenterToEdge = Units.inchesToMeters(FrameLength + bumperThickness /
   // 2);
