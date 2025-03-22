@@ -256,7 +256,7 @@
             }
           },
           {
-            "title": "Current State",
+            "title": "Robot State",
             "x": 32.0,
             "y": 96.0,
             "width": 352.0,
@@ -424,7 +424,7 @@
           {
             "title": "AlgaeShooterSubsystem",
             "x": 32.0,
-            "y": 544.0,
+            "y": 576.0,
             "width": 352.0,
             "height": 96.0,
             "type": "Subsystem",
@@ -448,7 +448,7 @@
           {
             "title": "ElevatorSubsystem",
             "x": 32.0,
-            "y": 352.0,
+            "y": 320.0,
             "width": 352.0,
             "height": 96.0,
             "type": "Subsystem",
@@ -544,8 +544,8 @@
           {
             "title": "AmpsLeft",
             "x": 576.0,
-            "y": 672.0,
-            "width": 128.0,
+            "y": 576.0,
+            "width": 64.0,
             "height": 96.0,
             "type": "Text Display",
             "properties": {
@@ -557,9 +557,9 @@
           },
           {
             "title": "AmpsRight",
-            "x": 576.0,
+            "x": 640.0,
             "y": 576.0,
-            "width": 128.0,
+            "width": 64.0,
             "height": 96.0,
             "type": "Text Display",
             "properties": {
@@ -641,6 +641,62 @@
               "data_type": "double",
               "show_submit_button": false
             }
+          },
+          {
+            "title": "LauncherSetpoint",
+            "x": 1120.0,
+            "y": 320.0,
+            "width": 96.0,
+            "height": 96.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/Subsystem/CoralShooter/LauncherSetpoint",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "Pitch",
+            "x": 160.0,
+            "y": 192.0,
+            "width": 96.0,
+            "height": 96.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/Subsystem/Drive/Pitch",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "Roll",
+            "x": 32.0,
+            "y": 192.0,
+            "width": 96.0,
+            "height": 96.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/Subsystem/Drive/Roll",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "Yaw",
+            "x": 288.0,
+            "y": 192.0,
+            "width": 96.0,
+            "height": 96.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/Subsystem/Drive/Yaw",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
           }
         ]
       }
@@ -648,110 +704,12 @@
     {
       "name": "Autonomous",
       "grid_layout": {
-        "layouts": [
-          {
-            "title": "Position",
-            "x": 512.0,
-            "y": 128.0,
-            "width": 256.0,
-            "height": 256.0,
-            "type": "List Layout",
-            "properties": {
-              "label_position": "TOP"
-            },
-            "children": [
-              {
-                "title": "D",
-                "x": 0.0,
-                "y": 0.0,
-                "width": 128.0,
-                "height": 128.0,
-                "type": "Text Display",
-                "properties": {
-                  "topic": "/SmartDashboard/Commands/DriveFinalApproach/Gains/Position/D",
-                  "period": 0.06,
-                  "data_type": "double",
-                  "show_submit_button": false
-                }
-              },
-              {
-                "title": "I",
-                "x": 0.0,
-                "y": 0.0,
-                "width": 128.0,
-                "height": 128.0,
-                "type": "Text Display",
-                "properties": {
-                  "topic": "/SmartDashboard/Commands/DriveFinalApproach/Gains/Position/I",
-                  "period": 0.06,
-                  "data_type": "double",
-                  "show_submit_button": false
-                }
-              },
-              {
-                "title": "P",
-                "x": 0.0,
-                "y": 0.0,
-                "width": 128.0,
-                "height": 128.0,
-                "type": "Text Display",
-                "properties": {
-                  "topic": "/SmartDashboard/Commands/DriveFinalApproach/Gains/Position/P",
-                  "period": 0.06,
-                  "data_type": "double",
-                  "show_submit_button": false
-                }
-              }
-            ]
-          }
-        ],
+        "layouts": [],
         "containers": [
           {
-            "title": "PositionTolerance (In)",
-            "x": 640.0,
-            "y": 128.0,
-            "width": 256.0,
-            "height": 128.0,
-            "type": "Text Display",
-            "properties": {
-              "topic": "/SmartDashboard/Commands/DriveFinalApproach/PositionTolerance (In)",
-              "period": 0.06,
-              "data_type": "double",
-              "show_submit_button": false
-            }
-          },
-          {
-            "title": "PositionVelocityTolerance (InPerSec)",
-            "x": 640.0,
-            "y": 256.0,
-            "width": 256.0,
-            "height": 128.0,
-            "type": "Text Display",
-            "properties": {
-              "topic": "/SmartDashboard/Commands/DriveFinalApproach/PositionVelocityTolerance (InPerSec)",
-              "period": 0.06,
-              "data_type": "double",
-              "show_submit_button": false
-            }
-          },
-          {
-            "title": "RotationTolerance (Deg)",
-            "x": 512.0,
-            "y": 384.0,
-            "width": 128.0,
-            "height": 128.0,
-            "type": "Text Display",
-            "properties": {
-              "topic": "/SmartDashboard/Commands/DriveFinalApproach/RotationTolerance (Deg)",
-              "period": 0.06,
-              "data_type": "double",
-              "show_submit_button": false
-            }
-          },
-          {
             "title": "Autonomous Mode",
-            "x": 512.0,
-            "y": 0.0,
+            "x": 64.0,
+            "y": 32.0,
             "width": 384.0,
             "height": 128.0,
             "type": "ComboBox Chooser",
@@ -763,9 +721,9 @@
           },
           {
             "title": "Pathplanner Trajectory",
-            "x": 896.0,
-            "y": 0.0,
-            "width": 512.0,
+            "x": 448.0,
+            "y": 32.0,
+            "width": 384.0,
             "height": 128.0,
             "type": "ComboBox Chooser",
             "properties": {
@@ -775,185 +733,51 @@
             }
           },
           {
-            "title": "rainbowValue",
-            "x": 640.0,
-            "y": 384.0,
-            "width": 256.0,
+            "title": "Field",
+            "x": 64.0,
+            "y": 160.0,
+            "width": 1376.0,
+            "height": 608.0,
+            "type": "Field",
+            "properties": {
+              "topic": "/SmartDashboard/Field",
+              "period": 0.02,
+              "field_game": "Crescendo",
+              "robot_width": 0.85,
+              "robot_length": 0.85,
+              "show_other_objects": false,
+              "show_trajectories": true,
+              "field_rotation": 0.0,
+              "robot_color": 4294198070,
+              "trajectory_color": 4282776068
+            }
+          },
+          {
+            "title": "Robot State",
+            "x": 832.0,
+            "y": 32.0,
+            "width": 384.0,
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/LEDManager/rainbowValue",
+              "topic": "/SmartDashboard/Commodore/Current State",
               "period": 0.06,
-              "data_type": "double",
+              "data_type": "string",
               "show_submit_button": false
             }
           },
           {
-            "title": "rainbowSaturation",
-            "x": 640.0,
-            "y": 512.0,
-            "width": 256.0,
+            "title": "coralState",
+            "x": 1216.0,
+            "y": 32.0,
+            "width": 224.0,
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/LEDManager/rainbowSaturation",
+              "topic": "/UIDashboard/ToDashboard/coralState",
               "period": 0.06,
-              "data_type": "double",
+              "data_type": "string",
               "show_submit_button": false
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "Tab 3",
-      "grid_layout": {
-        "layouts": [],
-        "containers": [
-          {
-            "title": "Amps",
-            "x": 896.0,
-            "y": 0.0,
-            "width": 128.0,
-            "height": 128.0,
-            "type": "Text Display",
-            "properties": {
-              "topic": "/SmartDashboard/Subsystem/Climber/Amps",
-              "period": 0.06,
-              "data_type": "double",
-              "show_submit_button": false
-            }
-          },
-          {
-            "title": "DesiredAngle",
-            "x": 896.0,
-            "y": 128.0,
-            "width": 128.0,
-            "height": 128.0,
-            "type": "Text Display",
-            "properties": {
-              "topic": "/SmartDashboard/Subsystem/Climber/DesiredAngle",
-              "period": 0.06,
-              "data_type": "double",
-              "show_submit_button": false
-            }
-          },
-          {
-            "title": "DesiredAngleDegrees",
-            "x": 1024.0,
-            "y": 128.0,
-            "width": 128.0,
-            "height": 128.0,
-            "type": "Text Display",
-            "properties": {
-              "topic": "/SmartDashboard/Subsystem/Climber/DesiredAngleDegrees",
-              "period": 0.06,
-              "data_type": "double",
-              "show_submit_button": false
-            }
-          },
-          {
-            "title": "CurrentAngle",
-            "x": 896.0,
-            "y": 256.0,
-            "width": 256.0,
-            "height": 128.0,
-            "type": "Text Display",
-            "properties": {
-              "topic": "/SmartDashboard/Subsystem/Climber/CurrentAngle",
-              "period": 0.06,
-              "data_type": "double",
-              "show_submit_button": false
-            }
-          },
-          {
-            "title": "P",
-            "x": 512.0,
-            "y": 0.0,
-            "width": 128.0,
-            "height": 128.0,
-            "type": "Text Display",
-            "properties": {
-              "topic": "/SmartDashboard/Subsystem/Climber/Gains/P",
-              "period": 0.06,
-              "data_type": "double",
-              "show_submit_button": false
-            }
-          },
-          {
-            "title": "I",
-            "x": 512.0,
-            "y": 128.0,
-            "width": 128.0,
-            "height": 128.0,
-            "type": "Text Display",
-            "properties": {
-              "topic": "/SmartDashboard/Subsystem/Climber/Gains/I",
-              "period": 0.06,
-              "data_type": "double",
-              "show_submit_button": false
-            }
-          },
-          {
-            "title": "D",
-            "x": 512.0,
-            "y": 256.0,
-            "width": 128.0,
-            "height": 128.0,
-            "type": "Text Display",
-            "properties": {
-              "topic": "/SmartDashboard/Subsystem/Climber/Gains/D",
-              "period": 0.06,
-              "data_type": "double",
-              "show_submit_button": false
-            }
-          },
-          {
-            "title": "CurrentRPMLauncher",
-            "x": 640.0,
-            "y": 384.0,
-            "width": 256.0,
-            "height": 128.0,
-            "type": "Text Display",
-            "properties": {
-              "topic": "/SmartDashboard/Subsystem/CoralShooter/CurrentRPMLauncher",
-              "period": 0.06,
-              "data_type": "double",
-              "show_submit_button": false
-            }
-          },
-          {
-            "title": "hasTarget",
-            "x": 640.0,
-            "y": 128.0,
-            "width": 128.0,
-            "height": 128.0,
-            "type": "Boolean Box",
-            "properties": {
-              "topic": "/photonvision/Arducam_AT001/hasTarget",
-              "period": 0.06,
-              "data_type": "boolean",
-              "true_color": 4283215696,
-              "false_color": 4294198070,
-              "true_icon": "None",
-              "false_icon": "None"
-            }
-          },
-          {
-            "title": "hasTarget",
-            "x": 640.0,
-            "y": 256.0,
-            "width": 128.0,
-            "height": 128.0,
-            "type": "Boolean Box",
-            "properties": {
-              "topic": "/photonvision/Arducam_AT002/hasTarget",
-              "period": 0.06,
-              "data_type": "boolean",
-              "true_color": 4283215696,
-              "false_color": 4294198070,
-              "true_icon": "None",
-              "false_icon": "None"
             }
           }
         ]
@@ -965,10 +789,10 @@
         "layouts": [
           {
             "title": "Gains",
-            "x": 512.0,
-            "y": 256.0,
+            "x": 384.0,
+            "y": 192.0,
             "width": 256.0,
-            "height": 256.0,
+            "height": 384.0,
             "type": "List Layout",
             "properties": {
               "label_position": "TOP"
@@ -1022,9 +846,9 @@
         "containers": [
           {
             "title": "Amps",
-            "x": 768.0,
-            "y": 128.0,
-            "width": 256.0,
+            "x": 640.0,
+            "y": 192.0,
+            "width": 512.0,
             "height": 128.0,
             "type": "Text Display",
             "properties": {
@@ -1036,9 +860,9 @@
           },
           {
             "title": "AppliedOutput",
-            "x": 768.0,
-            "y": 256.0,
-            "width": 256.0,
+            "x": 640.0,
+            "y": 320.0,
+            "width": 512.0,
             "height": 128.0,
             "type": "Text Display",
             "properties": {
@@ -1050,9 +874,9 @@
           },
           {
             "title": "DesiredAngleDegrees",
-            "x": 512.0,
-            "y": 0.0,
-            "width": 256.0,
+            "x": 384.0,
+            "y": 64.0,
+            "width": 384.0,
             "height": 128.0,
             "type": "Text Display",
             "properties": {
@@ -1064,9 +888,9 @@
           },
           {
             "title": "CurrentAngleDegrees",
-            "x": 512.0,
-            "y": 128.0,
-            "width": 256.0,
+            "x": 768.0,
+            "y": 64.0,
+            "width": 384.0,
             "height": 128.0,
             "type": "Text Display",
             "properties": {
@@ -1078,10 +902,10 @@
           },
           {
             "title": "Enabled",
-            "x": 768.0,
-            "y": 0.0,
-            "width": 256.0,
-            "height": 128.0,
+            "x": 384.0,
+            "y": 576.0,
+            "width": 768.0,
+            "height": 64.0,
             "type": "Boolean Box",
             "properties": {
               "topic": "/SmartDashboard/Subsystem/Wrist/Enabled",
@@ -1095,9 +919,9 @@
           },
           {
             "title": "Temperature",
-            "x": 768.0,
-            "y": 384.0,
-            "width": 256.0,
+            "x": 640.0,
+            "y": 448.0,
+            "width": 512.0,
             "height": 128.0,
             "type": "Text Display",
             "properties": {
@@ -1105,6 +929,23 @@
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
+            }
+          },
+          {
+            "title": "atSetPoint",
+            "x": 384.0,
+            "y": 0.0,
+            "width": 768.0,
+            "height": 64.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/SmartDashboard/Commands/WristSetAngle/atSetPoint",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
             }
           }
         ]
@@ -1117,7 +958,7 @@
           {
             "title": "Gains",
             "x": 384.0,
-            "y": 256.0,
+            "y": 128.0,
             "width": 256.0,
             "height": 256.0,
             "type": "List Layout",
@@ -1230,7 +1071,7 @@
           {
             "title": "Last Shot in (ms)",
             "x": 384.0,
-            "y": 128.0,
+            "y": 0.0,
             "width": 256.0,
             "height": 128.0,
             "type": "Text Display",
@@ -1244,9 +1085,9 @@
           {
             "title": "Launcher",
             "x": 640.0,
-            "y": 0.0,
+            "y": 64.0,
             "width": 256.0,
-            "height": 128.0,
+            "height": 64.0,
             "type": "Boolean Box",
             "properties": {
               "topic": "/SmartDashboard/Subsystem/AlgaeShooter/Launcher",
@@ -1289,9 +1130,9 @@
           {
             "title": "Shooter",
             "x": 896.0,
-            "y": 0.0,
+            "y": 64.0,
             "width": 512.0,
-            "height": 128.0,
+            "height": 64.0,
             "type": "Boolean Box",
             "properties": {
               "topic": "/SmartDashboard/Subsystem/AlgaeShooter/Shooter",
@@ -1403,10 +1244,10 @@
           },
           {
             "title": "isLoaded",
-            "x": 384.0,
+            "x": 640.0,
             "y": 0.0,
-            "width": 256.0,
-            "height": 128.0,
+            "width": 768.0,
+            "height": 64.0,
             "type": "Boolean Box",
             "properties": {
               "topic": "/SmartDashboard/Subsystem/AlgaeShooter/isLoaded",
@@ -1434,10 +1275,10 @@
           },
           {
             "title": "ForcedRMP",
-            "x": 96.0,
-            "y": 320.0,
-            "width": 192.0,
-            "height": 128.0,
+            "x": 224.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 96.0,
             "type": "Text Display",
             "properties": {
               "topic": "/SmartDashboard/Commands/AlgaeShooterRampUp/ForcedRMP",
@@ -1448,13 +1289,67 @@
           },
           {
             "title": "OverrideRPM",
-            "x": 96.0,
-            "y": 224.0,
+            "x": 32.0,
+            "y": 0.0,
             "width": 192.0,
             "height": 96.0,
             "type": "Toggle Switch",
             "properties": {
               "topic": "/SmartDashboard/Commands/AlgaeShooterRampUp/OverrideRPM",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "ForcedHeight",
+            "x": 224.0,
+            "y": 96.0,
+            "width": 128.0,
+            "height": 96.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/Commands/ElevatorSetHeight/ForcedHeight",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "ForcedAngle",
+            "x": 224.0,
+            "y": 192.0,
+            "width": 128.0,
+            "height": 96.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/Commands/WristSetAngle/ForcedAngle",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "OverrideHeight",
+            "x": 32.0,
+            "y": 96.0,
+            "width": 192.0,
+            "height": 96.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Commands/ElevatorSetHeight/OverrideHeight",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "OverrideAngle",
+            "x": 32.0,
+            "y": 192.0,
+            "width": 192.0,
+            "height": 96.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Commands/WristSetAngle/OverrideAngle",
               "period": 0.06,
               "data_type": "boolean"
             }
@@ -1468,8 +1363,8 @@
         "layouts": [
           {
             "title": "Gains",
-            "x": 512.0,
-            "y": 256.0,
+            "x": 384.0,
+            "y": 192.0,
             "width": 256.0,
             "height": 256.0,
             "type": "List Layout",
@@ -1525,9 +1420,9 @@
         "containers": [
           {
             "title": "DesiredHeight",
-            "x": 1024.0,
-            "y": 0.0,
-            "width": 256.0,
+            "x": 384.0,
+            "y": 64.0,
+            "width": 384.0,
             "height": 128.0,
             "type": "Text Display",
             "properties": {
@@ -1540,8 +1435,8 @@
           {
             "title": "Height",
             "x": 768.0,
-            "y": 0.0,
-            "width": 256.0,
+            "y": 64.0,
+            "width": 384.0,
             "height": 128.0,
             "type": "Text Display",
             "properties": {
@@ -1552,23 +1447,9 @@
             }
           },
           {
-            "title": "D",
-            "x": 128.0,
-            "y": 256.0,
-            "width": 128.0,
-            "height": 128.0,
-            "type": "Text Display",
-            "properties": {
-              "topic": "/SmartDashboard/Subsystem/Elevator/Gains/D",
-              "period": 0.06,
-              "data_type": "double",
-              "show_submit_button": false
-            }
-          },
-          {
             "title": "IsZeroed",
-            "x": 512.0,
-            "y": 512.0,
+            "x": 384.0,
+            "y": 448.0,
             "width": 256.0,
             "height": 128.0,
             "type": "Boolean Box",
@@ -1584,8 +1465,8 @@
           },
           {
             "title": "TemperatureLeft",
-            "x": 768.0,
-            "y": 512.0,
+            "x": 640.0,
+            "y": 448.0,
             "width": 256.0,
             "height": 128.0,
             "type": "Text Display",
@@ -1598,8 +1479,8 @@
           },
           {
             "title": "TemperatureRight",
-            "x": 1024.0,
-            "y": 512.0,
+            "x": 896.0,
+            "y": 448.0,
             "width": 256.0,
             "height": 128.0,
             "type": "Text Display",
@@ -1612,8 +1493,8 @@
           },
           {
             "title": "AppliedOutputLeft",
-            "x": 768.0,
-            "y": 384.0,
+            "x": 640.0,
+            "y": 320.0,
             "width": 256.0,
             "height": 128.0,
             "type": "Text Display",
@@ -1626,8 +1507,8 @@
           },
           {
             "title": "AppliedOutputRight",
-            "x": 1024.0,
-            "y": 384.0,
+            "x": 896.0,
+            "y": 320.0,
             "width": 256.0,
             "height": 128.0,
             "type": "Text Display",
@@ -1640,8 +1521,8 @@
           },
           {
             "title": "AmpsLeft",
-            "x": 768.0,
-            "y": 256.0,
+            "x": 640.0,
+            "y": 192.0,
             "width": 256.0,
             "height": 128.0,
             "type": "Text Display",
@@ -1654,8 +1535,8 @@
           },
           {
             "title": "AmpsRight",
-            "x": 1024.0,
-            "y": 256.0,
+            "x": 896.0,
+            "y": 192.0,
             "width": 256.0,
             "height": 128.0,
             "type": "Text Display",
@@ -1664,6 +1545,23 @@
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
+            }
+          },
+          {
+            "title": "atSetPoint",
+            "x": 384.0,
+            "y": 0.0,
+            "width": 768.0,
+            "height": 64.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/SmartDashboard/Commands/ElevatorSetHeight/atSetPoint",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
             }
           }
         ]
@@ -1887,12 +1785,123 @@
     {
       "name": "Coral",
       "grid_layout": {
-        "layouts": [],
+        "layouts": [
+          {
+            "title": "Left",
+            "x": 384.0,
+            "y": 128.0,
+            "width": 128.0,
+            "height": 256.0,
+            "type": "List Layout",
+            "properties": {
+              "label_position": "TOP"
+            },
+            "children": [
+              {
+                "title": "D",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/Subsystem/CoralShooter/Gains/Left/D",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              },
+              {
+                "title": "I",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/Subsystem/CoralShooter/Gains/Left/I",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              },
+              {
+                "title": "P",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/Subsystem/CoralShooter/Gains/Left/P",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              }
+            ]
+          },
+          {
+            "title": "Right",
+            "x": 512.0,
+            "y": 128.0,
+            "width": 128.0,
+            "height": 256.0,
+            "type": "List Layout",
+            "properties": {
+              "label_position": "TOP"
+            },
+            "children": [
+              {
+                "title": "D",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/Subsystem/CoralShooter/Gains/Right/D",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              },
+              {
+                "title": "I",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/Subsystem/CoralShooter/Gains/Right/I",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              },
+              {
+                "title": "P",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/Subsystem/CoralShooter/Gains/Right/P",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              }
+            ]
+          }
+        ],
         "containers": [
           {
             "title": "CurrentRPMLeft",
-            "x": 512.0,
-            "y": 128.0,
+            "x": 896.0,
+            "y": 256.0,
             "width": 256.0,
             "height": 128.0,
             "type": "Text Display",
@@ -1905,8 +1914,8 @@
           },
           {
             "title": "CurrentRPMRight",
-            "x": 768.0,
-            "y": 128.0,
+            "x": 1152.0,
+            "y": 256.0,
             "width": 256.0,
             "height": 128.0,
             "type": "Text Display",
@@ -1919,8 +1928,8 @@
           },
           {
             "title": "ShootingRPMLeft",
-            "x": 512.0,
-            "y": 0.0,
+            "x": 896.0,
+            "y": 128.0,
             "width": 256.0,
             "height": 128.0,
             "type": "Text Display",
@@ -1933,8 +1942,8 @@
           },
           {
             "title": "ShootingRPMRight",
-            "x": 768.0,
-            "y": 0.0,
+            "x": 1152.0,
+            "y": 128.0,
             "width": 256.0,
             "height": 128.0,
             "type": "Text Display",
@@ -1946,37 +1955,9 @@
             }
           },
           {
-            "title": "amps",
-            "x": 512.0,
-            "y": 256.0,
-            "width": 160.0,
-            "height": 128.0,
-            "type": "Text Display",
-            "properties": {
-              "topic": "/SmartDashboard/Subsystem/Wrist/amps",
-              "period": 0.06,
-              "data_type": "double",
-              "show_submit_button": false
-            }
-          },
-          {
-            "title": "SensorLeftDistance",
-            "x": 512.0,
-            "y": 384.0,
-            "width": 256.0,
-            "height": 128.0,
-            "type": "Text Display",
-            "properties": {
-              "topic": "/SmartDashboard/Subsystem/CoralShooter/SensorLeftDistance",
-              "period": 0.06,
-              "data_type": "double",
-              "show_submit_button": false
-            }
-          },
-          {
             "title": "ForcedRMPLeft",
-            "x": 224.0,
-            "y": 576.0,
+            "x": 96.0,
+            "y": 128.0,
             "width": 128.0,
             "height": 128.0,
             "type": "Text Display",
@@ -1989,8 +1970,8 @@
           },
           {
             "title": "ForcedRMPRight",
-            "x": 352.0,
-            "y": 576.0,
+            "x": 224.0,
+            "y": 128.0,
             "width": 128.0,
             "height": 128.0,
             "type": "Text Display",
@@ -2003,15 +1984,234 @@
           },
           {
             "title": "OverrideRPM",
-            "x": 224.0,
-            "y": 448.0,
-            "width": 128.0,
+            "x": 96.0,
+            "y": 0.0,
+            "width": 256.0,
             "height": 128.0,
             "type": "Toggle Switch",
             "properties": {
               "topic": "/SmartDashboard/Commands/CoralShooterRampUp/OverrideRPM",
               "period": 0.06,
               "data_type": "boolean"
+            }
+          },
+          {
+            "title": "AppliedOutputLauncher",
+            "x": 640.0,
+            "y": 512.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/Subsystem/CoralShooter/AppliedOutputLauncher",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "AppliedOutputShooterLeft",
+            "x": 896.0,
+            "y": 384.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/Subsystem/CoralShooter/AppliedOutputShooterLeft",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "AppliedOutputShooterRight",
+            "x": 1152.0,
+            "y": 384.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/Subsystem/CoralShooter/AppliedOutputShooterRight",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "CurrentRPMLauncher",
+            "x": 640.0,
+            "y": 256.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/Subsystem/CoralShooter/CurrentRPMLauncher",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "IsLoaded",
+            "x": 640.0,
+            "y": 0.0,
+            "width": 768.0,
+            "height": 64.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/SmartDashboard/Subsystem/CoralShooter/IsLoaded",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "LastShotIn(ms)",
+            "x": 384.0,
+            "y": 0.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/Subsystem/CoralShooter/LastShotIn(ms)",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "Launcher",
+            "x": 640.0,
+            "y": 64.0,
+            "width": 256.0,
+            "height": 64.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/SmartDashboard/Subsystem/CoralShooter/Launcher",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "LauncherSetpoint",
+            "x": 640.0,
+            "y": 128.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/Subsystem/CoralShooter/LauncherSetpoint",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "LauncherappliedOutputAmps",
+            "x": 640.0,
+            "y": 384.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/Subsystem/CoralShooter/LauncherappliedOutputAmps",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "Shooter",
+            "x": 896.0,
+            "y": 64.0,
+            "width": 512.0,
+            "height": 64.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/SmartDashboard/Subsystem/CoralShooter/Shooter",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "ShooterAmpsLeft",
+            "x": 896.0,
+            "y": 512.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/Subsystem/CoralShooter/ShooterAmpsLeft",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "ShooterAmpsRight",
+            "x": 1152.0,
+            "y": 512.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/Subsystem/CoralShooter/ShooterAmpsRight",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "TemperatureLauncher",
+            "x": 1152.0,
+            "y": 640.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/Subsystem/CoralShooter/TemperatureLauncher",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "TemperatureShooterLeft",
+            "x": 640.0,
+            "y": 640.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/Subsystem/CoralShooter/TemperatureShooterLeft",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "TemperatureShooterRight",
+            "x": 896.0,
+            "y": 640.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/Subsystem/CoralShooter/TemperatureShooterRight",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
             }
           }
         ]
@@ -2366,55 +2566,20 @@
             }
           },
           {
-            "title": "ErrorY",
-            "x": 288.0,
-            "y": 448.0,
-            "width": 128.0,
-            "height": 128.0,
+            "title": "RotationVelocityConstraint",
+            "x": 1024.0,
+            "y": 608.0,
+            "width": 256.0,
+            "height": 96.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Commands/DriveToPoseFinkle/ErrorY",
-              "period": 0.06,
-              "data_type": "double",
-              "show_submit_button": false
-            }
-          },
-          {
-            "title": "ErrorX",
-            "x": 160.0,
-            "y": 448.0,
-            "width": 128.0,
-            "height": 128.0,
-            "type": "Text Display",
-            "properties": {
-              "topic": "/SmartDashboard/Commands/DriveToPoseFinkle/ErrorX",
-              "period": 0.06,
-              "data_type": "double",
-              "show_submit_button": false
-            }
-          },
-          {
-            "title": "ErrorTheta",
-            "x": 192.0,
-            "y": 576.0,
-            "width": 128.0,
-            "height": 128.0,
-            "type": "Text Display",
-            "properties": {
-              "topic": "/SmartDashboard/Commands/DriveToPoseFinkle/ErrorTheta",
+              "topic": "/SmartDashboard/Commands/DriveToPoseFinkle/RotationVelocityConstraint",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
             }
           }
         ]
-      }
-    },
-    {
-      "name": "Tab 10",
-      "grid_layout": {
-        "layouts": [],
-        "containers": []
       }
     }
   ]

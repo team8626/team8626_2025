@@ -730,15 +730,17 @@ public class SwerveSubsystem extends CS_SubsystemBase {
     swerveDrive.lockPose();
   }
 
-  /**
-   * Gets the current pitch angle of the robot, as reported by the imu.
-   *
-   * @return The heading as a {@link Rotation2d} angle
-   */
-  public Rotation2d getPitch() {
-    return swerveDrive.getPitch();
+  public double getPitch() {
+    return swerveDrive.getPitch().getDegrees();
   }
 
+  public double getRoll() {
+    return swerveDrive.getRoll().getDegrees();
+  }
+
+  public double getYaw() {
+    return swerveDrive.getYaw().getDegrees();
+  }
   /** Add a fake vision reading for testing purposes. */
   public void addFakeVisionReading() {
     swerveDrive.addVisionMeasurement(
@@ -784,7 +786,9 @@ public class SwerveSubsystem extends CS_SubsystemBase {
    */
   public void updateDashboard() {
     SmartDashboard.putNumber("Subsystem/Drive/Heading", getHeading().getDegrees());
-    SmartDashboard.putNumber("Subsystem/Drive/Pitch", getPitch().getDegrees());
+    SmartDashboard.putNumber("Subsystem/Drive/Pitch", this.getPitch());
+    SmartDashboard.putNumber("Subsystem/Drive/Roll", this.getRoll());
+    SmartDashboard.putNumber("Subsystem/Drive/Yaw", this.getYaw());
     SmartDashboard.putBoolean("Subsystem/Drive/IsFlipped", isFlipped);
     robotPosePub.set(new Pose3d(getPose()));
   }

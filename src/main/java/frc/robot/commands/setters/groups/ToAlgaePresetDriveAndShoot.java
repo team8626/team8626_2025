@@ -24,7 +24,6 @@ import frc.robot.RobotContainer;
 import frc.robot.commands.setters.units.AlgaeShooterLaunch;
 import frc.robot.commands.setters.units.AlgaeShooterRampUp;
 import frc.robot.commands.setters.units.AlgaeShooterStop;
-import frc.robot.commands.setters.units.DriveToPoseFinkle;
 import frc.robot.subsystems.Dashboard;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterSubsystem;
 import frc.robot.subsystems.presets.AlgaePreset;
@@ -67,8 +66,7 @@ public class ToAlgaePresetDriveAndShoot extends SequentialCommandGroup {
                 // Set Subsystems and Shoot
                 new ParallelCommandGroup(
                     // Drive to Target Pose
-                    new DriveToPoseFinkle(targetPose, () -> 1, () -> 5)
-                        .onlyIf(() -> !targetPose.get().equals(new Pose2d())),
+
                     new ToSubsystemsPreset(() -> algaePreset.get()),
                     new WaitCommand(0.1),
                     new AlgaeShooterRampUp(() -> algaePreset.get().getRPM()) {

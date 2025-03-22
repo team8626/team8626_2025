@@ -44,10 +44,10 @@ public class DriveToPoseFinkle extends CS_Command {
   private double defaultRotationMaxVelocity = Units.degreesToRadians(720);
   private double defaultRotationMaxAcceleration = Units.degreesToRadians(360);
 
-  private static final double defaultPositionToleranceMeters = 0.01; // meters
-  private static final double defaultPositionVelocityTolerance = 0.01; // meters
-  private static final double defaultRotationToleranceRadians = Units.degreesToRadians(1.0);
-  private static final double defaultRotationVelocityTolerance = Units.degreesToRadians(1.0);
+  private static final double defaultPositionToleranceMeters = 0.025; // meters
+  private static final double defaultPositionVelocityTolerance = 0.03; // meters
+  private static final double defaultRotationToleranceRadians = Units.degreesToRadians(2.0);
+  private static final double defaultRotationVelocityTolerance = Units.degreesToRadians(5.0);
 
   private double defaultDriveP_X = 0.76;
   private double defaultDriveP_Y = 0.76;
@@ -145,6 +145,15 @@ public class DriveToPoseFinkle extends CS_Command {
       double rotIValue = SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/Rotation/I", 0);
       double rotDValue = SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/Rotation/D", 0);
 
+      // Tolerances
+      double newPositionToleranceMeters =
+          SmartDashboard.getNumber(
+              "Commands/DriveToPoseFinkle/PositionTolerance(m)", positionToleranceMeters);
+      double newPositionToleranceDegrees =
+          SmartDashboard.getNumber(
+              "Commands/DriveToPoseFinkle/RotationTolerance(deg)",
+              Units.radiansToDegrees(rotationToleranceRadians));
+
       // Max Velocity and Acceleration
       double newDriveMaxVelocity =
           SmartDashboard.getNumber(
@@ -176,9 +185,10 @@ public class DriveToPoseFinkle extends CS_Command {
       m_rotPID.setPID(rotPValue, rotIValue, rotDValue);
 
       // Set the tolerances
-      m_xPID.setTolerance(positionToleranceMeters, defaultPositionVelocityTolerance);
-      m_yPID.setTolerance(positionToleranceMeters, defaultPositionVelocityTolerance);
-      m_rotPID.setTolerance(rotationToleranceRadians, defaultRotationVelocityTolerance);
+      m_xPID.setTolerance(newPositionToleranceMeters, defaultPositionVelocityTolerance);
+      m_yPID.setTolerance(newPositionToleranceMeters, defaultPositionVelocityTolerance);
+      m_rotPID.setTolerance(
+          Units.degreesToRadians(newPositionToleranceDegrees), defaultRotationVelocityTolerance);
 
       // Reset the PID controllers
       m_xPID.reset(m_pose.getX());
@@ -196,20 +206,17 @@ public class DriveToPoseFinkle extends CS_Command {
       targetPosePub.set(m_desiredPoseSupplier.get());
       currentPosePub.set(m_pose);
 
-      SmartDashboard.putNumber(
-          "Commands/DriveToPoseFinkle/CalculateX", m_xPID.calculate(m_pose.getX(), m_xDesiredPos));
-      SmartDashboard.putNumber(
-          "Commands/DriveToPoseFinkle/CalculateY", m_yPID.calculate(m_pose.getY(), m_yDesiredPos));
-      SmartDashboard.putNumber(
-          "Commands/DriveToPoseFinkle/CalculateTheta",
-          m_rotPID.calculate(m_pose.getRotation().getRadians(), m_desiredRotRadians));
+      double calculateX = m_xPID.calculate(m_pose.getX(), m_xDesiredPos);
+      double calculateY = m_yPID.calculate(m_pose.getY(), m_yDesiredPos);
+      double calculateTheta =
+          m_rotPID.calculate(m_pose.getRotation().getRadians(), m_desiredRotRadians);
+
+      SmartDashboard.putNumber("Commands/DriveToPoseFinkle/CalculateX", calculateX);
+      SmartDashboard.putNumber("Commands/DriveToPoseFinkle/CalculateY", calculateY);
+      SmartDashboard.putNumber("Commands/DriveToPoseFinkle/CalculateTheta", calculateTheta);
 
       m_drive
-          .driveCommand(
-              () -> m_xPID.calculate(m_pose.getX(), m_xDesiredPos),
-              () -> m_yPID.calculate(m_pose.getY(), m_yDesiredPos),
-              () -> m_rotPID.calculate(m_pose.getRotation().getRadians(), m_desiredRotRadians),
-              () -> true)
+          .driveCommand(() -> calculateX, () -> calculateY, () -> calculateTheta, () -> true)
           .execute();
 
       SmartDashboard.putNumber("Commands/DriveToPoseFinkle/ErrorX", m_xPID.getPositionError());
