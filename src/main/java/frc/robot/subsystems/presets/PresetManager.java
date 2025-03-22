@@ -223,7 +223,7 @@ public class PresetManager extends CS_SubsystemBase {
     if (pickupSide != null) {
       uiSelectedPickupSide = pickupSide;
       uiCurrentPickupSide = uiSelectedPickupSide;
-      printf("POickup Side Side: %s", uiSelectedPickupSide.toString());
+      printf("Pickup Side: %s", uiSelectedPickupSide.toString());
     }
 
     DTP dtp = Dashboard.getSelectedDtp();
