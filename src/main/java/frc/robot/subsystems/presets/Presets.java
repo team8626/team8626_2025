@@ -14,7 +14,7 @@ public class Presets {
   public static final AlgaePreset ALGAE_STOW = new AlgaePreset("STOW", 9, 80, 0);
 
   public static final AlgaePreset ALGAE_NETFROMREEF =
-      new AlgaePreset("ALGAE_NETFROMREEF", 50, 115, 2200);
+      new AlgaePreset("ALGAE_NETFROMREEF", 50, 110, 1600);
   public static final AlgaePreset ALGAE_NETFROM6FT =
       new AlgaePreset("ALGAE_NETFROM6FT", 8, 180 - 74, 1433);
   public static final AlgaePreset ALGAE_NETFROM10FT =
@@ -28,18 +28,18 @@ public class Presets {
   public static final AlgaePreset ALGAE_SHOOTBARGE_OURSIDE =
       new AlgaePreset(
           "ALGAE_SHOOTBARGE_OURSIDE",
-          new Pose2d(7, 5, new Rotation2d(Units.degreesToRadians(37))),
-          20,
-          180 - 80,
-          2500);
+          new Pose2d(6.9, 6.0, new Rotation2d(Units.degreesToRadians(0))),
+          50,
+          110,
+          1600);
 
   public static final AlgaePreset ALGAE_SHOOTBARGE_THEIRSIDE =
       new AlgaePreset(
           "ALGAE_SHOOTBARGE_THEIRSIDE",
-          new Pose2d(10.3, 6.5, new Rotation2d(Units.degreesToRadians(-140))),
-          20,
-          180 - 80,
-          2500);
+          new Pose2d(10.6, 6.0, new Rotation2d(Units.degreesToRadians(-180))),
+          50,
+          110,
+          1600);
 
   public static final CoralPreset CORAL_L1 = new CoralPreset("L1", 900, 1000);
   public static final CoralPreset CORAL_L2 = new CoralPreset("L2", 900, 1000);

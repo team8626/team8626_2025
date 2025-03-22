@@ -9,6 +9,7 @@ package frc.robot.commands.setters.units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
+import frc.robot.subsystems.presets.Presets;
 import frc.robot.subsystems.wrist.WristConstants;
 import frc.robot.subsystems.wrist.WristSubsystem;
 import java.util.function.DoubleSupplier;
@@ -16,6 +17,9 @@ import java.util.function.DoubleSupplier;
 public class WristSetAngle extends CS_Command {
   private WristSubsystem wrist;
   private DoubleSupplier angle;
+  private boolean overrideAngle = false;
+  private double dashboardAngle = 0;
+  private double desiredAngle = Presets.ALGAE_SHOOTBARGE_OURSIDE.getWristAngleDegrees();
 
   public WristSetAngle(DoubleSupplier newAngle) {
     wrist = RobotContainer.wrist;
@@ -30,7 +34,14 @@ public class WristSetAngle extends CS_Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    wrist.setAngleDegrees(angle.getAsDouble());
+    desiredAngle = angle.getAsDouble();
+
+    overrideAngle = SmartDashboard.getBoolean("Commands/AlgaeShooterRampUp/OverrideAngle", false);
+    dashboardAngle = SmartDashboard.getNumber("Commands/AlgaeShooterRampUp/ForcedAngle", 0);
+    if (overrideAngle) {
+      desiredAngle = dashboardAngle;
+    }
+    wrist.setAngleDegrees(desiredAngle);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

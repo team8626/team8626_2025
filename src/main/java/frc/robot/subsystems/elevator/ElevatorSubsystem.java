@@ -59,6 +59,8 @@ public class ElevatorSubsystem extends CS_SubsystemBase {
     SmartDashboard.putNumber("Subsystem/Elevator/Gains/P", gains.kP());
     SmartDashboard.putNumber("Subsystem/Elevator/Gains/I", gains.kI());
     SmartDashboard.putNumber("Subsystem/Elevator/Gains/D", gains.kD());
+    SmartDashboard.putBoolean("Commands/ElevatorSetHeight/OverrideHeight", false);
+    SmartDashboard.putNumber("Commands/ElevatorSetHeight/ForcedHeight", 50);
   }
 
   @Override

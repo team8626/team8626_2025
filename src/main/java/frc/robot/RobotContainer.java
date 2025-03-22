@@ -31,6 +31,7 @@ import frc.robot.commands.setters.autos.Auto_J;
 import frc.robot.commands.setters.autos.Auto_K;
 import frc.robot.commands.setters.autos.Auto_L;
 import frc.robot.commands.setters.groups.ToAlgaePresetAndShoot;
+import frc.robot.commands.setters.groups.ToAlgaePresetDriveAndShoot;
 import frc.robot.commands.setters.groups.ToCoralIntake;
 import frc.robot.commands.setters.groups.ToCoralShoot;
 import frc.robot.commands.setters.groups.ToPathAndCoralIntake;
@@ -248,6 +249,22 @@ public class RobotContainer {
     //                                          Flip Drivebase directon
     controller.btn_Back.onTrue(new InstantCommand(() -> drivebase.flipToggle()));
 
+    // ---------------------------------------- POV UP/DOWN Button
+    //                                          Algae Shoot High From Reef
+    controller.btn_South.toggleOnTrue(
+        Commands.defer(
+                (() -> new ToAlgaePresetDriveAndShoot(() -> Presets.ALGAE_SHOOTBARGE_OURSIDE)),
+                Set.of(elevator, wrist, algae501))
+            .onlyIf(algae501::isLoaded));
+
+    controller.btn_North.toggleOnTrue(
+        Commands.defer(
+                (() -> new ToAlgaePresetDriveAndShoot(() -> Presets.ALGAE_SHOOTBARGE_THEIRSIDE)),
+                Set.of(elevator, wrist, algae501))
+            .onlyIf(algae501::isLoaded));
+
+    controller.btn_East.toggleOnTrue(new ToCoralShoot());
+
     // ---------------------------------------- POV UP/DOWN/LEFT/RIGHT -- FOR TESTING ONLY
     // controller.btn_South.onTrue(new ToSubsystemsPreset(() -> Presets.ALGAE_NETFROMREEF));
     // controller.btn_East.onTrue(new ToSubsystemsPreset(() -> Presets.ALGAE_FLOOR));
@@ -267,6 +284,15 @@ public class RobotContainer {
   // ------------------------------------ OPERATOR CONTROLLER -------------------------
   // ----------------------------------------------------------------------------------
   private void configureOperatorBindings(CS_XboxController controller) {
+
+    // controller.btn_A.toggleOnTrue(
+    //     Commands.defer(
+    //         (() ->
+    //             new ToPathAndFinkleAndAlgaeShoot(
+    //                     PresetManager.getBargeShootPreset(() -> drivebase.getPose()))
+    //                 .onlyIf(() -> algae501.isLoaded())),
+    //         Set.of(elevator, wrist, algae501)));
+
     // ---------------------------------------- POV UP/DOWN
     //                                          Elevator up/down 1"
     controller.btn_North.onTrue(new InstantCommand(() -> elevator.goUp(1.0)));

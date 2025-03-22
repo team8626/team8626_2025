@@ -66,6 +66,8 @@ public class WristSubsystem extends CS_SubsystemBase {
     SmartDashboard.putNumber("Subsystem/Wrist/Gains/P", WristConstants.gains.kP());
     SmartDashboard.putNumber("Subsystem/Wrist/Gains/I", WristConstants.gains.kI());
     SmartDashboard.putNumber("Subsystem/Wrist/Gains/D", WristConstants.gains.kD());
+    SmartDashboard.putBoolean("Commands/WristSetAngle/OverrideAngle", false);
+    SmartDashboard.putNumber("Commands/WristSetAngle/ForcedAngle", 110);
   }
 
   @Override
