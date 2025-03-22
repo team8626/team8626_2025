@@ -13,7 +13,7 @@
         {
           "type": "named",
           "data": {
-            "name": "FinkleAndShoot"
+            "name": "FinkleAndShootG"
           }
         },
         {
@@ -29,7 +29,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "G_LEFT"
+                  "pathName": "G_RIGHT"
                 }
               }
             ]
@@ -38,13 +38,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "LEFT_L"
+            "pathName": "RIGHT_B"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "FinkleAndShoot"
+            "name": "FinkleAndShootB"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "B_RIGHT"
           }
         }
       ]

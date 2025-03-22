@@ -7,13 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "START_C"
+            "pathName": "START_H"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "FinkleAndShootC"
+            "name": "FinkleAndShootH"
           }
         },
         {
@@ -29,7 +29,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "C_LEFT"
+                  "pathName": "H_LEFT"
                 }
               }
             ]

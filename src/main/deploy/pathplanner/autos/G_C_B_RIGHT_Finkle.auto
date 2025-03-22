@@ -7,19 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "RightScoreBranchE"
+            "pathName": "START_G"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "@BranchERightPickup"
+            "name": "FinkleAndShootG"
           }
         },
         {
@@ -31,6 +25,12 @@
                 "data": {
                   "name": "Intake"
                 }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "G_RIGHT"
+                }
               }
             ]
           }
@@ -38,19 +38,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "RightPickupBranchC"
+            "pathName": "RIGHT_C"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "@BranchCRightPickup"
+            "name": "FinkleAndShootC"
           }
         },
         {
@@ -62,36 +56,11 @@
                 "data": {
                   "name": "Intake"
                 }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "RightPickupBranchB"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "@BranchBLeftPickup"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
+              },
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "Intake"
+                  "pathName": "C_RIGHT"
                 }
               }
             ]
@@ -100,13 +69,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "LeftPickupBranchA"
+            "pathName": "RIGHT_B"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": "FinkleAndShootB"
           }
         }
       ]

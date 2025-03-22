@@ -7,43 +7,56 @@
         {
           "type": "path",
           "data": {
-            "pathName": "RightReefAlgaeA2"
+            "pathName": "Push_them"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "@ReefA2RightPickup"
+            "pathName": "PUSH_H"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "FinkleAndShootH"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "H_RIGHT"
+                }
+              }
+            ]
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "RightPickupCoralA3"
+            "pathName": "RIGHT_B"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "FinkleAndShootB"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "@ReefA3RightPickup"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "RightPickupCoralA3"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "@ReefA3RightPickup"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "RightPickupCoralA4"
+            "pathName": "B_RIGHT"
           }
         }
       ]
