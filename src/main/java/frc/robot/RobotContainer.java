@@ -8,7 +8,6 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -18,8 +17,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.RobotConstants.RobotType;
-import frc.robot.UIConstants.CORAL_BRANCH;
-import frc.robot.UIConstants.CORAL_LEVEL;
 import frc.robot.commands.RumbleCommand;
 import frc.robot.commands.setters.autos.Auto_A;
 import frc.robot.commands.setters.autos.Auto_B;
@@ -44,7 +41,6 @@ import frc.robot.commands.setters.groups.ToPathAndFinkleAndCoralShoot;
 import frc.robot.commands.setters.groups.ToPathAndFinleAndAlgaeIntake;
 import frc.robot.commands.setters.groups.ToSubsystemsPreset;
 import frc.robot.commands.setters.units.AlgaeShooterDiscard;
-import frc.robot.commands.setters.units.DriveToPoseFinkle;
 import frc.robot.subsystems.Dashboard;
 import frc.robot.subsystems.Dashboard.AutoOptions;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterSubsystem;
@@ -293,14 +289,14 @@ public class RobotContainer {
   // ----------------------------------------------------------------------------------
   private void configureOperatorBindings(CS_XboxController controller) {
 
-    Supplier<Pose2d> targetPose =
-        () -> PresetManager.getRobotPoseFromTarget(CORAL_BRANCH.G, CORAL_LEVEL.L4, 0);
-    Supplier<Pose2d> offsetPose =
-        () -> PresetManager.getRobotPoseFromTarget(CORAL_BRANCH.G, CORAL_LEVEL.L4, 12);
+    // Supplier<Pose2d> targetPose =
+    //     () -> PresetManager.getRobotPoseFromTarget(CORAL_BRANCH.G, CORAL_LEVEL.L4, 0);
+    // Supplier<Pose2d> offsetPose =
+    //     () -> PresetManager.getRobotPoseFromTarget(CORAL_BRANCH.G, CORAL_LEVEL.L4, 12);
 
-    controller.btn_Y.toggleOnTrue(new Auto_G());
-    controller.btn_A.toggleOnTrue(new DriveToPoseFinkle(offsetPose));
-    controller.btn_B.toggleOnTrue(new DriveToPoseFinkle(targetPose));
+    // controller.btn_Y.toggleOnTrue(new Auto_G());
+    // controller.btn_A.toggleOnTrue(new DriveToPoseFinkle(offsetPose));
+    // controller.btn_B.toggleOnTrue(new DriveToPoseFinkle(targetPose));
 
     // controller.btn_A.toggleOnTrue(
     //     Commands.defer(
