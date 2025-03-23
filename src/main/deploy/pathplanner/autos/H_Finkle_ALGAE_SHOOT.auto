@@ -1,0 +1,43 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "FinkleAndShootH"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "H_TURN180"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "RemoveSelectedAlgae"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ALGAE_SHOOT_PREP"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootIt"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
