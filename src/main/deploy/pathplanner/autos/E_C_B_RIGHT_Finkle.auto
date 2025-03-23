@@ -7,13 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "START_J"
+            "pathName": "START_E"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "FinkleAndShootJ"
+            "name": "FinkleAndShootE"
           }
         },
         {
@@ -29,7 +29,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "J_LEFT"
+                  "pathName": "E_RIGHT"
                 }
               }
             ]
@@ -38,13 +38,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "LEFT_K"
+            "pathName": "RIGHT_C"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "FinkleAndShootK"
+            "name": "FinkleAndShootC"
           }
         },
         {
@@ -60,7 +60,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "K_LEFT"
+                  "pathName": "C_RIGHT"
                 }
               }
             ]
@@ -69,32 +69,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "LEFT_L"
+            "pathName": "RIGHT_B"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "FinkleAndShootL"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "L_LEFT"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              }
-            ]
+            "name": "FinkleAndShootB"
           }
         }
       ]

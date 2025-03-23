@@ -454,6 +454,11 @@ public class RobotContainer {
     NamedCommands.registerCommand("FinkleAndShootJ", new Auto_J());
     NamedCommands.registerCommand("FinkleAndShootK", new Auto_K());
     NamedCommands.registerCommand("FinkleAndShootL", new Auto_L());
+    NamedCommands.registerCommand(
+        "RemoveSelectedAlgae",
+        Commands.defer(
+            (() -> new ToPathAndFinleAndAlgaeIntake().onlyIf(() -> !algae501.isLoaded())),
+            Set.of(elevator, wrist, algae501)));
   }
 
   public Command getAutonomousCommand() {

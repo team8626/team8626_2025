@@ -1,0 +1,31 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "FinkleAndShootH"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "H_TURN180"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "RemoveSelectedAlgae"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

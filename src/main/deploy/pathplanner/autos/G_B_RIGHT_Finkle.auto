@@ -5,12 +5,6 @@
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "START_G"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "FinkleAndShootG"
