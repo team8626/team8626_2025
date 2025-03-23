@@ -475,7 +475,7 @@ public class RobotContainer {
         break;
 
       case TRAJECTORY:
-        this.autoChooser.getSelected();
+        retVal = this.autoChooser.getSelected();
         break;
     }
     return retVal;
