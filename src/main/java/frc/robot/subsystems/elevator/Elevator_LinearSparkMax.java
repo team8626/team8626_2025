@@ -61,7 +61,7 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
         .p(gains.kP(), ClosedLoopSlot.kSlot1)
         .i(gains.kI(), ClosedLoopSlot.kSlot1)
         .d(gains.kD(), ClosedLoopSlot.kSlot1)
-        .outputRange(-0.5, 0.25, ClosedLoopSlot.kSlot1); // Down, Up
+        .outputRange(-0.6, 0.45, ClosedLoopSlot.kSlot1); // Down, Up
 
     rightConfig
         .closedLoop
