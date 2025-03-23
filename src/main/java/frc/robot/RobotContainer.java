@@ -35,6 +35,7 @@ import frc.robot.commands.setters.autos.Auto_K;
 import frc.robot.commands.setters.autos.Auto_L;
 import frc.robot.commands.setters.groups.ToAlgaePresetAndShoot;
 import frc.robot.commands.setters.groups.ToAlgaePresetDriveAndShoot;
+import frc.robot.commands.setters.groups.ToAlgaeShoot;
 import frc.robot.commands.setters.groups.ToCoralIntake;
 import frc.robot.commands.setters.groups.ToCoralShoot;
 import frc.robot.commands.setters.groups.ToPathAndCoralIntake;
@@ -454,6 +455,14 @@ public class RobotContainer {
     NamedCommands.registerCommand("FinkleAndShootJ", new Auto_J());
     NamedCommands.registerCommand("FinkleAndShootK", new Auto_K());
     NamedCommands.registerCommand("FinkleAndShootL", new Auto_L());
+    NamedCommands.registerCommand(
+        "ShootIt",
+        Commands.defer(
+            (() ->
+                new ToAlgaeShoot(() -> Presets.ALGAE_SHOOTBARGE_OURSIDE)
+                    .onlyIf(() -> algae501.isLoaded())),
+            Set.of(elevator, wrist, algae501)));
+
     NamedCommands.registerCommand(
         "RemoveSelectedAlgae",
         Commands.defer(

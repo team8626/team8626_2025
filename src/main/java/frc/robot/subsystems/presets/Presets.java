@@ -6,8 +6,8 @@ import edu.wpi.first.math.util.Units;
 
 public class Presets {
 
-  public static final AlgaePreset ALGAE_LOW = new AlgaePreset("LOW", 37.5, 200, -600);
-  public static final AlgaePreset ALGAE_HIGH = new AlgaePreset("HIGH", 55, 200, -600);
+  public static final AlgaePreset ALGAE_LOW = new AlgaePreset("LOW", 40.5, 200, -1000);
+  public static final AlgaePreset ALGAE_HIGH = new AlgaePreset("HIGH", 55, 190, -1000);
   public static final AlgaePreset ALGAE_FLOOR = new AlgaePreset("FLOOR", 8, 195, -1000);
   public static final AlgaePreset ALGAE_SPIT = new AlgaePreset("SPIT", 8, 205, -1000);
   public static final AlgaePreset ALGAE_PROCESS = new AlgaePreset("PROCESS", 8, 170, 500);

@@ -27,12 +27,6 @@
           "data": {
             "pathName": "ALGAE_SHOOT_PREP"
           }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ShootIt"
-          }
         }
       ]
     }
