@@ -153,6 +153,17 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
         // Not Zeroed and not Zeroing yet...
         this.reset();
       }
+
+      // desired height is low and amps are high, chain skipped,
+      // that requires to reset...
+      if((desiredHeightInches < 9) && (this.rightMotor.getOutputCurrent() > 30)){
+        // this.desiredHeightInches = ElevatorConstants.initHeightInches;
+        encoder.setPosition(ElevatorConstants.initHeightInches);
+        rightController.setReference(0, ControlType.kDutyCycle);
+
+        this.isZeroed = true;
+        this.isZeroing = false;
+      }
     }
   }
 
