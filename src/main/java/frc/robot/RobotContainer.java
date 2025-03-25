@@ -6,6 +6,9 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Inches;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -289,6 +292,16 @@ public class RobotContainer {
   // ----------------------------------------------------------------------------------
   private void configureOperatorBindings(CS_XboxController controller) {
 
+    Trigger sysIdQuasistatic = controller.btn_Start;
+    Trigger sysIdDynamic = controller.btn_Back;
+    Trigger sysIdForward = controller.btn_A;
+    Trigger sysIdBack = controller.btn_B;
+
+    // sysIdQuasistatic.and(sysIdForward).whileTrue(swerve.sysIdQuasistatic(Direction.kForward));
+    // sysIdQuasistatic.and(sysIdBack).whileTrue(swerve.sysIdQuasistatic(Direction.kReverse));
+    // sysIdDynamic.and(sysIdForward).whileTrue(swerve.sysIdDynamic(Direction.kForward));
+    // sysIdDynamic.and(sysIdBack).whileTrue(swerve.sysIdDynamic(Direction.kReverse));
+
     // Supplier<Pose2d> targetPose =
     //     () -> PresetManager.getRobotPoseFromTarget(CORAL_BRANCH.G, CORAL_LEVEL.L4, 0);
     // Supplier<Pose2d> offsetPose =
@@ -308,13 +321,13 @@ public class RobotContainer {
 
     // ---------------------------------------- POV UP/DOWN
     //                                          Elevator up/down 1"
-    controller.btn_North.onTrue(new InstantCommand(() -> elevator.goUp(1.0)));
-    controller.btn_South.onTrue(new InstantCommand(() -> elevator.goDown(1.0)));
+    controller.btn_North.onTrue(new InstantCommand(() -> elevator.goUp(Inches.of(1))));
+    controller.btn_South.onTrue(new InstantCommand(() -> elevator.goDown(Inches.of(1))));
 
     // ---------------------------------------- POV LEFT/RIGHT
     //                                          Wrist up/down 5"
-    controller.btn_West.onTrue(new InstantCommand(() -> wrist.goUp(5.0)));
-    controller.btn_East.onTrue(new InstantCommand(() -> wrist.goDown(5.0)));
+    controller.btn_West.onTrue(new InstantCommand(() -> wrist.goUp(Degrees.of(5))));
+    controller.btn_East.onTrue(new InstantCommand(() -> wrist.goDown(Degrees.of(5))));
 
     // ---------------------------------------- X Button
     //                                          Zero Elevator
@@ -322,7 +335,7 @@ public class RobotContainer {
 
     // ---------------------------------------- Back Button
     //                                          Flip Drivebase directon
-    controller.btn_Back.onTrue(new InstantCommand(() -> drivebase.flipToggle()));
+    // controller.btn_Back.onTrue(new InstantCommand(() -> drivebase.flipToggle()));
   }
 
   private void configureTestOperatorBindings(CS_XboxController controller) {}

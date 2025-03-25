@@ -6,6 +6,7 @@
 
 package frc.robot.commands.setters.units;
 
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
@@ -13,14 +14,14 @@ import frc.robot.subsystems.Dashboard;
 import frc.robot.subsystems.Dashboard.GamePieceState;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterConstants;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterSubsystem;
-import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 
 public class AlgaeShooterIntake extends CS_Command {
   private AlgaeShooterSubsystem algae501;
 
   private Timer timer = new Timer();
   private boolean algaeDetected = false;
-  private DoubleSupplier desiredRPM;
+  private Supplier<AngularVelocity> desiredRPM;
 
   public AlgaeShooterIntake() {
     algae501 = RobotContainer.algae501;
@@ -31,7 +32,7 @@ public class AlgaeShooterIntake extends CS_Command {
     this.setTAGString("ALGAESHOOTER_INTAKE");
   }
 
-  public AlgaeShooterIntake(DoubleSupplier newSpeed) {
+  public AlgaeShooterIntake(Supplier<AngularVelocity> newSpeed) {
     algae501 = RobotContainer.algae501;
     desiredRPM = newSpeed;
 
@@ -48,7 +49,7 @@ public class AlgaeShooterIntake extends CS_Command {
     algaeDetected = false;
 
     Dashboard.setAlgaeState(GamePieceState.INTAKING);
-    algae501.startIntake(desiredRPM.getAsDouble());
+    algae501.startIntake(desiredRPM.get());
   }
 
   // Called every time the scheduler runs while the command is scheduled.

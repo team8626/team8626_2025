@@ -1,7 +1,15 @@
 package frc.robot.subsystems.elevator;
 
+import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.Celsius;
+import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.MetersPerSecond;
 import static frc.robot.subsystems.elevator.ElevatorConstants.gains;
 
+import edu.wpi.first.units.measure.Current;
+import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.units.measure.LinearVelocity;
+import edu.wpi.first.units.measure.Temperature;
 import frc.robot.subsystems.elevator.ElevatorConstants.ElevatorStates.ElevatorState;
 
 /**
@@ -17,14 +25,18 @@ public interface ElevatorInterface {
     protected ElevatorState state = ElevatorState.IDLE;
     protected boolean isEnabled = false;
     protected boolean isZeroed = false;
-    protected double currentHeight = 0; // Inches
-    protected double desiredHeight = 0; // Inches
-    protected double ampsLeft = 0; // Amps
-    protected double ampsRight = 0; // Amps
+    protected Distance currentHeight = Inches.of(0); // Inches
+    protected Distance desiredHeight = Inches.of(0); // Inches
+    protected Current ampsLeft = Amps.of(0); // Amps
+    protected Current ampsRight = Amps.of(0); // Amps
     protected double appliedOutputLeft = 0;
     protected double appliedOutputRight = 0;
-    protected double temperatureLeft = 0; // Celsius
-    protected double temperatureRight = 0; // Celsius
+    protected Temperature temperatureLeft = Celsius.of(0);
+    protected Temperature temperatureRight = Celsius.of(0);
+
+    protected double positionRight = 0;
+    protected LinearVelocity velocityRight = MetersPerSecond.of(0);
+    protected double voltageRight = 0;
 
     protected double kP = gains.kP();
     protected double kI = gains.kI();
@@ -33,17 +45,20 @@ public interface ElevatorInterface {
 
   public default void updateInputs(ElevatorValues values) {}
 
-  public abstract double getHeightInches();
+  public abstract Distance getHeight();
 
-  public abstract void goUp(double offsetInches);
+  public abstract void goUp(Distance offset);
 
-  public abstract void goDown(double offsetInches);
+  public abstract void goDown(Distance offset);
 
-  public abstract void setHeightInches(double heightInches);
+  public abstract void setHeight(Distance height);
 
   default void setPID(double kP, double kI, double kD) {}
 
   public abstract void reset();
 
   public default void runCharacterization(double input) {}
+
+  // For Characterizarion
+  public default void setVoltageMainMotor(double voltage) {}
 }

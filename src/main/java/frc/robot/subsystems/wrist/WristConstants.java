@@ -1,19 +1,25 @@
 package frc.robot.subsystems.wrist;
 
+import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.DegreesPerSecond;
+
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
 import frc.robot.RobotConstants;
 
 public class WristConstants {
 
-  public static final double minAngleDegrees = 80;
-  public static final double maxAngleDegrees = 235;
-  public static final double restAngleDegrees = 80;
-  public static final double positionConversionFactor = 360; // degrees
-  public static final double velocityConversionFactor = 360 / 60; // degrees per second
+  public static final Angle minAngle = Degrees.of(80);
+  public static final Angle maxAngle = Degrees.of(235);
+  public static final Angle restAngle = Degrees.of(80);
+  public static final Angle positionConversionFactor = Degrees.of(360);
+  public static final AngularVelocity velocityConversionFactor =
+      DegreesPerSecond.of(360 / 60); // degrees per second
 
   public static final int maxCurrent = 40; // Amps
 
-  public static final double toleranceDegrees = 4;
+  public static final Angle tolerance = Degrees.of(4);
 
   // Gear box ratio
   public static final double inputGear = 16;

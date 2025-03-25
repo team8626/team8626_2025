@@ -1,5 +1,10 @@
 package frc.robot.subsystems.algaeshooter;
 
+import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.Celsius;
+import static edu.wpi.first.units.Units.RPM;
+
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.CS_SubsystemBase;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterInterface.AlgaeShooterValues;
@@ -8,7 +13,7 @@ import frc.utils.CS_Utils;
 public class AlgaeShooterSubsystem extends CS_SubsystemBase {
   private AlgaeShooterInterface algaeShooterInterface;
   private AlgaeShooterValues values;
-  private double DesiredRPM;
+  private AngularVelocity DesiredRPM;
 
   public AlgaeShooterSubsystem(AlgaeShooterInterface subsystem_interface) {
     super();
@@ -19,13 +24,13 @@ public class AlgaeShooterSubsystem extends CS_SubsystemBase {
   }
 
   // Calls to the algaeShooter interface
-  public void startRampUp(double newRPM) {
+  public void startRampUp(AngularVelocity newRPM) {
     // algaeShooterInterface.startLauncher(AlgaeShooterConstants.launcherIntakeSetpoint);
     updateShooterRPM(newRPM);
     algaeShooterInterface.startShooter(DesiredRPM);
   }
 
-  public void setShooterRPM(double newRPM) {
+  public void setShooterRPM(AngularVelocity newRPM) {
     updateShooterRPM(newRPM);
     algaeShooterInterface.updateShooterRPM(newRPM);
   }
@@ -36,11 +41,11 @@ public class AlgaeShooterSubsystem extends CS_SubsystemBase {
   }
 
   public void startDiscard() {
-    algaeShooterInterface.startShooter(-AlgaeShooterConstants.intakeRPM);
-    algaeShooterInterface.startLauncher(-AlgaeShooterConstants.launcherIntakeSetpoint);
+    algaeShooterInterface.startShooter(AlgaeShooterConstants.discardRPM);
+    algaeShooterInterface.startLauncher(-AlgaeShooterConstants.launcherDiscardSetpoint);
   }
 
-  public void startIntake(double newSpeed) {
+  public void startIntake(AngularVelocity newSpeed) {
     algaeShooterInterface.startShooter(newSpeed);
     algaeShooterInterface.startLauncher(AlgaeShooterConstants.launcherIntakeSetpoint);
   }
@@ -66,11 +71,11 @@ public class AlgaeShooterSubsystem extends CS_SubsystemBase {
     algaeShooterInterface.stopLauncher();
   }
 
-  public double getShooterRPMLeft() {
+  public AngularVelocity getShooterRPMLeft() {
     return algaeShooterInterface.getShooterRPMLeft();
   }
 
-  public double getShooterRPMRight() {
+  public AngularVelocity getShooterRPMRight() {
     return algaeShooterInterface.getShooterRPMRight();
   }
 
@@ -133,19 +138,24 @@ public class AlgaeShooterSubsystem extends CS_SubsystemBase {
     SmartDashboard.putBoolean("Subsystem/AlgaeShooter/Shooter", values.shooterIsEnabled);
     SmartDashboard.putBoolean("Subsystem/AlgaeShooter/Launcher", values.launchIsEnabled);
 
-    SmartDashboard.putNumber("Subsystem/AlgaeShooter/Shooter RPM Left", values.currentRPMLeft);
-    SmartDashboard.putNumber("Subsystem/AlgaeShooter/Shooter RPM Right", values.currentRPMRight);
     SmartDashboard.putNumber(
-        "Subsystem/AlgaeShooter/launcher RPM Right", values.currentRMPLauncher);
+        "Subsystem/AlgaeShooter/Shooter RPM Left", values.currentRPMLeft.in(RPM));
+    SmartDashboard.putNumber(
+        "Subsystem/AlgaeShooter/Shooter RPM Right", values.currentRPMRight.in(RPM));
+    SmartDashboard.putNumber(
+        "Subsystem/AlgaeShooter/launcher RPM Right", values.currentRMPLauncher.in(RPM));
     SmartDashboard.putNumber(
         "Subsystem/AlgaeShooter/Launcher Setpoint", values.currentLauncherSetpoint);
 
-    SmartDashboard.putNumber("Subsystem/AlgaeShooter/ShooterAmpsLeft", values.ampsLeft);
-    SmartDashboard.putNumber("Subsystem/AlgaeShooter/ShooterAmpsRight", values.ampsRight);
-    SmartDashboard.putNumber("Subsystem/AlgaeShooter/LauncherAmps", values.ampsLauncher);
-    SmartDashboard.putNumber("Subsystem/AlgaeShooter/TemperatureShooterLeft", values.tempLeft);
-    SmartDashboard.putNumber("Subsystem/AlgaeShooter/TemperatureShooterRight", values.tempRight);
-    SmartDashboard.putNumber("Subsystem/AlgaeShooter/TemperatureLauncher", values.tempLauncher);
+    SmartDashboard.putNumber("Subsystem/AlgaeShooter/ShooterAmpsLeft", values.ampsLeft.in(Amps));
+    SmartDashboard.putNumber("Subsystem/AlgaeShooter/ShooterAmpsRight", values.ampsRight.in(Amps));
+    SmartDashboard.putNumber("Subsystem/AlgaeShooter/LauncherAmps", values.ampsLauncher.in(Amps));
+    SmartDashboard.putNumber(
+        "Subsystem/AlgaeShooter/TemperatureShooterLeft", values.tempLeft.in(Celsius));
+    SmartDashboard.putNumber(
+        "Subsystem/AlgaeShooter/TemperatureShooterRight", values.tempRight.in(Celsius));
+    SmartDashboard.putNumber(
+        "Subsystem/AlgaeShooter/TemperatureLauncher", values.tempLauncher.in(Celsius));
     SmartDashboard.putNumber(
         "Subsystem/AlgaeShooter/AppliedOutputShooterLeft", values.appliedOutputLeft);
     SmartDashboard.putNumber(
@@ -155,9 +165,10 @@ public class AlgaeShooterSubsystem extends CS_SubsystemBase {
 
     SmartDashboard.putBoolean("Subsystem/AlgaeShooter/isLoaded", values.isLoaded);
 
-    double newRPM =
-        SmartDashboard.getNumber(
-            "Subsystem/AlgaeShooter/Shooting RPM", AlgaeShooterConstants.shootRPM);
+    AngularVelocity newRPM =
+        RPM.of(
+            SmartDashboard.getNumber(
+                "Subsystem/AlgaeShooter/Shooting RPM", AlgaeShooterConstants.shootRPM.in(RPM)));
     if (newRPM != DesiredRPM) {
       updateShooterRPM(newRPM);
       setShooterRPM(DesiredRPM);
@@ -175,11 +186,11 @@ public class AlgaeShooterSubsystem extends CS_SubsystemBase {
   }
 
   public double getCharacterizationVelocity() {
-    return (values.currentRPMLeft + values.currentRPMRight) / 2.0;
+    return (values.currentRPMLeft.in(RPM) + values.currentRPMRight.in(RPM)) / 2.0;
   }
 
-  private void updateShooterRPM(double new_RPM) {
+  private void updateShooterRPM(AngularVelocity new_RPM) {
     DesiredRPM = new_RPM;
-    SmartDashboard.putNumber("Subsystem/AlgaeShooter/Shooting RPM", DesiredRPM);
+    SmartDashboard.putNumber("Subsystem/AlgaeShooter/Shooting RPM", DesiredRPM.in(RPM));
   }
 }

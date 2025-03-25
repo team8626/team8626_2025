@@ -1,8 +1,19 @@
 package frc.robot.subsystems.elevator;
 
+import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.Celsius;
+import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.InchesPerSecond;
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.Second;
+import static edu.wpi.first.units.Units.Volts;
 import static frc.robot.subsystems.elevator.ElevatorConstants.gains;
 
+import com.ctre.phoenix6.SignalLogger;
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.subsystems.CS_SubsystemBase;
 import frc.robot.subsystems.elevator.ElevatorInterface.ElevatorValues;
 import frc.utils.CS_Utils;
@@ -16,17 +27,17 @@ public class ElevatorSubsystem extends CS_SubsystemBase {
 
     this.elevatorInterface = subsystem_interface;
     values = new ElevatorValues();
-    this.setHeight(ElevatorConstants.minHeightInches);
+    this.setHeight(ElevatorConstants.minHeight);
     println("Created");
   }
 
-  public void setHeight(double heightInches) {
-    printf("New Height: %f (%f)", heightInches, getHeight());
-    elevatorInterface.setHeightInches(heightInches);
+  public void setHeight(Distance height) {
+    printf("New Height: %f (%f)", height.in(Inches), getHeight().in(Inches));
+    elevatorInterface.setHeight(height);
   }
 
-  public double getHeight() {
-    return elevatorInterface.getHeightInches();
+  public Distance getHeight() {
+    return elevatorInterface.getHeight();
   }
 
   public void reset() {
@@ -66,16 +77,18 @@ public class ElevatorSubsystem extends CS_SubsystemBase {
   @Override
   public void updateDashboard() {
     // Update the SmartDashboard with the current state of the subsystem
-    SmartDashboard.putNumber("Subsystem/Elevator/DesiredHeight", values.desiredHeight);
+    SmartDashboard.putNumber("Subsystem/Elevator/DesiredHeight", values.desiredHeight.in(Inches));
     SmartDashboard.putBoolean("Subsystem/Elevator/Enabled", values.isEnabled);
     SmartDashboard.putString("Subsystem/Elevator/State", values.state.getString());
-    SmartDashboard.putNumber("Subsystem/Elevator/Height", values.currentHeight);
-    SmartDashboard.putNumber("Subsystem/Elevator/AmpsLeft", values.ampsLeft);
-    SmartDashboard.putNumber("Subsystem/Elevator/AmpsRight", values.ampsRight);
+    SmartDashboard.putNumber("Subsystem/Elevator/Height", values.currentHeight.in(Inches));
+    SmartDashboard.putNumber("Subsystem/Elevator/AmpsLeft", values.ampsLeft.in(Amps));
+    SmartDashboard.putNumber("Subsystem/Elevator/AmpsRight", values.ampsRight.in(Amps));
     SmartDashboard.putNumber("Subsystem/Elevator/AppliedOutputLeft", values.appliedOutputLeft);
     SmartDashboard.putNumber("Subsystem/Elevator/AppliedOutputRight", values.appliedOutputRight);
-    SmartDashboard.putNumber("Subsystem/Elevator/TemperatureLeft", values.temperatureLeft);
-    SmartDashboard.putNumber("Subsystem/Elevator/TemperatureRight", values.temperatureRight);
+    SmartDashboard.putNumber(
+        "Subsystem/Elevator/TemperatureLeft", values.temperatureLeft.in(Celsius));
+    SmartDashboard.putNumber(
+        "Subsystem/Elevator/TemperatureRight", values.temperatureRight.in(Celsius));
     SmartDashboard.putBoolean("Subsystem/Elevator/IsZeroed", values.isZeroed);
 
     // Using SmartDashboard to tune PIDs
@@ -107,15 +120,15 @@ public class ElevatorSubsystem extends CS_SubsystemBase {
   }
 
   public double getCharacterization() {
-    return values.currentHeight;
+    return values.currentHeight.in(Meters);
   }
 
-  public void goUp(double offsetInches) {
-    elevatorInterface.goUp(offsetInches);
+  public void goUp(Distance offset) {
+    elevatorInterface.goUp(offset);
   }
 
-  public void goDown(double offsetInches) {
-    elevatorInterface.goDown(offsetInches);
+  public void goDown(Distance offset) {
+    elevatorInterface.goDown(offset);
   }
   // private void log(SysIdRoutineLog log) {
   //   System.out.println("logging");
@@ -131,4 +144,34 @@ public class ElevatorSubsystem extends CS_SubsystemBase {
   // InchesPerSecond));
   // }
 
+  private final SysIdRoutine sysIdRoutine =
+      new SysIdRoutine(
+          new SysIdRoutine.Config(
+              Volts.of(0.5).per(Second),
+              Volts.of(1.5),
+              null,
+              state -> SignalLogger.writeString("SysId_Elevator_State", state.toString())),
+          new SysIdRoutine.Mechanism(
+              output -> elevatorInterface.setVoltageMainMotor(output.in(Volts)), null, this));
+
+  private double getRotations() {
+    return values.positionRight; // getPosition().in(Rotations);
+  }
+
+  private double getVelocity() {
+    // return motor1.getVelocity().getValue().in(RotationsPerSecond);
+    return values.velocityRight.in(InchesPerSecond);
+  }
+
+  public double getVolts() {
+    return values.voltageRight;
+  }
+
+  public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+    return this.sysIdRoutine.quasistatic(direction);
+  }
+
+  public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+    return this.sysIdRoutine.dynamic(direction);
+  }
 }

@@ -4,12 +4,17 @@
 
 package frc.robot.subsystems.presets;
 
+import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.RPM;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotConstants;
 import frc.robot.UIConstants;
@@ -20,10 +25,8 @@ import frc.robot.UIConstants.DTP;
 import frc.robot.UIConstants.PICKUP_SIDE;
 import frc.robot.subsystems.CS_SubsystemBase;
 import frc.robot.subsystems.Dashboard;
-import frc.robot.subsystems.algaeshooter.AlgaeShooterConstants;
 import frc.robot.subsystems.elevator.ElevatorConstants;
 import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 import org.littletonrobotics.frc2025.FieldConstants;
 import org.littletonrobotics.frc2025.FieldConstants.CoralStation;
@@ -101,76 +104,78 @@ public class PresetManager extends CS_SubsystemBase {
   }
 
   public static AlgaePreset getAimAndShootPreset(Supplier<Pose2d> poseSupplier) {
-
-    return getAimAndShootPreset(poseSupplier, () -> ElevatorConstants.minHeightInches);
+    return getAimAndShootPreset(poseSupplier, () -> ElevatorConstants.minHeight);
   }
 
   public static AlgaePreset getAimAndShootPreset(
-      Supplier<Pose2d> poseSupplier, DoubleSupplier elevatorHeightInches) {
+      Supplier<Pose2d> poseSupplier, Supplier<Distance> elevatorHeight) {
 
     Pose2d robotPose = poseSupplier.get();
-    AlgaePreset aimPreset = new AlgaePreset("AimPreset", 0, 0, 0);
+    AlgaePreset aimPreset = new AlgaePreset("AimPreset");
 
-    Pose2d targetPoseOurSide =
-        AllianceFlipUtil.apply(
-            new Pose2d(
-                Units.inchesToMeters(325.68), Units.inchesToMeters(241.64), new Rotation2d()));
+    // Pose2d targetPoseOurSide =
+    //     AllianceFlipUtil.apply(
+    //         new Pose2d(
+    //             Units.inchesToMeters(325.68), Units.inchesToMeters(241.64), new Rotation2d()));
 
-    Pose2d targetPose2TheirSide =
-        AllianceFlipUtil.apply(
-            new Pose2d(
-                Units.inchesToMeters(365.20), Units.inchesToMeters(241.64), new Rotation2d()));
-    String side;
-    Pose2d targetPose;
-    if (robotPose.getX() < targetPoseOurSide.getX()) {
-      // We are on our side
-      targetPose = targetPoseOurSide;
-      side = "Our Side";
-    } else if (robotPose.getX() > targetPose2TheirSide.getX()) {
-      // We are on their side
-      targetPose = targetPose2TheirSide;
-      side = "Their Side";
-    } else {
-      // We are in the middle
-      targetPose = new Pose2d();
-      side = "Middle";
-    }
+    // Pose2d targetPose2TheirSide =
+    //     AllianceFlipUtil.apply(
+    //         new Pose2d(
+    //             Units.inchesToMeters(365.20), Units.inchesToMeters(241.64), new Rotation2d()));
+    // String side;
+    // Pose2d targetPose;
+    // if (robotPose.getX() < targetPoseOurSide.getX()) {
+    //   // We are on our side
+    //   targetPose = targetPoseOurSide;
+    //   side = "Our Side";
+    // } else if (robotPose.getX() > targetPose2TheirSide.getX()) {
+    //   // We are on their side
+    //   targetPose = targetPose2TheirSide;
+    //   side = "Their Side";
+    // } else {
+    //   // We are in the middle
+    //   targetPose = new Pose2d();
+    //   side = "Middle";
+    // }
 
-    // Compute Distance to Target (Only using X, assuming we are facing the NET)
-    double x = 0, launchVelocity = 0, launchAngle = 0, launchRpm = 0, wristAngleDegrees = 0;
-    double wheelRadius = Units.metersToInches(AlgaeShooterConstants.wheelRadiusMeters);
+    // // Compute Distance to Target (Only using X, assuming we are facing the NET)
+    // double x = 0, launchVelocity = 0, launchAngle = 0, launchRpm = 0;
+    // Angle wristAngle = Degrees.of(0);
 
-    if (targetPose != new Pose2d()) {
+    // Distance wheelRadius = AlgaeShooterConstants.wheelRadius;
 
-      //   // Compute Distance to Target (Only using X, assuming we are facing the NET)
-      x = Units.metersToFeet(Math.abs(robotPose.getX() - targetPose.getX()));
+    // if (targetPose != new Pose2d()) {
 
-      launchVelocity = 24.1 + (x + 2) * (x + 2) / 70;
+    //   //   // Compute Distance to Target (Only using X, assuming we are facing the NET)
+    //   x = Units.metersToFeet(Math.abs(robotPose.getX() - targetPose.getX()));
 
-      launchAngle = (x - 20) * (x - 20) / 11 + 55 + x / 5;
-      launchRpm = (launchVelocity * 12) / (2 * Math.PI * wheelRadius) * 60;
+    //   launchVelocity = 24.1 + (x + 2) * (x + 2) / 70;
 
-      wristAngleDegrees = 180 - launchAngle;
-    }
+    //   launchAngle = (x - 20) * (x - 20) / 11 + 55 + x / 5;
+    //   launchRpm = (launchVelocity * 12) / (wheelRadius.times(2* Math.PI * 60);
 
-    SmartDashboard.putString("Subsystem/Presets/AimPreset/Side", side);
-    SmartDashboard.putNumber(
-        "Subsystem/PresetManager/AimPreset/RobotX (ft)", Units.metersToFeet(robotPose.getX()));
-    SmartDashboard.putNumber(
-        "Subsystem/PresetManager/AimPreset/RobotY (ft)", Units.metersToFeet(robotPose.getY()));
-    SmartDashboard.putNumber("Subsystem/PresetManager/AimPreset/Launch Distance (ft)", x);
-    SmartDashboard.putNumber("Subsystem/PresetManager/AimPreset/Launch Angle (deg)", launchAngle);
-    SmartDashboard.putNumber(
-        "Subsystem/PresetManager/AimPreset/Launch Velocity (ft.s-1)", launchVelocity);
-    SmartDashboard.putNumber("Subsystem/PresetManager/AimPreset/Launch Speed (RPM)", launchRpm);
-    SmartDashboard.putNumber(
-        "Subsystem/PresetManager/AimPreset/WristAngle (deg)", wristAngleDegrees);
-    SmartDashboard.putNumber(
-        "Presets/AimPreset/ElevatorHeight (in)", elevatorHeightInches.getAsDouble());
+    //   wristAngleDegrees = 180 - launchAngle;
+    // }
 
-    aimPreset.setElevatorHeightInches(elevatorHeightInches.getAsDouble());
-    aimPreset.setWristAngleDegrees(wristAngleDegrees);
-    aimPreset.setRPM(launchRpm);
+    // SmartDashboard.putString("Subsystem/Presets/AimPreset/Side", side);
+    // SmartDashboard.putNumber(
+    //     "Subsystem/PresetManager/AimPreset/RobotX (ft)", Units.metersToFeet(robotPose.getX()));
+    // SmartDashboard.putNumber(
+    //     "Subsystem/PresetManager/AimPreset/RobotY (ft)", Units.metersToFeet(robotPose.getY()));
+    // SmartDashboard.putNumber("Subsystem/PresetManager/AimPreset/Launch Distance (ft)", x);
+    // SmartDashboard.putNumber("Subsystem/PresetManager/AimPreset/Launch Angle (deg)",
+    // launchAngle);
+    // SmartDashboard.putNumber(
+    //     "Subsystem/PresetManager/AimPreset/Launch Velocity (ft.s-1)", launchVelocity);
+    // SmartDashboard.putNumber("Subsystem/PresetManager/AimPreset/Launch Speed (RPM)", launchRpm);
+    // SmartDashboard.putNumber(
+    //     "Subsystem/PresetManager/AimPreset/WristAngle (deg)", wristAngleDegrees);
+    // SmartDashboard.putNumber(
+    //     "Presets/AimPreset/ElevatorHeight (in)", elevatorHeightInches.get().in(Inches));
+
+    // aimPreset.setElevatorHeight(elevatorHeight.get().in(Inches));
+    // aimPreset.setWristAngle(wristAngle);
+    // aimPreset.setRPM(launchRpm);
 
     return aimPreset;
   }
@@ -616,11 +621,11 @@ public class PresetManager extends CS_SubsystemBase {
     algaePresetShootPosePub.set(currentAlgaePreset.getShootingPose());
     SmartDashboard.putNumber(
         "Subsystem/PresetManager/AlgaePreset/ElevatorHeight",
-        currentAlgaePreset.getElevatorHeightInches());
+        currentAlgaePreset.getElevatorHeight().in(Inches));
     SmartDashboard.putNumber(
-        "Subsystem/PresetManager/AlgaePreset/RPM", currentAlgaePreset.getRPM());
+        "Subsystem/PresetManager/AlgaePreset/RPM", currentAlgaePreset.getRPM().in(RPM));
     SmartDashboard.putNumber(
         "Subsystem/PresetManager/AlgaePreset/WristAngle",
-        currentAlgaePreset.getWristAngleDegrees());
+        currentAlgaePreset.getWristAngle().in(Degrees));
   }
 }

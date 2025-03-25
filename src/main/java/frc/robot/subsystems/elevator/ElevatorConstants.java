@@ -1,32 +1,44 @@
 package frc.robot.subsystems.elevator;
 
-import edu.wpi.first.math.util.Units;
+import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.InchesPerSecond;
+import static edu.wpi.first.units.Units.Kilogram;
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.MetersPerSecondPerSecond;
+
+import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.units.measure.LinearAcceleration;
+import edu.wpi.first.units.measure.LinearVelocity;
+import edu.wpi.first.units.measure.Mass;
 import frc.robot.RobotConstants;
 
 public class ElevatorConstants {
   // Elevator Constants
   public static final double gearRatio = 12.0 / 1;
   // public static final double drumRadiusInches = 1.0 / 2;
-  public static final double drumRadiusInches = 2.05 / 2;
+  public static final Distance drumRadius = Inches.of(2.05 / 2);
   public static final double cascadingRatio = 3;
 
-  public static final double positionConversionFactor =
-      2 * Math.PI * drumRadiusInches * cascadingRatio;
+  public static final Distance positionConversionFactor =
+      drumRadius.times(Math.PI).times(cascadingRatio);
+
   // public static final double positionConversionFactor =
   //     (2 * Math.PI * drumRadiusInches) * cascadingRatio;
-  public static final double velocityConversionFactor = positionConversionFactor / 60;
-  public static final double minHeightInches = 8;
-  public static final double maxHeightInches = 58;
-  public static final double initHeightInches = 8;
+  public static final LinearVelocity velocityConversionFactor =
+      MetersPerSecond.of(positionConversionFactor.in(Meters) / 60);
+  public static final Distance minHeight = Inches.of(8);
+  public static final Distance maxHeight = Inches.of(58);
+  public static final Distance initHeight = Inches.of(8);
 
   public static final int maxCurrent = 40; // Amps
 
-  public static final double carriageMassKg = Units.lbsToKilograms(20);
-  public static final double velocityMetersPerSecond = Units.inchesToMeters(30);
+  public static final Mass carriageMass = Kilogram.of(20);
+  public static final LinearVelocity velocity = InchesPerSecond.of(30);
 
-  public static final double maxVelocityInchesPerSec = 5;
-  public static final double maxAccelerationInchesPerSec2 = 5;
-  public static final double toleranceInches = 1;
+  public static final LinearVelocity maxVelocity = MetersPerSecond.of(1);
+  public static final LinearAcceleration maxAcceleration = MetersPerSecondPerSecond.of(2);
+  public static final Distance tolerance = Inches.of(1);
 
   public static final MotorConfig motorConfig =
       switch (RobotConstants.robotType) {

@@ -1,5 +1,11 @@
 package frc.robot.subsystems.elevator;
 
+import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.Celsius;
+import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.MetersPerSecondPerSecond;
 import static frc.robot.subsystems.elevator.ElevatorConstants.gains;
 import static frc.robot.subsystems.elevator.ElevatorConstants.motorConfig;
 
@@ -17,13 +23,13 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
+import edu.wpi.first.units.measure.Distance;
 import frc.robot.subsystems.CS_InterfaceBase;
 import frc.robot.subsystems.elevator.ElevatorConstants.ElevatorStates.ElevatorState;
 
 public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceBase {
-  // Declare the subsystem specific hardware here
-  // Example:
-  private double desiredHeightInches = ElevatorConstants.minHeightInches;
+
+  private Distance desiredHeight = ElevatorConstants.minHeight;
 
   private final SparkMax rightMotor;
   private final SparkMax leftMotor;
@@ -49,8 +55,8 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
 
     rightConfig
         .alternateEncoder
-        .positionConversionFactor(ElevatorConstants.positionConversionFactor)
-        .velocityConversionFactor(ElevatorConstants.velocityConversionFactor)
+        .positionConversionFactor(ElevatorConstants.positionConversionFactor.in(Meters))
+        .velocityConversionFactor(ElevatorConstants.velocityConversionFactor.in(MetersPerSecond))
         .inverted(true)
         .countsPerRevolution(8192);
 
@@ -66,9 +72,10 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
     rightConfig
         .closedLoop
         .maxMotion
-        .maxAcceleration(ElevatorConstants.maxAccelerationInchesPerSec2, ClosedLoopSlot.kSlot1)
-        .maxVelocity(ElevatorConstants.maxVelocityInchesPerSec, ClosedLoopSlot.kSlot1)
-        .allowedClosedLoopError(ElevatorConstants.toleranceInches, ClosedLoopSlot.kSlot1);
+        .maxAcceleration(
+            ElevatorConstants.maxAcceleration.in(MetersPerSecondPerSecond), ClosedLoopSlot.kSlot1)
+        .maxVelocity(ElevatorConstants.maxVelocity.in(MetersPerSecond), ClosedLoopSlot.kSlot1)
+        .allowedClosedLoopError(ElevatorConstants.tolerance.in(Meters), ClosedLoopSlot.kSlot1);
 
     // Create the motor and assign configuration
     rightMotor = new SparkMax(motorConfig.CANIdRight(), MotorType.kBrushless);
@@ -87,7 +94,7 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
 
     // Create the encoder
     encoder = rightMotor.getAlternateEncoder();
-    encoder.setPosition(ElevatorConstants.minHeightInches);
+    encoder.setPosition(ElevatorConstants.minHeight.in(Meters));
 
     // Setup the controller
     rightController = rightMotor.getClosedLoopController();
@@ -101,13 +108,16 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
   public void updateInputs(ElevatorValues values) {
 
     values.currentHeight = this.getElevatorHeight();
-    values.desiredHeight = this.desiredHeightInches;
-    values.ampsLeft = this.leftMotor.getOutputCurrent();
-    values.ampsRight = this.rightMotor.getOutputCurrent();
-    values.temperatureLeft = this.leftMotor.getMotorTemperature();
-    values.temperatureRight = this.rightMotor.getMotorTemperature();
+    values.desiredHeight = this.desiredHeight;
+    values.ampsLeft = Amps.of(this.leftMotor.getOutputCurrent());
+    values.ampsRight = Amps.of(this.rightMotor.getOutputCurrent());
+    values.temperatureLeft = Celsius.of(this.leftMotor.getMotorTemperature());
+    values.temperatureRight = Celsius.of(this.rightMotor.getMotorTemperature());
     values.appliedOutputLeft = this.leftMotor.getAppliedOutput();
     values.appliedOutputRight = this.rightMotor.getAppliedOutput();
+    values.positionRight = encoder.getPosition();
+    values.velocityRight = MetersPerSecond.of(encoder.getVelocity());
+
     values.isEnabled = this.isEnabled;
     values.isZeroed = this.isZeroed;
 
@@ -127,23 +137,17 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
 
     // controller.setReference(desiredHeight, ControlType.kPosition, ClosedLoopSlot.kSlot1);
     if (this.isZeroed) {
-      // rightController.setReference(
-      //   desiredHeightInches,
-      //   ControlType.kPosition,
-      //   ClosedLoopSlot.kSlot1,
-      //   elevatorFF.calculate(desiredHeightInches),
-      //   ArbFFUnits.kVoltage);
       rightController.setReference(
-          desiredHeightInches,
+          desiredHeight.in(Meters),
           ControlType.kPosition,
           ClosedLoopSlot.kSlot1,
-          elevatorFF.calculate(desiredHeightInches),
+          elevatorFF.calculate(desiredHeight.in(Meters)),
           ArbFFUnits.kVoltage);
     } else {
       if (this.isZeroing) {
         if (this.rightMotor.getOutputCurrent() > 30) {
-          this.desiredHeightInches = ElevatorConstants.initHeightInches;
-          encoder.setPosition(ElevatorConstants.initHeightInches);
+          this.desiredHeight = ElevatorConstants.initHeight;
+          encoder.setPosition(ElevatorConstants.initHeight.in(Meters));
           rightController.setReference(0, ControlType.kDutyCycle);
 
           this.isZeroed = true;
@@ -156,9 +160,9 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
 
       // desired height is low and amps are high, chain skipped,
       // that requires to reset...
-      if ((desiredHeightInches < 9) && (this.rightMotor.getOutputCurrent() > 30)) {
+      if ((desiredHeight.in(Inches) < 9) && (this.rightMotor.getOutputCurrent() > 30)) {
         // this.desiredHeightInches = ElevatorConstants.initHeightInches;
-        encoder.setPosition(ElevatorConstants.initHeightInches);
+        encoder.setPosition(ElevatorConstants.initHeight.in(Meters));
         rightController.setReference(0, ControlType.kDutyCycle);
 
         this.isZeroed = true;
@@ -167,8 +171,8 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
     }
   }
 
-  private double getElevatorHeight() {
-    return encoder.getPosition();
+  private Distance getElevatorHeight() {
+    return Meters.of(encoder.getPosition());
   }
 
   // Zero the elevator by srunning it reverse until it hits the bottom ---Gently---
@@ -179,8 +183,8 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
   }
 
   @Override
-  public double getHeightInches() {
-    double retval = encoder.getPosition();
+  public Distance getHeight() {
+    Distance retval = Meters.of(encoder.getPosition());
     return retval;
   }
 
@@ -197,19 +201,22 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
   }
 
   @Override
-  public void setHeightInches(double new_heightInches) {
-    desiredHeightInches =
-        MathUtil.clamp(
-            new_heightInches, ElevatorConstants.minHeightInches, ElevatorConstants.maxHeightInches);
+  public void setHeight(Distance new_height) {
+    desiredHeight =
+        Meters.of(
+            MathUtil.clamp(
+                new_height.in(Meters),
+                ElevatorConstants.minHeight.in(Meters),
+                ElevatorConstants.maxHeight.in(Meters)));
   }
 
   @Override
-  public void goUp(double offsetInches) {
-    desiredHeightInches += offsetInches;
+  public void goUp(Distance offset) {
+    desiredHeight.plus(offset);
   }
 
   @Override
-  public void goDown(double offsetInches) {
-    desiredHeightInches -= offsetInches;
+  public void goDown(Distance offset) {
+    desiredHeight.minus(offset);
   }
 }

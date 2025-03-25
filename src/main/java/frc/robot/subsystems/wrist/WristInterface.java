@@ -1,15 +1,22 @@
 package frc.robot.subsystems.wrist;
 
+import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.Celsius;
+import static edu.wpi.first.units.Units.Degrees;
 import static frc.robot.subsystems.wrist.WristConstants.gains;
 
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.Current;
+import edu.wpi.first.units.measure.Temperature;
+
 public interface WristInterface {
-  void setAngleDegrees(double new_Angle);
+  void setAngle(Angle newAngle);
 
-  double getAngleDegrees();
+  Angle getAngle();
 
-  void goUp(double offsetDegrees);
+  void goUp(Angle offset);
 
-  void goDown(double offsetDegrees);
+  void goDown(Angle offset);
 
   /** Run arm pivot at voltage */
   default void runCharacterization(double input) {}
@@ -22,11 +29,11 @@ public interface WristInterface {
 
   public class WristValues {
     protected boolean isEnabled = false;
-    protected double currentAngleDegrees = 0; // Degrees
-    protected double amps = 0;
-    protected double desiredAngleDegrees = 0; // degrees
+    protected Angle currentAngle = Degrees.of(0); // Degrees
+    protected Current amps = Amps.of(0);
+    protected Angle desiredAngle = Degrees.of(0); // degrees
     protected double appliedOutput = 0;
-    protected double temperature = 0; // Celsius
+    protected Temperature temperature = Celsius.of(0); // Celsius
 
     // protected double desiredAngleDegrees = 0;
 

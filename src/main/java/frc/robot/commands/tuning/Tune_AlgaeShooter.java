@@ -6,6 +6,9 @@
 
 package frc.robot.commands.tuning;
 
+import static edu.wpi.first.units.Units.RPM;
+
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
@@ -17,7 +20,7 @@ import frc.robot.subsystems.presets.Presets;
 
 public class Tune_AlgaeShooter extends CS_Command {
   private AlgaeShooterSubsystem algae501;
-  private double desiredRPM = AlgaeShooterConstants.shootRPM;
+  private AngularVelocity desiredRPM = AlgaeShooterConstants.shootRPM;
 
   public Tune_AlgaeShooter() {
     algae501 = RobotContainer.algae501;
@@ -30,9 +33,10 @@ public class Tune_AlgaeShooter extends CS_Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    double newRPM =
-        SmartDashboard.getNumber(
-            "Subsystem/AlgaeShooter/Shooting RPM", AlgaeShooterConstants.shootRPM);
+    AngularVelocity newRPM =
+        RPM.of(
+            SmartDashboard.getNumber(
+                "Subsystem/AlgaeShooter/Shooting RPM", AlgaeShooterConstants.shootRPM.in(RPM)));
     desiredRPM = newRPM;
     printf("RPM: %f", desiredRPM);
 

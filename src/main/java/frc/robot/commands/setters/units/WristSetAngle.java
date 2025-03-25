@@ -6,22 +6,25 @@
 
 package frc.robot.commands.setters.units;
 
+import static edu.wpi.first.units.Units.Degrees;
+
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
 import frc.robot.subsystems.presets.Presets;
 import frc.robot.subsystems.wrist.WristConstants;
 import frc.robot.subsystems.wrist.WristSubsystem;
-import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 
 public class WristSetAngle extends CS_Command {
   private WristSubsystem wrist;
-  private DoubleSupplier angle;
+  private Supplier<Angle> angle;
   private boolean overrideAngle = false;
-  private double dashboardAngle = 0;
-  private double desiredAngle = Presets.ALGAE_SHOOTBARGE_OURSIDE.getWristAngleDegrees();
+  private Angle dashboardAngle = Degrees.of(0);
+  private Angle desiredAngle = Presets.ALGAE_SHOOTBARGE_OURSIDE.getWristAngle();
 
-  public WristSetAngle(DoubleSupplier newAngle) {
+  public WristSetAngle(Supplier<Angle> newAngle) {
     wrist = RobotContainer.wrist;
     angle = newAngle;
 
@@ -34,14 +37,15 @@ public class WristSetAngle extends CS_Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    desiredAngle = angle.getAsDouble();
+    desiredAngle = angle.get();
 
     overrideAngle = SmartDashboard.getBoolean("Commands/AlgaeShooterRampUp/OverrideAngle", false);
-    dashboardAngle = SmartDashboard.getNumber("Commands/AlgaeShooterRampUp/ForcedAngle", 0);
+    dashboardAngle =
+        Degrees.of(SmartDashboard.getNumber("Commands/AlgaeShooterRampUp/ForcedAngle", 0));
     if (overrideAngle) {
       desiredAngle = dashboardAngle;
     }
-    wrist.setAngleDegrees(desiredAngle);
+    wrist.setAngle(desiredAngle);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -57,9 +61,9 @@ public class WristSetAngle extends CS_Command {
   public boolean isFinished() {
     boolean atSetPoint = false;
 
-    double currentAngle = wrist.getAngleDegrees();
+    Angle currentAngle = wrist.getAngle();
 
-    if (Math.abs(currentAngle - angle.getAsDouble()) <= WristConstants.toleranceDegrees) {
+    if (currentAngle.isNear(currentAngle, WristConstants.tolerance)) {
       atSetPoint = true;
     }
     SmartDashboard.putBoolean("Commands/WristSetAngle/atSetPoint", atSetPoint);
