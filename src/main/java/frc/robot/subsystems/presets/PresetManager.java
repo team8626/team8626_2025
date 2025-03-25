@@ -411,6 +411,37 @@ public class PresetManager extends CS_SubsystemBase {
   }
 
   /**
+   * Get the Robot Pose from the Target with an Offset
+   *
+   * @param newFace Algae Face (AB - KL)
+   * @param newOffsetInches Offset in Inches (from the Target)
+   * @return Pose2d (new Pose2d() is the Face is NONE or Invalid)
+   */
+  public static Pose2d getRobotPoseFromAlgae(ALGAE_FACE newFace, double newOffsetInches) {
+    Pose2d retValue = new Pose2d();
+    Pose2d facePose = getFacePoseFromTarget(newFace);
+
+    if (!facePose.equals(new Pose2d())) {
+      Pose2d robotPose =
+          facePose.plus(
+              new Transform2d(
+                  RobotConstants.robotCenterOffset.getX() + Units.inchesToMeters(0),
+                  0,
+                  new Rotation2d())); /// branchPose.getRotation()));
+
+      Pose2d robotPose2 =
+          new Pose2d(
+              robotPose.getX(),
+              robotPose.getY(),
+              new Rotation2d(robotPose.getRotation().getRadians() + Math.PI));
+
+      retValue = AllianceFlipUtil.apply(robotPose2);
+    }
+
+    return retValue;
+  }
+
+  /**
    * Get the Robot Pose from the Pickup Side
    *
    * @param newSide Pickup Side (LEFT/RIGHT)
@@ -519,7 +550,7 @@ public class PresetManager extends CS_SubsystemBase {
    * @param face ALGAE_FACE (AB, CD, EF, GH, IJ, KL, FLOOR)
    * @return Pose2d (new Pose2d() is the Face is FLOOR or Invalid)
    */
-  private Pose2d getFacePoseFromTarget(ALGAE_FACE face) {
+  private static Pose2d getFacePoseFromTarget(ALGAE_FACE face) {
     int faceId = 0;
     boolean isLow = false;
 
@@ -554,7 +585,7 @@ public class PresetManager extends CS_SubsystemBase {
         break;
     }
 
-    printf(
+    System.out.printf(
         "New Face (%s - %s) - x: %3f, y: %3f, theta: %3f\n",
         face,
         isLow ? "Low" : "High",

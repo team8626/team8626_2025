@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Commodore;
 import frc.robot.Commodore.CommodoreState;
 import frc.robot.RobotConstants;
+import frc.robot.commands.setters.units.AlgaeShooterIntake;
 import frc.robot.commands.setters.units.DriveToPoseFinkle;
 import frc.robot.subsystems.presets.AlgaePreset;
 import frc.robot.subsystems.presets.PresetManager;
@@ -47,7 +48,7 @@ public class ToPathAndFinleAndAlgaeIntake extends SequentialCommandGroup {
                     .onlyIf(() -> !targetPose.get().equals(new Pose2d())),
 
                 // Algae Intake
-                new ToAlgaeIntake(() -> algaePreset.get().getRPM()),
+                new AlgaeShooterIntake(() -> algaePreset.get().getRPM()),
 
                 // Drive Away
                 new DriveToPoseFinkle(offsetPose, () -> 6, () -> 10)

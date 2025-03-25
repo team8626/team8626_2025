@@ -26,6 +26,7 @@ public class AlgaeShooterRampUp extends CS_Command {
   private final AngularVelocity RPMTolerance = AlgaeShooterConstants.shooterRPMTolerance;
   private boolean overrideRPM = false;
   private AngularVelocity dashboardRPM = RPM.of(0);
+  private boolean doNotStopOnInterrupt = false;
 
   public AlgaeShooterRampUp(Supplier<AngularVelocity> newRPM) {
     algae501 = RobotContainer.algae501;
@@ -36,6 +37,11 @@ public class AlgaeShooterRampUp extends CS_Command {
 
     this.desiredRPM = newRPM.get();
     this.setTAGString("ALGAESHOOTER_RAMPUP");
+  }
+
+  public AlgaeShooterRampUp withDoNotStopOnInterrupt() {
+    doNotStopOnInterrupt = true;
+    return this;
   }
 
   @Override
@@ -58,7 +64,7 @@ public class AlgaeShooterRampUp extends CS_Command {
 
   @Override
   public void end(boolean interrupted) {
-    if (interrupted) {
+    if (interrupted && !doNotStopOnInterrupt) {
       algae501.stopAll();
     }
   }
