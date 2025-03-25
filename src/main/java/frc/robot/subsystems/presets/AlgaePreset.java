@@ -158,6 +158,12 @@ public class AlgaePreset {
     return retVal;
   }
 
+  public Pose2d getPose() {
+    Pose2d retVal = new Pose2d();
+    retVal = this.robotPose;
+    return retVal;
+  }
+
   /**
    * Get the Pose of the Robot
    *

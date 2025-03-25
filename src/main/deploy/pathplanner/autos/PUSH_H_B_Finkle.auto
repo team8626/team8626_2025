@@ -1,0 +1,68 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Push_them"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "PUSH_H"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "FinkleAndShootH"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "H_RIGHT"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RIGHT_B"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "FinkleAndShootB"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "B_RIGHT"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": false,
+  "folder": null,
+  "choreoAuto": false
+}

@@ -37,7 +37,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.OperatorConstants;
 import frc.robot.RobotConstants;
@@ -125,7 +124,7 @@ public class SwerveSubsystem extends CS_SubsystemBase {
       swerveDrive.stopOdometryThread();
     }
     setupPathPlanner();
-    RobotModeTriggers.autonomous().onTrue(Commands.runOnce(this::zeroGyro));
+    // RobotModeTriggers.autonomous().onTrue(Commands.runOnce(this::zeroGyroWithAlliance));
   }
 
   /**
@@ -730,15 +729,17 @@ public class SwerveSubsystem extends CS_SubsystemBase {
     swerveDrive.lockPose();
   }
 
-  /**
-   * Gets the current pitch angle of the robot, as reported by the imu.
-   *
-   * @return The heading as a {@link Rotation2d} angle
-   */
-  public Rotation2d getPitch() {
-    return swerveDrive.getPitch();
+  public double getPitch() {
+    return swerveDrive.getPitch().getDegrees();
   }
 
+  public double getRoll() {
+    return swerveDrive.getRoll().getDegrees();
+  }
+
+  public double getYaw() {
+    return swerveDrive.getYaw().getDegrees();
+  }
   /** Add a fake vision reading for testing purposes. */
   public void addFakeVisionReading() {
     swerveDrive.addVisionMeasurement(
@@ -784,7 +785,9 @@ public class SwerveSubsystem extends CS_SubsystemBase {
    */
   public void updateDashboard() {
     SmartDashboard.putNumber("Subsystem/Drive/Heading", getHeading().getDegrees());
-    SmartDashboard.putNumber("Subsystem/Drive/Pitch", getPitch().getDegrees());
+    SmartDashboard.putNumber("Subsystem/Drive/Pitch", this.getPitch());
+    SmartDashboard.putNumber("Subsystem/Drive/Roll", this.getRoll());
+    SmartDashboard.putNumber("Subsystem/Drive/Yaw", this.getYaw());
     SmartDashboard.putBoolean("Subsystem/Drive/IsFlipped", isFlipped);
     robotPosePub.set(new Pose3d(getPose()));
   }

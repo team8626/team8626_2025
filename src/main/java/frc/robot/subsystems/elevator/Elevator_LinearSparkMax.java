@@ -61,7 +61,7 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
         .p(gains.kP(), ClosedLoopSlot.kSlot1)
         .i(gains.kI(), ClosedLoopSlot.kSlot1)
         .d(gains.kD(), ClosedLoopSlot.kSlot1)
-        .outputRange(-0.5, 0.15, ClosedLoopSlot.kSlot1); // Down, Up
+        .outputRange(-0.5, 0.25, ClosedLoopSlot.kSlot1); // Down, Up
 
     rightConfig
         .closedLoop
@@ -152,6 +152,17 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
       } else {
         // Not Zeroed and not Zeroing yet...
         this.reset();
+      }
+
+      // desired height is low and amps are high, chain skipped,
+      // that requires to reset...
+      if((desiredHeightInches < 9) && (this.rightMotor.getOutputCurrent() > 30)){
+        // this.desiredHeightInches = ElevatorConstants.initHeightInches;
+        encoder.setPosition(ElevatorConstants.initHeightInches);
+        rightController.setReference(0, ControlType.kDutyCycle);
+
+        this.isZeroed = true;
+        this.isZeroing = false;
       }
     }
   }

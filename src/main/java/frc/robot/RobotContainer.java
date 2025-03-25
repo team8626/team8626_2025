@@ -31,6 +31,8 @@ import frc.robot.commands.setters.autos.Auto_J;
 import frc.robot.commands.setters.autos.Auto_K;
 import frc.robot.commands.setters.autos.Auto_L;
 import frc.robot.commands.setters.groups.ToAlgaePresetAndShoot;
+import frc.robot.commands.setters.groups.ToAlgaePresetDriveAndShoot;
+import frc.robot.commands.setters.groups.ToAlgaeShoot;
 import frc.robot.commands.setters.groups.ToCoralIntake;
 import frc.robot.commands.setters.groups.ToCoralShoot;
 import frc.robot.commands.setters.groups.ToPathAndCoralIntake;
@@ -40,6 +42,7 @@ import frc.robot.commands.setters.groups.ToPathAndFinleAndAlgaeIntake;
 import frc.robot.commands.setters.groups.ToSubsystemsPreset;
 import frc.robot.commands.setters.units.AlgaeShooterDiscard;
 import frc.robot.subsystems.Dashboard;
+import frc.robot.subsystems.Dashboard.AutoOptions;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterSubsystem;
 import frc.robot.subsystems.algaeshooter.AlgaeShooter_Sim;
 import frc.robot.subsystems.algaeshooter.AlgaeShooter_SparkMax;
@@ -247,6 +250,22 @@ public class RobotContainer {
     //                                          Flip Drivebase directon
     controller.btn_Back.onTrue(new InstantCommand(() -> drivebase.flipToggle()));
 
+    // ---------------------------------------- POV UP/DOWN Button
+    //                                          Algae Shoot High From Reef
+    controller.btn_South.toggleOnTrue(
+        Commands.defer(
+                (() -> new ToAlgaePresetDriveAndShoot(() -> Presets.ALGAE_SHOOTBARGE_OURSIDE)),
+                Set.of(elevator, wrist, algae501))
+            .onlyIf(algae501::isLoaded));
+
+    controller.btn_North.toggleOnTrue(
+        Commands.defer(
+                (() -> new ToAlgaePresetDriveAndShoot(() -> Presets.ALGAE_SHOOTBARGE_THEIRSIDE)),
+                Set.of(elevator, wrist, algae501))
+            .onlyIf(algae501::isLoaded));
+
+    controller.btn_East.toggleOnTrue(new ToCoralShoot());
+
     // ---------------------------------------- POV UP/DOWN/LEFT/RIGHT -- FOR TESTING ONLY
     // controller.btn_South.onTrue(new ToSubsystemsPreset(() -> Presets.ALGAE_NETFROMREEF));
     // controller.btn_East.onTrue(new ToSubsystemsPreset(() -> Presets.ALGAE_FLOOR));
@@ -261,11 +280,32 @@ public class RobotContainer {
     new Trigger(mortar::isLoaded)
         .debounce(0.1)
         .onTrue(new RumbleCommand(controller, RumbleType.kBothRumble));
+
+    new Trigger(() -> Math.abs(drivebase.getPitch() - 10) > 0)
+        .onTrue(new ToSubsystemsPreset(() -> Presets.ALGAE_STOW));
   }
 
   // ------------------------------------ OPERATOR CONTROLLER -------------------------
   // ----------------------------------------------------------------------------------
   private void configureOperatorBindings(CS_XboxController controller) {
+
+    // Supplier<Pose2d> targetPose =
+    //     () -> PresetManager.getRobotPoseFromTarget(CORAL_BRANCH.G, CORAL_LEVEL.L4, 0);
+    // Supplier<Pose2d> offsetPose =
+    //     () -> PresetManager.getRobotPoseFromTarget(CORAL_BRANCH.G, CORAL_LEVEL.L4, 12);
+
+    // controller.btn_Y.toggleOnTrue(new Auto_G());
+    // controller.btn_A.toggleOnTrue(new DriveToPoseFinkle(offsetPose));
+    // controller.btn_B.toggleOnTrue(new DriveToPoseFinkle(targetPose));
+
+    // controller.btn_A.toggleOnTrue(
+    //     Commands.defer(
+    //         (() ->
+    //             new ToPathAndFinkleAndAlgaeShoot(
+    //                     PresetManager.getBargeShootPreset(() -> drivebase.getPose()))
+    //                 .onlyIf(() -> algae501.isLoaded())),
+    //         Set.of(elevator, wrist, algae501)));
+
     // ---------------------------------------- POV UP/DOWN
     //                                          Elevator up/down 1"
     controller.btn_North.onTrue(new InstantCommand(() -> elevator.goUp(1.0)));
@@ -411,11 +451,44 @@ public class RobotContainer {
     NamedCommands.registerCommand("FinkleAndShootJ", new Auto_J());
     NamedCommands.registerCommand("FinkleAndShootK", new Auto_K());
     NamedCommands.registerCommand("FinkleAndShootL", new Auto_L());
+    NamedCommands.registerCommand(
+        "ShootIt",
+        Commands.defer(
+            (() ->
+                new ToAlgaeShoot(() -> Presets.ALGAE_SHOOTBARGE_OURSIDE)
+                    .onlyIf(() -> algae501.isLoaded())),
+            Set.of(elevator, wrist, algae501)));
+
+    NamedCommands.registerCommand(
+        "RemoveSelectedAlgae",
+        Commands.defer(
+            (() -> new ToPathAndFinleAndAlgaeIntake().onlyIf(() -> !algae501.isLoaded())),
+            Set.of(elevator, wrist, algae501)));
   }
 
   public Command getAutonomousCommand() {
     // Return the path to follow in autonomous mode
-    return this.autoChooser.getSelected();
+    Command retVal = new InstantCommand();
+
+    AutoOptions autoOption = dashboard.getSelectedAuto();
+    switch (autoOption) {
+      case G:
+        retVal = new Auto_G();
+        break;
+
+      case Practice_L:
+        retVal = new Auto_L();
+        break;
+
+      case DO_NOTHING:
+        retVal = new InstantCommand();
+        break;
+
+      case TRAJECTORY:
+        retVal = this.autoChooser.getSelected();
+        break;
+    }
+    return retVal;
   }
 
   public RobotType getRobotType() {

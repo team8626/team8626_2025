@@ -24,7 +24,7 @@ public class ToPathAndFinleAndAlgaeIntake extends SequentialCommandGroup {
           PresetManager.getAlgaePreset()
               .get()
               .getDealgaefyPose()
-              .plus(new Transform2d(Units.inchesToMeters(-30), 0, new Rotation2d()));
+              .plus(new Transform2d(Units.inchesToMeters(-12), 0, new Rotation2d()));
 
   private Supplier<AlgaePreset> algaePreset = PresetManager.getAlgaePreset();
 

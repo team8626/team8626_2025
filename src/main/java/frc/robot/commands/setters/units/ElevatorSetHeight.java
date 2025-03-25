@@ -11,11 +11,15 @@ import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
 import frc.robot.subsystems.elevator.ElevatorConstants;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
+import frc.robot.subsystems.presets.Presets;
 import java.util.function.DoubleSupplier;
 
 public class ElevatorSetHeight extends CS_Command {
   private ElevatorSubsystem elevator;
   private DoubleSupplier height;
+  private boolean overrideHeight = false;
+  private double dashboardHeight = 0;
+  private double desiredHeight = Presets.ALGAE_SHOOTBARGE_OURSIDE.getElevatorHeightInches();
 
   public ElevatorSetHeight(DoubleSupplier newHeight) {
     elevator = RobotContainer.elevator;
@@ -30,7 +34,14 @@ public class ElevatorSetHeight extends CS_Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    elevator.setHeight(height.getAsDouble());
+    desiredHeight = height.getAsDouble();
+
+    overrideHeight = SmartDashboard.getBoolean("Commands/AlgaeShooterRampUp/OverrideRPM", false);
+    dashboardHeight = SmartDashboard.getNumber("Commands/AlgaeShooterRampUp/ForcedRMP", 0);
+    if (overrideHeight) {
+      desiredHeight = dashboardHeight;
+    }
+    elevator.setHeight(desiredHeight);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
