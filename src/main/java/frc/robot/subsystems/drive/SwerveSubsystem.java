@@ -427,16 +427,7 @@ public class SwerveSubsystem extends CS_SubsystemBase {
         });
   }
 
-  /**
-   * Command to drive the robot using translative values and heading as angular velocity.
-   *
-   * @param translationX Translation in the X direction. Cubed for smoother controls.
-   * @param translationY Translation in the Y direction. Cubed for smoother controls.
-   * @param angularRotationX Angular velocity of the robot to set. Cubed for smoother controls.
-   * @param fieldRelative Field relative mode.
-   * @return Drive command.
-   */
-  public Command driveCommand(
+  public Command CS_driveCommand(
       DoubleSupplier translationX,
       DoubleSupplier translationY,
       DoubleSupplier angularRotationX,
@@ -445,13 +436,10 @@ public class SwerveSubsystem extends CS_SubsystemBase {
         () -> {
           // Make the robot move
           swerveDrive.drive(
-              SwerveMath.scaleTranslation(
-                  new Translation2d(
-                      translationX.getAsDouble() * swerveDrive.getMaximumChassisVelocity(),
-                      translationY.getAsDouble() * swerveDrive.getMaximumChassisVelocity()),
-                  0.8),
-              Math.pow(angularRotationX.getAsDouble(), 3)
-                  * swerveDrive.getMaximumChassisAngularVelocity(),
+              new Translation2d(
+                  translationX.getAsDouble() * swerveDrive.getMaximumChassisVelocity(),
+                  translationY.getAsDouble() * swerveDrive.getMaximumChassisVelocity()),
+              angularRotationX.getAsDouble() * swerveDrive.getMaximumChassisAngularVelocity(),
               fieldRelative.getAsBoolean(),
               false);
         });
@@ -756,23 +744,23 @@ public class SwerveSubsystem extends CS_SubsystemBase {
   }
 
   public void setDefaultCommand(CS_XboxController xboxController) {
-    Command driveCommand =
-        this.driveCommand(
+    Command CS_driveCommand =
+        this.CS_driveCommand(
             () ->
                 MathUtil.applyDeadband(
-                    -xboxController.getLeftY()
+                    -Math.pow(xboxController.getLeftY(), 3)
                         * (AllianceFlipUtil.shouldFlip() ? -1.0 : 1.0)
                         * (isFlipped ? -1.0 : 1.0),
                     OperatorConstants.LEFT_Y_DEADBAND),
             () ->
                 MathUtil.applyDeadband(
-                    -xboxController.getLeftX()
+                    -Math.pow(xboxController.getLeftX(), 3)
                         * (AllianceFlipUtil.shouldFlip() ? -1.0 : 1.0)
                         * (isFlipped ? -1.0 : 1.0),
                     OperatorConstants.LEFT_X_DEADBAND),
-            () -> -xboxController.getRightX(),
+            () -> -Math.pow(xboxController.getRightX(), 3),
             () -> !xboxController.getStartButton());
-    setDefaultCommand(driveCommand);
+    setDefaultCommand(CS_driveCommand);
   }
 
   public void flipToggle() {

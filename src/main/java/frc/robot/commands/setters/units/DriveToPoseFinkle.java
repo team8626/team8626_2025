@@ -215,8 +215,7 @@ public class DriveToPoseFinkle extends CS_Command {
       SmartDashboard.putNumber("Commands/DriveToPoseFinkle/CalculateY", calculateY);
       SmartDashboard.putNumber("Commands/DriveToPoseFinkle/CalculateTheta", calculateTheta);
 
-      m_drive
-          .driveCommand(() -> calculateX, () -> calculateY, () -> calculateTheta, () -> true)
+      m_drive.CS_driveCommand(() -> calculateX, () -> calculateY, () -> calculateTheta, () -> true)
           .execute();
 
       SmartDashboard.putNumber("Commands/DriveToPoseFinkle/ErrorX", m_xPID.getPositionError());
