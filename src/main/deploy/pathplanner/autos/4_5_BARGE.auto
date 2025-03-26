@@ -13,26 +13,19 @@
         {
           "type": "named",
           "data": {
-            "name": "Intake"
+            "name": "FinkleAndTake4"
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "4_BARGE_5"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": null
-                }
-              }
-            ]
+            "pathName": "4_BARGE_5"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "FinkleAndTake5"
           }
         },
         {
@@ -44,7 +37,7 @@
         {
           "type": "named",
           "data": {
-            "name": null
+            "name": "ShootIt"
           }
         }
       ]

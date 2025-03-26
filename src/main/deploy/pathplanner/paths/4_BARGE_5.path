@@ -86,7 +86,26 @@
     }
   ],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "PrepareRampUp",
+      "waypointRelativePos": 0.5256511444356651,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
+      "name": "PrepareShootLow",
+      "waypointRelativePos": 0.5256511444356771,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
+      "name": "ShootIt",
+      "waypointRelativePos": 1.3496448303078208,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 6.77,
     "maxAcceleration": 4.0,
