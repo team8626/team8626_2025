@@ -6,6 +6,9 @@
 
 package frc.robot.commands.setters.units;
 
+import static edu.wpi.first.units.Units.RPM;
+
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
@@ -15,17 +18,16 @@ import frc.robot.subsystems.coralshooter.CoralShooterConstants;
 import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
 import frc.robot.subsystems.presets.CoralPreset;
 import frc.robot.subsystems.presets.PresetManager;
-import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
 public class CoralShooterRampUp extends CS_Command {
   private CoralShooterSubsystem mortar;
   private boolean overrideRPM = false;
-  private double dashboardRPMLeft = 0;
-  private double dashboardRPMRight = 0;
-  private DoubleSupplier desiredRpmLeft;
-  private DoubleSupplier desiredRpmRight;
-  private final double RPMTolerance = CoralShooterConstants.RPMTolerance;
+  private AngularVelocity dashboardRPMLeft = RPM.of(0);
+  private AngularVelocity dashboardRPMRight = RPM.of(0);
+  private Supplier<AngularVelocity> desiredRpmLeft;
+  private Supplier<AngularVelocity> desiredRpmRight;
+  private final AngularVelocity RPMTolerance = CoralShooterConstants.RPMTolerance;
   private String coralPresetName = "";
 
   public CoralShooterRampUp() {
@@ -45,16 +47,17 @@ public class CoralShooterRampUp extends CS_Command {
     this.setTAGString("CORALSHOOTER_RAMPUP3");
   }
 
-  public CoralShooterRampUp(DoubleSupplier newRPMLeft, DoubleSupplier newRPMRight) {
+  public CoralShooterRampUp(
+      Supplier<AngularVelocity> newRPMLeft, Supplier<AngularVelocity> newRPMRight) {
     mortar = RobotContainer.mortar;
 
     desiredRpmLeft = newRPMLeft;
     desiredRpmRight = newRPMRight;
     coralPresetName =
         "From DoubleSuppliers"
-            + desiredRpmLeft.getAsDouble()
+            + desiredRpmLeft.get().in(RPM)
             + " / "
-            + desiredRpmRight.getAsDouble();
+            + desiredRpmRight.get().in(RPM);
 
     addRequirements(mortar);
     this.setTAGString("CORALSHOOTER_RAMPUP3");
@@ -65,8 +68,10 @@ public class CoralShooterRampUp extends CS_Command {
     Dashboard.setCoralState(GamePieceState.RAMPING_UP);
 
     overrideRPM = SmartDashboard.getBoolean("Commands/CoralShooterRampUp/OverrideRPM", false);
-    dashboardRPMLeft = SmartDashboard.getNumber("Commands/CoralShooterRampUp/ForcedRMPLeft", 0);
-    dashboardRPMRight = SmartDashboard.getNumber("Commands/CoralShooterRampUp/ForcedRMPRight", 0);
+    dashboardRPMLeft =
+        RPM.of(SmartDashboard.getNumber("Commands/CoralShooterRampUp/ForcedRMPLeft", 0));
+    dashboardRPMRight =
+        RPM.of(SmartDashboard.getNumber("Commands/CoralShooterRampUp/ForcedRMPRight", 0));
 
     if (overrideRPM) {
       desiredRpmLeft = () -> dashboardRPMLeft;
@@ -75,8 +80,8 @@ public class CoralShooterRampUp extends CS_Command {
 
     printf(
         "(%s) RPM Left: %f, RPM Right: %f",
-        coralPresetName, desiredRpmLeft.getAsDouble(), desiredRpmRight.getAsDouble());
-    mortar.startRampUp(desiredRpmLeft.getAsDouble(), desiredRpmRight.getAsDouble());
+        coralPresetName, desiredRpmLeft.get().in(RPM), desiredRpmRight.get().in(RPM));
+    mortar.startRampUp(desiredRpmLeft.get(), desiredRpmRight.get());
   }
 
   @Override
@@ -95,13 +100,15 @@ public class CoralShooterRampUp extends CS_Command {
     boolean leftAtSetpoint = false;
     boolean rightAtSetpoint = false;
 
-    double currentRPMLeft = mortar.getShooterRPMLeft();
-    double currentRPMRight = mortar.getShooterRPMRight();
+    AngularVelocity currentRPMLeft = mortar.getShooterRPMLeft();
+    AngularVelocity currentRPMRight = mortar.getShooterRPMRight();
 
     leftAtSetpoint =
-        Math.abs(Math.abs(currentRPMLeft) - desiredRpmLeft.getAsDouble()) <= RPMTolerance;
+        Math.abs(Math.abs(currentRPMLeft.in(RPM)) - desiredRpmLeft.get().in(RPM))
+            <= RPMTolerance.in(RPM);
     rightAtSetpoint =
-        Math.abs(Math.abs(currentRPMRight) - desiredRpmRight.getAsDouble()) <= RPMTolerance;
+        Math.abs(Math.abs(currentRPMRight.in(RPM)) - desiredRpmRight.get().in(RPM))
+            <= RPMTolerance.in(RPM);
 
     SmartDashboard.putBoolean("Commands/CoralShooterRampUp/leftAtSetPoint", leftAtSetpoint);
     SmartDashboard.putBoolean("Commands/CoralShooterRampUp/rightAtSetPoint", rightAtSetpoint);

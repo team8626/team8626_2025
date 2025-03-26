@@ -47,7 +47,8 @@ public class ToAlgaeShoot extends SequentialCommandGroup {
                     super.initialize();
                     double elapsedTime = timer.get();
                     SmartDashboard.putNumber(
-                        "Subsystem/AlgaeShooter/LastShotIn(ms)", (int) (elapsedTime * 1000));
+                        "Subsystem/AlgaeShooterSubsystem/LastShotIn(ms)",
+                        (int) (elapsedTime * 1000));
                     Dashboard.publishAlgaeShootTime((int) (elapsedTime * 1000));
                   }
                 },

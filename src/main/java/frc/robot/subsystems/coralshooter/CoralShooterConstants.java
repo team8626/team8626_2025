@@ -1,6 +1,12 @@
 package frc.robot.subsystems.coralshooter;
 
+import static edu.wpi.first.units.Units.RPM;
+import static edu.wpi.first.units.Units.Second;
+import static edu.wpi.first.units.Units.Seconds;
+
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Time;
 import frc.robot.RobotConstants;
 
 public class CoralShooterConstants {
@@ -8,14 +14,14 @@ public class CoralShooterConstants {
   // Tuned Values
   // public static final double RPMShootLeft = 1275;
   // public static final double RPMShootRight = 1275;
-  public static final double RPMIntake = -300;
+  public static final AngularVelocity RPMIntake = RPM.of(-300);
   public static final double launcherShootSetpoint = -1.0;
   public static final double launcherIntakeSetpoint = 0.3;
 
-  public static final double RPMTolerance = 20;
-  public static final double RPMDifferentialTolerance = 10;
-  public static final double launchTimerSeconds = 0.2;
-  public static final double shooterTimerSeconds = 0.2;
+  public static final AngularVelocity RPMTolerance = RPM.of(20);
+  public static final AngularVelocity RPMDifferentialTolerance = RPM.of(10);
+  public static final Time launchTimer = Seconds.of(0.2);
+  public static final Time shooterTimerSeconds = Second.of(0.2);
 
   public static final int maxCurrent = 60; // Amps
 

@@ -49,7 +49,6 @@ import frc.robot.subsystems.Dashboard.AutoOptions;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterSubsystem;
 import frc.robot.subsystems.algaeshooter.AlgaeShooter_Sim;
 import frc.robot.subsystems.algaeshooter.AlgaeShooter_SparkMax;
-import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
 import frc.robot.subsystems.coralshooter.CoralShooter_Sim;
 import frc.robot.subsystems.coralshooter.CoralShooter_SparkMax;
@@ -102,7 +101,6 @@ public class RobotContainer {
   public static WristSubsystem wrist = null;
   public static CoralShooterSubsystem mortar = null;
   public static AlgaeShooterSubsystem algae501 = null;
-  public static ClimberSubsystem climber = null;
 
   // Controllers
   public static final CS_XboxController driverController =
