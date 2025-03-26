@@ -21,8 +21,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.RobotConstants.RobotType;
 import frc.robot.commands.RumbleCommand;
-import frc.robot.commands.setters.autos.Auto_4;
-import frc.robot.commands.setters.autos.Auto_5;
 import frc.robot.commands.setters.autos.Auto_A;
 import frc.robot.commands.setters.autos.Auto_B;
 import frc.robot.commands.setters.autos.Auto_C;
@@ -46,13 +44,11 @@ import frc.robot.commands.setters.groups.ToPathAndFinkleAndCoralShoot;
 import frc.robot.commands.setters.groups.ToPathAndFinleAndAlgaeIntake;
 import frc.robot.commands.setters.groups.ToSubsystemsPreset;
 import frc.robot.commands.setters.units.AlgaeShooterDiscard;
-import frc.robot.commands.setters.units.AlgaeShooterRampUp;
 import frc.robot.subsystems.Dashboard;
 import frc.robot.subsystems.Dashboard.AutoOptions;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterSubsystem;
 import frc.robot.subsystems.algaeshooter.AlgaeShooter_Sim;
 import frc.robot.subsystems.algaeshooter.AlgaeShooter_SparkMax;
-import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
 import frc.robot.subsystems.coralshooter.CoralShooter_Sim;
 import frc.robot.subsystems.coralshooter.CoralShooter_SparkMax;
@@ -105,7 +101,6 @@ public class RobotContainer {
   public static WristSubsystem wrist = null;
   public static CoralShooterSubsystem mortar = null;
   public static AlgaeShooterSubsystem algae501 = null;
-  public static ClimberSubsystem climber = null;
 
   // Controllers
   public static final CS_XboxController driverController =
@@ -467,15 +462,6 @@ public class RobotContainer {
     NamedCommands.registerCommand("FinkleAndShootJ", new Auto_J());
     NamedCommands.registerCommand("FinkleAndShootK", new Auto_K());
     NamedCommands.registerCommand("FinkleAndShootL", new Auto_L());
-    NamedCommands.registerCommand("FinkleAndTake4", new Auto_4());
-    NamedCommands.registerCommand("FinkleAndTake5", new Auto_5());
-    NamedCommands.registerCommand(
-        "PrepareShootLow", new ToSubsystemsPreset(() -> Presets.ALGAE_SHOOTBARGE_OURSIDE));
-    NamedCommands.registerCommand(
-        "PrepareRampUp",
-        new AlgaeShooterRampUp(() -> Presets.ALGAE_SHOOTBARGE_OURSIDE.getRPM())
-            .withDoNotStopOnInterrupt()
-            .onlyIf(() -> algae501.isLoaded()));
     NamedCommands.registerCommand(
         "ShootIt",
         Commands.defer(
