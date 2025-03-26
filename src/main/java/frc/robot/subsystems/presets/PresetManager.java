@@ -5,7 +5,12 @@
 package frc.robot.subsystems.presets;
 
 import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Feet;
+import static edu.wpi.first.units.Units.FeetPerSecond;
 import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.InchesPerSecond;
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RPM;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -14,7 +19,10 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotConstants;
 import frc.robot.UIConstants;
@@ -25,6 +33,7 @@ import frc.robot.UIConstants.DTP;
 import frc.robot.UIConstants.PICKUP_SIDE;
 import frc.robot.subsystems.CS_SubsystemBase;
 import frc.robot.subsystems.Dashboard;
+import frc.robot.subsystems.algaeshooter.AlgaeShooterConstants;
 import frc.robot.subsystems.elevator.ElevatorConstants;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
@@ -113,69 +122,90 @@ public class PresetManager extends CS_SubsystemBase {
     Pose2d robotPose = poseSupplier.get();
     AlgaePreset aimPreset = new AlgaePreset("AimPreset");
 
-    // Pose2d targetPoseOurSide =
-    //     AllianceFlipUtil.apply(
-    //         new Pose2d(
-    //             Units.inchesToMeters(325.68), Units.inchesToMeters(241.64), new Rotation2d()));
+    Pose2d targetPoseOurSide =
+        AllianceFlipUtil.apply(
+            new Pose2d(
+                Units.inchesToMeters(325.68), Units.inchesToMeters(241.64), new Rotation2d()));
 
-    // Pose2d targetPose2TheirSide =
-    //     AllianceFlipUtil.apply(
-    //         new Pose2d(
-    //             Units.inchesToMeters(365.20), Units.inchesToMeters(241.64), new Rotation2d()));
-    // String side;
-    // Pose2d targetPose;
-    // if (robotPose.getX() < targetPoseOurSide.getX()) {
-    //   // We are on our side
-    //   targetPose = targetPoseOurSide;
-    //   side = "Our Side";
-    // } else if (robotPose.getX() > targetPose2TheirSide.getX()) {
-    //   // We are on their side
-    //   targetPose = targetPose2TheirSide;
-    //   side = "Their Side";
-    // } else {
-    //   // We are in the middle
-    //   targetPose = new Pose2d();
-    //   side = "Middle";
-    // }
+    Pose2d targetPose2TheirSide =
+        AllianceFlipUtil.apply(
+            new Pose2d(
+                Units.inchesToMeters(365.20), Units.inchesToMeters(241.64), new Rotation2d()));
 
-    // // Compute Distance to Target (Only using X, assuming we are facing the NET)
-    // double x = 0, launchVelocity = 0, launchAngle = 0, launchRpm = 0;
-    // Angle wristAngle = Degrees.of(0);
+    String side;
+    Pose2d targetPose;
+    if (robotPose.getX() < targetPoseOurSide.getX()) {
+      // We are on our side
+      targetPose = targetPoseOurSide;
+      side = "Our Side";
+    } else if (robotPose.getX() > targetPose2TheirSide.getX()) {
+      // We are on their side
+      targetPose = targetPose2TheirSide;
+      side = "Their Side";
+    } else {
+      // We are in the middle
+      targetPose = new Pose2d();
+      side = "Middle";
+    }
 
-    // Distance wheelRadius = AlgaeShooterConstants.wheelRadius;
+    // Compute Distance to Target (Only using X, assuming we are facing the NET)
+    Distance x = Meters.of(0);
 
-    // if (targetPose != new Pose2d()) {
+    LinearVelocity launchVelocity = MetersPerSecond.of(0);
+    Angle launchAngle = Degrees.of(0);
+    double rmpErrorMultiplier = 1.0;
+    Angle angleAdjust = Degrees.of(0);
+    AngularVelocity launchRpm = RPM.of(0);
+    Angle wristAngle = Degrees.of(0);
 
-    //   //   // Compute Distance to Target (Only using X, assuming we are facing the NET)
-    //   x = Units.metersToFeet(Math.abs(robotPose.getX() - targetPose.getX()));
+    Distance wheelRadius = AlgaeShooterConstants.wheelRadius;
 
-    //   launchVelocity = 24.1 + (x + 2) * (x + 2) / 70;
+    if (targetPose != new Pose2d()) {
+      rmpErrorMultiplier =
+          SmartDashboard.getNumber(
+              "Subsystem/PresetManager/AimPreset/rmpErrorMultiplier", rmpErrorMultiplier);
+      angleAdjust =
+          Degrees.of(
+              SmartDashboard.getNumber(
+                  "Subsystem/PresetManager/AimPreset/angleAdjust(deg)", angleAdjust.in(Degrees)));
 
-    //   launchAngle = (x - 20) * (x - 20) / 11 + 55 + x / 5;
-    //   launchRpm = (launchVelocity * 12) / (wheelRadius.times(2* Math.PI * 60);
+      // Compute Distance to Target (Only using X, assuming we are facing the NET)
+      x = Meters.of(Math.abs(robotPose.getX() - targetPose.getX()));
 
-    //   wristAngleDegrees = 180 - launchAngle;
-    // }
+      launchVelocity = FeetPerSecond.of(24.1 + (x.in(Feet) + 2) * (x.in(Feet) + 2) / 70);
+      launchAngle = Degrees.of((x.in(Feet) * -20) * (x.in(Feet) - 20) / 11 + 55 + (x.in(Feet) / 5));
 
-    // SmartDashboard.putString("Subsystem/Presets/AimPreset/Side", side);
-    // SmartDashboard.putNumber(
-    //     "Subsystem/PresetManager/AimPreset/RobotX (ft)", Units.metersToFeet(robotPose.getX()));
-    // SmartDashboard.putNumber(
-    //     "Subsystem/PresetManager/AimPreset/RobotY (ft)", Units.metersToFeet(robotPose.getY()));
-    // SmartDashboard.putNumber("Subsystem/PresetManager/AimPreset/Launch Distance (ft)", x);
-    // SmartDashboard.putNumber("Subsystem/PresetManager/AimPreset/Launch Angle (deg)",
-    // launchAngle);
-    // SmartDashboard.putNumber(
-    //     "Subsystem/PresetManager/AimPreset/Launch Velocity (ft.s-1)", launchVelocity);
-    // SmartDashboard.putNumber("Subsystem/PresetManager/AimPreset/Launch Speed (RPM)", launchRpm);
-    // SmartDashboard.putNumber(
-    //     "Subsystem/PresetManager/AimPreset/WristAngle (deg)", wristAngleDegrees);
-    // SmartDashboard.putNumber(
-    //     "Presets/AimPreset/ElevatorHeight (in)", elevatorHeightInches.get().in(Inches));
+      launchRpm =
+          RPM.of(
+                  (launchVelocity.in(InchesPerSecond) / (wheelRadius.in(Inches) * (2 * Math.PI)))
+                      * 60)
+              .times(rmpErrorMultiplier);
 
-    // aimPreset.setElevatorHeight(elevatorHeight.get().in(Inches));
-    // aimPreset.setWristAngle(wristAngle);
-    // aimPreset.setRPM(launchRpm);
+      wristAngle = Degrees.of(180).minus(launchAngle).plus(angleAdjust);
+    }
+
+    SmartDashboard.putString("Subsystem/Presets/AimPreset/Side", side);
+    SmartDashboard.putNumber(
+        "Subsystem/PresetManager/AimPreset/RobotX (ft)", Units.metersToFeet(robotPose.getX()));
+    SmartDashboard.putNumber(
+        "Subsystem/PresetManager/AimPreset/RobotY (ft)", Units.metersToFeet(robotPose.getY()));
+    SmartDashboard.putNumber("Subsystem/PresetManager/AimPreset/Launch Distance (ft)", x.in(Feet));
+    SmartDashboard.putNumber(
+        "Subsystem/PresetManager/AimPreset/Launch Angle (deg)", launchAngle.in(Degrees));
+    SmartDashboard.putNumber(
+        "Subsystem/PresetManager/AimPreset/Launch Velocity (ft.s-1)",
+        launchVelocity.in(FeetPerSecond));
+    SmartDashboard.putNumber(
+        "Subsystem/PresetManager/AimPreset/Launch Speed (RPM)", launchRpm.in(RPM));
+    SmartDashboard.putNumber(
+        "Subsystem/PresetManager/AimPreset/WristAngle (deg)", wristAngle.in(Degrees));
+
+    SmartDashboard.putNumber(
+        "Presets/AimPreset/ElevatorHeight (in)", elevatorHeight.get().in(Inches));
+
+    aimPreset.setElevatorHeight(elevatorHeight.get());
+    aimPreset.setWristAngle(wristAngle);
+    aimPreset.setRPM(launchRpm);
 
     return aimPreset;
   }
