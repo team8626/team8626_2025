@@ -1,5 +1,8 @@
 package frc.robot.commands.setters.groups;
 
+import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Inches;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -44,14 +47,14 @@ public class ToPathAndFinleAndAlgaeIntake extends SequentialCommandGroup {
                 new ToSubsystemsPreset(algaePreset),
 
                 // Drive to Target Pose
-                new DriveToPoseFinkle(targetPose, () -> 2, () -> 5)
+                new DriveToPoseFinkle(targetPose, () -> Inches.of(2), () -> Degrees.of(5))
                     .onlyIf(() -> !targetPose.get().equals(new Pose2d())),
 
                 // Algae Intake
                 new AlgaeShooterIntake(() -> algaePreset.get().getRPM()),
 
                 // Drive Away
-                new DriveToPoseFinkle(offsetPose, () -> 6, () -> 10)
+                new DriveToPoseFinkle(offsetPose, () -> Inches.of(6), () -> Degrees.of(10))
                     .onlyIf(() -> !targetPose.get().equals(new Pose2d())),
 
                 // Stow

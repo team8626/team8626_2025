@@ -4,12 +4,28 @@
 
 package frc.robot.commands.setters.units;
 
+import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.DegreesPerSecond;
+import static edu.wpi.first.units.Units.DegreesPerSecondPerSecond;
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.MetersPerSecondPerSecond;
+import static edu.wpi.first.units.Units.Radians;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecondPerSecond;
+
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularAcceleration;
+import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.units.measure.LinearAcceleration;
+import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Commodore;
@@ -17,18 +33,17 @@ import frc.robot.Commodore.CommodoreState;
 import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
 import frc.robot.subsystems.drive.SwerveSubsystem;
-import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
 public class DriveToPoseFinkle extends CS_Command {
 
   private final SwerveSubsystem m_drive;
 
-  private final ProfiledPIDController m_xPID =
+  private final ProfiledPIDController xPIDController =
       new ProfiledPIDController(0, 0, 0, new TrapezoidProfile.Constraints(0, 0));
-  private final ProfiledPIDController m_yPID =
+  private final ProfiledPIDController yPIDController =
       new ProfiledPIDController(0, 0, 0, new TrapezoidProfile.Constraints(0, 0));
-  private final ProfiledPIDController m_rotPID =
+  private final ProfiledPIDController rotPIDController =
       new ProfiledPIDController(0, 0, 0, new TrapezoidProfile.Constraints(0, 0));
 
   private Supplier<Pose2d> m_desiredPoseSupplier;
@@ -38,16 +53,16 @@ public class DriveToPoseFinkle extends CS_Command {
   private double m_yDesiredPos;
   private double m_desiredRotRadians;
 
-  private double defaultPositionMaxVelocity = 6;
-  private double defaultPositionMaxAcceleration = 8;
+  private LinearVelocity defaultPositionMaxVelocity = MetersPerSecond.of(6);
+  private LinearAcceleration defaultPositionMaxAcceleration = MetersPerSecondPerSecond.of(8);
 
-  private double defaultRotationMaxVelocity = Units.degreesToRadians(720);
-  private double defaultRotationMaxAcceleration = Units.degreesToRadians(360);
+  private AngularVelocity defaultRotationMaxVelocity = DegreesPerSecond.of(720);
+  private AngularAcceleration defaultRotationMaxAcceleration = DegreesPerSecondPerSecond.of(360);
 
-  private static final double defaultPositionToleranceMeters = 0.025; // meters
-  private static final double defaultPositionVelocityTolerance = 0.03; // meters
-  private static final double defaultRotationToleranceRadians = Units.degreesToRadians(2.0);
-  private static final double defaultRotationVelocityTolerance = Units.degreesToRadians(5.0);
+  private static final Distance defaultPositionTolerance = Meters.of(0.025);
+  private static final LinearVelocity defaultPositionVelocityTolerance = MetersPerSecond.of(0.03);
+  private static final Angle defaultRotationTolerance = Degrees.of(2.0);
+  private static final AngularVelocity defaultRotationVelocityTolerance = DegreesPerSecond.of(5.0);
 
   private double defaultDriveP_X = 0.76;
   private double defaultDriveP_Y = 0.76;
@@ -64,31 +79,28 @@ public class DriveToPoseFinkle extends CS_Command {
 
   private boolean hasValidPose = false;
 
-  private double positionToleranceMeters = defaultPositionToleranceMeters;
-  private double rotationToleranceRadians = defaultRotationToleranceRadians;
+  private Distance positionTolerance = defaultPositionTolerance;
+  private Angle rotationTolerance = defaultRotationTolerance;
 
   public DriveToPoseFinkle(Supplier<Pose2d> desiredPoseSupplier) {
-    this(
-        desiredPoseSupplier,
-        () -> Units.metersToInches(defaultPositionToleranceMeters),
-        () -> Units.radiansToDegrees(defaultRotationToleranceRadians));
+    this(desiredPoseSupplier, () -> defaultPositionTolerance, () -> defaultRotationTolerance);
   }
 
   /**
    * Creates a new DriveToPoseFinkle command.
    *
    * @param desiredPoseSupplier
-   * @param posToleranceSupplier in inches
-   * @param rotToleranceDegreeSupplier in Degrees
+   * @param posToleranceSupplier as a Distance
+   * @param new_rotationTolerance as an Angle
    */
   public DriveToPoseFinkle(
       Supplier<Pose2d> desiredPoseSupplier,
-      DoubleSupplier posToleranceInchesSupplier,
-      DoubleSupplier rotToleranceDegreeSupplier) {
+      Supplier<Distance> new_positionTolerance,
+      Supplier<Angle> new_rotationTolerance) {
     m_drive = RobotContainer.drivebase;
 
-    positionToleranceMeters = Units.inchesToMeters(posToleranceInchesSupplier.getAsDouble());
-    rotationToleranceRadians = Units.degreesToRadians(rotToleranceDegreeSupplier.getAsDouble());
+    positionTolerance = new_positionTolerance.get();
+    rotationTolerance = new_rotationTolerance.get();
 
     m_desiredPoseSupplier = desiredPoseSupplier;
 
@@ -101,7 +113,6 @@ public class DriveToPoseFinkle extends CS_Command {
     addRequirements(m_drive);
   }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     // m_drive.resetOdometry();
@@ -126,75 +137,15 @@ public class DriveToPoseFinkle extends CS_Command {
 
       Commands.print("(" + m_xDesiredPos + "  " + m_yDesiredPos + ")").schedule();
 
-      double drivePValueX =
-          SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/PositionX/P", defaultDriveP_X);
-      double driveIValueX =
-          SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/PositionX/I", 0);
-      double driveDValueX =
-          SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/PositionX/D", 0);
-
-      double drivePValueY =
-          SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/PositionY/P", defaultDriveP_Y);
-      double driveIValueY =
-          SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/PositionY/I", 0);
-      double driveDValueY =
-          SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/PositionY/D", 0);
-
-      double rotPValue =
-          SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/Rotation/P", defaultRotP);
-      double rotIValue = SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/Rotation/I", 0);
-      double rotDValue = SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/Rotation/D", 0);
-
-      // Tolerances
-      double newPositionToleranceMeters =
-          SmartDashboard.getNumber(
-              "Commands/DriveToPoseFinkle/PositionTolerance(m)", positionToleranceMeters);
-      double newPositionToleranceDegrees =
-          SmartDashboard.getNumber(
-              "Commands/DriveToPoseFinkle/RotationTolerance(deg)",
-              Units.radiansToDegrees(rotationToleranceRadians));
-
-      // Max Velocity and Acceleration
-      double newDriveMaxVelocity =
-          SmartDashboard.getNumber(
-              "Commands/DriveToPoseFinkle/DriveVelocityConstraint", defaultPositionMaxVelocity);
-      double newDriveMaxAcceleration =
-          SmartDashboard.getNumber(
-              "Commands/DriveToPoseFinkle/DriveAccelerationConstraint",
-              defaultPositionMaxAcceleration);
-
-      double newRotMaxVelocity =
-          SmartDashboard.getNumber(
-              "Commands/DriveToPoseFinkle/RotationVelocityConstraint", defaultRotationMaxVelocity);
-      double newRotMaxAcceleration =
-          SmartDashboard.getNumber(
-              "Commands/DriveToPoseFinkle/RotationAccelerationConstraint",
-              defaultRotationMaxAcceleration);
-
-      // Set the constraints for the PID controllers
-      m_xPID.setConstraints(
-          new TrapezoidProfile.Constraints(newDriveMaxVelocity, newDriveMaxAcceleration));
-      m_yPID.setConstraints(
-          new TrapezoidProfile.Constraints(newDriveMaxVelocity, newDriveMaxAcceleration));
-      m_rotPID.setConstraints(
-          new TrapezoidProfile.Constraints(newRotMaxVelocity, newRotMaxAcceleration));
-
-      // Set the PID values
-      m_xPID.setPID(drivePValueX, driveIValueX, driveDValueX);
-      m_yPID.setPID(drivePValueY, driveIValueY, driveDValueY);
-      m_rotPID.setPID(rotPValue, rotIValue, rotDValue);
-
-      // Set the tolerances
-      m_xPID.setTolerance(newPositionToleranceMeters, defaultPositionVelocityTolerance);
-      m_yPID.setTolerance(newPositionToleranceMeters, defaultPositionVelocityTolerance);
-      m_rotPID.setTolerance(
-          Units.degreesToRadians(newPositionToleranceDegrees), defaultRotationVelocityTolerance);
+      updatePIDValues();
+      updateTolerancesValues();
+      updateConstraintsValues();
 
       // Reset the PID controllers
-      m_xPID.reset(m_pose.getX());
-      m_yPID.reset(m_pose.getY());
-      m_rotPID.reset(m_pose.getRotation().getRadians());
-      m_rotPID.enableContinuousInput(-Math.PI, Math.PI);
+      xPIDController.reset(m_pose.getX());
+      yPIDController.reset(m_pose.getY());
+      rotPIDController.reset(m_pose.getRotation().getRadians());
+      rotPIDController.enableContinuousInput(-Math.PI, Math.PI);
     }
   }
 
@@ -206,10 +157,10 @@ public class DriveToPoseFinkle extends CS_Command {
       targetPosePub.set(m_desiredPoseSupplier.get());
       currentPosePub.set(m_pose);
 
-      double calculateX = m_xPID.calculate(m_pose.getX(), m_xDesiredPos);
-      double calculateY = m_yPID.calculate(m_pose.getY(), m_yDesiredPos);
+      double calculateX = xPIDController.calculate(m_pose.getX(), m_xDesiredPos);
+      double calculateY = yPIDController.calculate(m_pose.getY(), m_yDesiredPos);
       double calculateTheta =
-          m_rotPID.calculate(m_pose.getRotation().getRadians(), m_desiredRotRadians);
+          rotPIDController.calculate(m_pose.getRotation().getRadians(), m_desiredRotRadians);
 
       SmartDashboard.putNumber("Commands/DriveToPoseFinkle/CalculateX", calculateX);
       SmartDashboard.putNumber("Commands/DriveToPoseFinkle/CalculateY", calculateY);
@@ -218,11 +169,13 @@ public class DriveToPoseFinkle extends CS_Command {
       m_drive.CS_driveCommand(() -> calculateX, () -> calculateY, () -> calculateTheta, () -> true)
           .execute();
 
-      SmartDashboard.putNumber("Commands/DriveToPoseFinkle/ErrorX", m_xPID.getPositionError());
-      SmartDashboard.putNumber("Commands/DriveToPoseFinkle/ErrorY", m_yPID.getPositionError());
+      SmartDashboard.putNumber(
+          "Commands/DriveToPoseFinkle/ErrorX", xPIDController.getPositionError());
+      SmartDashboard.putNumber(
+          "Commands/DriveToPoseFinkle/ErrorY", yPIDController.getPositionError());
       SmartDashboard.putNumber(
           "Commands/DriveToPoseFinkle/ErrorTheta",
-          Units.radiansToDegrees(m_rotPID.getPositionError()));
+          Units.radiansToDegrees(rotPIDController.getPositionError()));
     }
   }
 
@@ -233,11 +186,17 @@ public class DriveToPoseFinkle extends CS_Command {
 
   @Override
   public boolean isFinished() {
-    SmartDashboard.putBoolean("Commands/DriveToPoseFinkle/XAtSetpoint", m_xPID.atSetpoint());
-    SmartDashboard.putBoolean("Commands/DriveToPoseFinkle/YAtSetpoint", m_yPID.atSetpoint());
-    SmartDashboard.putBoolean("Commands/DriveToPoseFinkle/RotAtSetpoint", m_rotPID.atSetpoint());
+    SmartDashboard.putBoolean(
+        "Commands/DriveToPoseFinkle/XAtSetpoint", xPIDController.atSetpoint());
+    SmartDashboard.putBoolean(
+        "Commands/DriveToPoseFinkle/YAtSetpoint", yPIDController.atSetpoint());
+    SmartDashboard.putBoolean(
+        "Commands/DriveToPoseFinkle/RotAtSetpoint", rotPIDController.atSetpoint());
 
-    return hasValidPose && (m_xPID.atSetpoint() && m_yPID.atSetpoint() && m_rotPID.atSetpoint());
+    return hasValidPose
+        && (xPIDController.atSetpoint()
+            && yPIDController.atSetpoint()
+            && rotPIDController.atSetpoint());
   }
 
   void initDashboard() {
@@ -272,21 +231,108 @@ public class DriveToPoseFinkle extends CS_Command {
         SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/Rotation/D", 0.0));
 
     SmartDashboard.putNumber(
-        "Commands/DriveToPoseFinkle/PositionTolerance(m)", positionToleranceMeters);
+        "Commands/DriveToPoseFinkle/PositionTolerance(m)", positionTolerance.in(Meters));
     SmartDashboard.putNumber(
-        "Commands/DriveToPoseFinkle/RotationTolerance(deg)",
-        Units.radiansToDegrees(rotationToleranceRadians));
+        "Commands/DriveToPoseFinkle/RotationTolerance(deg)", rotationTolerance.in(Degrees));
     SmartDashboard.putNumber(
-        "Commands/DriveToPoseFinkle/PositionVelocityTolerance(m.s-2)",
-        defaultPositionVelocityTolerance);
+        "Commands/DriveToPoseFinkle/PositionVelocityTolerance(m.s-1)",
+        defaultPositionVelocityTolerance.in(MetersPerSecond));
     SmartDashboard.putNumber(
-        "Commands/DriveToPoseFinkle/DriveVelocityConstraint", defaultPositionMaxVelocity);
+        "Commands/DriveToPoseFinkle/DriveVelocityConstraint",
+        defaultPositionMaxVelocity.in(MetersPerSecond));
     SmartDashboard.putNumber(
-        "Commands/DriveToPoseFinkle/DriveAccelerationConstraint", defaultPositionMaxAcceleration);
+        "Commands/DriveToPoseFinkle/DriveAccelerationConstraint",
+        defaultPositionMaxAcceleration.in(MetersPerSecondPerSecond));
     SmartDashboard.putNumber(
-        "Commands/DriveToPoseFinkle/RotationVelocityConstraint", defaultRotationMaxVelocity);
+        "Commands/DriveToPoseFinkle/RotationVelocityConstraint",
+        defaultRotationMaxVelocity.in(DegreesPerSecond));
     SmartDashboard.putNumber(
         "Commands/DriveToPoseFinkle/RotationAccelerationConstraint",
-        defaultRotationMaxAcceleration);
+        defaultRotationMaxAcceleration.in(DegreesPerSecondPerSecond));
+  }
+
+  private void updatePIDValues() {
+    double drivePValueX =
+        SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/PositionX/P", defaultDriveP_X);
+    double driveIValueX =
+        SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/PositionX/I", 0);
+    double driveDValueX =
+        SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/PositionX/D", 0);
+
+    double drivePValueY =
+        SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/PositionY/P", defaultDriveP_Y);
+    double driveIValueY =
+        SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/PositionY/I", 0);
+    double driveDValueY =
+        SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/PositionY/D", 0);
+
+    double rotPValue =
+        SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/Rotation/P", defaultRotP);
+    double rotIValue = SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/Rotation/I", 0);
+    double rotDValue = SmartDashboard.getNumber("Commands/DriveToPoseFinkle/Gains/Rotation/D", 0);
+
+    // Set the PID values
+    xPIDController.setPID(drivePValueX, driveIValueX, driveDValueX);
+    yPIDController.setPID(drivePValueY, driveIValueY, driveDValueY);
+    rotPIDController.setPID(rotPValue, rotIValue, rotDValue);
+  }
+
+  private void updateTolerancesValues() {
+    Distance newPositionTolerance =
+        Meters.of(
+            SmartDashboard.getNumber(
+                "Commands/DriveToPoseFinkle/PositionTolerance(m)", positionTolerance.in(Meters)));
+    Angle newRotationTolerance =
+        Degrees.of(
+            SmartDashboard.getNumber(
+                "Commands/DriveToPoseFinkle/RotationTolerance(deg)",
+                rotationTolerance.in(Degrees)));
+
+    // Set the tolerances
+    xPIDController.setTolerance(
+        newPositionTolerance.in(Meters), defaultPositionVelocityTolerance.in(MetersPerSecond));
+    yPIDController.setTolerance(
+        newPositionTolerance.in(Meters), defaultPositionVelocityTolerance.in(MetersPerSecond));
+    rotPIDController.setTolerance(
+        newRotationTolerance.in(Radians), defaultRotationVelocityTolerance.in(RadiansPerSecond));
+  }
+
+  private void updateConstraintsValues() {
+    // Max Velocity and Acceleration
+    LinearVelocity newDriveMaxVelocity =
+        MetersPerSecond.of(
+            SmartDashboard.getNumber(
+                "Commands/DriveToPoseFinkle/DriveVelocityConstraint",
+                defaultPositionMaxVelocity.in(MetersPerSecond)));
+    LinearAcceleration newDriveMaxAcceleration =
+        MetersPerSecondPerSecond.of(
+            SmartDashboard.getNumber(
+                "Commands/DriveToPoseFinkle/DriveAccelerationConstraint",
+                defaultPositionMaxAcceleration.in(MetersPerSecondPerSecond)));
+
+    AngularVelocity newRotMaxVelocity =
+        DegreesPerSecond.of(
+            SmartDashboard.getNumber(
+                "Commands/DriveToPoseFinkle/RotationVelocityConstraint",
+                defaultRotationMaxVelocity.in(DegreesPerSecond)));
+    AngularAcceleration newRotMaxAcceleration =
+        DegreesPerSecondPerSecond.of(
+            SmartDashboard.getNumber(
+                "Commands/DriveToPoseFinkle/RotationAccelerationConstraint",
+                defaultRotationMaxAcceleration.in(DegreesPerSecondPerSecond)));
+
+    // Set the constraints for the PID controllers
+    xPIDController.setConstraints(
+        new TrapezoidProfile.Constraints(
+            newDriveMaxVelocity.in(MetersPerSecond),
+            newDriveMaxAcceleration.in(MetersPerSecondPerSecond)));
+    yPIDController.setConstraints(
+        new TrapezoidProfile.Constraints(
+            newDriveMaxVelocity.in(MetersPerSecond),
+            newDriveMaxAcceleration.in(MetersPerSecondPerSecond)));
+    rotPIDController.setConstraints(
+        new TrapezoidProfile.Constraints(
+            newRotMaxVelocity.in(RadiansPerSecond),
+            newRotMaxAcceleration.in(RadiansPerSecondPerSecond)));
   }
 }

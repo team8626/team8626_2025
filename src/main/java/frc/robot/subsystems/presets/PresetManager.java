@@ -644,9 +644,9 @@ public class PresetManager extends CS_SubsystemBase {
   public void updateDashboard() {
     coralPresetPosePub.set(currentCoralPreset.getPose());
     SmartDashboard.putNumber(
-        "Subsystem/PresetManager/CoralPreset/RPMLeft", currentCoralPreset.getRPMLeft());
+        "Subsystem/PresetManager/CoralPreset/RPMLeft", currentCoralPreset.getRPMLeft().in(RPM));
     SmartDashboard.putNumber(
-        "Subsystem/PresetManager/CoralPreset/RPMRight", currentCoralPreset.getRPMRight());
+        "Subsystem/PresetManager/CoralPreset/RPMRight", currentCoralPreset.getRPMRight().in(RPM));
 
     algaePresetDeaglaefyPosePub.set(currentAlgaePreset.getDealgaefyPose());
     algaePresetShootPosePub.set(currentAlgaePreset.getShootingPose());

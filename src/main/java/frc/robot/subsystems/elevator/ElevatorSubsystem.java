@@ -67,9 +67,9 @@ public class ElevatorSubsystem extends CS_SubsystemBase {
 
     // Using SmartDashboard to tune PIDs
     // --------------------------------------------------
-    SmartDashboard.putNumber("Subsystem/Elevator/Gains/P", gains.kP());
-    SmartDashboard.putNumber("Subsystem/Elevator/Gains/I", gains.kI());
-    SmartDashboard.putNumber("Subsystem/Elevator/Gains/D", gains.kD());
+    SmartDashboard.putNumber("Subsystem/ElevatorSubsystem/Gains/P", gains.kP());
+    SmartDashboard.putNumber("Subsystem/ElevatorSubsystem/Gains/I", gains.kI());
+    SmartDashboard.putNumber("Subsystem/ElevatorSubsystem/Gains/D", gains.kD());
     SmartDashboard.putBoolean("Commands/ElevatorSetHeight/OverrideHeight", false);
     SmartDashboard.putNumber("Commands/ElevatorSetHeight/ForcedHeight", 50);
   }
@@ -77,25 +77,28 @@ public class ElevatorSubsystem extends CS_SubsystemBase {
   @Override
   public void updateDashboard() {
     // Update the SmartDashboard with the current state of the subsystem
-    SmartDashboard.putNumber("Subsystem/Elevator/DesiredHeight", values.desiredHeight.in(Inches));
-    SmartDashboard.putBoolean("Subsystem/Elevator/Enabled", values.isEnabled);
-    SmartDashboard.putString("Subsystem/Elevator/State", values.state.getString());
-    SmartDashboard.putNumber("Subsystem/Elevator/Height", values.currentHeight.in(Inches));
-    SmartDashboard.putNumber("Subsystem/Elevator/AmpsLeft", values.ampsLeft.in(Amps));
-    SmartDashboard.putNumber("Subsystem/Elevator/AmpsRight", values.ampsRight.in(Amps));
-    SmartDashboard.putNumber("Subsystem/Elevator/AppliedOutputLeft", values.appliedOutputLeft);
-    SmartDashboard.putNumber("Subsystem/Elevator/AppliedOutputRight", values.appliedOutputRight);
     SmartDashboard.putNumber(
-        "Subsystem/Elevator/TemperatureLeft", values.temperatureLeft.in(Celsius));
+        "Subsystem/ElevatorSubsystem/DesiredHeight", values.desiredHeight.in(Inches));
+    SmartDashboard.putBoolean("Subsystem/ElevatorSubsystem/Enabled", values.isEnabled);
+    SmartDashboard.putString("Subsystem/ElevatorSubsystem/State", values.state.getString());
+    SmartDashboard.putNumber("Subsystem/ElevatorSubsystem/Height", values.currentHeight.in(Inches));
+    SmartDashboard.putNumber("Subsystem/ElevatorSubsystem/AmpsLeft", values.ampsLeft.in(Amps));
+    SmartDashboard.putNumber("Subsystem/ElevatorSubsystem/AmpsRight", values.ampsRight.in(Amps));
     SmartDashboard.putNumber(
-        "Subsystem/Elevator/TemperatureRight", values.temperatureRight.in(Celsius));
-    SmartDashboard.putBoolean("Subsystem/Elevator/IsZeroed", values.isZeroed);
+        "Subsystem/ElevatorSubsystem/AppliedOutputLeft", values.appliedOutputLeft);
+    SmartDashboard.putNumber(
+        "Subsystem/ElevatorSubsystem/AppliedOutputRight", values.appliedOutputRight);
+    SmartDashboard.putNumber(
+        "Subsystem/ElevatorSubsystem/TemperatureLeft", values.temperatureLeft.in(Celsius));
+    SmartDashboard.putNumber(
+        "Subsystem/ElevatorSubsystem/TemperatureRight", values.temperatureRight.in(Celsius));
+    SmartDashboard.putBoolean("Subsystem/ElevatorSubsystem/IsZeroed", values.isZeroed);
 
     // Using SmartDashboard to tune PIDs
     // --------------------------------------------------
-    double newkP = SmartDashboard.getNumber("Subsystem/Elevator/Gains/P", values.kP);
-    double newkI = SmartDashboard.getNumber("Subsystem/Elevator/Gains/I", values.kI);
-    double newkD = SmartDashboard.getNumber("Subsystem/Elevator/Gains/D", values.kD);
+    double newkP = SmartDashboard.getNumber("Subsystem/ElevatorSubsystem/Gains/P", values.kP);
+    double newkI = SmartDashboard.getNumber("Subsystem/ElevatorSubsystem/Gains/I", values.kI);
+    double newkD = SmartDashboard.getNumber("Subsystem/ElevatorSubsystem/Gains/D", values.kD);
 
     // Coefficients on SmartDashboard have changed, save new values to the PID controller
     // --------------------------------------------------
@@ -105,13 +108,13 @@ public class ElevatorSubsystem extends CS_SubsystemBase {
 
     SmartDashboard.putData(this);
 
-    // double newHeight = SmartDashboard.getNumber("Subsystem/Elevator/DesiredHeight",
+    // double newHeight = SmartDashboard.getNumber("Subsystem/ElevatorSubsystem/DesiredHeight",
     // desiredHeight);
     // if (newHeight != desiredHeight) {
     //   desiredHeight = newHeight;
     //   setHeight(newHeight);
     // }
-    // SmartDashboard.putNumber("Subsystem/Elevator/DesiredHeight", desiredHeight);
+    // SmartDashboard.putNumber("Subsystem/ElevatorSubsystem/DesiredHeight", desiredHeight);
   }
 
   @Override

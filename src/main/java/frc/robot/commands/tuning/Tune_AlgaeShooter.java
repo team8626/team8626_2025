@@ -36,7 +36,8 @@ public class Tune_AlgaeShooter extends CS_Command {
     AngularVelocity newRPM =
         RPM.of(
             SmartDashboard.getNumber(
-                "Subsystem/AlgaeShooter/Shooting RPM", AlgaeShooterConstants.shootRPM.in(RPM)));
+                "Subsystem/AlgaeShooterSubsystem/Shooting RPM",
+                AlgaeShooterConstants.shootRPM.in(RPM)));
     desiredRPM = newRPM;
     printf("RPM: %f", desiredRPM);
 

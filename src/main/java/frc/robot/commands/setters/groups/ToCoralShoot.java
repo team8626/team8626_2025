@@ -46,7 +46,8 @@ public class ToCoralShoot extends SequentialCommandGroup {
                     super.initialize();
                     double elapsedTime = timer.get();
                     SmartDashboard.putNumber(
-                        "Subsystem/CoralShooter/LastShotIn(ms)", (int) (elapsedTime * 1000));
+                        "Subsystem/CoralShooterSubsystem/LastShotIn(ms)",
+                        (int) (elapsedTime * 1000));
                     Dashboard.publishCoralShootTime((int) (elapsedTime * 1000));
                   }
                 },
@@ -80,7 +81,8 @@ public class ToCoralShoot extends SequentialCommandGroup {
                     super.initialize();
                     double elapsedTime = timer.get();
                     SmartDashboard.putNumber(
-                        "Subsystem/CoralShooter/LastShotIn(ms)", (int) (elapsedTime * 1000));
+                        "Subsystem/CoralShooterSubsystem/LastShotIn(ms)",
+                        (int) (elapsedTime * 1000));
                     Dashboard.publishCoralShootTime((int) (elapsedTime * 1000));
                   }
                 },

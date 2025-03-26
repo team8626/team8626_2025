@@ -32,15 +32,6 @@ public class Presets {
   public static final AlgaePreset ALGAE_NETFROM10FT =
       new AlgaePreset("ALGAE_NETFROM10FT", Inches.of(8), Degrees.of(180 - 66), RPM.of(3000));
 
-  public static final AlgaePreset ALGAE_Test2 =
-      new AlgaePreset("ALGAE_Test2", Inches.of(20), Degrees.of(180 - 74), RPM.of(2500));
-  public static final AlgaePreset ALGAE_Test3 =
-      new AlgaePreset("ALGAE_Test3", Inches.of(20), Degrees.of(180 - 80), RPM.of(2500));
-  public static final AlgaePreset ALGAE_Test4 =
-      new AlgaePreset("ALGAE_Test4", Inches.of(8), Degrees.of(180 - 80), RPM.of(3000));
-  public static final AlgaePreset ALGAE_Test1 =
-      new AlgaePreset("ALGAE_Test1", Inches.of(8), Degrees.of(180 - 80), RPM.of(2700));
-
   public static final AlgaePreset ALGAE_SHOOTBARGE_OURSIDE =
       new AlgaePreset(
           "ALGAE_SHOOTBARGE_OURSIDE",
@@ -57,11 +48,8 @@ public class Presets {
           Degrees.of(110),
           RPM.of(1600));
 
-  public static final CoralPreset CORAL_L1 = new CoralPreset("L1", 900, 1000);
-  public static final CoralPreset CORAL_L2 = new CoralPreset("L2", 900, 1000);
-  public static final CoralPreset CORAL_L3 = new CoralPreset("L3", 550, 1335);
-  public static final CoralPreset CORAL_L4 = new CoralPreset("L4", 1300, 1300);
-
-  public static final Pose2d Test3Pose =
-      new Pose2d(7, 5, new Rotation2d(Units.degreesToRadians(37)));
+  public static final CoralPreset CORAL_L1 = new CoralPreset("L1", RPM.of(900), RPM.of(1000));
+  public static final CoralPreset CORAL_L2 = new CoralPreset("L2", RPM.of(900), RPM.of(1000));
+  public static final CoralPreset CORAL_L3 = new CoralPreset("L3", RPM.of(550), RPM.of(1335));
+  public static final CoralPreset CORAL_L4 = new CoralPreset("L4", RPM.of(1300), RPM.of(1300));
 }

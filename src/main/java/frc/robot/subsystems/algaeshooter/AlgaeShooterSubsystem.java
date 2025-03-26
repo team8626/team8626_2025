@@ -110,11 +110,14 @@ public class AlgaeShooterSubsystem extends CS_SubsystemBase {
 
     // Using SmartDashboard to tune PIDs
     // --------------------------------------------------
-    SmartDashboard.putNumber("Subsystem/AlgaeShooter/Gains/P", AlgaeShooterConstants.gains.kP());
-    SmartDashboard.putNumber("Subsystem/AlgaeShooter/Gains/I", AlgaeShooterConstants.gains.kI());
-    SmartDashboard.putNumber("Subsystem/AlgaeShooter/Gains/D", AlgaeShooterConstants.gains.kD());
+    SmartDashboard.putNumber(
+        "Subsystem/AlgaeShooterSubsystem/Gains/P", AlgaeShooterConstants.gains.kP());
+    SmartDashboard.putNumber(
+        "Subsystem/AlgaeShooterSubsystem/Gains/I", AlgaeShooterConstants.gains.kI());
+    SmartDashboard.putNumber(
+        "Subsystem/AlgaeShooterSubsystem/Gains/D", AlgaeShooterConstants.gains.kD());
 
-    SmartDashboard.putNumber("Subsystem/AlgaeShooter/Last Shot in (ms)", 0);
+    SmartDashboard.putNumber("Subsystem/AlgaeShooterSubsystem/Last Shot in (ms)", 0);
     SmartDashboard.putBoolean("Commands/AlgaeShooterRampUp/OverrideRPM", false);
     SmartDashboard.putNumber("Commands/AlgaeShooterRampUp/ForcedRMP", 2200);
   }
@@ -123,10 +126,10 @@ public class AlgaeShooterSubsystem extends CS_SubsystemBase {
   public void updateDashboard() {
     // Using SmartDashboard to tune PIDs
     // --------------------------------------------------
-    double newkP = SmartDashboard.getNumber("Subsystem/AlgaeShooter/Gains/P", values.kP);
-    double newkI = SmartDashboard.getNumber("Subsystem/AlgaeShooter/Gains/I", values.kI);
-    double newkD = SmartDashboard.getNumber("Subsystem/AlgaeShooter/Gains/D", values.kD);
-    // double newFF = SmartDashboard.getNumber("Subsystem/AlgaeShooter/FF", values.FF);
+    double newkP = SmartDashboard.getNumber("Subsystem/AlgaeShooterSubsystem/Gains/P", values.kP);
+    double newkI = SmartDashboard.getNumber("Subsystem/AlgaeShooterSubsystem/Gains/I", values.kI);
+    double newkD = SmartDashboard.getNumber("Subsystem/AlgaeShooterSubsystem/Gains/D", values.kD);
+    // double newFF = SmartDashboard.getNumber("Subsystem/AlgaeShooterSubsystem/FF", values.FF);
 
     // Coefficients on SmartDashboard have changed, save new values to the PID controller
     // --------------------------------------------------
@@ -135,40 +138,44 @@ public class AlgaeShooterSubsystem extends CS_SubsystemBase {
     values.kD = CS_Utils.updateFromSmartDashboard(newkD, values.kD, (value) -> setkD(value));
 
     // Update the SmartDashboard with the current state of the subsystem
-    SmartDashboard.putBoolean("Subsystem/AlgaeShooter/Shooter", values.shooterIsEnabled);
-    SmartDashboard.putBoolean("Subsystem/AlgaeShooter/Launcher", values.launchIsEnabled);
+    SmartDashboard.putBoolean("Subsystem/AlgaeShooterSubsystem/Shooter", values.shooterIsEnabled);
+    SmartDashboard.putBoolean("Subsystem/AlgaeShooterSubsystem/Launcher", values.launchIsEnabled);
 
     SmartDashboard.putNumber(
-        "Subsystem/AlgaeShooter/Shooter RPM Left", values.currentRPMLeft.in(RPM));
+        "Subsystem/AlgaeShooterSubsystem/Shooter RPM Left", values.currentRPMLeft.in(RPM));
     SmartDashboard.putNumber(
-        "Subsystem/AlgaeShooter/Shooter RPM Right", values.currentRPMRight.in(RPM));
+        "Subsystem/AlgaeShooterSubsystem/Shooter RPM Right", values.currentRPMRight.in(RPM));
     SmartDashboard.putNumber(
-        "Subsystem/AlgaeShooter/launcher RPM Right", values.currentRMPLauncher.in(RPM));
+        "Subsystem/AlgaeShooterSubsystem/launcher RPM Right", values.currentRMPLauncher.in(RPM));
     SmartDashboard.putNumber(
-        "Subsystem/AlgaeShooter/Launcher Setpoint", values.currentLauncherSetpoint);
+        "Subsystem/AlgaeShooterSubsystem/Launcher Setpoint", values.currentLauncherSetpoint);
 
-    SmartDashboard.putNumber("Subsystem/AlgaeShooter/ShooterAmpsLeft", values.ampsLeft.in(Amps));
-    SmartDashboard.putNumber("Subsystem/AlgaeShooter/ShooterAmpsRight", values.ampsRight.in(Amps));
-    SmartDashboard.putNumber("Subsystem/AlgaeShooter/LauncherAmps", values.ampsLauncher.in(Amps));
     SmartDashboard.putNumber(
-        "Subsystem/AlgaeShooter/TemperatureShooterLeft", values.tempLeft.in(Celsius));
+        "Subsystem/AlgaeShooterSubsystem/ShooterAmpsLeft", values.ampsLeft.in(Amps));
     SmartDashboard.putNumber(
-        "Subsystem/AlgaeShooter/TemperatureShooterRight", values.tempRight.in(Celsius));
+        "Subsystem/AlgaeShooterSubsystem/ShooterAmpsRight", values.ampsRight.in(Amps));
     SmartDashboard.putNumber(
-        "Subsystem/AlgaeShooter/TemperatureLauncher", values.tempLauncher.in(Celsius));
+        "Subsystem/AlgaeShooterSubsystem/LauncherAmps", values.ampsLauncher.in(Amps));
     SmartDashboard.putNumber(
-        "Subsystem/AlgaeShooter/AppliedOutputShooterLeft", values.appliedOutputLeft);
+        "Subsystem/AlgaeShooterSubsystem/TemperatureShooterLeft", values.tempLeft.in(Celsius));
     SmartDashboard.putNumber(
-        "Subsystem/AlgaeShooter/AppliedOutputShooterRight", values.appliedOutputRight);
+        "Subsystem/AlgaeShooterSubsystem/TemperatureShooterRight", values.tempRight.in(Celsius));
     SmartDashboard.putNumber(
-        "Subsystem/AlgaeShooter/AppliedOutputLauncher", values.appliedOutputLauncher);
+        "Subsystem/AlgaeShooterSubsystem/TemperatureLauncher", values.tempLauncher.in(Celsius));
+    SmartDashboard.putNumber(
+        "Subsystem/AlgaeShooterSubsystem/AppliedOutputShooterLeft", values.appliedOutputLeft);
+    SmartDashboard.putNumber(
+        "Subsystem/AlgaeShooterSubsystem/AppliedOutputShooterRight", values.appliedOutputRight);
+    SmartDashboard.putNumber(
+        "Subsystem/AlgaeShooterSubsystem/AppliedOutputLauncher", values.appliedOutputLauncher);
 
-    SmartDashboard.putBoolean("Subsystem/AlgaeShooter/isLoaded", values.isLoaded);
+    SmartDashboard.putBoolean("Subsystem/AlgaeShooterSubsystem/isLoaded", values.isLoaded);
 
     AngularVelocity newRPM =
         RPM.of(
             SmartDashboard.getNumber(
-                "Subsystem/AlgaeShooter/Shooting RPM", AlgaeShooterConstants.shootRPM.in(RPM)));
+                "Subsystem/AlgaeShooterSubsystem/Shooting RPM",
+                AlgaeShooterConstants.shootRPM.in(RPM)));
     if (newRPM != DesiredRPM) {
       updateShooterRPM(newRPM);
       setShooterRPM(DesiredRPM);
@@ -176,7 +183,7 @@ public class AlgaeShooterSubsystem extends CS_SubsystemBase {
 
     SmartDashboard.putData(this);
 
-    // SmartDashboard.putNumber("Subsystem/AlgaeShooter/Shooting RPM", DesiredRPM);
+    // SmartDashboard.putNumber("Subsystem/AlgaeShooterSubsystem/Shooting RPM", DesiredRPM);
   }
 
   // Characterization methods
@@ -191,6 +198,6 @@ public class AlgaeShooterSubsystem extends CS_SubsystemBase {
 
   private void updateShooterRPM(AngularVelocity new_RPM) {
     DesiredRPM = new_RPM;
-    SmartDashboard.putNumber("Subsystem/AlgaeShooter/Shooting RPM", DesiredRPM.in(RPM));
+    SmartDashboard.putNumber("Subsystem/AlgaeShooterSubsystem/Shooting RPM", DesiredRPM.in(RPM));
   }
 }
