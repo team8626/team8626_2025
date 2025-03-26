@@ -309,13 +309,13 @@ public class RobotContainer {
     // controller.btn_A.toggleOnTrue(new DriveToPoseFinkle(offsetPose));
     // controller.btn_B.toggleOnTrue(new DriveToPoseFinkle(targetPose));
 
-    // controller.btn_A.toggleOnTrue(
-    //     Commands.defer(
-    //         (() ->
-    //             new ToPathAndFinkleAndAlgaeShoot(
-    //                     PresetManager.getBargeShootPreset(() -> drivebase.getPose()))
-    //                 .onlyIf(() -> algae501.isLoaded())),
-    //         Set.of(elevator, wrist, algae501)));
+    controller.btn_Y.toggleOnTrue(
+        Commands.defer(
+            (() ->
+                new ToAlgaeShoot(
+                        () -> PresetManager.getAimAndShootPreset(() -> drivebase.getPose()))
+                    .onlyIf(() -> algae501.isLoaded())),
+            Set.of(elevator, wrist, algae501)));
 
     // ---------------------------------------- POV UP/DOWN
     //                                          Elevator up/down 1"
@@ -333,7 +333,7 @@ public class RobotContainer {
 
     // ---------------------------------------- Back Button
     //                                          Flip Drivebase directon
-    // controller.btn_Back.onTrue(new InstantCommand(() -> drivebase.flipToggle()));
+    controller.btn_Back.onTrue(new InstantCommand(() -> drivebase.flipToggle()));
   }
 
   private void configureTestOperatorBindings(CS_XboxController controller) {}

@@ -141,7 +141,7 @@ public class AlgaePreset {
     this.rpm = newRPM;
   }
 
-  public void setElevatorHeightInches(Distance newElevatorHeight) {
+  public void setElevatorHeight(Distance newElevatorHeight) {
     this.elevatorHeight = newElevatorHeight;
   }
 
@@ -149,7 +149,7 @@ public class AlgaePreset {
     return this.elevatorHeight;
   }
 
-  public void setWristAngleDegrees(Angle newWristAngle) {
+  public void setWristAngle(Angle newWristAngle) {
     this.wristAngle = newWristAngle;
   }
 
