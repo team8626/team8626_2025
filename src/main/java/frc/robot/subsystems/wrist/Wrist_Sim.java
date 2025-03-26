@@ -44,8 +44,8 @@ public class Wrist_Sim implements WristInterface, CS_InterfaceBase {
                 desiredAngle.in(Degrees),
                 WristConstants.minAngle.in(Degrees),
                 WristConstants.maxAngle.in(Degrees)));
-    this.pidController.setSetpoint(this.desiredAngle.in(Degrees));
-    double output = this.pidController.calculate(Units.radiansToDegrees(armSim.getAngleRads()));
+    this.pidController.setSetpoint(this.desiredAngle.in(Radians));
+    double output = this.pidController.calculate(armSim.getAngleRads());
     this.armSim.setInput(MathUtil.clamp(output, -13, 13)); // Clamping on Batttery Voltage
     this.armSim.update(0.020);
 
