@@ -31,7 +31,7 @@ public class ToPathAndFinkleAndCoralShootWithOffset extends SequentialCommandGro
       () ->
           Inches.of(
               SmartDashboard.getNumber(
-                  "Commands/ToPathAndFinkleAndCoralShootWithOffset/OffsetDistance(in)", 0));
+                  "Commands/ToPathAndFinkleAndCoralShootWithOffset/OffsetDistance(in)", 1));
 
   Supplier<Pose2d> targetPose =
       () ->
