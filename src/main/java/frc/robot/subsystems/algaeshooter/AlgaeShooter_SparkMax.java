@@ -1,5 +1,8 @@
 package frc.robot.subsystems.algaeshooter;
 
+import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.Celsius;
+import static edu.wpi.first.units.Units.RPM;
 import static frc.robot.subsystems.algaeshooter.AlgaeShooterConstants.flywheelConfig;
 import static frc.robot.subsystems.algaeshooter.AlgaeShooterConstants.gains;
 import static frc.robot.subsystems.algaeshooter.AlgaeShooterConstants.launcherConfig;
@@ -18,6 +21,7 @@ import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.units.measure.AngularVelocity;
 import frc.robot.subsystems.CS_InterfaceBase;
 
 public class AlgaeShooter_SparkMax implements AlgaeShooterInterface, CS_InterfaceBase {
@@ -143,13 +147,13 @@ public class AlgaeShooter_SparkMax implements AlgaeShooterInterface, CS_Interfac
     values.currentRMPLauncher = getLauncherRPM();
     values.currentLauncherSetpoint = getLauncherSetpoint();
 
-    values.ampsLeft = leftMotor.getOutputCurrent();
-    values.ampsRight = rightMotor.getOutputCurrent();
-    values.ampsLauncher = launchMotor.getOutputCurrent();
+    values.ampsLeft = Amps.of(leftMotor.getOutputCurrent());
+    values.ampsRight = Amps.of(rightMotor.getOutputCurrent());
+    values.ampsLauncher = Amps.of(launchMotor.getOutputCurrent());
 
-    values.tempLeft = leftMotor.getMotorTemperature();
-    values.tempRight = rightMotor.getMotorTemperature();
-    values.tempLauncher = launchMotor.getMotorTemperature();
+    values.tempLeft = Celsius.of(leftMotor.getMotorTemperature());
+    values.tempRight = Celsius.of(rightMotor.getMotorTemperature());
+    values.tempLauncher = Celsius.of(launchMotor.getMotorTemperature());
 
     values.appliedOutputLeft = leftMotor.getAppliedOutput();
     values.appliedOutputRight = rightMotor.getAppliedOutput();
@@ -159,19 +163,19 @@ public class AlgaeShooter_SparkMax implements AlgaeShooterInterface, CS_Interfac
   }
 
   @Override
-  public void startShooter(double new_RPM) {
+  public void startShooter(AngularVelocity new_RPM) {
     leftController.setReference(
-        new_RPM,
+        new_RPM.in(RPM),
         ControlType.kVelocity,
         ClosedLoopSlot.kSlot0,
-        shooterFFLeft.calculate(new_RPM),
+        shooterFFLeft.calculate(new_RPM.in(RPM)),
         ArbFFUnits.kVoltage);
 
     rightController.setReference(
-        new_RPM,
+        new_RPM.in(RPM),
         ControlType.kVelocity,
         ClosedLoopSlot.kSlot0,
-        shooterFFRight.calculate(new_RPM),
+        shooterFFRight.calculate(new_RPM.in(RPM)),
         ArbFFUnits.kVoltage);
 
     shooterIsEnabled = true;
@@ -185,20 +189,20 @@ public class AlgaeShooter_SparkMax implements AlgaeShooterInterface, CS_Interfac
   }
 
   @Override
-  public void updateShooterRPM(double new_RPM) {
+  public void updateShooterRPM(AngularVelocity new_RPM) {
     if (shooterIsEnabled) {
       leftController.setReference(
-          new_RPM,
+          new_RPM.in(RPM),
           ControlType.kVelocity,
           ClosedLoopSlot.kSlot0,
-          shooterFFLeft.calculate(new_RPM),
+          shooterFFLeft.calculate(new_RPM.in(RPM)),
           ArbFFUnits.kVoltage);
 
       rightController.setReference(
-          new_RPM,
+          new_RPM.in(RPM),
           ControlType.kVelocity,
           ClosedLoopSlot.kSlot0,
-          shooterFFRight.calculate(new_RPM),
+          shooterFFRight.calculate(new_RPM.in(RPM)),
           ArbFFUnits.kVoltage);
     }
   }
@@ -232,18 +236,18 @@ public class AlgaeShooter_SparkMax implements AlgaeShooterInterface, CS_Interfac
   }
 
   @Override
-  public double getShooterRPMLeft() {
-    return leftEncoder.getVelocity();
+  public AngularVelocity getShooterRPMLeft() {
+    return RPM.of(leftEncoder.getVelocity());
   }
 
   @Override
-  public double getShooterRPMRight() {
-    return rightEncoder.getVelocity();
+  public AngularVelocity getShooterRPMRight() {
+    return RPM.of(rightEncoder.getVelocity());
   }
 
   @Override
-  public double getLauncherRPM() {
-    return launchEncoder.getVelocity() / (36 / 24);
+  public AngularVelocity getLauncherRPM() {
+    return RPM.of(launchEncoder.getVelocity() / (36 / 24));
   }
 
   public double getLauncherSetpoint() {

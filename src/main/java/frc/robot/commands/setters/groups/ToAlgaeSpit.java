@@ -6,19 +6,20 @@
 
 package frc.robot.commands.setters.groups;
 
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Commodore;
 import frc.robot.RobotContainer;
 import frc.robot.commands.setters.units.AlgaeShooterSpit;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterSubsystem;
 import frc.robot.subsystems.presets.Presets;
-import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 
 public class ToAlgaeSpit extends SequentialCommandGroup {
   private AlgaeShooterSubsystem algae501;
-  private DoubleSupplier rpm = null;
+  private Supplier<AngularVelocity> rpm = null;
 
-  public ToAlgaeSpit(DoubleSupplier newRMP) {
+  public ToAlgaeSpit(Supplier<AngularVelocity> newRMP) {
     this.algae501 = RobotContainer.algae501;
     rpm = newRMP;
     buildCommandGroup();

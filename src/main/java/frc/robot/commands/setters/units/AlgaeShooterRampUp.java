@@ -6,6 +6,9 @@
 
 package frc.robot.commands.setters.units;
 
+import static edu.wpi.first.units.Units.RPM;
+
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
@@ -13,25 +16,32 @@ import frc.robot.subsystems.Dashboard;
 import frc.robot.subsystems.Dashboard.GamePieceState;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterConstants;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterSubsystem;
-import java.util.function.DoubleSupplier;
+import frc.robot.subsystems.presets.Presets;
+import java.util.function.Supplier;
 
 public class AlgaeShooterRampUp extends CS_Command {
   private AlgaeShooterSubsystem algae501;
 
-  private double desiredRPM = AlgaeShooterConstants.shootRPM;
-  private final double RPMTolerance = AlgaeShooterConstants.shooterRPMTolerance;
+  private AngularVelocity desiredRPM = Presets.ALGAE_FLOOR.getRPM();
+  private final AngularVelocity RPMTolerance = AlgaeShooterConstants.shooterRPMTolerance;
   private boolean overrideRPM = false;
-  private double dashboardRPM = 0;
+  private AngularVelocity dashboardRPM = RPM.of(0);
+  private boolean doNotStopOnInterrupt = false;
 
-  public AlgaeShooterRampUp(DoubleSupplier newRPM) {
+  public AlgaeShooterRampUp(Supplier<AngularVelocity> newRPM) {
     algae501 = RobotContainer.algae501;
 
     addRequirements(algae501);
     SmartDashboard.putBoolean("Commands/AlgaeShooterRampUp/leftAtSetPoint", false);
     SmartDashboard.putBoolean("Commands/AlgaeShooterRampUp/rightAtSetPoint", false);
 
-    this.desiredRPM = newRPM.getAsDouble();
+    this.desiredRPM = newRPM.get();
     this.setTAGString("ALGAESHOOTER_RAMPUP");
+  }
+
+  public AlgaeShooterRampUp withDoNotStopOnInterrupt() {
+    doNotStopOnInterrupt = true;
+    return this;
   }
 
   @Override
@@ -41,7 +51,7 @@ public class AlgaeShooterRampUp extends CS_Command {
     Dashboard.setAlgaeState(GamePieceState.RAMPING_UP);
 
     overrideRPM = SmartDashboard.getBoolean("Commands/AlgaeShooterRampUp/OverrideRPM", false);
-    dashboardRPM = SmartDashboard.getNumber("Commands/AlgaeShooterRampUp/ForcedRMP", 0);
+    dashboardRPM = RPM.of(SmartDashboard.getNumber("Commands/AlgaeShooterRampUp/ForcedRMP", 0));
 
     if (overrideRPM) {
       desiredRPM = dashboardRPM;
@@ -54,7 +64,7 @@ public class AlgaeShooterRampUp extends CS_Command {
 
   @Override
   public void end(boolean interrupted) {
-    if (interrupted) {
+    if (interrupted && !doNotStopOnInterrupt) {
       algae501.stopAll();
     }
   }
@@ -64,11 +74,13 @@ public class AlgaeShooterRampUp extends CS_Command {
     boolean leftAtSetpoint = false;
     boolean rightAtSetpoint = false;
 
-    double currentRPMLeft = algae501.getShooterRPMLeft();
-    double currentRPMRight = algae501.getShooterRPMRight();
+    AngularVelocity currentRPMLeft = algae501.getShooterRPMLeft();
+    AngularVelocity currentRPMRight = algae501.getShooterRPMRight();
 
-    leftAtSetpoint = Math.abs(Math.abs(currentRPMLeft) - desiredRPM) <= RPMTolerance;
-    rightAtSetpoint = Math.abs(Math.abs(currentRPMRight) - desiredRPM) <= RPMTolerance;
+    leftAtSetpoint =
+        Math.abs(Math.abs(currentRPMLeft.in(RPM)) - desiredRPM.in(RPM)) <= RPMTolerance.in(RPM);
+    leftAtSetpoint =
+        Math.abs(Math.abs(currentRPMRight.in(RPM)) - desiredRPM.in(RPM)) <= RPMTolerance.in(RPM);
 
     SmartDashboard.putBoolean("Commands/AlgaeShooterRampUp/leftAtSetPoint", leftAtSetpoint);
     SmartDashboard.putBoolean("Commands/AlgaeShooterRampUp/rightAtSetPoint", rightAtSetpoint);

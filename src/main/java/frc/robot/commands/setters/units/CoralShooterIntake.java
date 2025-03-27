@@ -6,6 +6,8 @@
 
 package frc.robot.commands.setters.units;
 
+import static edu.wpi.first.units.Units.Seconds;
+
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
@@ -72,6 +74,6 @@ public class CoralShooterIntake extends CS_Command {
     if (mortar.isLoaded()) {
       timer.start();
     }
-    return timer.hasElapsed(CoralShooterConstants.launchTimerSeconds);
+    return timer.hasElapsed(CoralShooterConstants.launchTimer.in(Seconds));
   }
 }

@@ -1,10 +1,14 @@
 package frc.robot.subsystems.algaeshooter;
 
+import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.RPM;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static frc.robot.subsystems.algaeshooter.AlgaeShooterConstants.flywheelConfig;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.simulation.DIOSim;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
@@ -66,32 +70,32 @@ public class AlgaeShooter_Sim implements AlgaeShooterInterface, CS_InterfaceBase
     values.currentRMPLauncher = getLauncherRPM();
     values.currentLauncherSetpoint = getLauncherSetpoint();
 
-    values.ampsLeft = leftSim.getCurrentDrawAmps();
-    values.ampsRight = rightSim.getCurrentDrawAmps();
-    values.ampsLauncher = launchSim.getCurrentDrawAmps();
+    values.ampsLeft = Amps.of(leftSim.getCurrentDrawAmps());
+    values.ampsRight = Amps.of(rightSim.getCurrentDrawAmps());
+    values.ampsLauncher = Amps.of(launchSim.getCurrentDrawAmps());
 
     values.isLoaded = shooterIsLoaded();
   }
 
   @Override
-  public void startShooter(double new_RPM) {
-    rightSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_RPM));
-    leftSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_RPM));
+  public void startShooter(AngularVelocity new_RPM) {
+    rightSim.setAngularVelocity(new_RPM.in(RotationsPerSecond));
+    leftSim.setAngularVelocity(new_RPM.in(RotationsPerSecond));
     shooterIsEnabled = true;
     printf("Shooter RPM: %f", new_RPM);
   }
 
   @Override
   public void stopShooter() {
-    updateShooterRPM(0);
+    updateShooterRPM(RPM.of(0));
     shooterIsEnabled = false;
   }
 
   @Override
-  public void updateShooterRPM(double new_RPM) {
+  public void updateShooterRPM(AngularVelocity new_RPM) {
     if (shooterIsEnabled) {
-      rightSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_RPM));
-      leftSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_RPM));
+      rightSim.setAngularVelocity(new_RPM.in(RotationsPerSecond));
+      leftSim.setAngularVelocity(new_RPM.in(RotationsPerSecond));
       printf("Shooter RPM: %f", new_RPM);
     }
   }
@@ -127,18 +131,18 @@ public class AlgaeShooter_Sim implements AlgaeShooterInterface, CS_InterfaceBase
   }
 
   @Override
-  public double getShooterRPMLeft() {
-    return leftSim.getAngularVelocityRPM();
+  public AngularVelocity getShooterRPMLeft() {
+    return RPM.of(leftSim.getAngularVelocityRPM());
   }
 
   @Override
-  public double getShooterRPMRight() {
-    return rightSim.getAngularVelocityRPM();
+  public AngularVelocity getShooterRPMRight() {
+    return RPM.of(rightSim.getAngularVelocityRPM());
   }
 
   @Override
-  public double getLauncherRPM() {
-    return launchSim.getAngularVelocityRPM();
+  public AngularVelocity getLauncherRPM() {
+    return RPM.of(launchSim.getAngularVelocityRPM());
   }
 
   public double getLauncherSetpoint() {

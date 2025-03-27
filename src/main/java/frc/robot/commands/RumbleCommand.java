@@ -105,4 +105,8 @@ public class RumbleCommand extends CS_Command {
   private boolean arePulseCountCompleted() {
     return m_currentPulseCount == m_pulseCount;
   }
+
+  public static RumbleCommand longRumble() {
+    return new RumbleCommand(RobotContainer.driverController, 1, 2, RumbleType.kBothRumble);
+  }
 }

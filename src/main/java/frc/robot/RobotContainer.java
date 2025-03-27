@@ -6,6 +6,9 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Inches;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -18,6 +21,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.RobotConstants.RobotType;
 import frc.robot.commands.RumbleCommand;
+import frc.robot.commands.setters.autos.Auto_4;
+import frc.robot.commands.setters.autos.Auto_5;
 import frc.robot.commands.setters.autos.Auto_A;
 import frc.robot.commands.setters.autos.Auto_B;
 import frc.robot.commands.setters.autos.Auto_C;
@@ -31,7 +36,6 @@ import frc.robot.commands.setters.autos.Auto_J;
 import frc.robot.commands.setters.autos.Auto_K;
 import frc.robot.commands.setters.autos.Auto_L;
 import frc.robot.commands.setters.groups.ToAlgaePresetAndShoot;
-import frc.robot.commands.setters.groups.ToAlgaePresetDriveAndShoot;
 import frc.robot.commands.setters.groups.ToAlgaeShoot;
 import frc.robot.commands.setters.groups.ToCoralIntake;
 import frc.robot.commands.setters.groups.ToCoralShoot;
@@ -41,12 +45,13 @@ import frc.robot.commands.setters.groups.ToPathAndFinkleAndCoralShoot;
 import frc.robot.commands.setters.groups.ToPathAndFinleAndAlgaeIntake;
 import frc.robot.commands.setters.groups.ToSubsystemsPreset;
 import frc.robot.commands.setters.units.AlgaeShooterDiscard;
+import frc.robot.commands.setters.units.AlgaeShooterRampUp;
+import frc.robot.commands.setters.units.DriveTurnToAngle;
 import frc.robot.subsystems.Dashboard;
 import frc.robot.subsystems.Dashboard.AutoOptions;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterSubsystem;
 import frc.robot.subsystems.algaeshooter.AlgaeShooter_Sim;
 import frc.robot.subsystems.algaeshooter.AlgaeShooter_SparkMax;
-import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
 import frc.robot.subsystems.coralshooter.CoralShooter_Sim;
 import frc.robot.subsystems.coralshooter.CoralShooter_SparkMax;
@@ -67,7 +72,6 @@ import frc.utils.CS_XboxController;
 import java.io.File;
 import java.util.Set;
 import java.util.function.Supplier;
-import org.littletonrobotics.frc2024.commands.FeedForwardCharacterization;
 
 public class RobotContainer {
   // Singleton instance
@@ -99,7 +103,6 @@ public class RobotContainer {
   public static WristSubsystem wrist = null;
   public static CoralShooterSubsystem mortar = null;
   public static AlgaeShooterSubsystem algae501 = null;
-  public static ClimberSubsystem climber = null;
 
   // Controllers
   public static final CS_XboxController driverController =
@@ -252,25 +255,37 @@ public class RobotContainer {
 
     // ---------------------------------------- POV UP/DOWN Button
     //                                          Algae Shoot High From Reef
-    controller.btn_South.toggleOnTrue(
-        Commands.defer(
-                (() -> new ToAlgaePresetDriveAndShoot(() -> Presets.ALGAE_SHOOTBARGE_OURSIDE)),
-                Set.of(elevator, wrist, algae501))
-            .onlyIf(algae501::isLoaded));
+    // controller.btn_South.toggleOnTrue(
+    //     Commands.defer(
+    //             (() -> new ToAlgaePresetDriveAndShoot(() -> Presets.ALGAE_SHOOTBARGE_OURSIDE)),
+    //             Set.of(elevator, wrist, algae501))
+    //         .onlyIf(algae501::isLoaded));
 
-    controller.btn_North.toggleOnTrue(
-        Commands.defer(
-                (() -> new ToAlgaePresetDriveAndShoot(() -> Presets.ALGAE_SHOOTBARGE_THEIRSIDE)),
-                Set.of(elevator, wrist, algae501))
-            .onlyIf(algae501::isLoaded));
+    // controller.btn_North.toggleOnTrue(
+    //     Commands.defer(
+    //             (() -> new ToAlgaePresetDriveAndShoot(() -> Presets.ALGAE_SHOOTBARGE_THEIRSIDE)),
+    //             Set.of(elevator, wrist, algae501))
+    //         .onlyIf(algae501::isLoaded));
+    controller.btn_North.toggleOnTrue(new DriveTurnToAngle(() -> Degrees.of(0)));
+    controller.btn_East.toggleOnTrue(new DriveTurnToAngle(() -> Degrees.of(90)));
+    controller.btn_South.toggleOnTrue(new DriveTurnToAngle(() -> Degrees.of(180)));
+    controller.btn_West.toggleOnTrue(new DriveTurnToAngle(() -> Degrees.of(270)));
 
-    controller.btn_East.toggleOnTrue(new ToCoralShoot());
+    // controller.btn_East.toggleOnTrue(new ToCoralShoot());
 
     // ---------------------------------------- POV UP/DOWN/LEFT/RIGHT -- FOR TESTING ONLY
     // controller.btn_South.onTrue(new ToSubsystemsPreset(() -> Presets.ALGAE_NETFROMREEF));
     // controller.btn_East.onTrue(new ToSubsystemsPreset(() -> Presets.ALGAE_FLOOR));
     // controller.btn_North.onTrue(new ToSubsystemsPreset(() -> Presets.ALGAE_STOW));
     // controller.btn_West.onTrue(new ToSubsystemsPreset(() -> Presets.ALGAE_SHOOTBARGE_OURSIDE));
+
+    // ---------------------------------------- TRIGGER STOW on Tipping Over
+    new Trigger(() -> Math.abs(drivebase.getPitch() - 10) > 0)
+        .onTrue(
+            RumbleCommand.longRumble().alongWith(new ToSubsystemsPreset(() -> Presets.ALGAE_STOW)));
+    new Trigger(() -> Math.abs(drivebase.getRoll() - 10) > 0)
+        .onTrue(
+            RumbleCommand.longRumble().alongWith(new ToSubsystemsPreset(() -> Presets.ALGAE_STOW)));
 
     // ---------------------------------------- TRIGGER RUMBLE
     new Trigger(algae501::isLoaded)
@@ -280,41 +295,39 @@ public class RobotContainer {
     new Trigger(mortar::isLoaded)
         .debounce(0.1)
         .onTrue(new RumbleCommand(controller, RumbleType.kBothRumble));
-
-    new Trigger(() -> Math.abs(drivebase.getPitch() - 10) > 0)
-        .onTrue(new ToSubsystemsPreset(() -> Presets.ALGAE_STOW));
   }
 
   // ------------------------------------ OPERATOR CONTROLLER -------------------------
   // ----------------------------------------------------------------------------------
   private void configureOperatorBindings(CS_XboxController controller) {
 
-    // Supplier<Pose2d> targetPose =
-    //     () -> PresetManager.getRobotPoseFromTarget(CORAL_BRANCH.G, CORAL_LEVEL.L4, 0);
-    // Supplier<Pose2d> offsetPose =
-    //     () -> PresetManager.getRobotPoseFromTarget(CORAL_BRANCH.G, CORAL_LEVEL.L4, 12);
+    // Trigger sysIdQuasistatic = controller.btn_Start;
+    // Trigger sysIdDynamic = controller.btn_Back;
+    // Trigger sysIdForward = controller.btn_A;
+    // Trigger sysIdBack = controller.btn_B;
 
-    // controller.btn_Y.toggleOnTrue(new Auto_G());
-    // controller.btn_A.toggleOnTrue(new DriveToPoseFinkle(offsetPose));
-    // controller.btn_B.toggleOnTrue(new DriveToPoseFinkle(targetPose));
+    // sysIdQuasistatic.and(sysIdForward).whileTrue(elevator.sysIdQuasistatic(Direction.kForward));
+    // sysIdQuasistatic.and(sysIdBack).whileTrue(elevator.sysIdQuasistatic(Direction.kReverse));
+    // sysIdDynamic.and(sysIdForward).whileTrue(elevator.sysIdDynamic(Direction.kForward));
+    // sysIdDynamic.and(sysIdBack).whileTrue(elevator.sysIdDynamic(Direction.kReverse));
 
-    // controller.btn_A.toggleOnTrue(
-    //     Commands.defer(
-    //         (() ->
-    //             new ToPathAndFinkleAndAlgaeShoot(
-    //                     PresetManager.getBargeShootPreset(() -> drivebase.getPose()))
-    //                 .onlyIf(() -> algae501.isLoaded())),
-    //         Set.of(elevator, wrist, algae501)));
+    controller.btn_Y.toggleOnTrue(
+        Commands.defer(
+            (() ->
+                new ToAlgaeShoot(
+                        () -> PresetManager.getAimAndShootPreset(() -> drivebase.getPose()))
+                    .onlyIf(() -> algae501.isLoaded())),
+            Set.of(elevator, wrist, algae501)));
 
     // ---------------------------------------- POV UP/DOWN
     //                                          Elevator up/down 1"
-    controller.btn_North.onTrue(new InstantCommand(() -> elevator.goUp(1.0)));
-    controller.btn_South.onTrue(new InstantCommand(() -> elevator.goDown(1.0)));
+    controller.btn_North.onTrue(new InstantCommand(() -> elevator.goUp(Inches.of(1))));
+    controller.btn_South.onTrue(new InstantCommand(() -> elevator.goDown(Inches.of(1))));
 
     // ---------------------------------------- POV LEFT/RIGHT
     //                                          Wrist up/down 5"
-    controller.btn_West.onTrue(new InstantCommand(() -> wrist.goUp(5.0)));
-    controller.btn_East.onTrue(new InstantCommand(() -> wrist.goDown(5.0)));
+    controller.btn_West.onTrue(new InstantCommand(() -> wrist.goUp(Degrees.of(5))));
+    controller.btn_East.onTrue(new InstantCommand(() -> wrist.goDown(Degrees.of(5))));
 
     // ---------------------------------------- X Button
     //                                          Zero Elevator
@@ -323,6 +336,10 @@ public class RobotContainer {
     // ---------------------------------------- Back Button
     //                                          Flip Drivebase directon
     controller.btn_Back.onTrue(new InstantCommand(() -> drivebase.flipToggle()));
+
+    // ---------------------------------------- TRIGGER RUMBLE
+    new Trigger(() -> Math.abs(drivebase.getPitch() - 10) > 0).onTrue(RumbleCommand.longRumble());
+    new Trigger(() -> Math.abs(drivebase.getRoll() - 10) > 0).onTrue(RumbleCommand.longRumble());
   }
 
   private void configureTestOperatorBindings(CS_XboxController controller) {}
@@ -338,98 +355,9 @@ public class RobotContainer {
   //           +-----------------+
   //
   // ----------------------------------------------------------------------------------
-  private void configureButtonBoxBindings(CS_ButtonBoxController controller) {
+  private void configureButtonBoxBindings(CS_ButtonBoxController controller) {}
 
-    // Supplier<Pose2d> targetPose = () -> PresetManager.getCoralPreset().getPose();
-    // Supplier<Pose2d> offsetPose =
-    //     () ->
-    //         PresetManager.getCoralPreset()
-    //             .getPose()
-    //             .plus(new Transform2d(Units.inchesToMeters(36), 0, new Rotation2d()));
-
-    // controller.btn_1.toggleOnTrue(
-    //     new FollowPathToPose(() -> PresetManager.getCoralPreset().getPose(), () -> 36)
-    //         .andThen(new DriveToPoseFinkle(() -> PresetManager.getCoralPreset().getPose()))
-    //         .andThen(new ToCoralShoot3()));
-
-    // controller.btn_2.toggleOnTrue(
-    //     new FollowPathToPose(() -> PresetManager.getCoralPreset().getPose(), () -> 36));
-
-    // controller.btn_3.toggleOnTrue(
-    //     new DriveToPoseFinkle(() -> PresetManager.getCoralPreset().getPose())
-    //         .andThen(new ToCoralShoot3()));
-
-    // controller.btn_4.toggleOnTrue(
-    //     Commands.defer((() -> new ToPathAndFinkleAndCoralShoot()), Set.of(drivebase, mortar)));
-
-    // controller.btn_5.toggleOnTrue(new FollowPathToPose(offsetPose));
-
-    // controller.btn_6.toggleOnTrue(new DriveToPoseFinkle(targetPose).andThen(new
-    // ToCoralShoot3()));
-
-    // Pose2d testPose = new Pose2d(3, 2, new Rotation2d(Units.degreesToRadians(-120)));
-    // controller.btn_9.toggleOnTrue(new DriveToPoseFinkle(() -> testPose));
-
-    // controller.btn_2.toggleOnTrue(
-    //     new DriveToPoseFinkle(() -> PresetManager.getCoralPreset().getPose(), true));
-
-    // controller.btn_3.toggleOnTrue(
-    //     drivebase.driveToPose(() -> PresetManager.getCoralPreset().getPose(24)));
-
-    // controller.btn_4.toggleOnTrue(
-    //     new ToSubsystemsPreset(() -> Presets.ALGAE_Test1)
-    //         .andThen(new ToAlgaeShoot(() -> Presets.ALGAE_Test1.getRPM()))
-    //         .onlyIf(algae501::isLoaded)
-    //         .finallyDo(
-    //             interrupted -> {
-    //               new ToSubsystemsPreset(() -> Presets.ALGAE_STOW).schedule();
-    //             }));
-
-    // controller.btn_5.toggleOnTrue(
-    //     drivebase
-    //         .driveToPose(() -> PresetManager.getCoralPreset().getPose(24))
-    //         // .andThen(drivebase.reset())
-    //         .andThen(new DriveToPoseFinkle(() -> PresetManager.getCoralPreset().getPose(), true))
-    //         .andThen(new ToCoralShoot3()));
-
-    // controller.btn_7.toggleOnTrue(
-    //     new ToSubsystemsPreset(() -> Presets.ALGAE_Test2)
-    //         .andThen(new ToAlgaeShoot(() -> Presets.ALGAE_Test2.getRPM()))
-    //         .onlyIf(algae501::isLoaded)
-    //         .finallyDo(
-    //             interrupted -> {
-    //               new ToSubsystemsPreset(() -> Presets.ALGAE_STOW).schedule();
-    //             }));
-
-    // controller.btn_8.toggleOnTrue(
-    //     new ToSubsystemsPreset(() -> Presets.ALGAE_Test3)
-    //         .andThen(new ToAlgaeShoot(() -> Presets.ALGAE_Test3.getRPM()))
-    //         .onlyIf(algae501::isLoaded)
-    //         .finallyDo(
-    //             interrupted -> {
-    //               new ToSubsystemsPreset(() -> Presets.ALGAE_STOW).schedule();
-    //             }));
-    // controller.btn_9.toggleOnTrue(
-    //     new ToSubsystemsPreset(() -> Presets.ALGAE_Test4)
-    //         .andThen(new ToAlgaeShoot(() -> Presets.ALGAE_Test4.getRPM()))
-    //         .onlyIf(algae501::isLoaded)
-    //         .finallyDo(
-    //             interrupted -> {
-    //               new ToSubsystemsPreset(() -> Presets.ALGAE_STOW).schedule();
-    //             }));
-  }
-
-  private void configureTestButtonBoxBindings(CS_ButtonBoxController controller) {
-    controller.btn_7.toggleOnTrue(
-        new FeedForwardCharacterization(
-            mortar, mortar::runCharacterizationLeft, mortar::getCharacterizationVelocityLeft));
-    controller.btn_8.toggleOnTrue(
-        new FeedForwardCharacterization(
-            mortar, mortar::runCharacterizationRight, mortar::getCharacterizationVelocityRight));
-    controller.btn_9.toggleOnTrue(
-        new FeedForwardCharacterization(
-            algae501, algae501::runCharacterization, algae501::getCharacterizationVelocity));
-  }
+  private void configureTestButtonBoxBindings(CS_ButtonBoxController controller) {}
 
   private void configureDefaultCommands() {
     drivebase.setDefaultCommand(driverController);
@@ -451,6 +379,15 @@ public class RobotContainer {
     NamedCommands.registerCommand("FinkleAndShootJ", new Auto_J());
     NamedCommands.registerCommand("FinkleAndShootK", new Auto_K());
     NamedCommands.registerCommand("FinkleAndShootL", new Auto_L());
+    NamedCommands.registerCommand("FinkleAndTake4", new Auto_4());
+    NamedCommands.registerCommand("FinkleAndTake5", new Auto_5());
+    NamedCommands.registerCommand(
+        "PrepareShootLow", new ToSubsystemsPreset(() -> Presets.ALGAE_SHOOTBARGE_OURSIDE));
+    NamedCommands.registerCommand(
+        "PrepareRampUp",
+        new AlgaeShooterRampUp(() -> Presets.ALGAE_SHOOTBARGE_OURSIDE.getRPM())
+            .withDoNotStopOnInterrupt()
+            .onlyIf(() -> algae501.isLoaded()));
     NamedCommands.registerCommand(
         "ShootIt",
         Commands.defer(

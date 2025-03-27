@@ -1,13 +1,16 @@
 package frc.robot.subsystems.presets;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Distance;
 import frc.robot.UIConstants.ALGAE_FACE;
 
 public class AlgaePreset {
   private Pose2d robotPose = null;
-  private double elevatorHeightInches;
-  private double wristAngleDegrees;
-  private double RPM;
+  private Distance elevatorHeight;
+  private Angle wristAngle;
+  private AngularVelocity rpm;
   public boolean hasPose = false;
   public boolean hasSubsystemsReady = false;
   private String name;
@@ -21,22 +24,26 @@ public class AlgaePreset {
   }
 
   public AlgaePreset(
-      String name, Pose2d pose, double elevatorHeightInches, double wristAngleDegrees, double RPM) {
+      String name,
+      Pose2d pose,
+      Distance elevatorHeightInches,
+      Angle wristAngleDegrees,
+      AngularVelocity RPM) {
     this.name = name;
     this.robotPose = pose;
-    this.elevatorHeightInches = elevatorHeightInches;
-    this.wristAngleDegrees = wristAngleDegrees;
-    this.RPM = RPM;
+    this.elevatorHeight = elevatorHeightInches;
+    this.wristAngle = wristAngleDegrees;
+    this.rpm = RPM;
     this.hasSubsystemsReady = true;
     this.hasPose = true;
   }
 
   public AlgaePreset(
-      String name, double elevatorHeightInches, double wristAngleDegrees, double RPM) {
+      String name, Distance elevatorHeightInches, Angle wristAngleDegrees, AngularVelocity RPM) {
     this.name = name;
-    this.elevatorHeightInches = elevatorHeightInches;
-    this.wristAngleDegrees = wristAngleDegrees;
-    this.RPM = RPM;
+    this.elevatorHeight = elevatorHeightInches;
+    this.wristAngle = wristAngleDegrees;
+    this.rpm = RPM;
 
     this.hasSubsystemsReady = true;
     this.hasPose = false;
@@ -56,30 +63,30 @@ public class AlgaePreset {
       case AB:
       case EF:
       case IJ:
-        this.elevatorHeightInches = Presets.ALGAE_HIGH.getElevatorHeightInches();
-        this.wristAngleDegrees = Presets.ALGAE_HIGH.getWristAngleDegrees();
-        this.RPM = Presets.ALGAE_HIGH.getRPM();
+        this.elevatorHeight = Presets.ALGAE_HIGH.getElevatorHeight();
+        this.wristAngle = Presets.ALGAE_HIGH.getWristAngle();
+        this.rpm = Presets.ALGAE_HIGH.getRPM();
         this.hasSubsystemsReady = true;
         break;
       case CD:
       case GH:
       case KL:
-        this.elevatorHeightInches = Presets.ALGAE_LOW.getElevatorHeightInches();
-        this.wristAngleDegrees = Presets.ALGAE_LOW.getWristAngleDegrees();
-        this.RPM = Presets.ALGAE_LOW.getRPM();
+        this.elevatorHeight = Presets.ALGAE_LOW.getElevatorHeight();
+        this.wristAngle = Presets.ALGAE_LOW.getWristAngle();
+        this.rpm = Presets.ALGAE_LOW.getRPM();
         this.hasSubsystemsReady = true;
         break;
       case FLOOR:
       default:
-        this.elevatorHeightInches = Presets.ALGAE_FLOOR.getElevatorHeightInches();
-        this.wristAngleDegrees = Presets.ALGAE_FLOOR.getWristAngleDegrees();
-        this.RPM = Presets.ALGAE_FLOOR.getRPM();
+        this.elevatorHeight = Presets.ALGAE_FLOOR.getElevatorHeight();
+        this.wristAngle = Presets.ALGAE_FLOOR.getWristAngle();
+        this.rpm = Presets.ALGAE_FLOOR.getRPM();
         break;
     }
 
     System.out.printf(
         "[ALGAEPRESET] New Algae Preset - %s - %s In, %s Deg, %s RPM\n",
-        this.toString(), elevatorHeightInches, wristAngleDegrees, RPM);
+        this.toString(), elevatorHeight, wristAngle, rpm);
   }
 
   private void setSubsystems(String newPositionName) {
@@ -87,61 +94,67 @@ public class AlgaePreset {
       case "AB":
       case "EF":
       case "IJ":
-        this.elevatorHeightInches = Presets.ALGAE_HIGH.getElevatorHeightInches();
-        this.wristAngleDegrees = Presets.ALGAE_HIGH.getWristAngleDegrees();
-        this.RPM = Presets.ALGAE_HIGH.getRPM();
+        this.elevatorHeight = Presets.ALGAE_HIGH.getElevatorHeight();
+        this.wristAngle = Presets.ALGAE_HIGH.getWristAngle();
+        this.rpm = Presets.ALGAE_HIGH.getRPM();
         this.hasSubsystemsReady = true;
         break;
       case "CD":
       case "GH":
       case "KL":
-        this.elevatorHeightInches = Presets.ALGAE_LOW.getElevatorHeightInches();
-        this.wristAngleDegrees = Presets.ALGAE_LOW.getWristAngleDegrees();
-        this.RPM = Presets.ALGAE_LOW.getRPM();
+        this.elevatorHeight = Presets.ALGAE_LOW.getElevatorHeight();
+        this.wristAngle = Presets.ALGAE_LOW.getWristAngle();
+        this.rpm = Presets.ALGAE_LOW.getRPM();
         this.hasSubsystemsReady = true;
         break;
       case "PROCESSOR":
-        this.elevatorHeightInches = Presets.ALGAE_PROCESS.getElevatorHeightInches();
-        this.wristAngleDegrees = Presets.ALGAE_PROCESS.getWristAngleDegrees();
-        this.RPM = Presets.ALGAE_PROCESS.getRPM();
+        this.elevatorHeight = Presets.ALGAE_PROCESS.getElevatorHeight();
+        this.wristAngle = Presets.ALGAE_PROCESS.getWristAngle();
+        this.rpm = Presets.ALGAE_PROCESS.getRPM();
+        this.hasSubsystemsReady = true;
+        break;
+      case "POPSTICLE":
+        this.elevatorHeight = Presets.ALGAE_POPSTICLE.getElevatorHeight();
+        this.wristAngle = Presets.ALGAE_POPSTICLE.getWristAngle();
+        this.rpm = Presets.ALGAE_POPSTICLE.getRPM();
         this.hasSubsystemsReady = true;
         break;
       case "FLOOR":
       default:
-        this.elevatorHeightInches = Presets.ALGAE_FLOOR.getElevatorHeightInches();
-        this.wristAngleDegrees = Presets.ALGAE_FLOOR.getWristAngleDegrees();
-        this.RPM = Presets.ALGAE_FLOOR.getRPM();
+        this.elevatorHeight = Presets.ALGAE_FLOOR.getElevatorHeight();
+        this.wristAngle = Presets.ALGAE_FLOOR.getWristAngle();
+        this.rpm = Presets.ALGAE_FLOOR.getRPM();
         break;
     }
 
     System.out.printf(
         "[ALGAEPRESET] New Algae Preset - %s - %s In, %s Deg, %s RPM\n",
-        this.toString(), elevatorHeightInches, wristAngleDegrees, RPM);
+        this.toString(), elevatorHeight, wristAngle, rpm);
   }
 
-  public double getRPM() {
+  public AngularVelocity getRPM() {
     // Get the RPM of the Coral Shooter
-    return this.RPM;
+    return this.rpm;
   }
 
-  public void setRPM(double newRPM) {
-    this.RPM = newRPM;
+  public void setRPM(AngularVelocity newRPM) {
+    this.rpm = newRPM;
   }
 
-  public void setElevatorHeightInches(double newElevatorHeightInches) {
-    this.elevatorHeightInches = newElevatorHeightInches;
+  public void setElevatorHeight(Distance newElevatorHeight) {
+    this.elevatorHeight = newElevatorHeight;
   }
 
-  public double getElevatorHeightInches() {
-    return this.elevatorHeightInches;
+  public Distance getElevatorHeight() {
+    return this.elevatorHeight;
   }
 
-  public void setWristAngleDegrees(double newWristAngleDegrees) {
-    this.wristAngleDegrees = newWristAngleDegrees;
+  public void setWristAngle(Angle newWristAngle) {
+    this.wristAngle = newWristAngle;
   }
 
-  public double getWristAngleDegrees() {
-    return this.wristAngleDegrees;
+  public Angle getWristAngle() {
+    return this.wristAngle;
   }
 
   /**

@@ -1,9 +1,11 @@
 package frc.robot.vizualization;
 
+import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Meters;
+
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.networktables.StructPublisher;
@@ -48,39 +50,26 @@ public class Visualization extends CS_SubsystemBase {
     stage2Pose =
         RobotConstants.stage2PoseOffset.plus(
             new Transform3d(
-                0,
-                0,
-                -Units.inchesToMeters(RobotContainer.elevator.getHeight() * 0.33),
-                new Rotation3d()));
+                0, 0, -(RobotContainer.elevator.getHeight().in(Meters) * 0.33), new Rotation3d()));
     stage3Pose =
         RobotConstants.stage3PoseOffset.plus(
             new Transform3d(
-                0,
-                0,
-                -Units.inchesToMeters(RobotContainer.elevator.getHeight() * 0.67),
-                new Rotation3d()));
+                0, 0, -(RobotContainer.elevator.getHeight().in(Meters) * 0.67), new Rotation3d()));
     carriagePose =
         RobotConstants.carriagePoseOffset.plus(
             new Transform3d(
-                0,
-                0,
-                -Units.inchesToMeters(RobotContainer.elevator.getHeight()),
-                new Rotation3d()));
+                0, 0, -(RobotContainer.elevator.getHeight().in(Meters)), new Rotation3d()));
     wristPose =
         RobotConstants.wristPoseOffset.plus(
             new Transform3d(
-                0,
-                0,
-                -Units.inchesToMeters(RobotContainer.elevator.getHeight()),
-                new Rotation3d()));
+                0, 0, -(RobotContainer.elevator.getHeight().in(Meters)), new Rotation3d()));
     shooterPose =
         RobotConstants.shooterPoseOffset.plus(
             new Transform3d(
                 0,
                 0,
-                -Units.inchesToMeters(RobotContainer.elevator.getHeight()),
-                new Rotation3d(
-                    Units.degreesToRadians(RobotContainer.wrist.getAngleDegrees() - 180), 0, 0)));
+                -(RobotContainer.elevator.getHeight().in(Meters)),
+                new Rotation3d((RobotContainer.wrist.getAngle().in(Degrees) - 180), 0, 0)));
 
     publisher.set(robotPose);
     arrayPublisher.set(
