@@ -6,8 +6,10 @@ import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Volts;
-import static frc.robot.subsystems.elevator.ElevatorConstants.gains;
+import static frc.robot.subsystems.elevator.ElevatorConstants.gains0;
+import static frc.robot.subsystems.elevator.ElevatorConstants.gains1;
 
+import com.revrobotics.spark.ClosedLoopSlot;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
@@ -43,16 +45,44 @@ public class ElevatorSubsystem extends CS_SubsystemBase {
     elevatorInterface.reset();
   }
 
-  public void setkP(double newkP) {
-    elevatorInterface.setPID(newkP, values.kI, values.kD);
+  public void setkP0(double newkP0) {
+    elevatorInterface.setPID(newkP0, values.kI0, values.kD0, ClosedLoopSlot.kSlot0);
   }
 
-  public void setkI(double newkI) {
-    elevatorInterface.setPID(values.kP, values.kI, newkI);
+  public void setkI0(double newkI0) {
+    elevatorInterface.setPID(values.kP0, values.kI0, newkI0, ClosedLoopSlot.kSlot0);
   }
 
-  public void setkD(double newkD) {
-    elevatorInterface.setPID(values.kP, values.kI, newkD);
+  public void setkD0(double newkD0) {
+    elevatorInterface.setPID(values.kP0, values.kI0, newkD0, ClosedLoopSlot.kSlot0);
+  }
+
+  public void setkP1(double newkP1) {
+    elevatorInterface.setPID(newkP1, values.kI1, values.kD1, ClosedLoopSlot.kSlot1);
+  }
+
+  public void setkI1(double newkI1) {
+    elevatorInterface.setPID(values.kP1, values.kI1, newkI1, ClosedLoopSlot.kSlot1);
+  }
+
+  public void setkD1(double newkD1) {
+    elevatorInterface.setPID(values.kP1, values.kI1, newkD1, ClosedLoopSlot.kSlot1);
+  }
+
+  public void setMaxOutput0(double newMax) {
+    elevatorInterface.setOutputRange(values.minOutput0, newMax, ClosedLoopSlot.kSlot0);
+  }
+
+  public void setMinOutput0(double newMin) {
+    elevatorInterface.setOutputRange(newMin, values.maxOutput0, ClosedLoopSlot.kSlot0);
+  }
+
+  public void setMaxOutput1(double newMax) {
+    elevatorInterface.setOutputRange(values.minOutput1, newMax, ClosedLoopSlot.kSlot1);
+  }
+
+  public void setMinOutput1(double newMin) {
+    elevatorInterface.setOutputRange(newMin, values.maxOutput1, ClosedLoopSlot.kSlot1);
   }
 
   @Override
@@ -66,9 +96,21 @@ public class ElevatorSubsystem extends CS_SubsystemBase {
 
     // Using SmartDashboard to tune PIDs
     // --------------------------------------------------
-    SmartDashboard.putNumber("Subsystem/ElevatorSubsystem/Gains/P", gains.kP());
-    SmartDashboard.putNumber("Subsystem/ElevatorSubsystem/Gains/I", gains.kI());
-    SmartDashboard.putNumber("Subsystem/ElevatorSubsystem/Gains/D", gains.kD());
+    SmartDashboard.putNumber("Subsystem/ElevatorSubsystem/Gains/Slot0(Up)/P", gains0.kP());
+    SmartDashboard.putNumber("Subsystem/ElevatorSubsystem/Gains/Slot0(Up)/I", gains0.kI());
+    SmartDashboard.putNumber("Subsystem/ElevatorSubsystem/Gains/Slot0(Up)/D", gains0.kD());
+    SmartDashboard.putNumber(
+        "Subsystem/ElevatorSubsystem/Gains/Slot0(Up)/minOutput", gains0.minOutput());
+    SmartDashboard.putNumber(
+        "Subsystem/ElevatorSubsystem/Gains/Slot0(Up)/maxOutput", gains0.maxOutput());
+    SmartDashboard.putNumber("Subsystem/ElevatorSubsystem/Gains/Slot1(Down)/P", gains1.kP());
+    SmartDashboard.putNumber("Subsystem/ElevatorSubsystem/Gains/Slot1(Down)/I", gains1.kI());
+    SmartDashboard.putNumber("Subsystem/ElevatorSubsystem/Gains/Slot1(Down)/D", gains1.kD());
+    SmartDashboard.putNumber(
+        "Subsystem/ElevatorSubsystem/Gains/Slot1(Down)/minOutput", gains1.minOutput());
+    SmartDashboard.putNumber(
+        "Subsystem/ElevatorSubsystem/Gains/Slot1(Down)/maxOutput", gains1.maxOutput());
+
     SmartDashboard.putBoolean("Commands/ElevatorSetHeight/OverrideHeight", false);
     SmartDashboard.putNumber("Commands/ElevatorSetHeight/ForcedHeight", 50);
   }
@@ -95,15 +137,53 @@ public class ElevatorSubsystem extends CS_SubsystemBase {
 
     // Using SmartDashboard to tune PIDs
     // --------------------------------------------------
-    double newkP = SmartDashboard.getNumber("Subsystem/ElevatorSubsystem/Gains/P", values.kP);
-    double newkI = SmartDashboard.getNumber("Subsystem/ElevatorSubsystem/Gains/I", values.kI);
-    double newkD = SmartDashboard.getNumber("Subsystem/ElevatorSubsystem/Gains/D", values.kD);
+    double newkP0 =
+        SmartDashboard.getNumber("Subsystem/ElevatorSubsystem/Gains/Slot0(Up)/P", values.kP0);
+    double newkI0 =
+        SmartDashboard.getNumber("Subsystem/ElevatorSubsystem/Gains/Slot0(Up)/I", values.kI0);
+    double newkD0 =
+        SmartDashboard.getNumber("Subsystem/ElevatorSubsystem/Gains/Slot0(Up)/D", values.kD0);
+    double newMinOutput0 =
+        SmartDashboard.getNumber(
+            "Subsystem/ElevatorSubsystem/Gains/Slot0(Up)/minOutput", values.minOutput0);
+    double newMaxOutput0 =
+        SmartDashboard.getNumber(
+            "Subsystem/ElevatorSubsystem/Gains/Slot0(Up)/maxOutput", values.maxOutput0);
+
+    double newkP1 =
+        SmartDashboard.getNumber("Subsystem/ElevatorSubsystem/Gains/Slot1(Down)/P", values.kP1);
+    double newkI1 =
+        SmartDashboard.getNumber("Subsystem/ElevatorSubsystem/Gains/Slot1(Down)/I", values.kI1);
+    double newkD1 =
+        SmartDashboard.getNumber("Subsystem/ElevatorSubsystem/Gains/Slot1(Down)/D", values.kD1);
+    double newMinOutput1 =
+        SmartDashboard.getNumber(
+            "Subsystem/ElevatorSubsystem/Gains/Slot1(Down)/minOutput", values.minOutput1);
+    double newMaxOutput1 =
+        SmartDashboard.getNumber(
+            "Subsystem/ElevatorSubsystem/Gains/Slot1(Down)/maxOutput", values.maxOutput1);
 
     // Coefficients on SmartDashboard have changed, save new values to the PID controller
     // --------------------------------------------------
-    values.kP = CS_Utils.updateFromSmartDashboard(newkP, values.kP, (value) -> setkP(value));
-    values.kI = CS_Utils.updateFromSmartDashboard(newkI, values.kI, (value) -> setkI(value));
-    values.kD = CS_Utils.updateFromSmartDashboard(newkD, values.kD, (value) -> setkD(value));
+    values.kP0 = CS_Utils.updateFromSmartDashboard(newkP0, values.kP0, (value) -> setkP0(value));
+    values.kI0 = CS_Utils.updateFromSmartDashboard(newkI0, values.kI0, (value) -> setkI0(value));
+    values.kD0 = CS_Utils.updateFromSmartDashboard(newkD0, values.kD0, (value) -> setkD0(value));
+    values.minOutput0 =
+        CS_Utils.updateFromSmartDashboard(
+            newMinOutput0, values.minOutput0, (value) -> setMinOutput0(value));
+    values.maxOutput0 =
+        CS_Utils.updateFromSmartDashboard(
+            newMaxOutput0, values.maxOutput0, (value) -> setMaxOutput0(value));
+
+    values.kP1 = CS_Utils.updateFromSmartDashboard(newkP1, values.kP1, (value) -> setkP1(value));
+    values.kI1 = CS_Utils.updateFromSmartDashboard(newkI1, values.kI1, (value) -> setkI1(value));
+    values.kD1 = CS_Utils.updateFromSmartDashboard(newkD1, values.kD1, (value) -> setkD1(value));
+    values.minOutput1 =
+        CS_Utils.updateFromSmartDashboard(
+            newMinOutput1, values.minOutput1, (value) -> setMinOutput1(value));
+    values.maxOutput1 =
+        CS_Utils.updateFromSmartDashboard(
+            newMaxOutput1, values.maxOutput1, (value) -> setMaxOutput1(value));
 
     SmartDashboard.putData(this);
   }

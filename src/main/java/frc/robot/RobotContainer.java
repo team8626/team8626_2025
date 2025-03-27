@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.RobotConstants.RobotType;
 import frc.robot.commands.RumbleCommand;
 import frc.robot.commands.setters.autos.Auto_4;
@@ -57,8 +58,8 @@ import frc.robot.subsystems.coralshooter.CoralShooter_Sim;
 import frc.robot.subsystems.coralshooter.CoralShooter_SparkMax;
 import frc.robot.subsystems.drive.SwerveSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
-import frc.robot.subsystems.elevator.Elevator_LinearSparkMax;
 import frc.robot.subsystems.elevator.Elevator_SimulationRose;
+import frc.robot.subsystems.elevator.Elevator_SparkMax;
 import frc.robot.subsystems.ledManager.LEDManager;
 import frc.robot.subsystems.presets.CoralPreset;
 import frc.robot.subsystems.presets.PresetManager;
@@ -138,7 +139,7 @@ public class RobotContainer {
       case COMPBOT:
       default:
         drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(), "swerve_devbot"));
-        elevator = new ElevatorSubsystem(new Elevator_LinearSparkMax());
+        elevator = new ElevatorSubsystem(new Elevator_SparkMax());
         wrist = new WristSubsystem(new Wrist_SparkFlex());
         mortar = new CoralShooterSubsystem(new CoralShooter_SparkMax());
         algae501 = new AlgaeShooterSubsystem(new AlgaeShooter_SparkMax());
@@ -221,7 +222,7 @@ public class RobotContainer {
 
     // ---------------------------------------- Y Button
     //                                          Stow Algae Manipulator
-    controller.btn_Y.onTrue(new ToSubsystemsPreset(() -> Presets.ALGAE_STOW));
+    controller.btn_Y.onTrue(new ToSubsystemsPreset(() -> Presets.ALGAE_NETFROMREEF));
 
     // ---------------------------------------- X Button
     //                                          Discard Algae
@@ -301,15 +302,15 @@ public class RobotContainer {
   // ----------------------------------------------------------------------------------
   private void configureOperatorBindings(CS_XboxController controller) {
 
-    // Trigger sysIdQuasistatic = controller.btn_Start;
-    // Trigger sysIdDynamic = controller.btn_Back;
-    // Trigger sysIdForward = controller.btn_A;
-    // Trigger sysIdBack = controller.btn_B;
+    Trigger sysIdQuasistatic = controller.btn_Start;
+    Trigger sysIdDynamic = controller.btn_Back;
+    Trigger sysIdForward = controller.btn_A;
+    Trigger sysIdBack = controller.btn_B;
 
-    // sysIdQuasistatic.and(sysIdForward).whileTrue(elevator.sysIdQuasistatic(Direction.kForward));
-    // sysIdQuasistatic.and(sysIdBack).whileTrue(elevator.sysIdQuasistatic(Direction.kReverse));
-    // sysIdDynamic.and(sysIdForward).whileTrue(elevator.sysIdDynamic(Direction.kForward));
-    // sysIdDynamic.and(sysIdBack).whileTrue(elevator.sysIdDynamic(Direction.kReverse));
+    sysIdQuasistatic.and(sysIdForward).whileTrue(elevator.sysIdQuasistatic(Direction.kForward));
+    sysIdQuasistatic.and(sysIdBack).whileTrue(elevator.sysIdQuasistatic(Direction.kReverse));
+    sysIdDynamic.and(sysIdForward).whileTrue(elevator.sysIdDynamic(Direction.kForward));
+    sysIdDynamic.and(sysIdBack).whileTrue(elevator.sysIdDynamic(Direction.kReverse));
 
     controller.btn_Y.toggleOnTrue(
         Commands.defer(

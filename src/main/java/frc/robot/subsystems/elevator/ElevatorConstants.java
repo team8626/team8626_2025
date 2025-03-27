@@ -1,16 +1,22 @@
 package frc.robot.subsystems.elevator;
 
+import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.InchesPerSecond;
 import static edu.wpi.first.units.Units.Kilogram;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.MetersPerSecondPerSecond;
+import static edu.wpi.first.units.Units.Second;
+import static edu.wpi.first.units.Units.Seconds;
 
+import edu.wpi.first.units.LinearAccelerationUnit;
+import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.LinearAcceleration;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.units.measure.Mass;
+import edu.wpi.first.units.measure.Time;
 import frc.robot.RobotConstants;
 
 public class ElevatorConstants {
@@ -18,7 +24,8 @@ public class ElevatorConstants {
   public static final double gearRatio = 12.0 / 1;
   public static final Distance drumRadius = Inches.of(1.92 / 2);
   public static final double cascadingRatio = 3;
-  public static final Distance cascadingOffset = Inches.of(8);
+  public static final Distance cascadingOffset =
+      Inches.of(8); // From Belly pan to bottom of the carriage
 
   public static final Distance positionConversionFactor =
       drumRadius.times(Math.PI * 2).times(cascadingRatio);
@@ -31,10 +38,13 @@ public class ElevatorConstants {
   public static final Distance initHeight = Inches.of(8);
 
   public static final int maxCurrent = 40; // Amps
+  public static final Current stallCurrent = Amps.of(30);
+  public static final Time zeroingTime = Seconds.of(0.25);
 
   public static final Mass carriageMass = Kilogram.of(20);
   public static final LinearVelocity velocity = InchesPerSecond.of(30);
 
+  public static final LinearAccelerationUnit InchesPerSecondPerSecond = InchesPerSecond.per(Second);
   public static final LinearVelocity maxVelocity = MetersPerSecond.of(1);
   public static final LinearAcceleration maxAcceleration = MetersPerSecondPerSecond.of(2);
   public static final Distance tolerance = Inches.of(1);
@@ -46,15 +56,36 @@ public class ElevatorConstants {
         default -> new MotorConfig(13, 1);
       };
 
-  public static final Gains gains =
+  // Gains for the elevator going Down
+  public static final Gains gains0 =
       switch (RobotConstants.robotType) {
-        case COMPBOT -> new Gains(0.5, 0.0, 0.0, 0.2261, 5.7, 0.04);
+        case COMPBOT -> new Gains(5, 0.0, 0.1, 0.0, 0.2261, 5.7, 0.04, -0.3, 1.0);
           // case COMPBOT -> new Gains(0.5, 0.0, 0.0, 0.2261, 3.07, 0.04);
-        case SIMBOT -> new Gains(0.5, 0.0, 0.0, 0.2261, 3.07, 0.04);
-        default -> new Gains(0.05, 0.0, 0.0, 0.43, 3.07, 0.04);
+        case SIMBOT -> new Gains(5, 0.0, 0.1, 0.0, 0.2261, 5.7, 0.04, -0.3, 1.0);
+        default -> new Gains(0.05, 0.0, 0.0, 0.0, 0.43, 3.07, 0.04, -0.3, 1.0);
       };
 
-  public record Gains(double kP, double kI, double kD, double kS, double kV, double kA) {}
+  // Gains for the elevator going Up
+  public static final Gains gains1 =
+      switch (RobotConstants.robotType) {
+        case COMPBOT -> new Gains(6, 0.0, 0.2, 0.0, 0.2261, 5.7, 0.04, -1.0, 0.3);
+          // case COMPBOT -> new Gains(0.5, 0.0, 0.0, 0.0, 0.2261, 5.7, 0.04);
+        case SIMBOT -> new Gains(6, 0.0, 0.2, 0.0, 0.2261, 5.7, 0.04, -1.0, 0.3);
+        default -> new Gains(0.05, 0.0, 0.0, 0.0, 0.43, 3.07, 0.04, -1.0, 0.3);
+      };
+
+  // public record Gains(double kP, double kI, double kD, double kG, double kS, double kV, double
+  // kA) {}
+  public record Gains(
+      double kP,
+      double kI,
+      double kD,
+      double kG,
+      double kS,
+      double kV,
+      double kA,
+      double minOutput,
+      double maxOutput) {}
 
   public record MotorConfig(int CANIdLeft, int CANIdRight) {}
 

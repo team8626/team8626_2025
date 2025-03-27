@@ -7,8 +7,10 @@ import static edu.wpi.first.units.Units.InchesPerSecond;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Volts;
-import static frc.robot.subsystems.elevator.ElevatorConstants.gains;
+import static frc.robot.subsystems.elevator.ElevatorConstants.gains0;
+import static frc.robot.subsystems.elevator.ElevatorConstants.gains1;
 
+import com.revrobotics.spark.ClosedLoopSlot;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.LinearVelocity;
@@ -46,9 +48,17 @@ public interface ElevatorInterface {
     protected LinearVelocity velocityRight = MetersPerSecond.of(0);
     protected double voltageRight = 0;
 
-    protected double kP = gains.kP();
-    protected double kI = gains.kI();
-    protected double kD = gains.kD();
+    protected double kP0 = gains0.kP();
+    protected double kI0 = gains0.kI();
+    protected double kD0 = gains0.kD();
+    protected double kP1 = gains1.kP();
+    protected double kI1 = gains1.kI();
+    protected double kD1 = gains1.kD();
+
+    protected double minOutput0 = gains0.minOutput();
+    protected double maxOutput0 = gains0.maxOutput();
+    protected double minOutput1 = gains1.minOutput();
+    protected double maxOutput1 = gains1.maxOutput();
   }
 
   public default void updateInputs(ElevatorValues values) {}
@@ -61,7 +71,9 @@ public interface ElevatorInterface {
 
   public abstract void setHeight(Distance height);
 
-  default void setPID(double kP, double kI, double kD) {}
+  default void setPID(double kP, double kI, double kD, ClosedLoopSlot slot) {}
+
+  default void setOutputRange(double min, double max, ClosedLoopSlot slot) {}
 
   public abstract void reset();
 
