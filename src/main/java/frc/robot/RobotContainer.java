@@ -302,6 +302,16 @@ public class RobotContainer {
   // ----------------------------------------------------------------------------------
   private void configureOperatorBindings(CS_XboxController controller) {
 
+    Trigger sysIdQuasistatic = controller.btn_Start;
+    Trigger sysIdDynamic = controller.btn_Back;
+    Trigger sysIdForward = controller.btn_A;
+    Trigger sysIdBack = controller.btn_B;
+
+    // sysIdQuasistatic.and(sysIdForward).whileTrue(swerve.sysIdQuasistatic(Direction.kForward));
+    // sysIdQuasistatic.and(sysIdBack).whileTrue(swerve.sysIdQuasistatic(Direction.kReverse));
+    // sysIdDynamic.and(sysIdForward).whileTrue(swerve.sysIdDynamic(Direction.kForward));
+    // sysIdDynamic.and(sysIdBack).whileTrue(swerve.sysIdDynamic(Direction.kReverse));
+
     // Trigger sysIdQuasistatic = controller.btn_Start;
     // Trigger sysIdDynamic = controller.btn_Back;
     // Trigger sysIdForward = controller.btn_A;

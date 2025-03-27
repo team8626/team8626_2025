@@ -9,6 +9,9 @@ package frc.robot.commands.setters.units;
 import static edu.wpi.first.units.Units.Degrees;
 
 import edu.wpi.first.units.measure.Angle;
+import static edu.wpi.first.units.Units.Degrees;
+
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
