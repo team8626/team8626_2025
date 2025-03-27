@@ -16,17 +16,16 @@ import frc.robot.RobotConstants;
 public class ElevatorConstants {
   // Elevator Constants
   public static final double gearRatio = 12.0 / 1;
-  // public static final double drumRadiusInches = 1.0 / 2;
-  public static final Distance drumRadius = Inches.of(2.05 / 2);
+  public static final Distance drumRadius = Inches.of(1.92 / 2);
   public static final double cascadingRatio = 3;
+  public static final Distance cascadingOffset = Inches.of(8);
 
   public static final Distance positionConversionFactor =
-      drumRadius.times(Math.PI).times(cascadingRatio);
+      drumRadius.times(Math.PI * 2).times(cascadingRatio);
 
-  // public static final double positionConversionFactor =
-  //     (2 * Math.PI * drumRadiusInches) * cascadingRatio;
   public static final LinearVelocity velocityConversionFactor =
       MetersPerSecond.of(positionConversionFactor.in(Meters) / 60);
+
   public static final Distance minHeight = Inches.of(8);
   public static final Distance maxHeight = Inches.of(58);
   public static final Distance initHeight = Inches.of(8);
@@ -49,8 +48,9 @@ public class ElevatorConstants {
 
   public static final Gains gains =
       switch (RobotConstants.robotType) {
-        case COMPBOT -> new Gains(0.5, 0.0, 0.0, 0.43, 3.07, 0.04);
-        case SIMBOT -> new Gains(0.5, 0.0, 0.0, 0.43, 3.07, 0.04);
+        case COMPBOT -> new Gains(0.5, 0.0, 0.0, 0.2261, 5.7, 0.04);
+          // case COMPBOT -> new Gains(0.5, 0.0, 0.0, 0.2261, 3.07, 0.04);
+        case SIMBOT -> new Gains(0.5, 0.0, 0.0, 0.2261, 3.07, 0.04);
         default -> new Gains(0.05, 0.0, 0.0, 0.43, 3.07, 0.04);
       };
 

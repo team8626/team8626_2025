@@ -3,9 +3,8 @@ package frc.robot.subsystems.elevator;
 import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Celsius;
 import static edu.wpi.first.units.Units.Inches;
-import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.MetersPerSecondPerSecond;
+import static edu.wpi.first.units.Units.InchesPerSecond;
+import static edu.wpi.first.units.Units.Volts;
 import static frc.robot.subsystems.elevator.ElevatorConstants.gains;
 import static frc.robot.subsystems.elevator.ElevatorConstants.motorConfig;
 
@@ -24,6 +23,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.units.measure.Voltage;
 import frc.robot.subsystems.CS_InterfaceBase;
 import frc.robot.subsystems.elevator.ElevatorConstants.ElevatorStates.ElevatorState;
 
@@ -55,8 +55,8 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
 
     rightConfig
         .alternateEncoder
-        .positionConversionFactor(ElevatorConstants.positionConversionFactor.in(Meters))
-        .velocityConversionFactor(ElevatorConstants.velocityConversionFactor.in(MetersPerSecond))
+        .positionConversionFactor(ElevatorConstants.positionConversionFactor.in(Inches))
+        .velocityConversionFactor(ElevatorConstants.velocityConversionFactor.in(InchesPerSecond))
         .inverted(true)
         .countsPerRevolution(8192);
 
@@ -67,15 +67,16 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
         .p(gains.kP(), ClosedLoopSlot.kSlot1)
         .i(gains.kI(), ClosedLoopSlot.kSlot1)
         .d(gains.kD(), ClosedLoopSlot.kSlot1)
-        .outputRange(-0.5, 0.25, ClosedLoopSlot.kSlot1); // Down, Up
+        .outputRange(-0.85, 0.20, ClosedLoopSlot.kSlot1); // Down, Up
 
-    rightConfig
-        .closedLoop
-        .maxMotion
-        .maxAcceleration(
-            ElevatorConstants.maxAcceleration.in(MetersPerSecondPerSecond), ClosedLoopSlot.kSlot1)
-        .maxVelocity(ElevatorConstants.maxVelocity.in(MetersPerSecond), ClosedLoopSlot.kSlot1)
-        .allowedClosedLoopError(ElevatorConstants.tolerance.in(Meters), ClosedLoopSlot.kSlot1);
+    // rightConfig
+    //     .closedLoop
+    //     .maxMotion
+    //     .maxAcceleration(
+    //         ElevatorConstants.maxAcceleration.in(InchesPerSecondPerSecond),
+    // ClosedLoopSlot.kSlot1)
+    //     .maxVelocity(ElevatorConstants.maxVelocity.in(InchesPerSecond), ClosedLoopSlot.kSlot1)
+    //     .allowedClosedLoopError(ElevatorConstants.tolerance.in(Inches), ClosedLoopSlot.kSlot1);
 
     // Create the motor and assign configuration
     rightMotor = new SparkMax(motorConfig.CANIdRight(), MotorType.kBrushless);
@@ -94,7 +95,7 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
 
     // Create the encoder
     encoder = rightMotor.getAlternateEncoder();
-    encoder.setPosition(ElevatorConstants.minHeight.in(Meters));
+    encoder.setPosition(ElevatorConstants.minHeight.in(Inches));
 
     // Setup the controller
     rightController = rightMotor.getClosedLoopController();
@@ -106,17 +107,27 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
 
   @Override
   public void updateInputs(ElevatorValues values) {
+    desiredHeight =
+        Inches.of(
+            MathUtil.clamp(
+                desiredHeight.in(Inches),
+                ElevatorConstants.minHeight.in(Inches),
+                ElevatorConstants.maxHeight.in(Inches)));
 
-    values.currentHeight = this.getElevatorHeight();
+    values.currentHeight = getHeight();
+    values.currentVelocity = InchesPerSecond.of(encoder.getVelocity());
     values.desiredHeight = this.desiredHeight;
     values.ampsLeft = Amps.of(this.leftMotor.getOutputCurrent());
     values.ampsRight = Amps.of(this.rightMotor.getOutputCurrent());
+    values.voltsLeft = Volts.of(this.leftMotor.getAppliedOutput() * this.leftMotor.getBusVoltage());
+    values.voltsRight =
+        Volts.of(this.rightMotor.getAppliedOutput() * this.rightMotor.getBusVoltage());
     values.temperatureLeft = Celsius.of(this.leftMotor.getMotorTemperature());
     values.temperatureRight = Celsius.of(this.rightMotor.getMotorTemperature());
     values.appliedOutputLeft = this.leftMotor.getAppliedOutput();
     values.appliedOutputRight = this.rightMotor.getAppliedOutput();
-    values.positionRight = encoder.getPosition();
-    values.velocityRight = MetersPerSecond.of(encoder.getVelocity());
+    values.absolutePositionRight = Inches.of(encoder.getPosition());
+    values.velocityRight = InchesPerSecond.of(encoder.getVelocity());
 
     values.isEnabled = this.isEnabled;
     values.isZeroed = this.isZeroed;
@@ -137,17 +148,20 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
 
     // controller.setReference(desiredHeight, ControlType.kPosition, ClosedLoopSlot.kSlot1);
     if (this.isZeroed) {
+      Distance deltaElevation = desiredHeight.minus(ElevatorConstants.cascadingOffset);
       rightController.setReference(
-          desiredHeight.in(Meters),
+          deltaElevation.in(Inches),
+          // ControlType.kMAXMotionPositionControl,
           ControlType.kPosition,
           ClosedLoopSlot.kSlot1,
-          elevatorFF.calculate(desiredHeight.in(Meters)),
+          elevatorFF.calculate(deltaElevation.in(Inches)),
           ArbFFUnits.kVoltage);
     } else {
       if (this.isZeroing) {
         if (this.rightMotor.getOutputCurrent() > 30) {
           this.desiredHeight = ElevatorConstants.initHeight;
-          encoder.setPosition(ElevatorConstants.initHeight.in(Meters));
+          encoder.setPosition(
+              (ElevatorConstants.initHeight.minus(ElevatorConstants.cascadingOffset)).in(Inches));
           rightController.setReference(0, ControlType.kDutyCycle);
 
           this.isZeroed = true;
@@ -160,19 +174,15 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
 
       // desired height is low and amps are high, chain skipped,
       // that requires to reset...
-      if ((desiredHeight.in(Inches) < 9) && (this.rightMotor.getOutputCurrent() > 30)) {
-        // this.desiredHeightInches = ElevatorConstants.initHeightInches;
-        encoder.setPosition(ElevatorConstants.initHeight.in(Meters));
-        rightController.setReference(0, ControlType.kDutyCycle);
+      // if ((desiredHeight.in(Inches) < 9) && (this.rightMotor.getOutputCurrent() > 30)) {
+      //   // this.desiredHeightInches = ElevatorConstants.initHeightInches;
+      //   encoder.setPosition(ElevatorConstants.initHeight.in(Meters));
+      //   rightController.setReference(0, ControlType.kDutyCycle);
 
-        this.isZeroed = true;
-        this.isZeroing = false;
-      }
+      //   this.isZeroed = true;
+      //   this.isZeroing = false;
+      // }
     }
-  }
-
-  private Distance getElevatorHeight() {
-    return Meters.of(encoder.getPosition());
   }
 
   // Zero the elevator by srunning it reverse until it hits the bottom ---Gently---
@@ -184,7 +194,7 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
 
   @Override
   public Distance getHeight() {
-    Distance retval = Meters.of(encoder.getPosition());
+    Distance retval = (Inches.of(encoder.getPosition())).plus(ElevatorConstants.cascadingOffset);
     return retval;
   }
 
@@ -202,21 +212,27 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
 
   @Override
   public void setHeight(Distance new_height) {
-    desiredHeight =
-        Meters.of(
-            MathUtil.clamp(
-                new_height.in(Meters),
-                ElevatorConstants.minHeight.in(Meters),
-                ElevatorConstants.maxHeight.in(Meters)));
+    desiredHeight = new_height;
+
+    // printf(
+    //     "Setting Height: %f [%f - %f]\n",
+    //     desiredHeight.in(Inches),
+    //     ElevatorConstants.minHeight.in(Inches),
+    //     ElevatorConstants.maxHeight.in(Inches));
   }
 
   @Override
   public void goUp(Distance offset) {
-    desiredHeight.plus(offset);
+    desiredHeight = desiredHeight.plus(offset);
   }
 
   @Override
   public void goDown(Distance offset) {
-    desiredHeight.minus(offset);
+    desiredHeight = desiredHeight.minus(offset);
+  }
+
+  @Override
+  public void setVoltageMainMotor(Voltage voltage) {
+    this.rightMotor.set(voltage.in(Volts) / this.rightMotor.getBusVoltage());
   }
 }

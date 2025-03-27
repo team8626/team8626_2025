@@ -3,13 +3,17 @@ package frc.robot.subsystems.elevator;
 import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Celsius;
 import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.InchesPerSecond;
+import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Volts;
 import static frc.robot.subsystems.elevator.ElevatorConstants.gains;
 
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.units.measure.Temperature;
+import edu.wpi.first.units.measure.Voltage;
 import frc.robot.subsystems.elevator.ElevatorConstants.ElevatorStates.ElevatorState;
 
 /**
@@ -26,15 +30,19 @@ public interface ElevatorInterface {
     protected boolean isEnabled = false;
     protected boolean isZeroed = false;
     protected Distance currentHeight = Inches.of(0); // Inches
+    protected LinearVelocity currentVelocity = InchesPerSecond.of(0); // Inches/Sec
     protected Distance desiredHeight = Inches.of(0); // Inches
     protected Current ampsLeft = Amps.of(0); // Amps
     protected Current ampsRight = Amps.of(0); // Amps
+    protected Voltage voltsLeft = Volts.of(0); // Volts
+    protected Voltage voltsRight = Volts.of(0); // Volts
+
     protected double appliedOutputLeft = 0;
     protected double appliedOutputRight = 0;
     protected Temperature temperatureLeft = Celsius.of(0);
     protected Temperature temperatureRight = Celsius.of(0);
 
-    protected double positionRight = 0;
+    protected Distance absolutePositionRight = Meters.of(0);
     protected LinearVelocity velocityRight = MetersPerSecond.of(0);
     protected double voltageRight = 0;
 
@@ -60,5 +68,5 @@ public interface ElevatorInterface {
   public default void runCharacterization(double input) {}
 
   // For Characterizarion
-  public default void setVoltageMainMotor(double voltage) {}
+  public abstract void setVoltageMainMotor(Voltage voltage);
 }

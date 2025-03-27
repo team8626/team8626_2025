@@ -3,15 +3,14 @@ package frc.robot.subsystems.elevator;
 import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Celsius;
 import static edu.wpi.first.units.Units.Inches;
-import static edu.wpi.first.units.Units.InchesPerSecond;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Volts;
 import static frc.robot.subsystems.elevator.ElevatorConstants.gains;
 
-import com.ctre.phoenix6.SignalLogger;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.subsystems.CS_SubsystemBase;
@@ -107,14 +106,6 @@ public class ElevatorSubsystem extends CS_SubsystemBase {
     values.kD = CS_Utils.updateFromSmartDashboard(newkD, values.kD, (value) -> setkD(value));
 
     SmartDashboard.putData(this);
-
-    // double newHeight = SmartDashboard.getNumber("Subsystem/ElevatorSubsystem/DesiredHeight",
-    // desiredHeight);
-    // if (newHeight != desiredHeight) {
-    //   desiredHeight = newHeight;
-    //   setHeight(newHeight);
-    // }
-    // SmartDashboard.putNumber("Subsystem/ElevatorSubsystem/DesiredHeight", desiredHeight);
   }
 
   @Override
@@ -133,42 +124,13 @@ public class ElevatorSubsystem extends CS_SubsystemBase {
   public void goDown(Distance offset) {
     elevatorInterface.goDown(offset);
   }
-  // private void log(SysIdRoutineLog log) {
-  //   System.out.println("logging");
-  //   log.motor("left")
-  //       .voltage(Voltage.ofRelativeUnits(left`Motor.get() * 12, Volts))
-  //       .linearPosition(Distance.ofRelativeUnits(leftMotor.getEncoder().getPosition(), Inches))
-  //       .linearVelocity(LinearVelocity.ofRelativeUnits(leftMotor.getEncoder().getVelocity(),
-  // InchesPerSecond));
-  //   log.motor("right")
-  //       .voltage(Voltage.ofRelativeUnits(rightMotor.get() * 12, Volts))
-  //       .linearPosition(Distance.ofRelativeUnits(rightMotor.getEncoder().getPosition(), Inches))
-  //       .linearVelocity(LinearVelocity.ofRelativeUnits(rightMotor.getEncoder().getVelocity(),
-  // InchesPerSecond));
-  // }
 
   private final SysIdRoutine sysIdRoutine =
       new SysIdRoutine(
-          new SysIdRoutine.Config(
-              Volts.of(0.5).per(Second),
-              Volts.of(1.5),
-              null,
-              state -> SignalLogger.writeString("SysId_Elevator_State", state.toString())),
+          new SysIdRoutine.Config(Volts.of(0.25).per(Second), Volts.of(7), null, null),
+          // state -> SignalLogger.writeString("SysId_Elevator_State", state.toString())),
           new SysIdRoutine.Mechanism(
-              output -> elevatorInterface.setVoltageMainMotor(output.in(Volts)), null, this));
-
-  private double getRotations() {
-    return values.positionRight; // getPosition().in(Rotations);
-  }
-
-  private double getVelocity() {
-    // return motor1.getVelocity().getValue().in(RotationsPerSecond);
-    return values.velocityRight.in(InchesPerSecond);
-  }
-
-  public double getVolts() {
-    return values.voltageRight;
-  }
+              output -> elevatorInterface.setVoltageMainMotor(output), this::log, this));
 
   public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
     return this.sysIdRoutine.quasistatic(direction);
@@ -176,5 +138,12 @@ public class ElevatorSubsystem extends CS_SubsystemBase {
 
   public Command sysIdDynamic(SysIdRoutine.Direction direction) {
     return this.sysIdRoutine.dynamic(direction);
+  }
+
+  private void log(SysIdRoutineLog log) {
+    log.motor("elevator-right")
+        .voltage(values.voltsRight)
+        .linearPosition(values.absolutePositionRight)
+        .linearVelocity(values.currentVelocity);
   }
 }
