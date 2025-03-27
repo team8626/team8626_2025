@@ -229,6 +229,9 @@ public class SwerveSubsystem extends CS_SubsystemBase {
    *
    * @return A {@link Command} which will run the alignment.
    */
+  public Command aimAtTarget(int index) {
+    return aimAtTarget(camerasIndexed[index]);
+  }
   public Command aimAtTarget(Cameras camera) {
 
     return run(
