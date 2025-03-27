@@ -11,9 +11,9 @@ import edu.wpi.first.math.util.Units;
 public class Presets {
 
   public static final AlgaePreset ALGAE_LOW =
-      new AlgaePreset("LOW", Inches.of(40.5), Degrees.of(200), RPM.of(-1000.0));
+      new AlgaePreset("LOW", Inches.of(36), Degrees.of(200), RPM.of(-1000.0));
   public static final AlgaePreset ALGAE_HIGH =
-      new AlgaePreset("HIGH", Inches.of(55), Degrees.of(190), RPM.of(-1000));
+      new AlgaePreset("HIGH", Inches.of(48), Degrees.of(190), RPM.of(-1000));
   public static final AlgaePreset ALGAE_FLOOR =
       new AlgaePreset("FLOOR", Inches.of(8), Degrees.of(195), RPM.of(-1000));
   public static final AlgaePreset ALGAE_SPIT =
@@ -21,12 +21,12 @@ public class Presets {
   public static final AlgaePreset ALGAE_PROCESS =
       new AlgaePreset("PROCESS", Inches.of(8), Degrees.of(170), RPM.of(500));
   public static final AlgaePreset ALGAE_STOW =
-      new AlgaePreset("STOW", Inches.of(9), Degrees.of(80), RPM.of(0));
+      new AlgaePreset("STOW", Inches.of(8), Degrees.of(80), RPM.of(0));
   public static final AlgaePreset ALGAE_POPSTICLE =
       new AlgaePreset("POPSTICLE", Inches.of(8), Degrees.of(205), RPM.of(0));
 
   public static final AlgaePreset ALGAE_NETFROMREEF =
-      new AlgaePreset("ALGAE_NETFROMREEF", Inches.of(50), Degrees.of(110), RPM.of(1600));
+      new AlgaePreset("ALGAE_NETFROMREEF", Inches.of(45), Degrees.of(110), RPM.of(1600));
   public static final AlgaePreset ALGAE_NETFROM6FT =
       new AlgaePreset("ALGAE_NETFROM6FT", Inches.of(8), Degrees.of(180 - 74), RPM.of(1433));
   public static final AlgaePreset ALGAE_NETFROM10FT =
