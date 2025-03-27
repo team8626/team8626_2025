@@ -171,15 +171,15 @@ public class AlgaeShooterSubsystem extends CS_SubsystemBase {
 
     SmartDashboard.putBoolean("Subsystem/AlgaeShooterSubsystem/isLoaded", values.isLoaded);
 
-    AngularVelocity newRPM =
-        RPM.of(
-            SmartDashboard.getNumber(
-                "Subsystem/AlgaeShooterSubsystem/Shooting RPM",
-                AlgaeShooterConstants.shootRPM.in(RPM)));
-    if (newRPM != DesiredRPM) {
-      updateShooterRPM(newRPM);
-      setShooterRPM(DesiredRPM);
-    }
+    // AngularVelocity newRPM =
+    //     RPM.of(
+    //         SmartDashboard.getNumber(
+    //             "Subsystem/AlgaeShooterSubsystem/Shooting RPM",
+    //             AlgaeShooterConstants.shootRPM.in(RPM)));
+    // if (newRPM != DesiredRPM) {
+    //   updateShooterRPM(newRPM);
+    //   setShooterRPM(DesiredRPM);
+    // }
 
     SmartDashboard.putData(this);
 

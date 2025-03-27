@@ -42,6 +42,7 @@ import frc.robot.commands.setters.groups.ToCoralShoot;
 import frc.robot.commands.setters.groups.ToPathAndCoralIntake;
 import frc.robot.commands.setters.groups.ToPathAndFinkleAndAlgaeShoot;
 import frc.robot.commands.setters.groups.ToPathAndFinkleAndCoralShoot;
+import frc.robot.commands.setters.groups.ToPathAndFinkleAndCoralShootWithOffset;
 import frc.robot.commands.setters.groups.ToPathAndFinleAndAlgaeIntake;
 import frc.robot.commands.setters.groups.ToSubsystemsPreset;
 import frc.robot.commands.setters.units.AlgaeShooterDiscard;
@@ -318,6 +319,11 @@ public class RobotContainer {
                         () -> PresetManager.getAimAndShootPreset(() -> drivebase.getPose()))
                     .onlyIf(() -> algae501.isLoaded())),
             Set.of(elevator, wrist, algae501)));
+    // ---------------------------------------- Start Button
+    //                                          Flip Drivebase directon
+    controller.btn_Back.toggleOnTrue(
+        Commands.defer(
+            (() -> new ToPathAndFinkleAndCoralShootWithOffset()), Set.of(drivebase, mortar)));
 
     // ---------------------------------------- POV UP/DOWN
     //                                          Elevator up/down 1"

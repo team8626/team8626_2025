@@ -34,9 +34,8 @@ public class ToAlgaePresetAndShoot extends SequentialCommandGroup {
 
     addCommands(
         new SequentialCommandGroup(
-                new ParallelCommandGroup(
+                new SequentialCommandGroup(
                     new ToSubsystemsPreset(() -> algaePreset.get()),
-                    new WaitCommand(0.1),
                     new AlgaeShooterRampUp(() -> algaePreset.get().getRPM()) {
                       @Override
                       public void initialize() {

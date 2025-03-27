@@ -63,7 +63,7 @@ public class WristSetAngle extends CS_Command {
 
     Angle currentAngle = wrist.getAngle();
 
-    if (currentAngle.isNear(currentAngle, WristConstants.tolerance)) {
+    if (currentAngle.isNear(desiredAngle, WristConstants.tolerance)) {
       atSetPoint = true;
     }
     SmartDashboard.putBoolean("Commands/WristSetAngle/atSetPoint", atSetPoint);

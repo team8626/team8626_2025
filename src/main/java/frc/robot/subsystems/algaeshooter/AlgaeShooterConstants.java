@@ -11,7 +11,7 @@ import frc.robot.RobotConstants;
 public class AlgaeShooterConstants {
 
   // Tuned Values
-  public static final AngularVelocity shootRPM = RPM.of(2200);
+  // public static final AngularVelocity shootRPM = RPM.of(2200);
   public static final AngularVelocity intakeRPM = RPM.of(-600);
   public static final AngularVelocity discardRPM = RPM.of(600);
   public static final double launcherShootSetpoint = 1.0;

@@ -46,7 +46,7 @@ public class AlgaeShooterRampUp extends CS_Command {
 
   @Override
   public void initialize() {
-    printf("RPM: %f", desiredRPM);
+    printf("RPM: %f", desiredRPM.in(RPM));
 
     Dashboard.setAlgaeState(GamePieceState.RAMPING_UP);
 
@@ -79,7 +79,7 @@ public class AlgaeShooterRampUp extends CS_Command {
 
     leftAtSetpoint =
         Math.abs(Math.abs(currentRPMLeft.in(RPM)) - desiredRPM.in(RPM)) <= RPMTolerance.in(RPM);
-    leftAtSetpoint =
+    rightAtSetpoint =
         Math.abs(Math.abs(currentRPMRight.in(RPM)) - desiredRPM.in(RPM)) <= RPMTolerance.in(RPM);
 
     SmartDashboard.putBoolean("Commands/AlgaeShooterRampUp/leftAtSetPoint", leftAtSetpoint);

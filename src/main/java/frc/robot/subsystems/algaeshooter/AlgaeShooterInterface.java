@@ -67,7 +67,7 @@ public interface AlgaeShooterInterface {
     protected double appliedOutputLauncher = 0;
 
     protected boolean isLoaded = false;
-    protected AngularVelocity desiredRPM = AlgaeShooterConstants.shootRPM;
+    protected AngularVelocity desiredRPM = RPM.of(0);
 
     protected double kP = gains.kP();
     protected double kI = gains.kI();
