@@ -72,7 +72,6 @@ import frc.utils.CS_XboxController;
 import java.io.File;
 import java.util.Set;
 import java.util.function.Supplier;
-import org.littletonrobotics.frc2024.commands.FeedForwardCharacterization;
 
 public class RobotContainer {
   // Singleton instance
@@ -302,24 +301,15 @@ public class RobotContainer {
   // ----------------------------------------------------------------------------------
   private void configureOperatorBindings(CS_XboxController controller) {
 
-    Trigger sysIdQuasistatic = controller.btn_Start;
-    Trigger sysIdDynamic = controller.btn_Back;
-    Trigger sysIdForward = controller.btn_A;
-    Trigger sysIdBack = controller.btn_B;
+    // Trigger sysIdQuasistatic = controller.btn_Start;
+    // Trigger sysIdDynamic = controller.btn_Back;
+    // Trigger sysIdForward = controller.btn_A;
+    // Trigger sysIdBack = controller.btn_B;
 
-    // sysIdQuasistatic.and(sysIdForward).whileTrue(swerve.sysIdQuasistatic(Direction.kForward));
-    // sysIdQuasistatic.and(sysIdBack).whileTrue(swerve.sysIdQuasistatic(Direction.kReverse));
-    // sysIdDynamic.and(sysIdForward).whileTrue(swerve.sysIdDynamic(Direction.kForward));
-    // sysIdDynamic.and(sysIdBack).whileTrue(swerve.sysIdDynamic(Direction.kReverse));
-
-    // Supplier<Pose2d> targetPose =
-    //     () -> PresetManager.getRobotPoseFromTarget(CORAL_BRANCH.G, CORAL_LEVEL.L4, 0);
-    // Supplier<Pose2d> offsetPose =
-    //     () -> PresetManager.getRobotPoseFromTarget(CORAL_BRANCH.G, CORAL_LEVEL.L4, 12);
-
-    // controller.btn_Y.toggleOnTrue(new Auto_G());
-    // controller.btn_A.toggleOnTrue(new DriveToPoseFinkle(offsetPose));
-    // controller.btn_B.toggleOnTrue(new DriveToPoseFinkle(targetPose));
+    // sysIdQuasistatic.and(sysIdForward).whileTrue(elevator.sysIdQuasistatic(Direction.kForward));
+    // sysIdQuasistatic.and(sysIdBack).whileTrue(elevator.sysIdQuasistatic(Direction.kReverse));
+    // sysIdDynamic.and(sysIdForward).whileTrue(elevator.sysIdDynamic(Direction.kForward));
+    // sysIdDynamic.and(sysIdBack).whileTrue(elevator.sysIdDynamic(Direction.kReverse));
 
     controller.btn_Y.toggleOnTrue(
         Commands.defer(
@@ -365,98 +355,9 @@ public class RobotContainer {
   //           +-----------------+
   //
   // ----------------------------------------------------------------------------------
-  private void configureButtonBoxBindings(CS_ButtonBoxController controller) {
+  private void configureButtonBoxBindings(CS_ButtonBoxController controller) {}
 
-    // Supplier<Pose2d> targetPose = () -> PresetManager.getCoralPreset().getPose();
-    // Supplier<Pose2d> offsetPose =
-    //     () ->
-    //         PresetManager.getCoralPreset()
-    //             .getPose()
-    //             .plus(new Transform2d(Units.inchesToMeters(36), 0, new Rotation2d()));
-
-    // controller.btn_1.toggleOnTrue(
-    //     new FollowPathToPose(() -> PresetManager.getCoralPreset().getPose(), () -> 36)
-    //         .andThen(new DriveToPoseFinkle(() -> PresetManager.getCoralPreset().getPose()))
-    //         .andThen(new ToCoralShoot3()));
-
-    // controller.btn_2.toggleOnTrue(
-    //     new FollowPathToPose(() -> PresetManager.getCoralPreset().getPose(), () -> 36));
-
-    // controller.btn_3.toggleOnTrue(
-    //     new DriveToPoseFinkle(() -> PresetManager.getCoralPreset().getPose())
-    //         .andThen(new ToCoralShoot3()));
-
-    // controller.btn_4.toggleOnTrue(
-    //     Commands.defer((() -> new ToPathAndFinkleAndCoralShoot()), Set.of(drivebase, mortar)));
-
-    // controller.btn_5.toggleOnTrue(new FollowPathToPose(offsetPose));
-
-    // controller.btn_6.toggleOnTrue(new DriveToPoseFinkle(targetPose).andThen(new
-    // ToCoralShoot3()));
-
-    // Pose2d testPose = new Pose2d(3, 2, new Rotation2d(Units.degreesToRadians(-120)));
-    // controller.btn_9.toggleOnTrue(new DriveToPoseFinkle(() -> testPose));
-
-    // controller.btn_2.toggleOnTrue(
-    //     new DriveToPoseFinkle(() -> PresetManager.getCoralPreset().getPose(), true));
-
-    // controller.btn_3.toggleOnTrue(
-    //     drivebase.driveToPose(() -> PresetManager.getCoralPreset().getPose(24)));
-
-    // controller.btn_4.toggleOnTrue(
-    //     new ToSubsystemsPreset(() -> Presets.ALGAE_Test1)
-    //         .andThen(new ToAlgaeShoot(() -> Presets.ALGAE_Test1.getRPM()))
-    //         .onlyIf(algae501::isLoaded)
-    //         .finallyDo(
-    //             interrupted -> {
-    //               new ToSubsystemsPreset(() -> Presets.ALGAE_STOW).schedule();
-    //             }));
-
-    // controller.btn_5.toggleOnTrue(
-    //     drivebase
-    //         .driveToPose(() -> PresetManager.getCoralPreset().getPose(24))
-    //         // .andThen(drivebase.reset())
-    //         .andThen(new DriveToPoseFinkle(() -> PresetManager.getCoralPreset().getPose(), true))
-    //         .andThen(new ToCoralShoot3()));
-
-    // controller.btn_7.toggleOnTrue(
-    //     new ToSubsystemsPreset(() -> Presets.ALGAE_Test2)
-    //         .andThen(new ToAlgaeShoot(() -> Presets.ALGAE_Test2.getRPM()))
-    //         .onlyIf(algae501::isLoaded)
-    //         .finallyDo(
-    //             interrupted -> {
-    //               new ToSubsystemsPreset(() -> Presets.ALGAE_STOW).schedule();
-    //             }));
-
-    // controller.btn_8.toggleOnTrue(
-    //     new ToSubsystemsPreset(() -> Presets.ALGAE_Test3)
-    //         .andThen(new ToAlgaeShoot(() -> Presets.ALGAE_Test3.getRPM()))
-    //         .onlyIf(algae501::isLoaded)
-    //         .finallyDo(
-    //             interrupted -> {
-    //               new ToSubsystemsPreset(() -> Presets.ALGAE_STOW).schedule();
-    //             }));
-    // controller.btn_9.toggleOnTrue(
-    //     new ToSubsystemsPreset(() -> Presets.ALGAE_Test4)
-    //         .andThen(new ToAlgaeShoot(() -> Presets.ALGAE_Test4.getRPM()))
-    //         .onlyIf(algae501::isLoaded)
-    //         .finallyDo(
-    //             interrupted -> {
-    //               new ToSubsystemsPreset(() -> Presets.ALGAE_STOW).schedule();
-    //             }));
-  }
-
-  private void configureTestButtonBoxBindings(CS_ButtonBoxController controller) {
-    controller.btn_7.toggleOnTrue(
-        new FeedForwardCharacterization(
-            mortar, mortar::runCharacterizationLeft, mortar::getCharacterizationVelocityLeft));
-    controller.btn_8.toggleOnTrue(
-        new FeedForwardCharacterization(
-            mortar, mortar::runCharacterizationRight, mortar::getCharacterizationVelocityRight));
-    controller.btn_9.toggleOnTrue(
-        new FeedForwardCharacterization(
-            algae501, algae501::runCharacterization, algae501::getCharacterizationVelocity));
-  }
+  private void configureTestButtonBoxBindings(CS_ButtonBoxController controller) {}
 
   private void configureDefaultCommands() {
     drivebase.setDefaultCommand(driverController);

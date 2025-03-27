@@ -121,11 +121,11 @@ public class Wrist_SparkFlex implements WristInterface, CS_InterfaceBase {
 
   @Override
   public void goUp(Angle offset) {
-    desiredAngle.plus(offset);
+    desiredAngle = desiredAngle.plus(offset);
   }
 
   @Override
   public void goDown(Angle offset) {
-    desiredAngle.minus(offset);
+    desiredAngle = desiredAngle.minus(offset);
   }
 }

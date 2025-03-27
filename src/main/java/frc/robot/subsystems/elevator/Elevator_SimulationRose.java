@@ -5,6 +5,7 @@ import static edu.wpi.first.units.Units.Meters;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.units.measure.Voltage;
 import frc.robot.subsystems.CS_InterfaceBase;
 import frc.robot.subsystems.elevator.ElevatorConstants.ElevatorStates.ElevatorState;
 
@@ -63,4 +64,10 @@ public class Elevator_SimulationRose implements ElevatorInterface, CS_InterfaceB
 
   @Override
   public void reset() {}
+
+  @Override
+  public void setVoltageMainMotor(Voltage voltage) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'setVoltageMainMotor'");
+  }
 }
