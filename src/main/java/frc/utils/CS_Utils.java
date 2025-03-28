@@ -6,6 +6,7 @@
 
 package frc.utils;
 
+import edu.wpi.first.units.measure.Distance;
 import java.util.function.Consumer;
 
 /**
@@ -41,5 +42,17 @@ public class CS_Utils {
       retVal = newValue;
     }
     return retVal;
+  }
+
+  public static Distance clamp(Distance value, Distance low, Distance high) {
+    return max(low, max(value, high));
+  }
+
+  public static Distance max(Distance a, Distance b) {
+    return a.gt(b) ? a : b;
+  }
+
+  public static Distance min(Distance a, Distance b) {
+    return a.lt(b) ? a : b;
   }
 }
