@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Commodore;
 import frc.robot.Commodore.CommodoreState;
 import frc.robot.RobotConstants;
-import frc.robot.commands.setters.units.DriveToPoseFinkle;
+import frc.robot.commands.setters.units.DriveToPoseFinkle2;
 import frc.robot.subsystems.presets.CoralPreset;
 import frc.robot.subsystems.presets.PresetManager;
 import java.util.function.Supplier;
@@ -31,15 +31,18 @@ public class ToPathAndFinkleAndCoralShootWithOffset extends SequentialCommandGro
       () ->
           Inches.of(
               SmartDashboard.getNumber(
-                  "Commands/ToPathAndFinkleAndCoralShootWithOffset/OffsetDistance(in)", 1));
+                  "Commands/ToPathAndFinkleAndCoralShootWithOffset/OffsetDistance(in)", 7));
 
-  Supplier<Pose2d> targetPose =
-      () ->
-          PresetManager.getCoralPreset()
-              .get()
-              .getPose()
-              .plus(new Transform2d(shootOffset.get().in(Meters), 0, new Rotation2d()));
+  Supplier<Pose2d> targetPose = () -> PresetManager.getCoralPreset().get().getPose();
 
+  Supplier<Pose2d> shootPose =
+      () -> {
+        System.out.println("************ Offset " + shootOffset.get());
+        return PresetManager.getCoralPreset()
+            .get()
+            .getPose()
+            .plus(new Transform2d(shootOffset.get().in(Meters), 0, new Rotation2d()));
+      };
   Supplier<Pose2d> offsetPose =
       () ->
           PresetManager.getCoralPreset()
@@ -58,7 +61,7 @@ public class ToPathAndFinkleAndCoralShootWithOffset extends SequentialCommandGro
             .finallyDo((interrupted) -> Commodore.setCommodoreState(CommodoreState.IDLE)),
 
         // Drive to Target Pose
-        new DriveToPoseFinkle(targetPose).onlyIf(() -> !targetPose.get().equals(new Pose2d())),
+        new DriveToPoseFinkle2(shootPose).onlyIf(() -> !targetPose.get().equals(new Pose2d())),
 
         // Coral Shoot
         new ToCoralShoot(coralPreset));

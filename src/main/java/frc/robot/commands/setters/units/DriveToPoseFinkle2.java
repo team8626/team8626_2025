@@ -7,6 +7,7 @@ package frc.robot.commands.setters.units;
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.DegreesPerSecond;
 import static edu.wpi.first.units.Units.DegreesPerSecondPerSecond;
+import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.MetersPerSecondPerSecond;
@@ -16,6 +17,8 @@ import static edu.wpi.first.units.Units.RadiansPerSecondPerSecond;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -35,7 +38,7 @@ import frc.robot.commands.CS_Command;
 import frc.robot.subsystems.drive.SwerveSubsystem;
 import java.util.function.Supplier;
 
-public class DriveToPoseFinkle extends CS_Command {
+public class DriveToPoseFinkle2 extends CS_Command {
 
   private final SwerveSubsystem m_drive;
 
@@ -60,6 +63,7 @@ public class DriveToPoseFinkle extends CS_Command {
   private AngularAcceleration defaultRotationMaxAcceleration = DegreesPerSecondPerSecond.of(360);
 
   private static final Distance defaultPositionTolerance = Meters.of(0.025);
+  private static final Distance defaultPoseOffsetX = Inches.of(1);
   private static final LinearVelocity defaultPositionVelocityTolerance = MetersPerSecond.of(0.03);
   private static final Angle defaultRotationTolerance = Degrees.of(2.0);
   private static final AngularVelocity defaultRotationVelocityTolerance = DegreesPerSecond.of(5.0);
@@ -81,11 +85,34 @@ public class DriveToPoseFinkle extends CS_Command {
 
   private Distance positionTolerance = defaultPositionTolerance;
   private Angle rotationTolerance = defaultRotationTolerance;
+  private Distance positionOffsetX = defaultPoseOffsetX;
 
-  public DriveToPoseFinkle(Supplier<Pose2d> desiredPoseSupplier) {
-    this(desiredPoseSupplier, () -> defaultPositionTolerance, () -> defaultRotationTolerance);
+  public DriveToPoseFinkle2(Supplier<Pose2d> desiredPoseSupplier) {
+    this(
+        desiredPoseSupplier,
+        () -> defaultPoseOffsetX,
+        () -> defaultPositionTolerance,
+        () -> defaultRotationTolerance);
   }
 
+  public DriveToPoseFinkle2(Supplier<Pose2d> desiredPoseSupplier, Supplier<Distance> offset) {
+    this(
+        desiredPoseSupplier,
+        offset,
+        () -> defaultPositionTolerance,
+        () -> defaultRotationTolerance);
+  }
+
+  public DriveToPoseFinkle2(
+      Supplier<Pose2d> desiredPoseSupplier,
+      Supplier<Distance> new_positionTolerance,
+      Supplier<Angle> new_rotationTolerance) {
+    this(
+        desiredPoseSupplier,
+        () -> defaultPoseOffsetX,
+        () -> defaultPositionTolerance,
+        () -> defaultRotationTolerance);
+  }
   /**
    * Creates a new DriveToPoseFinkle command.
    *
@@ -93,18 +120,20 @@ public class DriveToPoseFinkle extends CS_Command {
    * @param posToleranceSupplier as a Distance
    * @param new_rotationTolerance as an Angle
    */
-  public DriveToPoseFinkle(
+  public DriveToPoseFinkle2(
       Supplier<Pose2d> desiredPoseSupplier,
+      Supplier<Distance> offset,
       Supplier<Distance> new_positionTolerance,
       Supplier<Angle> new_rotationTolerance) {
     m_drive = RobotContainer.drivebase;
 
     positionTolerance = new_positionTolerance.get();
     rotationTolerance = new_rotationTolerance.get();
+    positionOffsetX = offset.get();
 
     m_desiredPoseSupplier = desiredPoseSupplier;
 
-    setName("DRIVETOPOSEFINKLE");
+    setName("DRIVETOPOSEFINKLE2");
 
     targetPosePub.set(new Pose2d());
     currentPosePub.set(new Pose2d());
@@ -127,13 +156,19 @@ public class DriveToPoseFinkle extends CS_Command {
     if (hasValidPose == true) {
       Commodore.setCommodoreState(CommodoreState.DRIVE_FINKLE);
       m_pose = m_drive.getPose();
+      updatePositionValues();
 
-      targetPosePub.set(m_desiredPoseSupplier.get());
+      Pose2d offsetPose =
+          m_desiredPoseSupplier
+              .get()
+              .plus(new Transform2d(positionOffsetX.in(Meters), 0, new Rotation2d()));
+
+      targetPosePub.set(offsetPose);
       currentPosePub.set(m_pose);
 
-      m_xDesiredPos = m_desiredPoseSupplier.get().getX();
-      m_yDesiredPos = m_desiredPoseSupplier.get().getY();
-      m_desiredRotRadians = m_desiredPoseSupplier.get().getRotation().getRadians();
+      m_xDesiredPos = offsetPose.getX();
+      m_yDesiredPos = offsetPose.getY();
+      m_desiredRotRadians = offsetPose.getRotation().getRadians();
 
       Commands.print("(" + m_xDesiredPos + "  " + m_yDesiredPos + ")").schedule();
 
@@ -334,5 +369,11 @@ public class DriveToPoseFinkle extends CS_Command {
         new TrapezoidProfile.Constraints(
             newRotMaxVelocity.in(RadiansPerSecond),
             newRotMaxAcceleration.in(RadiansPerSecondPerSecond)));
+  }
+
+  private void updatePositionValues() {
+
+    positionOffsetX =
+        Inches.of(SmartDashboard.getNumber("Commands/DriveToPoseFinkle/OffsetDistance(in)", 7));
   }
 }

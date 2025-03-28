@@ -88,14 +88,14 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "PrepareRampUp",
-      "waypointRelativePos": 0.5256511444356651,
+      "name": "PrepareShootLow",
+      "waypointRelativePos": 0.5256511444356771,
       "endWaypointRelativePos": null,
       "command": null
     },
     {
-      "name": "PrepareShootLow",
-      "waypointRelativePos": 0.5256511444356771,
+      "name": "PrepareRampUp",
+      "waypointRelativePos": 0.53,
       "endWaypointRelativePos": null,
       "command": null
     },

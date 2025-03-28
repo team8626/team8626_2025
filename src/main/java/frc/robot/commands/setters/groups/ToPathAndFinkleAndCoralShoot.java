@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Commodore;
 import frc.robot.Commodore.CommodoreState;
 import frc.robot.RobotConstants;
-import frc.robot.commands.setters.units.DriveToPoseFinkle;
+import frc.robot.commands.setters.units.DriveToPoseFinkle2;
 import frc.robot.subsystems.presets.CoralPreset;
 import frc.robot.subsystems.presets.PresetManager;
 import java.util.function.Supplier;
@@ -41,7 +41,7 @@ public class ToPathAndFinkleAndCoralShoot extends SequentialCommandGroup {
             .finallyDo((interrupted) -> Commodore.setCommodoreState(CommodoreState.IDLE)),
 
         // Drive to Target Pose
-        new DriveToPoseFinkle(targetPose).onlyIf(() -> !targetPose.get().equals(new Pose2d())),
+        new DriveToPoseFinkle2(targetPose).onlyIf(() -> !targetPose.get().equals(new Pose2d())),
 
         // Coral Shoot
         new ToCoralShoot(coralPreset));

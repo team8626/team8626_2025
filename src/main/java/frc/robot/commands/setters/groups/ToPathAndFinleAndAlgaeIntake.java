@@ -13,7 +13,7 @@ import frc.robot.Commodore;
 import frc.robot.Commodore.CommodoreState;
 import frc.robot.RobotConstants;
 import frc.robot.commands.setters.units.AlgaeShooterIntake;
-import frc.robot.commands.setters.units.DriveToPoseFinkle;
+import frc.robot.commands.setters.units.DriveToPoseFinkle2;
 import frc.robot.subsystems.presets.AlgaePreset;
 import frc.robot.subsystems.presets.PresetManager;
 import frc.robot.subsystems.presets.Presets;
@@ -47,14 +47,14 @@ public class ToPathAndFinleAndAlgaeIntake extends SequentialCommandGroup {
                 new ToSubsystemsPreset(algaePreset),
 
                 // Drive to Target Pose
-                new DriveToPoseFinkle(targetPose, () -> Inches.of(2), () -> Degrees.of(5))
+                new DriveToPoseFinkle2(targetPose, () -> Inches.of(2), () -> Degrees.of(5))
                     .onlyIf(() -> !targetPose.get().equals(new Pose2d())),
 
                 // Algae Intake
                 new AlgaeShooterIntake(() -> algaePreset.get().getRPM()),
 
                 // Drive Away
-                new DriveToPoseFinkle(offsetPose, () -> Inches.of(6), () -> Degrees.of(10))
+                new DriveToPoseFinkle2(offsetPose, () -> Inches.of(6), () -> Degrees.of(10))
                     .onlyIf(() -> !targetPose.get().equals(new Pose2d())),
 
                 // Stow

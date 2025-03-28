@@ -70,7 +70,7 @@ public class SwerveSubsystem extends CS_SubsystemBase {
   protected final SwerveDrive swerveDrive;
   /** AprilTag field layout. */
   private final AprilTagFieldLayout aprilTagFieldLayout =
-      AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
+      AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark);
   /** Enable vision odometry updates while driving. */
   private final boolean visionDriveTest = true;
   /** PhotonVision class to keep an accurate odometry. */

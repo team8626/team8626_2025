@@ -12,7 +12,6 @@ import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.RadiansPerSecondPerSecond;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularAcceleration;
@@ -31,9 +30,6 @@ public class DriveTurnToAngle extends CS_Command {
   private final ProfiledPIDController rotPIDController =
       new ProfiledPIDController(0, 0, 0, new TrapezoidProfile.Constraints(0, 0));
 
-  private Supplier<Pose2d> m_desiredPoseSupplier;
-  private Pose2d m_pose;
-
   private Supplier<Angle> desiredAngle = () -> Degrees.of(0);
 
   private AngularVelocity defaultRotationMaxVelocity = DegreesPerSecond.of(720);
@@ -42,7 +38,7 @@ public class DriveTurnToAngle extends CS_Command {
   private static final Angle defaultRotationTolerance = Degrees.of(2.0);
   private static final AngularVelocity defaultRotationVelocityTolerance = DegreesPerSecond.of(5.0);
 
-  private double defaultRotP = 5;
+  private double defaultRotP = 0.5;
 
   private Supplier<Angle> rotationTolerance = () -> defaultRotationTolerance;
 
@@ -69,7 +65,6 @@ public class DriveTurnToAngle extends CS_Command {
   @Override
   public void initialize() {
     // m_drive.resetOdometry();
-
     Commodore.setCommodoreState(CommodoreState.DRIVE_FINKLE);
 
     rotPIDController.setPID(defaultRotP, 0, 0);
@@ -81,7 +76,7 @@ public class DriveTurnToAngle extends CS_Command {
             defaultRotationMaxAcceleration.in(RadiansPerSecondPerSecond)));
 
     // Reset the PID controllers
-    rotPIDController.reset(m_pose.getRotation().getRadians());
+    rotPIDController.reset(drive.getPose().getRotation().getRadians());
     rotPIDController.enableContinuousInput(-Math.PI, Math.PI);
   }
 

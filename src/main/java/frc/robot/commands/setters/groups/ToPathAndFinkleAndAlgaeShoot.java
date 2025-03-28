@@ -17,7 +17,7 @@ import frc.robot.RobotContainer;
 import frc.robot.commands.setters.units.AlgaeShooterLaunch;
 import frc.robot.commands.setters.units.AlgaeShooterRampUp;
 import frc.robot.commands.setters.units.AlgaeShooterStop;
-import frc.robot.commands.setters.units.DriveToPoseFinkle;
+import frc.robot.commands.setters.units.DriveToPoseFinkle2;
 import frc.robot.subsystems.Dashboard;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterSubsystem;
 import frc.robot.subsystems.presets.AlgaePreset;
@@ -57,7 +57,7 @@ public class ToPathAndFinkleAndAlgaeShoot extends SequentialCommandGroup {
                 // Drive to Target Pose while setting subsystems
                 new ParallelCommandGroup(
                     // Drive to Target Pose
-                    new SequentialCommandGroup(new DriveToPoseFinkle(targetPose))
+                    new SequentialCommandGroup(new DriveToPoseFinkle2(targetPose))
                         .onlyIf(() -> !targetPose.get().equals(new Pose2d())),
 
                     // Adjust Subsystems & Start Rampup

@@ -31,8 +31,6 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
 
   private Distance desiredHeight = ElevatorConstants.minHeight;
 
-  private Distance desiredHeight = ElevatorConstants.minHeight;
-
   private final SparkMax rightMotor;
   private final SparkMax leftMotor;
   private final SparkMaxConfig rightConfig;

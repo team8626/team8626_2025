@@ -115,7 +115,6 @@ public class ElevatorSubsystem extends CS_SubsystemBase {
 
   public double getCharacterization() {
     return values.currentHeight.in(Meters);
-    return values.currentHeight.in(Meters);
   }
 
   public void goUp(Distance offset) {

@@ -5,11 +5,6 @@ import static edu.wpi.first.units.Units.Celsius;
 import static edu.wpi.first.units.Units.RPM;
 
 import edu.wpi.first.units.measure.AngularVelocity;
-import static edu.wpi.first.units.Units.Amps;
-import static edu.wpi.first.units.Units.Celsius;
-import static edu.wpi.first.units.Units.RPM;
-
-import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.CS_SubsystemBase;
 import frc.robot.subsystems.coralshooter.CoralShooterInterface.CoralShooterValues;
@@ -138,7 +133,9 @@ public class CoralShooterSubsystem extends CS_SubsystemBase {
     SmartDashboard.putNumber("Commands/CoralShooterRampUp/ForcedRMPLeft", 1275);
     SmartDashboard.putNumber("Commands/CoralShooterRampUp/ForcedRMPRight", 1275);
     SmartDashboard.putNumber(
-        "Commands/ToPathAndFinkleAndCoralShootWithOffset/OffsetDistance(in)", 2.0);
+        "Commands/ToPathAndFinkleAndCoralShootWithOffset/OffsetDistance(in)", 7.0);
+    SmartDashboard.putNumber("Commands/DriveToPoseFinkle/OffsetDistance(in)", 7.0);
+
     SmartDashboard.putNumber("Subsystem/PresetManager/AimPreset/rmpErrorMultiplier", 1.0);
     SmartDashboard.putNumber("Subsystem/PresetManager/AimPreset/angleAdjust(deg)", 0);
   }

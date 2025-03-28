@@ -6,6 +6,9 @@
 
 package frc.robot.commands.setters.groups;
 
+import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Inches;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -14,6 +17,7 @@ import frc.robot.Commodore.CommodoreState;
 import frc.robot.RobotConstants;
 import frc.robot.RobotContainer;
 import frc.robot.commands.setters.units.CoralShooterIntake;
+import frc.robot.commands.setters.units.DriveToPoseFinkle2;
 import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
 import frc.robot.subsystems.presets.PresetManager;
 import java.util.function.Supplier;
@@ -33,6 +37,10 @@ public class ToPathAndCoralIntake extends SequentialCommandGroup {
                 Commodore.getSetStateCommand(CommodoreState.IDLE))
             .onlyIf(() -> !targetPose.get().equals(new Pose2d()) && !mortar.isLoaded())
             .finallyDo((interrupted) -> Commodore.setCommodoreState(CommodoreState.IDLE)),
+
+        // Drive to Target Pose
+        new DriveToPoseFinkle2(targetPose, () -> Inches.of(1), () -> Degrees.of(5))
+            .onlyIf(() -> !targetPose.get().equals(new Pose2d())),
 
         // Coral Intake
         new CoralShooterIntake().onlyIf(() -> !mortar.isLoaded()),

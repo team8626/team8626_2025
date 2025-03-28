@@ -54,15 +54,11 @@ public interface ElevatorInterface {
   public default void updateInputs(ElevatorValues values) {}
 
   public abstract Distance getHeight();
-  public abstract Distance getHeight();
 
-  public abstract void goUp(Distance offset);
   public abstract void goUp(Distance offset);
 
   public abstract void goDown(Distance offset);
-  public abstract void goDown(Distance offset);
 
-  public abstract void setHeight(Distance height);
   public abstract void setHeight(Distance height);
 
   default void setPID(double kP, double kI, double kD) {}
