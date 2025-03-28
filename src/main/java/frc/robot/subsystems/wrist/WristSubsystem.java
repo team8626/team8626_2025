@@ -19,7 +19,6 @@ public class WristSubsystem extends CS_SubsystemBase {
 
     this.wristInterface = subsystem_interface;
     values = new WristValues();
-    println("Created");
   }
 
   // Calls to the wrist interface
