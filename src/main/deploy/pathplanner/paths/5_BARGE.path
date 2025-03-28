@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.753607954545455,
-        "y": 6.632571022727273
+        "x": 6.193710931733792,
+        "y": 5.301862837767043
       },
       "isLocked": false,
       "linkedName": null
@@ -20,8 +20,8 @@
         "y": 6.293536931818181
       },
       "prevControl": {
-        "x": 6.7906534090909085,
-        "y": 6.243678977272728
+        "x": 6.6154218413122425,
+        "y": 6.299195833084014
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,7 +30,18 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "pointTowardsZones": [],
+  "pointTowardsZones": [
+    {
+      "fieldPosition": {
+        "x": 0.4,
+        "y": 5.5
+      },
+      "rotationOffset": 135.0,
+      "minWaypointRelativePos": 0.25,
+      "maxWaypointRelativePos": 0.75,
+      "name": "PointToBarge"
+    }
+  ],
   "eventMarkers": [
     {
       "name": "PrepareShootLow",
@@ -41,6 +52,12 @@
     {
       "name": "PrepareRampUp",
       "waypointRelativePos": 0.1325966850828675,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
+      "name": "ShootIt",
+      "waypointRelativePos": 1.0,
       "endWaypointRelativePos": null,
       "command": null
     }
@@ -55,13 +72,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -42.939888976276876
+    "rotation": -45.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -120.25643716352921
+    "rotation": -119.99999999999999
   },
   "useDefaultConstraints": true
 }

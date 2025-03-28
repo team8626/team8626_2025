@@ -8,68 +8,59 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.638653846153845,
-        "y": 4.025
+        "x": 6.876488275153644,
+        "y": 3.9455360203812653
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.268205128205127,
-        "y": 4.004358974358975
+        "x": 7.2396281124444615,
+        "y": 4.431242852246712
       },
       "prevControl": {
-        "x": 7.277950814839703,
-        "y": 3.6924970020525545
+        "x": 7.237351184165104,
+        "y": 4.181253221266524
       },
       "nextControl": {
-        "x": 7.2372435897435885,
-        "y": 4.995128205128205
+        "x": 7.247631227473885,
+        "y": 5.309924798900699
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.268205128205127,
-        "y": 5.717564102564102
+        "x": 6.954465284092039,
+        "y": 5.799741863495035
       },
       "prevControl": {
-        "x": 7.3235086778241545,
-        "y": 5.360604827750381
+        "x": 7.158683859530002,
+        "y": 5.65553793343039
       },
       "nextControl": {
-        "x": 7.154679487179488,
-        "y": 6.450320512820513
+        "x": 6.750246708654076,
+        "y": 5.94394579355968
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.33826923076923,
-        "y": 5.273782051282051
+        "x": 5.464623842592593,
+        "y": 5.607922092013889
       },
       "prevControl": {
-        "x": 5.782051282051282,
-        "y": 5.573076923076924
+        "x": 6.498376844720346,
+        "y": 5.349617553251541
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 1.0,
-      "rotationDegrees": 24.898797315498115
-    },
-    {
-      "waypointRelativePos": 2.0,
-      "rotationDegrees": 27.699472808055045
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [
     {
       "name": "Constraints Zone",
@@ -85,23 +76,34 @@
       }
     }
   ],
-  "pointTowardsZones": [],
+  "pointTowardsZones": [
+    {
+      "fieldPosition": {
+        "x": 0.4,
+        "y": 5.5
+      },
+      "rotationOffset": -135.0,
+      "minWaypointRelativePos": 0.5715323920265784,
+      "maxWaypointRelativePos": 1.985997196843856,
+      "name": "PointToBarge"
+    }
+  ],
   "eventMarkers": [
     {
       "name": "PrepareShootLow",
-      "waypointRelativePos": 0.5256511444356771,
+      "waypointRelativePos": 0.13264379152823924,
       "endWaypointRelativePos": null,
       "command": null
     },
     {
       "name": "PrepareRampUp",
-      "waypointRelativePos": 0.53,
+      "waypointRelativePos": 0.5906094269102992,
       "endWaypointRelativePos": null,
       "command": null
     },
     {
       "name": "ShootIt",
-      "waypointRelativePos": 1.3496448303078208,
+      "waypointRelativePos": 1.340064368770765,
       "endWaypointRelativePos": null,
       "command": null
     }

@@ -42,6 +42,7 @@ public class RobotConstants {
   public static boolean tracesEnabled = true;
   public static boolean tuningEnabled = false; // DO NOT COMMIT WHILE ENABLED
   public static boolean disableHAL = false;
+  public static boolean useWhileTrueControls = true;
 
   // PathFinding Constants
   public static final PathConstraints PATH_CONSTRAINTS =
