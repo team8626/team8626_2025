@@ -25,6 +25,8 @@ public interface CoralShooterInterface {
 
   boolean isLoaded();
 
+  boolean hasCoral();
+
   AngularVelocity getRPMLeft();
 
   AngularVelocity getRPMRight();
@@ -68,6 +70,8 @@ public interface CoralShooterInterface {
     protected double appliedOutputLauncher = 0;
 
     protected boolean isLoaded = false;
+    protected boolean coralDetected = false;
+
     protected AngularVelocity desiredRPMLeft;
     protected AngularVelocity desiredRPMRight;
 

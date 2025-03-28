@@ -47,7 +47,8 @@ public class CoralShooter_SparkMax implements CoralShooterInterface, CS_Interfac
   SimpleMotorFeedforward shooterFFRight =
       new SimpleMotorFeedforward(gainsRight.kS(), gainsRight.kV(), gainsRight.kA());
 
-  private DigitalInput loadedSensor = new DigitalInput(CoralShooterConstants.lidarPort);
+  private DigitalInput loadedSensor = new DigitalInput(CoralShooterConstants.lidarPortBottom);
+  private DigitalInput coralSensor = new DigitalInput(CoralShooterConstants.lidarPortTop);
 
   // private AnalogInput leftSensor = new AnalogInput(CoralShooterConstants.leftUSPort);
   // private AnalogInput rightSensor = new AnalogInput(CoralShooterConstants.rightUSPort);
@@ -247,6 +248,11 @@ public class CoralShooter_SparkMax implements CoralShooterInterface, CS_Interfac
   @Override
   public boolean isLoaded() {
     return !loadedSensor.get();
+  }
+
+  @Override
+  public boolean hasCoral() {
+    return !coralSensor.get();
   }
 
   @Override

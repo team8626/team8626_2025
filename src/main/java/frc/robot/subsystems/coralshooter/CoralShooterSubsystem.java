@@ -71,6 +71,10 @@ public class CoralShooterSubsystem extends CS_SubsystemBase {
     return coralShooterInterface.isLoaded();
   }
 
+  public boolean hasCoral() {
+    return coralShooterInterface.hasCoral();
+  }
+
   public void setPIDLeft(double newkP, double newkI, double newkD) {
     coralShooterInterface.setPIDLeft(newkP, newkI, newkD);
   }
@@ -211,6 +215,8 @@ public class CoralShooterSubsystem extends CS_SubsystemBase {
         "Subsystem/CoralShooterSubsystem/LauncherappliedOutputAmps", values.appliedOutputLauncher);
 
     SmartDashboard.putBoolean("Subsystem/CoralShooterSubsystem/IsLoaded", values.isLoaded);
+    SmartDashboard.putBoolean(
+        "Subsystem/CoralShooterSubsystem/CoralDetected", values.coralDetected);
 
     SmartDashboard.putNumber(
         "Subsystem/CoralShooterSubsystem/ShootingRPMLeft", shootingRPMLeft.in(RPM));

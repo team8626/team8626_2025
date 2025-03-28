@@ -45,9 +45,8 @@ public class CoralShooterConstants {
       new FlywheelConfig(3, 0, (1.0 / 1.0), 2 * momentOfInertia, 6000.0);
 
   // Lidar Port (Sensor to check if the CORAL is loaded)
-  public static final int lidarPort = 0; // DIO
-  public static final int leftUSPort = 1; // Analog
-  public static final int rightUSPort = 2; // Analog
+  public static final int lidarPortBottom = 0; // DIO
+  public static final int lidarPortTop = 2; // DIO
 
   public static double usScaleFactor = 5 * 1 / (5. / 1024.); // scale converting voltage to distance
 
