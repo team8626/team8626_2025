@@ -39,8 +39,8 @@ import frc.robot.commands.setters.groups.ToAlgaePresetAndShoot;
 import frc.robot.commands.setters.groups.ToAlgaeShoot;
 import frc.robot.commands.setters.groups.ToCoralIntake;
 import frc.robot.commands.setters.groups.ToCoralShoot;
-import frc.robot.commands.setters.groups.ToPathAndCoralIntake;
 import frc.robot.commands.setters.groups.ToPathAndFinkleAndAlgaeShoot;
+import frc.robot.commands.setters.groups.ToPathAndFinkleAndCoralIntake;
 import frc.robot.commands.setters.groups.ToPathAndFinkleAndCoralShoot;
 import frc.robot.commands.setters.groups.ToPathAndFinkleAndCoralShootWithOffset;
 import frc.robot.commands.setters.groups.ToPathAndFinleAndAlgaeIntake;
@@ -194,7 +194,7 @@ public class RobotContainer {
     // ---------------------------------------- Right Bumper
     //                                          Coral Intake
     controller.btn_RightBumper.toggleOnTrue(
-        Commands.defer((() -> new ToPathAndCoralIntake()), Set.of(mortar)));
+        Commands.defer((() -> new ToPathAndFinkleAndCoralIntake()), Set.of(mortar)));
     // controller.btn_RightBumper.toggleOnTrue(new ToCoralIntake());
 
     // ---------------------------------------- Right Trigger
@@ -306,16 +306,6 @@ public class RobotContainer {
     Trigger sysIdDynamic = controller.btn_Back;
     Trigger sysIdForward = controller.btn_A;
     Trigger sysIdBack = controller.btn_B;
-
-    // sysIdQuasistatic.and(sysIdForward).whileTrue(swerve.sysIdQuasistatic(Direction.kForward));
-    // sysIdQuasistatic.and(sysIdBack).whileTrue(swerve.sysIdQuasistatic(Direction.kReverse));
-    // sysIdDynamic.and(sysIdForward).whileTrue(swerve.sysIdDynamic(Direction.kForward));
-    // sysIdDynamic.and(sysIdBack).whileTrue(swerve.sysIdDynamic(Direction.kReverse));
-
-    // Trigger sysIdQuasistatic = controller.btn_Start;
-    // Trigger sysIdDynamic = controller.btn_Back;
-    // Trigger sysIdForward = controller.btn_A;
-    // Trigger sysIdBack = controller.btn_B;
 
     // sysIdQuasistatic.and(sysIdForward).whileTrue(elevator.sysIdQuasistatic(Direction.kForward));
     // sysIdQuasistatic.and(sysIdBack).whileTrue(elevator.sysIdQuasistatic(Direction.kReverse));

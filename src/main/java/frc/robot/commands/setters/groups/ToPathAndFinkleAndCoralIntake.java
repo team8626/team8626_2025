@@ -11,6 +11,9 @@ import static edu.wpi.first.units.Units.Inches;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Commodore;
 import frc.robot.Commodore.CommodoreState;
@@ -22,18 +25,25 @@ import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
 import frc.robot.subsystems.presets.PresetManager;
 import java.util.function.Supplier;
 
-public class ToPathAndCoralIntake extends SequentialCommandGroup {
+public class ToPathAndFinkleAndCoralIntake extends SequentialCommandGroup {
   private Supplier<Pose2d> targetPose =
       () -> PresetManager.getRobotPoseFromPickupSide(PresetManager.getPickupSide());
 
-  public ToPathAndCoralIntake() {
+  private Supplier<Pose2d> offsetPose =
+      () ->
+          PresetManager.getCoralPreset()
+              .get()
+              .getPose()
+              .plus(new Transform2d(Units.inchesToMeters(36), 0, new Rotation2d()));
+
+  public ToPathAndFinkleAndCoralIntake() {
     CoralShooterSubsystem mortar = RobotContainer.mortar;
 
     addCommands(
         // Drive to Target Pose
         new SequentialCommandGroup(
                 Commodore.getSetStateCommand(CommodoreState.DRIVE_AUTO),
-                AutoBuilder.pathfindToPose(targetPose.get(), RobotConstants.PATH_CONSTRAINTS, 0.25),
+                AutoBuilder.pathfindToPose(offsetPose.get(), RobotConstants.PATH_CONSTRAINTS, 0.25),
                 Commodore.getSetStateCommand(CommodoreState.IDLE))
             .onlyIf(() -> !targetPose.get().equals(new Pose2d()) && !mortar.isLoaded())
             .finallyDo((interrupted) -> Commodore.setCommodoreState(CommodoreState.IDLE)),
