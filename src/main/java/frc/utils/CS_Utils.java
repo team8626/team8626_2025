@@ -6,6 +6,7 @@
 
 package frc.utils;
 
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
 import java.util.function.Consumer;
 
@@ -44,8 +45,20 @@ public class CS_Utils {
     return retVal;
   }
 
+  public static Angle clamp(Angle value, Angle low, Angle high) {
+    return max(low, min(value, high));
+  }
+
+  public static Angle max(Angle a, Angle b) {
+    return a.gt(b) ? a : b;
+  }
+
+  public static Angle min(Angle a, Angle b) {
+    return a.lt(b) ? a : b;
+  }
+
   public static Distance clamp(Distance value, Distance low, Distance high) {
-    return max(low, max(value, high));
+    return max(low, min(value, high));
   }
 
   public static Distance max(Distance a, Distance b) {
