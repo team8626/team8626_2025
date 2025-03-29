@@ -82,7 +82,7 @@ public class AlgaeShooter_Sim implements AlgaeShooterInterface, CS_InterfaceBase
     rightSim.setAngularVelocity(new_RPM.in(RotationsPerSecond));
     leftSim.setAngularVelocity(new_RPM.in(RotationsPerSecond));
     shooterIsEnabled = true;
-    printf("Shooter RPM: %f", new_RPM);
+    printf("Shooter RPM: %f", new_RPM.in(RPM));
   }
 
   @Override
@@ -96,7 +96,7 @@ public class AlgaeShooter_Sim implements AlgaeShooterInterface, CS_InterfaceBase
     if (shooterIsEnabled) {
       rightSim.setAngularVelocity(new_RPM.in(RotationsPerSecond));
       leftSim.setAngularVelocity(new_RPM.in(RotationsPerSecond));
-      printf("Shooter RPM: %f", new_RPM);
+      printf("Shooter RPM: %f", new_RPM.in(RPM));
     }
   }
 
