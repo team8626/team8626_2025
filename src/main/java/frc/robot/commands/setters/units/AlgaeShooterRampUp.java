@@ -10,6 +10,8 @@ import static edu.wpi.first.units.Units.RPM;
 
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Commodore;
+import frc.robot.Commodore.CommodoreState;
 import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
 import frc.robot.subsystems.Dashboard;
@@ -48,6 +50,7 @@ public class AlgaeShooterRampUp extends CS_Command {
   public void initialize() {
     printf("RPM: %f", desiredRPM.in(RPM));
 
+    Commodore.setCommodoreState(CommodoreState.ALGAE_SHOOT_RAMPUP);
     Dashboard.setAlgaeState(GamePieceState.RAMPING_UP);
 
     overrideRPM = SmartDashboard.getBoolean("Commands/AlgaeShooterRampUp/OverrideRPM", false);
@@ -76,7 +79,6 @@ public class AlgaeShooterRampUp extends CS_Command {
 
     AngularVelocity currentRPMLeft = algae501.getShooterRPMLeft();
     AngularVelocity currentRPMRight = algae501.getShooterRPMRight();
-
     leftAtSetpoint =
         Math.abs(Math.abs(currentRPMLeft.in(RPM)) - desiredRPM.in(RPM)) <= RPMTolerance.in(RPM);
     rightAtSetpoint =

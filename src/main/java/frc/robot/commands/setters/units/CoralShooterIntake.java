@@ -9,6 +9,8 @@ package frc.robot.commands.setters.units;
 import static edu.wpi.first.units.Units.Seconds;
 
 import edu.wpi.first.wpilibj.Timer;
+import frc.robot.Commodore;
+import frc.robot.Commodore.CommodoreState;
 import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
 import frc.robot.subsystems.Dashboard;
@@ -31,6 +33,7 @@ public class CoralShooterIntake extends CS_Command {
 
   @Override
   public void initialize() {
+    Commodore.setCommodoreState(CommodoreState.CORAL_INTAKE);
     Dashboard.setCoralState(GamePieceState.INTAKING);
     mortar.startIntake();
     intakeTimer.stop();

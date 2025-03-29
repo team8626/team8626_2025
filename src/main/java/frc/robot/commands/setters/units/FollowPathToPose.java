@@ -60,6 +60,8 @@ public class FollowPathToPose extends CS_Command {
 
   @Override
   public void initialize() {
+    Commodore.setCommodoreState(CommodoreState.DRIVE_AUTO);
+
     hasValidPose = false;
 
     if ((this.poseSupplier != null) && (this.poseSupplier.get() != null)) {
@@ -101,7 +103,12 @@ public class FollowPathToPose extends CS_Command {
 
   @Override
   public void end(boolean interrupted) {
-    Commodore.setCommodoreState(CommodoreState.IDLE);
+    if (interrupted) {
+      Commodore.setCommodoreState(CommodoreState.DRIVE_AUTO_INTERRUPTED);
+    } else {
+
+      Commodore.setCommodoreState(CommodoreState.DRIVE_AUTO_FINISHED);
+    }
   }
 
   @Override

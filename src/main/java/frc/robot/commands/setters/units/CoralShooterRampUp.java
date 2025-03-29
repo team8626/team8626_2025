@@ -10,6 +10,8 @@ import static edu.wpi.first.units.Units.RPM;
 
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Commodore;
+import frc.robot.Commodore.CommodoreState;
 import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
 import frc.robot.subsystems.Dashboard;
@@ -65,6 +67,7 @@ public class CoralShooterRampUp extends CS_Command {
 
   @Override
   public void initialize() {
+    Commodore.setCommodoreState(CommodoreState.CORAL_SHOOT_RAMPUP);
     Dashboard.setCoralState(GamePieceState.RAMPING_UP);
 
     overrideRPM = SmartDashboard.getBoolean("Commands/CoralShooterRampUp/OverrideRPM", false);

@@ -216,7 +216,12 @@ public class DriveToPoseFinkle2 extends CS_Command {
 
   @Override
   public void end(boolean interrupted) {
-    Commodore.setCommodoreState(CommodoreState.IDLE);
+    if (interrupted) {
+      Commodore.setCommodoreState(CommodoreState.DRIVE_FINKLE_INTERRUPTED);
+
+    } else {
+      Commodore.setCommodoreState(CommodoreState.DRIVE_FINKLE_FINISHED);
+    }
   }
 
   @Override

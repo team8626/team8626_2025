@@ -8,6 +8,8 @@ package frc.robot.commands.setters.units;
 
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.Timer;
+import frc.robot.Commodore;
+import frc.robot.Commodore.CommodoreState;
 import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
 import frc.robot.subsystems.Dashboard;
@@ -48,6 +50,7 @@ public class AlgaeShooterIntake extends CS_Command {
     timer.reset();
     algaeDetected = false;
 
+    Commodore.setCommodoreState(CommodoreState.ALGAE_INTAKE);
     Dashboard.setAlgaeState(GamePieceState.INTAKING);
     algae501.startIntake(desiredRPM.get());
   }

@@ -65,7 +65,7 @@ public class DriveTurnToAngle extends CS_Command {
   @Override
   public void initialize() {
     // m_drive.resetOdometry();
-    Commodore.setCommodoreState(CommodoreState.DRIVE_FINKLE);
+    Commodore.setCommodoreState(CommodoreState.DRIVE_TURN_TO_ANGLE);
 
     rotPIDController.setPID(defaultRotP, 0, 0);
     rotPIDController.setTolerance(
@@ -92,7 +92,12 @@ public class DriveTurnToAngle extends CS_Command {
 
   @Override
   public void end(boolean interrupted) {
-    Commodore.setCommodoreState(CommodoreState.IDLE);
+    if (interrupted) {
+      Commodore.setCommodoreState(CommodoreState.DRIVE_TURN_TO_ANGLE_INTERRUPTED);
+
+    } else {
+      Commodore.setCommodoreState(CommodoreState.DRIVE_TURN_TO_ANGLE_FINISHED);
+    }
   }
 
   @Override
