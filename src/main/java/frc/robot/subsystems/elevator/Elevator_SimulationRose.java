@@ -20,35 +20,23 @@ public class Elevator_SimulationRose implements ElevatorInterface, CS_InterfaceB
 
   private void updateRoseSim() {
     if (currentHeight.lt(desiredHeight)) {
-      currentHeight.plus(Inches.of(0.5));
+      currentHeight = currentHeight.plus(Inches.of(0.5));
     } else if (currentHeight.gt(desiredHeight)) {
-      currentHeight.minus(Inches.of(0.5));
-      if (currentHeight.lt(desiredHeight)) {
-        currentHeight.plus(Inches.of(0.5));
-      } else if (currentHeight.gt(desiredHeight)) {
-        currentHeight.minus(Inches.of(0.5));
-      }
-      desiredHeight =
-          Meters.of(
-              MathUtil.clamp(
-                  desiredHeight.in(Meters),
-                  ElevatorConstants.minHeight.in(Meters),
-                  ElevatorConstants.maxHeight.in(Meters)));
-      desiredHeight =
-          Meters.of(
-              MathUtil.clamp(
-                  desiredHeight.in(Meters),
-                  ElevatorConstants.minHeight.in(Meters),
-                  ElevatorConstants.maxHeight.in(Meters)));
+      currentHeight = currentHeight.minus(Inches.of(0.5));
     }
+    desiredHeight =
+        Inches.of(
+            MathUtil.clamp(
+                desiredHeight.in(Inches),
+                ElevatorConstants.minHeight.in(Inches),
+                ElevatorConstants.maxHeight.in(Inches)));
   }
 
   @Override
   public void updateInputs(ElevatorValues values) {
     updateRoseSim();
-    values.currentHeight = getHeight();
     values.desiredHeight = desiredHeight;
-    values.currentHeight = getHeight();
+    values.currentHeight = currentHeight;
     values.desiredHeight = desiredHeight;
     values.state = current_state;
     values.isEnabled = is_enabled;
@@ -56,7 +44,7 @@ public class Elevator_SimulationRose implements ElevatorInterface, CS_InterfaceB
 
   @Override
   public Distance getHeight() {
-    return (currentHeight);
+    return currentHeight.plus(ElevatorConstants.cascadingOffset);
   }
 
   @Override
@@ -67,12 +55,12 @@ public class Elevator_SimulationRose implements ElevatorInterface, CS_InterfaceB
 
   @Override
   public void goUp(Distance offset) {
-    desiredHeight.plus(offset);
+    desiredHeight = desiredHeight.plus(offset);
   }
 
   @Override
   public void goDown(Distance offset) {
-    desiredHeight.minus(offset);
+    desiredHeight = desiredHeight.minus(offset);
   }
 
   @Override
