@@ -299,8 +299,6 @@ public class Vision {
 
     Arducam_AT001(
         "Arducam_AT001",
-        // new Rotation3d(26.033445, Units.degreesToRadians(-20),
-        // Units.degreesToRadians(143.308536)),
         new Rotation3d(
             Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(180)),
         new Translation3d(-0.092444, -0.285114, 0.164375 + 0.127933),
@@ -308,14 +306,18 @@ public class Vision {
         VecBuilder.fill(0.5, 0.5, 1)),
     Arducam_AT002(
         "Arducam_AT002",
-        // new Rotation3d(-26.033445, Units.degreesToRadians(-20),
-        // Units.degreesToRadians(216.691464)),
         new Rotation3d(
             Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(180)),
         new Translation3d(-0.092444, 0.285114, 0.164375 + 0.127933),
         VecBuilder.fill(4, 4, 8),
+        VecBuilder.fill(0.5, 0.5, 1)),
+    Arducam_AT003(
+        "Arducam_AT003",
+        new Rotation3d(
+            Units.degreesToRadians(0), Units.degreesToRadians(20), Units.degreesToRadians(20)),
+        new Translation3d(0.115865, -0.210425, 0.149541),
+        VecBuilder.fill(4, 4, 8),
         VecBuilder.fill(0.5, 0.5, 1));
-
     /** Latency alert to use when high latency is detected. */
     public final Alert latencyAlert;
     /** Camera instance for comms. */

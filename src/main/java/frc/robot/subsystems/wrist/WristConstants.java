@@ -53,7 +53,7 @@ public class WristConstants {
   public static final Gains gains =
       switch (RobotConstants.robotType) {
         case COMPBOT -> new Gains(0.005, 0.0, 0.00006, 0.12, 0.00635, 0);
-        case SIMBOT -> new Gains(0.005, 0.0, 0.000006, 0.12, 0.00635, 0.0);
+        case SIMBOT -> new Gains(6, 0.0, 0.00000, 0.12, 0.00635, 0.0);
         default -> new Gains(0.05, 0.0, 0.0, 0.12, 0.00635, 0.0);
       };
 

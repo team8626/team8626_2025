@@ -4,6 +4,7 @@ import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Radians;
+import static frc.robot.subsystems.wrist.WristConstants.gains;
 import static frc.robot.subsystems.wrist.WristConstants.wristConfig;
 
 import edu.wpi.first.math.MathUtil;
@@ -30,9 +31,9 @@ public class Wrist_Sim implements WristInterface, CS_InterfaceBase {
           WristConstants.restAngle.in(Radians),
           new double[0]);
 
-  PIDController pidController = new PIDController(0.1, 0, 0);
+  PIDController pidController = new PIDController(gains.kP(), gains.kI(), gains.kD());
 
-  private boolean climberIsEnabled = false;
+  private boolean wristIsEnabled = false;
 
   public Wrist_Sim() {}
 
@@ -49,7 +50,7 @@ public class Wrist_Sim implements WristInterface, CS_InterfaceBase {
     this.armSim.setInput(MathUtil.clamp(output, -13, 13)); // Clamping on Batttery Voltage
     this.armSim.update(0.020);
 
-    values.isEnabled = climberIsEnabled;
+    values.isEnabled = wristIsEnabled;
     values.currentAngle = getAngle();
     values.desiredAngle = this.desiredAngle;
     values.amps = Amps.of(this.armSim.getCurrentDrawAmps());
@@ -62,12 +63,13 @@ public class Wrist_Sim implements WristInterface, CS_InterfaceBase {
   @Override
   public void setAngle(Angle new_angle) {
     this.desiredAngle = new_angle;
-    printf("New Angle %f", desiredAngle);
+    printf("New Angle %f", desiredAngle.in(Degrees));
   }
 
   @Override
   public void setPID(double newkP, double newkI, double newkD) {
     printf("New PID: %f, %f, %f \n", newkP, newkI, newkD);
+    pidController.setPID(newkP, newkI, newkD);
   }
 
   @Override
