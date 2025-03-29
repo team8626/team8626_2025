@@ -2,6 +2,7 @@ package frc.robot.vizualization;
 
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.Radians;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -69,7 +70,8 @@ public class Visualization extends CS_SubsystemBase {
                 0,
                 0,
                 -(RobotContainer.elevator.getHeight().in(Meters)),
-                new Rotation3d((RobotContainer.wrist.getAngle().in(Degrees) - 180), 0, 0)));
+                new Rotation3d(
+                    (RobotContainer.wrist.getAngle().minus(Degrees.of(180)).in(Radians)), 0, 0)));
 
     publisher.set(robotPose);
     arrayPublisher.set(
