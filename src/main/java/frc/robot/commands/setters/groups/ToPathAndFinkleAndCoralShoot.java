@@ -15,12 +15,16 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Commodore;
 import frc.robot.Commodore.CommodoreState;
 import frc.robot.RobotConstants;
+import frc.robot.RobotContainer;
 import frc.robot.commands.setters.units.DriveToPoseFinkle2;
+import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
 import frc.robot.subsystems.presets.CoralPreset;
 import frc.robot.subsystems.presets.PresetManager;
 import java.util.function.Supplier;
 
 public class ToPathAndFinkleAndCoralShoot extends SequentialCommandGroup {
+
+  CoralShooterSubsystem mortar = RobotContainer.mortar;
 
   Supplier<Pose2d> targetPose = () -> PresetManager.getCoralPreset().get().getPose();
   Supplier<Pose2d> offsetPose =

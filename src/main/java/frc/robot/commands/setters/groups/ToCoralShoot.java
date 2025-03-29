@@ -26,6 +26,7 @@ public class ToCoralShoot extends SequentialCommandGroup {
   private CoralShooterSubsystem mortar;
   Supplier<CoralPreset> coralPreset = () -> new CoralPreset("empty");
 
+  // TODO: Remove this constructor and ass preset in all calls (See Autos)
   public ToCoralShoot() {
     this.mortar = RobotContainer.mortar;
     addCommands(
@@ -64,33 +65,25 @@ public class ToCoralShoot extends SequentialCommandGroup {
     coralPreset = newCoralPreset;
 
     addCommands(
-        new ConditionalCommand(
-            new SequentialCommandGroup(
-                new CoralShooterRampUp(coralPreset) {
-                  @Override
-                  public void initialize() {
-                    super.initialize();
-                    timer.reset();
-                    timer.start();
-                  }
-                },
-                new CoralShooterLaunch(),
-                new CoralShooterStop() {
-                  @Override
-                  public void initialize() {
-                    super.initialize();
-                    double elapsedTime = timer.get();
-                    SmartDashboard.putNumber(
-                        "Subsystem/CoralShooterSubsystem/LastShotIn(ms)",
-                        (int) (elapsedTime * 1000));
-                    Dashboard.publishCoralShootTime((int) (elapsedTime * 1000));
-                  }
-                },
-                Commodore.getSetStateCommand(CommodoreState.IDLE)
-                // ,new InstantCommand(() -> PresetManager.resetCoralPreset())
-
-                ),
-            new SequentialCommandGroup(Commodore.getSetStateCommand(CommodoreState.IDLE)),
-            mortar::isLoaded));
+        new CoralShooterRampUp(coralPreset) {
+          @Override
+          public void initialize() {
+            super.initialize();
+            timer.reset();
+            timer.start();
+          }
+        },
+        new CoralShooterLaunch(),
+        new CoralShooterStop() {
+          @Override
+          public void initialize() {
+            super.initialize();
+            double elapsedTime = timer.get();
+            SmartDashboard.putNumber(
+                "Subsystem/CoralShooterSubsystem/LastShotIn(ms)", (int) (elapsedTime * 1000));
+            Dashboard.publishCoralShootTime((int) (elapsedTime * 1000));
+          }
+        },
+        Commodore.getSetStateCommand(CommodoreState.IDLE));
   }
 }

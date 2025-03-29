@@ -35,39 +35,30 @@ public class ToPathAndFinleAndAlgaeIntake extends SequentialCommandGroup {
   public ToPathAndFinleAndAlgaeIntake() {
     addCommands(
         new SequentialCommandGroup(
-                // Drive to Target Pose
-                new SequentialCommandGroup(
-                        Commodore.getSetStateCommand(CommodoreState.DRIVE_AUTO),
-                        AutoBuilder.pathfindToPose(
-                            offsetPose.get(), RobotConstants.PATH_CONSTRAINTS, 0))
-                    .onlyIf(() -> !targetPose.get().equals(new Pose2d()))
-                    .finallyDo((interrupted) -> Commodore.setCommodoreState(CommodoreState.IDLE)),
+            // Drive to Target Pose
+            new SequentialCommandGroup(
+                    Commodore.getSetStateCommand(CommodoreState.DRIVE_AUTO),
+                    AutoBuilder.pathfindToPose(
+                        offsetPose.get(), RobotConstants.PATH_CONSTRAINTS, 0))
+                .onlyIf(() -> !targetPose.get().equals(new Pose2d()))
+                .finallyDo((interrupted) -> Commodore.setCommodoreState(CommodoreState.IDLE)),
 
-                // Adjust Subsystems
-                new ToSubsystemsPreset(algaePreset),
+            // Adjust Subsystems
+            new ToSubsystemsPreset(algaePreset),
 
-                // Drive to Target Pose
-                new DriveToPoseFinkle2(targetPose, () -> Inches.of(2), () -> Degrees.of(5))
-                    .onlyIf(() -> !targetPose.get().equals(new Pose2d())),
+            // Drive to Target Pose
+            new DriveToPoseFinkle2(targetPose, () -> Inches.of(2), () -> Degrees.of(5))
+                .onlyIf(() -> !targetPose.get().equals(new Pose2d())),
 
-                // Algae Intake
-                new AlgaeShooterIntake(() -> algaePreset.get().getRPM()),
+            // Algae Intake
+            new AlgaeShooterIntake(() -> algaePreset.get().getRPM()),
 
-                // Drive Away
-                new DriveToPoseFinkle2(offsetPose, () -> Inches.of(6), () -> Degrees.of(10))
-                    .onlyIf(() -> !targetPose.get().equals(new Pose2d())),
+            // Drive Away
+            new DriveToPoseFinkle2(offsetPose, () -> Inches.of(6), () -> Degrees.of(10))
+                .onlyIf(() -> !targetPose.get().equals(new Pose2d())),
 
-                // Stow
-                new ToSubsystemsPreset(() -> Presets.ALGAE_STOW),
-                Commodore.getSetStateCommand(CommodoreState.IDLE))
-
-            // Handle Interrupts
-            .finallyDo(
-                interrupted -> {
-                  new SequentialCommandGroup(
-                          new ToSubsystemsPreset(() -> Presets.ALGAE_STOW),
-                          Commodore.getSetStateCommand(CommodoreState.IDLE))
-                      .schedule();
-                }));
+            // Stow
+            new ToSubsystemsPreset(() -> Presets.ALGAE_STOW),
+            Commodore.getSetStateCommand(CommodoreState.IDLE)));
   }
 }

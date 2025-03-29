@@ -25,6 +25,7 @@ import frc.robot.subsystems.presets.CoralPreset;
 import frc.robot.subsystems.presets.PresetManager;
 import java.util.function.Supplier;
 
+@Deprecated
 public class ToPathAndFinkleAndCoralShootWithOffset extends SequentialCommandGroup {
 
   Supplier<Distance> shootOffset =

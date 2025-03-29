@@ -8,8 +8,6 @@ package frc.robot.commands.setters.groups;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Commodore;
@@ -34,41 +32,33 @@ public class ToAlgaePresetAndShoot extends SequentialCommandGroup {
 
     addCommands(
         new SequentialCommandGroup(
-                new SequentialCommandGroup(
-                    new ToSubsystemsPreset(() -> algaePreset.get()),
-                    new AlgaeShooterRampUp(() -> algaePreset.get().getRPM()) {
-                      @Override
-                      public void initialize() {
-                        super.initialize();
-                        timer.reset();
-                        timer.start();
-                      }
-                    }),
-                new WaitCommand(0.1),
-
-                // Shoot Algae
-                new AlgaeShooterLaunch(),
-
-                // Stop Shooter and Reset
-                new AlgaeShooterStop() {
+            new SequentialCommandGroup(
+                new ToSubsystemsPreset(() -> algaePreset.get()),
+                new AlgaeShooterRampUp(() -> algaePreset.get().getRPM()) {
                   @Override
                   public void initialize() {
                     super.initialize();
-                    double elapsedTime = timer.get();
-                    SmartDashboard.putNumber(
-                        "Subsystem/AlgaeShooterSubsystem/LastShotIn(ms)",
-                        (int) (elapsedTime * 1000));
-                    Dashboard.publishAlgaeShootTime((int) (elapsedTime * 1000));
+                    timer.reset();
+                    timer.start();
                   }
-                },
-                new ToSubsystemsPreset(() -> Presets.ALGAE_STOW))
-            .finallyDo(
-                interrupted -> {
-                  new ParallelCommandGroup(
-                          new InstantCommand(algae501::stopAll),
-                          new ToSubsystemsPreset(() -> Presets.ALGAE_STOW),
-                          Commodore.getSetStateCommand(CommodoreState.IDLE))
-                      .schedule();
-                }));
+                }),
+            new WaitCommand(0.1),
+
+            // Shoot Algae
+            new AlgaeShooterLaunch(),
+
+            // Stop Shooter and Reset
+            new AlgaeShooterStop() {
+              @Override
+              public void initialize() {
+                super.initialize();
+                double elapsedTime = timer.get();
+                SmartDashboard.putNumber(
+                    "Subsystem/AlgaeShooterSubsystem/LastShotIn(ms)", (int) (elapsedTime * 1000));
+                Dashboard.publishAlgaeShootTime((int) (elapsedTime * 1000));
+              }
+            },
+            new ToSubsystemsPreset(() -> Presets.ALGAE_STOW),
+            Commodore.getSetStateCommand(CommodoreState.IDLE)));
   }
 }

@@ -51,7 +51,9 @@ public class AlgaeShooterLaunch extends CS_Command {
   @Override
   public void end(boolean interrupted) {
     Dashboard.setAlgaeState(GamePieceState.IDLE);
-
+    if (interrupted) {
+      algae501.stopShooter();
+    }
     algae501.stopLauncher();
     timer.stop();
   }
