@@ -2,6 +2,7 @@ package frc.robot.subsystems.algaeshooter;
 
 import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.RPM;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static frc.robot.subsystems.algaeshooter.AlgaeShooterConstants.flywheelConfig;
 
@@ -79,8 +80,8 @@ public class AlgaeShooter_Sim implements AlgaeShooterInterface, CS_InterfaceBase
 
   @Override
   public void startShooter(AngularVelocity new_RPM) {
-    rightSim.setAngularVelocity(new_RPM.in(RotationsPerSecond));
-    leftSim.setAngularVelocity(new_RPM.in(RotationsPerSecond));
+    rightSim.setAngularVelocity(new_RPM.in(RadiansPerSecond));
+    leftSim.setAngularVelocity(new_RPM.in(RadiansPerSecond));
     shooterIsEnabled = true;
     printf("Shooter RPM: %f", new_RPM.in(RPM));
   }
