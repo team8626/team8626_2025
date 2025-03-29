@@ -88,13 +88,6 @@ public class LEDManager extends CS_SubsystemBase {
         breatheSlow(currentColor).applyTo(m_right);
         break;
 
-      case SUBSYSTEMS_AT_SETPOINT:
-      case IDLE:
-        currentColor = getAllianceColor();
-        wave(currentColor).applyTo(m_left);
-        wave(currentColor).applyTo(m_right);
-        break;
-
       case SUBSYSTEMS_ADJUST:
         currentColor = getAllianceColor();
         flash(currentColor).applyTo(m_left);
@@ -115,9 +108,10 @@ public class LEDManager extends CS_SubsystemBase {
         currentColor = new Color[] {Color.kGreen, Color.kGreenYellow};
         break;
 
-      case UNKNOWN:
-      case TRANSITION:
+        // IDLE & default case... just show alliance color
+      case IDLE:
       default:
+        currentColor = getAllianceColor();
         wave(currentColor).applyTo(m_left);
         wave(currentColor).applyTo(m_right);
         break;
