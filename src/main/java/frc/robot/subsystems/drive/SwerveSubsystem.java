@@ -6,8 +6,6 @@ package frc.robot.subsystems.drive;
 
 import static edu.wpi.first.units.Units.Meter;
 import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.MetersPerSecondPerSecond;
-import static edu.wpi.first.units.Units.RadiansPerSecondPerSecond;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -22,7 +20,6 @@ import com.pathplanner.lib.util.swerve.SwerveSetpoint;
 import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -105,10 +102,11 @@ public class SwerveSubsystem extends CS_SubsystemBase {
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
-    swerveDrive.swerveController.addSlewRateLimiters(
-        new SlewRateLimiter(RobotConstants.MAX_LINEAR_ACCELERATION.in(MetersPerSecondPerSecond)),
-        new SlewRateLimiter(RobotConstants.MAX_LINEAR_ACCELERATION.in(MetersPerSecondPerSecond)),
-        new SlewRateLimiter(RobotConstants.MAX_ANGULAR_ACCELERATION.in(RadiansPerSecondPerSecond)));
+    // swerveDrive.swerveController.addSlewRateLimiters(
+    //     new SlewRateLimiter(RobotConstants.MAX_LINEAR_ACCELERATION.in(MetersPerSecondPerSecond)),
+    //     new SlewRateLimiter(RobotConstants.MAX_LINEAR_ACCELERATION.in(MetersPerSecondPerSecond)),
+    //     new
+    // SlewRateLimiter(RobotConstants.MAX_ANGULAR_ACCELERATION.in(RadiansPerSecondPerSecond)));
 
     swerveDrive.setHeadingCorrection(
         false); // Heading correction should only be used while controlling the robot via angle.
