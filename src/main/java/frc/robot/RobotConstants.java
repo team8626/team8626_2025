@@ -1,8 +1,9 @@
 package frc.robot;
 
-import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.Radians;
-import static edu.wpi.first.units.Units.Second;
+import static edu.wpi.first.units.Units.DegreesPerSecond;
+import static edu.wpi.first.units.Units.DegreesPerSecondPerSecond;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.MetersPerSecondPerSecond;
 
 import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -10,7 +11,9 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.AngularAcceleration;
 import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.LinearAcceleration;
 import edu.wpi.first.units.measure.LinearVelocity;
 
 /**
@@ -59,9 +62,12 @@ public class RobotConstants {
 
   public static final double driveBaseRadius =
       Math.hypot(FrameWidthInches / 2, FrameLengthInches / 2);
-  public static final LinearVelocity MAX_LINEAR_VELOCITY = Meters.per(Second).of(6.77);
-  public static final AngularVelocity MAX_ANGULAR_VELOCITY =
-      Radians.per(Second).of(6.77 / driveBaseRadius);
+  public static final LinearVelocity MAX_LINEAR_VELOCITY = MetersPerSecond.of(6.77);
+  public static final AngularVelocity MAX_ANGULAR_VELOCITY = DegreesPerSecond.of(720);
+
+  public static final LinearAcceleration MAX_LINEAR_ACCELERATION = MetersPerSecondPerSecond.of(1.5);
+  public static final AngularAcceleration MAX_ANGULAR_ACCELERATION =
+      DegreesPerSecondPerSecond.of(120);
 
   public static double bumperThicknessInches = 3;
 

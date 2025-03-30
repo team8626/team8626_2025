@@ -7,6 +7,7 @@
 package frc.utils;
 
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
 import java.util.function.Consumer;
 
@@ -66,6 +67,19 @@ public class CS_Utils {
   }
 
   public static Distance min(Distance a, Distance b) {
+    return a.lt(b) ? a : b;
+  }
+
+  public static AngularVelocity clamp(
+      AngularVelocity value, AngularVelocity low, AngularVelocity high) {
+    return max(low, min(value, high));
+  }
+
+  public static AngularVelocity max(AngularVelocity a, AngularVelocity b) {
+    return a.gt(b) ? a : b;
+  }
+
+  public static AngularVelocity min(AngularVelocity a, AngularVelocity b) {
     return a.lt(b) ? a : b;
   }
 }

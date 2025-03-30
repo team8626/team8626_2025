@@ -39,9 +39,17 @@ public class FieldConstants {
             AprilTagLayoutType.OFFICIAL.getLayout().getTagPose(16).get().getX(),
             0,
             Rotation2d.fromDegrees(90));
+    public static final Pose2d opposingCenterFace =
+        new Pose2d(
+            AprilTagLayoutType.OFFICIAL.getLayout().getTagPose(3).get().getX(),
+            fieldWidth,
+            Rotation2d.fromDegrees(-90));
   }
 
   public static class Barge {
+    public static final double netWidth = Units.inchesToMeters(40.0);
+    public static final double netHeight = Units.inchesToMeters(88.0);
+
     public static final Translation2d farCage =
         new Translation2d(Units.inchesToMeters(345.428), Units.inchesToMeters(286.779));
     public static final Translation2d middleCage =
@@ -106,10 +114,10 @@ public class FieldConstants {
               new Pose3d(
                   new Translation3d(
                       poseDirection
-                          .transformBy(new Transform2d(adjustX, adjustY, new Rotation2d()))
+                          .transformBy(new Transform2d(adjustX, adjustY, Rotation2d.kZero))
                           .getX(),
                       poseDirection
-                          .transformBy(new Transform2d(adjustX, adjustY, new Rotation2d()))
+                          .transformBy(new Transform2d(adjustX, adjustY, Rotation2d.kZero))
                           .getY(),
                       level.height),
                   new Rotation3d(
@@ -120,10 +128,10 @@ public class FieldConstants {
               new Pose3d(
                   new Translation3d(
                       poseDirection
-                          .transformBy(new Transform2d(adjustX, -adjustY, new Rotation2d()))
+                          .transformBy(new Transform2d(adjustX, -adjustY, Rotation2d.kZero))
                           .getX(),
                       poseDirection
-                          .transformBy(new Transform2d(adjustX, -adjustY, new Rotation2d()))
+                          .transformBy(new Transform2d(adjustX, -adjustY, Rotation2d.kZero))
                           .getY(),
                       level.height),
                   new Rotation3d(
@@ -148,11 +156,11 @@ public class FieldConstants {
     // Measured from the center of the ice cream
     public static final double separation = Units.inchesToMeters(72.0);
     public static final Pose2d middleIceCream =
-        new Pose2d(Units.inchesToMeters(48), fieldWidth / 2.0, new Rotation2d());
+        new Pose2d(Units.inchesToMeters(48), fieldWidth / 2.0, Rotation2d.kZero);
     public static final Pose2d leftIceCream =
-        new Pose2d(Units.inchesToMeters(48), middleIceCream.getY() + separation, new Rotation2d());
+        new Pose2d(Units.inchesToMeters(48), middleIceCream.getY() + separation, Rotation2d.kZero);
     public static final Pose2d rightIceCream =
-        new Pose2d(Units.inchesToMeters(48), middleIceCream.getY() - separation, new Rotation2d());
+        new Pose2d(Units.inchesToMeters(48), middleIceCream.getY() - separation, Rotation2d.kZero);
   }
 
   public enum ReefLevel {
@@ -191,7 +199,19 @@ public class FieldConstants {
 
     AprilTagLayoutType(String name) {
       if (RobotConstants.disableHAL) {
-        layout = null;
+        try {
+          layout =
+              new AprilTagFieldLayout(
+                  Path.of(
+                      "src",
+                      "main",
+                      "deploy",
+                      "apriltags",
+                      fieldType.getJsonFolder(),
+                      "2025-official.json"));
+        } catch (IOException e) {
+          throw new RuntimeException(e);
+        }
       } else {
         try {
           layout =
@@ -205,15 +225,12 @@ public class FieldConstants {
           throw new RuntimeException(e);
         }
       }
-      if (layout == null) {
-        layoutString = "";
-      } else {
-        try {
-          layoutString = new ObjectMapper().writeValueAsString(layout);
-        } catch (JsonProcessingException e) {
-          throw new RuntimeException(
-              "Failed to serialize AprilTag layout JSON " + toString() + "for Northstar");
-        }
+
+      try {
+        layoutString = new ObjectMapper().writeValueAsString(layout);
+      } catch (JsonProcessingException e) {
+        throw new RuntimeException(
+            "Failed to serialize AprilTag layout JSON " + toString() + "for Northstar");
       }
     }
 
@@ -223,7 +240,11 @@ public class FieldConstants {
 
   public record CoralObjective(int branchId, ReefLevel reefLevel) {}
 
-  public record AlgaeObjective(int id) {}
+  public record AlgaeObjective(int id, boolean low) {
+    public AlgaeObjective(int id) {
+      this(id, id % 2 == 1);
+    }
+  }
 
   @RequiredArgsConstructor
   public enum FieldType {

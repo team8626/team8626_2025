@@ -14,6 +14,7 @@ public class AlgaeShooterConstants {
   // public static final AngularVelocity shootRPM = RPM.of(2200);
   public static final AngularVelocity intakeRPM = RPM.of(-600);
   public static final AngularVelocity discardRPM = RPM.of(600);
+  public static final AngularVelocity maxRPM = RPM.of(3000);
   public static final double launcherShootSetpoint = 1.0;
   public static final double launcherIntakeSetpoint = -0.5;
   public static final double launcherDiscardSetpoint = 0.5;
