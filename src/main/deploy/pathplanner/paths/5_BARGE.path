@@ -8,20 +8,36 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.193710931733792,
-        "y": 5.301862837767043
+        "x": 5.753477805906504,
+        "y": 5.250674574223453
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.139659090909091,
-        "y": 6.293536931818181
+        "x": 6.976795054290254,
+        "y": 6.258014019465042
       },
       "prevControl": {
-        "x": 6.6154218413122425,
-        "y": 6.299195833084014
+        "x": 6.907028612548141,
+        "y": 6.017946021583933
+      },
+      "nextControl": {
+        "x": 7.046561496032367,
+        "y": 6.498082017346151
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 6.248449913930085,
+        "y": 6.869680630958686
+      },
+      "prevControl": {
+        "x": 7.006812041463214,
+        "y": 6.20202962174783
       },
       "nextControl": null,
       "isLocked": false,
@@ -29,7 +45,21 @@
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.833861088039867,
+      "maxWaypointRelativePos": 1.561695390365449,
+      "constraints": {
+        "maxVelocity": 1.0,
+        "maxAcceleration": 4.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
   "pointTowardsZones": [
     {
       "fieldPosition": {
@@ -45,19 +75,19 @@
   "eventMarkers": [
     {
       "name": "PrepareShootLow",
-      "waypointRelativePos": 0.1310181531176013,
+      "waypointRelativePos": 0.1700309327411167,
       "endWaypointRelativePos": null,
       "command": null
     },
     {
       "name": "PrepareRampUp",
-      "waypointRelativePos": 0.1325966850828675,
+      "waypointRelativePos": 0.1998730964467006,
       "endWaypointRelativePos": null,
       "command": null
     },
     {
       "name": "ShootIt",
-      "waypointRelativePos": 1.0,
+      "waypointRelativePos": 0.9246311865482232,
       "endWaypointRelativePos": null,
       "command": null
     }

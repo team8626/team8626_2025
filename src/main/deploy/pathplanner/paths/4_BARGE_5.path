@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.876488275153644,
-        "y": 3.9455360203812653
+        "x": 6.524877181939115,
+        "y": 4.260436459719343
       },
       "isLocked": false,
       "linkedName": null
@@ -20,12 +20,12 @@
         "y": 4.431242852246712
       },
       "prevControl": {
-        "x": 7.237351184165104,
-        "y": 4.181253221266524
+        "x": 7.239477102340931,
+        "y": 4.181242897854819
       },
       "nextControl": {
-        "x": 7.247631227473885,
-        "y": 5.309924798900699
+        "x": 7.24020394238865,
+        "y": 5.384539727216907
       },
       "isLocked": false,
       "linkedName": null
@@ -36,12 +36,12 @@
         "y": 5.799741863495035
       },
       "prevControl": {
-        "x": 7.158683859530002,
-        "y": 5.65553793343039
+        "x": 7.2067003666244025,
+        "y": 5.7273502029656385
       },
       "nextControl": {
-        "x": 6.750246708654076,
-        "y": 5.94394579355968
+        "x": 6.317260988395862,
+        "y": 5.98261998099874
       },
       "isLocked": false,
       "linkedName": null
@@ -52,8 +52,8 @@
         "y": 5.607922092013889
       },
       "prevControl": {
-        "x": 6.498376844720346,
-        "y": 5.349617553251541
+        "x": 6.542412480807584,
+        "y": 5.454795682047582
       },
       "nextControl": null,
       "isLocked": false,
@@ -65,7 +65,7 @@
     {
       "name": "Constraints Zone",
       "minWaypointRelativePos": 0.9696261682243035,
-      "maxWaypointRelativePos": 2.1191588785046616,
+      "maxWaypointRelativePos": 1.71997937817259,
       "constraints": {
         "maxVelocity": 1.0,
         "maxAcceleration": 4.0,
@@ -83,7 +83,7 @@
         "y": 5.5
       },
       "rotationOffset": -135.0,
-      "minWaypointRelativePos": 0.5715323920265784,
+      "minWaypointRelativePos": 0.6287377062182741,
       "maxWaypointRelativePos": 1.985997196843856,
       "name": "PointToBarge"
     }
@@ -104,6 +104,12 @@
     {
       "name": "ShootIt",
       "waypointRelativePos": 1.340064368770765,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
+      "name": "Stow",
+      "waypointRelativePos": 2.0341180440199347,
       "endWaypointRelativePos": null,
       "command": null
     }
