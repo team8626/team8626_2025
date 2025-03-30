@@ -51,7 +51,7 @@ import frc.robot.subsystems.Dashboard;
 import frc.robot.subsystems.Dashboard.AutoOptions;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterSubsystem;
 import frc.robot.subsystems.algaeshooter.AlgaeShooter_Sim;
-import frc.robot.subsystems.algaeshooter.AlgaeShooter_SparkMax;
+import frc.robot.subsystems.algaeshooter.AlgaeShooter_SparkFlex;
 import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
 import frc.robot.subsystems.coralshooter.CoralShooter_Sim;
 import frc.robot.subsystems.coralshooter.CoralShooter_SparkMax;
@@ -134,7 +134,6 @@ public class RobotContainer {
         wrist = new WristSubsystem(new Wrist_Sim());
         algae501 = new AlgaeShooterSubsystem(new AlgaeShooter_Sim());
         mortar = new CoralShooterSubsystem(new CoralShooter_Sim());
-        // visualization = Visualization.getInstance();
 
         break;
       case COMPBOT:
@@ -143,7 +142,7 @@ public class RobotContainer {
         elevator = new ElevatorSubsystem(new Elevator_Sim());
         wrist = new WristSubsystem(new Wrist_SparkFlex());
         mortar = new CoralShooterSubsystem(new CoralShooter_SparkMax());
-        algae501 = new AlgaeShooterSubsystem(new AlgaeShooter_SparkMax());
+        algae501 = new AlgaeShooterSubsystem(new AlgaeShooter_SparkFlex());
 
         break;
     }
@@ -381,10 +380,6 @@ public class RobotContainer {
   // ----------------------------------------------------------------------------------
   private void configureOperatorBindings(CS_XboxController controller) {
 
-    // ---------------------------------------- Start Button
-    //                                          Flip Drivebase directon
-    controller.btn_Back.onTrue(new InstantCommand(() -> drivebase.flipToggle()));
-
     // ---------------------------------------- POV UP/DOWN
     //                                          Elevator up/down 1"
     controller.btn_North.onTrue(new InstantCommand(() -> elevator.goUp(Inches.of(1))));
@@ -398,6 +393,10 @@ public class RobotContainer {
     // ---------------------------------------- X Button
     //                                          Zero Elevator
     controller.btn_X.onTrue(new InstantCommand(() -> elevator.reset()));
+
+    // ---------------------------------------- Y Button
+    //                                          Stow Algae Manipulator
+    controller.btn_Y.onTrue(new ToSubsystemsPreset(() -> Presets.ALGAE_STOW));
 
     // ---------------------------------------- Back Button
     //                                          Flip Drivebase directon
