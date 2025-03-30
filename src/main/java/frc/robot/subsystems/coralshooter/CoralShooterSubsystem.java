@@ -136,6 +136,7 @@ public class CoralShooterSubsystem extends CS_SubsystemBase {
     SmartDashboard.putBoolean("Commands/CoralShooterRampUp/OverrideRPM", false);
     SmartDashboard.putNumber("Commands/CoralShooterRampUp/ForcedRMPLeft", 1275);
     SmartDashboard.putNumber("Commands/CoralShooterRampUp/ForcedRMPRight", 1275);
+    SmartDashboard.putBoolean("Commands/DriveToPoseFinkle/OverrideOffsetDistance", false);
     SmartDashboard.putNumber("Commands/DriveToPoseFinkle/OffsetDistance(in)", 7.0);
 
     SmartDashboard.putNumber("Subsystem/PresetManager/AimPreset/rmpErrorMultiplier", 1.0);
