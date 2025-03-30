@@ -25,6 +25,7 @@ import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotConstants;
+import frc.robot.RobotContainer;
 import frc.robot.UIConstants;
 import frc.robot.UIConstants.ALGAE_FACE;
 import frc.robot.UIConstants.CORAL_BRANCH;
@@ -35,9 +36,9 @@ import frc.robot.subsystems.CS_SubsystemBase;
 import frc.robot.subsystems.Dashboard;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterConstants;
 import frc.robot.subsystems.elevator.ElevatorConstants;
+import frc.utils.CS_Utils;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
-import org.littletonrobotics.frc2025.FieldConstants;
 import org.littletonrobotics.frc2025.FieldConstants.CoralStation;
 import org.littletonrobotics.frc2025.FieldConstants.Reef;
 import org.littletonrobotics.frc2025.FieldConstants.ReefLevel;
@@ -63,6 +64,14 @@ public class PresetManager extends CS_SubsystemBase {
   private static CoralPreset currentCoralPreset = new CoralPreset("autoPreset");
   private static AlgaePreset currentAlgaePreset = new AlgaePreset("autoPreset");
 
+  static StructPublisher<Pose2d> bargeShootPosePub =
+      NetworkTableInstance.getDefault()
+          .getStructTopic("SmartDashboard/Subsystem/PresetManager/BargeShoot/Pose", Pose2d.struct)
+          .publish();
+  StructPublisher<Pose2d> coralPickupPosePub =
+      NetworkTableInstance.getDefault()
+          .getStructTopic("SmartDashboard/Subsystem/PresetManager/CoralPickup/Pose", Pose2d.struct)
+          .publish();
   StructPublisher<Pose2d> coralPresetPosePub =
       NetworkTableInstance.getDefault()
           .getStructTopic("SmartDashboard/Subsystem/PresetManager/CoralPreset/Pose", Pose2d.struct)
@@ -153,9 +162,10 @@ public class PresetManager extends CS_SubsystemBase {
 
     LinearVelocity launchVelocity = MetersPerSecond.of(0);
     Angle launchAngle = Degrees.of(0);
-    double rmpErrorMultiplier = 1.0;
+    double rmpErrorMultiplier = 1.75;
     Angle angleAdjust = Degrees.of(0);
     AngularVelocity launchRpm = RPM.of(0);
+    AngularVelocity maxRpm = AlgaeShooterConstants.maxRPM;
     Angle wristAngle = Degrees.of(0);
 
     Distance wheelRadius = AlgaeShooterConstants.wheelRadius;
@@ -169,17 +179,25 @@ public class PresetManager extends CS_SubsystemBase {
               SmartDashboard.getNumber(
                   "Subsystem/PresetManager/AimPreset/angleAdjust(deg)", angleAdjust.in(Degrees)));
 
-      // Compute Distance to Target (Only using X, assuming we are facing the NET)
-      x = Meters.of(Math.abs(robotPose.getX() - targetPose.getX()));
+      // Compute Distance to Target using robot pose (rotation) to project towards the barge
+      Transform2d vectorToTarget = targetPose.minus(robotPose);
+      double projectedDistance =
+          vectorToTarget.getTranslation().getX() * Math.cos(robotPose.getRotation().getRadians())
+              + vectorToTarget.getTranslation().getY()
+                  * Math.sin(robotPose.getRotation().getRadians());
+      x = Meters.of(Math.abs(projectedDistance));
 
       launchVelocity = FeetPerSecond.of(24.1 + (x.in(Feet) + 2) * (x.in(Feet) + 2) / 70);
-      launchAngle = Degrees.of((x.in(Feet) * -20) * (x.in(Feet) - 20) / 11 + 55 + (x.in(Feet) / 5));
+      launchAngle = Degrees.of((x.in(Feet) - 20) * (x.in(Feet) - 20) / 11 + 55 + (x.in(Feet) / 5));
 
       launchRpm =
-          RPM.of(
-                  (launchVelocity.in(InchesPerSecond) / (wheelRadius.in(Inches) * (2 * Math.PI)))
-                      * 60)
-              .times(rmpErrorMultiplier);
+          CS_Utils.min(
+              RPM.of(
+                      (launchVelocity.in(InchesPerSecond)
+                              / (wheelRadius.in(Inches) * (2 * Math.PI)))
+                          * 60)
+                  .times(rmpErrorMultiplier),
+              maxRpm);
 
       wristAngle = Degrees.of(180).minus(launchAngle).plus(angleAdjust);
     }
@@ -201,7 +219,7 @@ public class PresetManager extends CS_SubsystemBase {
         "Subsystem/PresetManager/AimPreset/WristAngle (deg)", wristAngle.in(Degrees));
 
     SmartDashboard.putNumber(
-        "Presets/AimPreset/ElevatorHeight (in)", elevatorHeight.get().in(Inches));
+        "Presets/PresetManager/AimPreset/ElevatorHeight (in)", elevatorHeight.get().in(Inches));
 
     aimPreset.setElevatorHeight(elevatorHeight.get());
     aimPreset.setWristAngle(wristAngle);
@@ -216,16 +234,15 @@ public class PresetManager extends CS_SubsystemBase {
    * @param robotPoseSupplier Current Pose of the Robot
    * @return AlgaePreset
    */
-  public static AlgaePreset getBargeShootPreset(Supplier<Pose2d> robotPoseSupplier) {
+  public static AlgaePreset getBargeShootPreset() {
     AlgaePreset retVal = Presets.ALGAE_SHOOTBARGE_OURSIDE;
-    Pose2d robotPose = robotPoseSupplier.get();
 
-    if (robotPose.getX() > (FieldConstants.fieldLength / 2)) {
-      // We are on their side
+    if (!RobotContainer.drivebase.onOurSide()) {
       retVal = Presets.ALGAE_SHOOTBARGE_THEIRSIDE;
     }
+    retVal.setPose(AllianceFlipUtil.apply(retVal.getPose()));
+    bargeShootPosePub.set(retVal.getPose());
 
-    retVal.setPose(AllianceFlipUtil.apply(retVal.getShootingPose()));
     return retVal;
   }
 
@@ -615,13 +632,13 @@ public class PresetManager extends CS_SubsystemBase {
         break;
     }
 
-    System.out.printf(
-        "New Face (%s - %s) - x: %3f, y: %3f, theta: %3f\n",
-        face,
-        isLow ? "Low" : "High",
-        Reef.centerFaces[faceId].getX(),
-        Reef.centerFaces[faceId].getY(),
-        Reef.centerFaces[faceId].getRotation().getDegrees());
+    // System.out.printf(
+    //     "New Face (%s - %s) - x: %3f, y: %3f, theta: %3f\n",
+    //     face,
+    //     isLow ? "Low" : "High",
+    //     Reef.centerFaces[faceId].getX(),
+    //     Reef.centerFaces[faceId].getY(),
+    //     Reef.centerFaces[faceId].getRotation().getDegrees());
 
     return Reef.centerFaces[faceId];
   }
@@ -672,6 +689,7 @@ public class PresetManager extends CS_SubsystemBase {
 
   @Override
   public void updateDashboard() {
+    coralPickupPosePub.set(getRobotPoseFromPickupSide(() -> uiCurrentPickupSide));
     coralPresetPosePub.set(currentCoralPreset.getPose());
     SmartDashboard.putNumber(
         "Subsystem/PresetManager/CoralPreset/RPMLeft", currentCoralPreset.getRPMLeft().in(RPM));
