@@ -54,7 +54,7 @@ public class AlgaePreset {
     this.robotPose = newPose;
     this.hasPose = true;
     System.out.printf(
-        "[ALGAEPRESET] New Pose Set to - x: %3f, y: %3f, theta: %3f",
+        "[ALGAEPRESET] New Pose Set to - x: %3f, y: %3f, theta: %3f\n",
         robotPose.getX(), robotPose.getY(), robotPose.getRotation().getDegrees());
   }
 
@@ -107,12 +107,6 @@ public class AlgaePreset {
         this.rpm = Presets.ALGAE_LOW.getRPM();
         this.hasSubsystemsReady = true;
         break;
-      case "PROCESSOR":
-        this.elevatorHeight = Presets.ALGAE_PROCESS.getElevatorHeight();
-        this.wristAngle = Presets.ALGAE_PROCESS.getWristAngle();
-        this.rpm = Presets.ALGAE_PROCESS.getRPM();
-        this.hasSubsystemsReady = true;
-        break;
       case "POPSTICLE":
         this.elevatorHeight = Presets.ALGAE_POPSTICLE.getElevatorHeight();
         this.wristAngle = Presets.ALGAE_POPSTICLE.getWristAngle();
@@ -155,6 +149,10 @@ public class AlgaePreset {
 
   public Angle getWristAngle() {
     return this.wristAngle;
+  }
+
+  public String getName() {
+    return this.name;
   }
 
   /**
