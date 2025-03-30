@@ -6,6 +6,8 @@ package frc.robot.subsystems.drive;
 
 import static edu.wpi.first.units.Units.Meter;
 import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.MetersPerSecondPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecondPerSecond;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -18,10 +20,9 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.DriveFeedforwards;
 import com.pathplanner.lib.util.swerve.SwerveSetpoint;
 import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -52,6 +53,7 @@ import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 import org.json.simple.parser.ParseException;
+import org.littletonrobotics.frc2025.FieldConstants;
 import org.littletonrobotics.frc2025.util.AllianceFlipUtil;
 import org.photonvision.targeting.PhotonPipelineResult;
 import swervelib.SwerveController;
@@ -68,9 +70,6 @@ public class SwerveSubsystem extends CS_SubsystemBase {
 
   /** Swerve drive object. */
   protected final SwerveDrive swerveDrive;
-  /** AprilTag field layout. */
-  private final AprilTagFieldLayout aprilTagFieldLayout =
-      AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark);
   /** Enable vision odometry updates while driving. */
   private final boolean visionDriveTest = true;
   /** PhotonVision class to keep an accurate odometry. */
@@ -96,14 +95,21 @@ public class SwerveSubsystem extends CS_SubsystemBase {
           new SwerveParser(directory)
               .createSwerveDrive(
                   RobotConstants.MAX_LINEAR_VELOCITY.in(MetersPerSecond),
-                  new Pose2d(
-                      new Translation2d(Meter.of(1), Meter.of(4)), Rotation2d.fromDegrees(0)));
+                  AllianceFlipUtil.apply(
+                      new Pose2d(
+                          new Translation2d(Meter.of(7.2), Meter.of(4)),
+                          Rotation2d.fromDegrees(180))));
       // Alternative method if you don't want to supply the conversion factor via JSON files.
       // swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumSpeed,
       // angleConversionFactor, driveConversionFactor);
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
+    swerveDrive.swerveController.addSlewRateLimiters(
+        new SlewRateLimiter(RobotConstants.MAX_LINEAR_ACCELERATION.in(MetersPerSecondPerSecond)),
+        new SlewRateLimiter(RobotConstants.MAX_LINEAR_ACCELERATION.in(MetersPerSecondPerSecond)),
+        new SlewRateLimiter(RobotConstants.MAX_ANGULAR_ACCELERATION.in(RadiansPerSecondPerSecond)));
+
     swerveDrive.setHeadingCorrection(
         false); // Heading correction should only be used while controlling the robot via angle.
     swerveDrive.setCosineCompensator(
@@ -564,6 +570,11 @@ public class SwerveSubsystem extends CS_SubsystemBase {
     return swerveDrive.getPose();
   }
 
+  public boolean onOurSide() {
+    return AllianceFlipUtil.shouldFlip()
+        ^ this.getPose().getX() - (FieldConstants.fieldLength / 2) < 0;
+  }
+
   /**
    * Set chassis speeds with closed-loop velocity control.
    *
@@ -777,6 +788,11 @@ public class SwerveSubsystem extends CS_SubsystemBase {
     SmartDashboard.putNumber("Subsystem/Drive/Roll", this.getRoll());
     SmartDashboard.putNumber("Subsystem/Drive/Yaw", this.getYaw());
     SmartDashboard.putBoolean("Subsystem/Drive/IsFlipped", isFlipped);
-    robotPosePub.set(new Pose3d(getPose()));
+    SmartDashboard.putBoolean("Subsystem/Drive/onOurSide", onOurSide());
+
+    double absoluteSpeed =
+        Math.hypot(
+            this.getRobotVelocity().vxMetersPerSecond, this.getRobotVelocity().vyMetersPerSecond);
+    SmartDashboard.putNumber("Subsystem/Drive/AbsoluteVelocity(m.s-2)", absoluteSpeed);
   }
 }
