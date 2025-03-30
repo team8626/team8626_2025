@@ -2727,7 +2727,7 @@
             "height": 96.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Commands/DriveToPoseFinkle/OffsetDistance(in)",
+              "topic": "/SmartDashboard/Commands/ToPathAndFinkleAndCoralShootWithOffset/OffsetDistance(in)",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
