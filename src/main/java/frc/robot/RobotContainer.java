@@ -57,6 +57,7 @@ import frc.robot.subsystems.coralshooter.CoralShooter_Sim;
 import frc.robot.subsystems.coralshooter.CoralShooter_SparkMax;
 import frc.robot.subsystems.drive.SwerveSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
+import frc.robot.subsystems.elevator.Elevator_LinearSparkMax;
 import frc.robot.subsystems.elevator.Elevator_Sim;
 import frc.robot.subsystems.ledManager.LEDManager;
 import frc.robot.subsystems.presets.CoralPreset;
@@ -139,7 +140,7 @@ public class RobotContainer {
       case COMPBOT:
       default:
         drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(), "swerve_devbot"));
-        elevator = new ElevatorSubsystem(new Elevator_Sim());
+        elevator = new ElevatorSubsystem(new Elevator_LinearSparkMax());
         wrist = new WristSubsystem(new Wrist_SparkFlex());
         mortar = new CoralShooterSubsystem(new CoralShooter_SparkMax());
         algae501 = new AlgaeShooterSubsystem(new AlgaeShooter_SparkFlex());
@@ -192,13 +193,12 @@ public class RobotContainer {
     // ---------------------------------------- Right Bumper
     //                                          Coral Intake
     controller.btn_RightBumper.toggleOnTrue(
-        Commands.defer((() -> new ToPathAndFinkleAndCoralIntake()), Set.of(mortar)));
+        Commands.defer((() -> new CoralShooterIntake()), Set.of(mortar)));
 
     // ---------------------------------------- Right Trigger
     //                                          Coral Shoot
-    // controller.btn_RightTrigger.toggleOnTrue(new ToPathAndCoralShoot3());
     controller.btn_RightTrigger.toggleOnTrue(
-        Commands.defer((() -> new ToPathAndFinkleAndCoralShoot()), Set.of(drivebase, mortar)));
+        Commands.defer((() -> new ToCoralShoot()), Set.of(mortar)));
 
     // ---------------------------------------- Left Bumper
     //                                          Algae Intake (based on Dashboard Selection)
