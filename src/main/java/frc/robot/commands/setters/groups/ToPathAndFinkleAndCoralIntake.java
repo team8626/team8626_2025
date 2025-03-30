@@ -46,7 +46,8 @@ public class ToPathAndFinkleAndCoralIntake extends SequentialCommandGroup {
 
         // Drive to Target Pose
         new DriveToPoseFinkle2(targetPose, () -> Inches.of(1), () -> Degrees.of(5))
-            .onlyIf(() -> !targetPose.get().equals(new Pose2d())),
+            .onlyIf(() -> !targetPose.get().equals(new Pose2d()))
+            .withDeadline(new CoralShooterIntake()),
 
         // Coral Intake
         new CoralShooterIntake().onlyIf(() -> !mortar.isLoaded()),
