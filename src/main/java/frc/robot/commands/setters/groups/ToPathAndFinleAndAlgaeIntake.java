@@ -23,7 +23,7 @@ public class ToPathAndFinleAndAlgaeIntake extends SequentialCommandGroup {
 
   private Supplier<Pose2d> targetPose =
       () -> PresetManager.getAlgaePreset().get().getDealgaefyPose();
-  Supplier<Pose2d> offsetPose =
+  private Supplier<Pose2d> offsetPose =
       () ->
           PresetManager.getAlgaePreset()
               .get()

@@ -13,6 +13,7 @@ import static edu.wpi.first.units.Units.RadiansPerSecondPerSecond;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularAcceleration;
 import edu.wpi.first.units.measure.AngularVelocity;
@@ -32,8 +33,8 @@ public class DriveTurnToAngle extends CS_Command {
 
   private Supplier<Angle> desiredAngle = () -> Degrees.of(0);
 
-  private AngularVelocity defaultRotationMaxVelocity = DegreesPerSecond.of(720);
-  private AngularAcceleration defaultRotationMaxAcceleration = DegreesPerSecondPerSecond.of(360);
+  private AngularVelocity defaultRotationMaxVelocity = DegreesPerSecond.of(360);
+  private AngularAcceleration defaultRotationMaxAcceleration = DegreesPerSecondPerSecond.of(180);
 
   private static final Angle defaultRotationTolerance = Degrees.of(2.0);
   private static final AngularVelocity defaultRotationVelocityTolerance = DegreesPerSecond.of(5.0);
@@ -64,7 +65,6 @@ public class DriveTurnToAngle extends CS_Command {
 
   @Override
   public void initialize() {
-    // m_drive.resetOdometry();
     Commodore.setCommodoreState(CommodoreState.DRIVE_TURN_TO_ANGLE);
 
     rotPIDController.setPID(defaultRotP, 0, 0);
@@ -83,11 +83,14 @@ public class DriveTurnToAngle extends CS_Command {
   @Override
   public void execute() {
     double currentRotationRadians = drive.getPose().getRotation().getRadians();
-
+    printf(
+        "I have %f, I want %f\n",
+        Units.radiansToDegrees(currentRotationRadians), desiredAngle.get().in(Degrees));
     double calculateTheta =
         rotPIDController.calculate(currentRotationRadians, desiredAngle.get().in(Radians));
+    printf("calculateTheta: %f\n", calculateTheta);
 
-    drive.CS_driveCommand(() -> 0, () -> 0, () -> calculateTheta, () -> true).execute();
+    drive.CS_driveCommand(() -> 0, () -> 0, () -> calculateTheta, () -> false).execute();
   }
 
   @Override

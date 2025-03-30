@@ -30,11 +30,7 @@ public class ToPathAndFinkleAndCoralIntake extends SequentialCommandGroup {
       () -> PresetManager.getRobotPoseFromPickupSide(PresetManager.getPickupSide());
 
   private Supplier<Pose2d> offsetPose =
-      () ->
-          PresetManager.getCoralPreset()
-              .get()
-              .getPose()
-              .plus(new Transform2d(Units.inchesToMeters(36), 0, new Rotation2d()));
+      () -> targetPose.get().plus(new Transform2d(Units.inchesToMeters(24), 0, new Rotation2d()));
 
   public ToPathAndFinkleAndCoralIntake() {
     CoralShooterSubsystem mortar = RobotContainer.mortar;

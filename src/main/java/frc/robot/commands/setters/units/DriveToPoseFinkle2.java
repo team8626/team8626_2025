@@ -49,7 +49,7 @@ public class DriveToPoseFinkle2 extends CS_Command {
   private final ProfiledPIDController rotPIDController =
       new ProfiledPIDController(0, 0, 0, new TrapezoidProfile.Constraints(0, 0));
 
-  private Supplier<Pose2d> m_desiredPoseSupplier;
+  private Supplier<Pose2d> desiredPose;
   private Pose2d m_pose;
 
   private double m_xDesiredPos;
@@ -63,7 +63,7 @@ public class DriveToPoseFinkle2 extends CS_Command {
   private AngularAcceleration defaultRotationMaxAcceleration = DegreesPerSecondPerSecond.of(360);
 
   private static final Distance defaultPositionTolerance = Meters.of(0.025);
-  private static final Distance defaultPoseOffsetX = Inches.of(1);
+  private static final Distance defaultPoseOffsetX = Inches.of(0);
   private static final LinearVelocity defaultPositionVelocityTolerance = MetersPerSecond.of(0.03);
   private static final Angle defaultRotationTolerance = Degrees.of(2.0);
   private static final AngularVelocity defaultRotationVelocityTolerance = DegreesPerSecond.of(5.0);
@@ -116,12 +116,13 @@ public class DriveToPoseFinkle2 extends CS_Command {
   /**
    * Creates a new DriveToPoseFinkle command.
    *
-   * @param desiredPoseSupplier
+   * @param new_pose
+   * @param offset as a Distance
    * @param posToleranceSupplier as a Distance
    * @param new_rotationTolerance as an Angle
    */
   public DriveToPoseFinkle2(
-      Supplier<Pose2d> desiredPoseSupplier,
+      Supplier<Pose2d> new_pose,
       Supplier<Distance> offset,
       Supplier<Distance> new_positionTolerance,
       Supplier<Angle> new_rotationTolerance) {
@@ -130,8 +131,7 @@ public class DriveToPoseFinkle2 extends CS_Command {
     positionTolerance = new_positionTolerance.get();
     rotationTolerance = new_rotationTolerance.get();
     positionOffsetX = offset.get();
-
-    m_desiredPoseSupplier = desiredPoseSupplier;
+    desiredPose = new_pose;
 
     setName("DRIVETOPOSEFINKLE2");
 
@@ -147,8 +147,8 @@ public class DriveToPoseFinkle2 extends CS_Command {
     // m_drive.resetOdometry();
 
     hasValidPose = false;
-    if (m_desiredPoseSupplier != null) {
-      if (m_desiredPoseSupplier.get() != null) {
+    if (desiredPose != null) {
+      if (desiredPose.get() != null) {
         hasValidPose = true;
       }
     }
@@ -159,9 +159,7 @@ public class DriveToPoseFinkle2 extends CS_Command {
       updatePositionValues();
 
       Pose2d offsetPose =
-          m_desiredPoseSupplier
-              .get()
-              .plus(new Transform2d(positionOffsetX.in(Meters), 0, new Rotation2d()));
+          desiredPose.get().plus(new Transform2d(positionOffsetX.in(Meters), 0, new Rotation2d()));
 
       targetPosePub.set(offsetPose);
       currentPosePub.set(m_pose);
@@ -189,7 +187,7 @@ public class DriveToPoseFinkle2 extends CS_Command {
     if (hasValidPose) {
       m_pose = m_drive.getPose();
 
-      targetPosePub.set(m_desiredPoseSupplier.get());
+      targetPosePub.set(desiredPose.get());
       currentPosePub.set(m_pose);
 
       double calculateX = xPIDController.calculate(m_pose.getX(), m_xDesiredPos);
@@ -377,8 +375,9 @@ public class DriveToPoseFinkle2 extends CS_Command {
   }
 
   private void updatePositionValues() {
-
-    positionOffsetX =
-        Inches.of(SmartDashboard.getNumber("Commands/DriveToPoseFinkle/OffsetDistance(in)", 7));
+    if (SmartDashboard.getBoolean("Commands/DriveToPoseFinkle/OverrideOffsetDistance", false)) {
+      positionOffsetX =
+          Inches.of(SmartDashboard.getNumber("Commands/DriveToPoseFinkle/OffsetDistance(in)", 7.0));
+    }
   }
 }
