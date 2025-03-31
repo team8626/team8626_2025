@@ -38,10 +38,10 @@ import frc.robot.commands.setters.autos.Auto_K;
 import frc.robot.commands.setters.autos.Auto_L;
 import frc.robot.commands.setters.groups.ToAlgaeShoot;
 import frc.robot.commands.setters.groups.ToCoralShoot;
+import frc.robot.commands.setters.groups.ToPathAndFinkleAndAlgaeIntake;
 import frc.robot.commands.setters.groups.ToPathAndFinkleAndAlgaeShoot;
 import frc.robot.commands.setters.groups.ToPathAndFinkleAndCoralIntake;
 import frc.robot.commands.setters.groups.ToPathAndFinkleAndCoralShoot;
-import frc.robot.commands.setters.groups.ToPathAndFinleAndAlgaeIntake;
 import frc.robot.commands.setters.groups.ToSubsystemsPreset;
 import frc.robot.commands.setters.units.AlgaeShooterDiscard;
 import frc.robot.commands.setters.units.AlgaeShooterRampUp;
@@ -206,10 +206,13 @@ public class RobotContainer {
     controller.btn_LeftBumper.toggleOnTrue(
         Commands.defer(
             () ->
-                new ToPathAndFinleAndAlgaeIntake()
+                new ToPathAndFinkleAndAlgaeIntake()
                     .onlyIf(() -> !algae501.isLoaded())
                     .handleInterrupt(
-                        () -> new ToSubsystemsPreset(() -> Presets.ALGAE_STOW).schedule()),
+                        () ->
+                            new ToSubsystemsPreset(() -> Presets.ALGAE_STOW)
+                                .alongWith(new InstantCommand(() -> algae501.stopAll()))
+                                .schedule()),
             Set.of(elevator, wrist, algae501)));
 
     // ---------------------------------------- Left Trigger
@@ -475,7 +478,7 @@ public class RobotContainer {
     NamedCommands.registerCommand(
         "RemoveSelectedAlgae",
         Commands.defer(
-            (() -> new ToPathAndFinleAndAlgaeIntake().onlyIf(() -> !algae501.isLoaded())),
+            (() -> new ToPathAndFinkleAndAlgaeIntake().onlyIf(() -> !algae501.isLoaded())),
             Set.of(elevator, wrist, algae501)));
   }
 

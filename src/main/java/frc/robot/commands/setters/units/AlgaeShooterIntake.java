@@ -24,6 +24,7 @@ public class AlgaeShooterIntake extends CS_Command {
   private Timer timer = new Timer();
   private boolean algaeDetected = false;
   private Supplier<AngularVelocity> desiredRPM;
+  private boolean doNoStopOnIntake = false;
 
   public AlgaeShooterIntake() {
     algae501 = RobotContainer.algae501;
@@ -41,6 +42,11 @@ public class AlgaeShooterIntake extends CS_Command {
     addRequirements(algae501);
 
     this.setTAGString("ALGAESHOOTER_INTAKE");
+  }
+
+  public AlgaeShooterIntake withDoNotStopOnIntake() {
+    doNoStopOnIntake = true;
+    return this;
   }
 
   // Called when the command is initially scheduled.
@@ -67,7 +73,7 @@ public class AlgaeShooterIntake extends CS_Command {
     } else {
       Dashboard.setAlgaeState(GamePieceState.IDLE);
     }
-    algae501.stopAll();
+    if (!doNoStopOnIntake) algae501.stopAll();
   }
 
   // Returns true when the command should end.
