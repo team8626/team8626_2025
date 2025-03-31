@@ -139,7 +139,8 @@ public class RobotContainer {
         break;
       case COMPBOT:
       default:
-        drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(), "swerve_devbot"));
+        drivebase =
+            new SwerveSubsystem(new File(Filesystem.getDeployDirectory(), "swerve_tsunami"));
         elevator = new ElevatorSubsystem(new Elevator_LinearSparkMax());
         wrist = new WristSubsystem(new Wrist_SparkFlex());
         mortar = new CoralShooterSubsystem(new CoralShooter_SparkMax());
@@ -285,7 +286,7 @@ public class RobotContainer {
     // ---------------------------------------- POV DOWN Button
     //                                          Algae Shoot Low From Reef
     controller
-        .btn_North
+        .btn_South
         .and(ourSide)
         .whileTrue(
             Commands.defer(
@@ -298,7 +299,7 @@ public class RobotContainer {
                 Set.of(drivebase, elevator, wrist, algae501)));
 
     controller
-        .btn_North
+        .btn_South
         .and(theirSide)
         .whileTrue(
             Commands.defer(
@@ -312,18 +313,18 @@ public class RobotContainer {
 
     // ---------------------------------------- POV LEFT Button
     //                                          Auto Shoot Algae
-    controller.btn_West.toggleOnTrue(
-        Commands.defer(
-            (() ->
-                new ToAlgaeShoot(
-                        () -> PresetManager.getAimAndShootPreset(() -> drivebase.getPose()))
-                    .onlyIf(() -> algae501.isLoaded())),
-            Set.of(elevator, wrist, algae501)));
+    // controller.btn_West.toggleOnTrue(
+    //     Commands.defer(
+    //         (() ->
+    //             new ToAlgaeShoot(
+    //                     () -> PresetManager.getAimAndShootPreset(() -> drivebase.getPose()))
+    //                 .onlyIf(() -> algae501.isLoaded())),
+    //         Set.of(elevator, wrist, algae501)));
 
     // ---------------------------------------- POV Right Button
     //                                          Process Algae
     controller
-        .btn_West
+        .btn_East
         .and(ourSide)
         .whileTrue(
             Commands.defer(
@@ -336,7 +337,7 @@ public class RobotContainer {
                 Set.of(drivebase, elevator, wrist, algae501)));
 
     controller
-        .btn_West
+        .btn_East
         .and(theirSide)
         .whileTrue(
             Commands.defer(
@@ -359,8 +360,11 @@ public class RobotContainer {
 
     // ---------------------------------------- TRIGGER STOW on Tipping Over
     new Trigger(
-            () -> Math.abs(drivebase.getPitch() - 10) > 0 || Math.abs(drivebase.getRoll() - 10) > 0)
-        .debounce(0.05)
+            () ->
+                (elevator.getHeight().in(Inches) > 12
+                    && (Math.abs(drivebase.getPitch().in(Degrees)) > 5
+                        || Math.abs(drivebase.getRoll().in(Degrees)) > 5)))
+        // .debounce(0.025)
         .onTrue(
             new ToSubsystemsPreset(() -> Presets.ALGAE_STOW)
                 .alongWith(RumbleCommand.longRumble(driver))

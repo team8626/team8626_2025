@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Commodore;
 import frc.robot.Commodore.CommodoreState;
 import frc.robot.RobotConstants;
@@ -52,7 +53,7 @@ public class ToPathAndFinkleAndAlgaeShoot extends SequentialCommandGroup {
                     .onlyIf(() -> !targetPose.get().equals(new Pose2d())),
 
                 // Adjust Subsystems & Start Rampup
-                new ToSubsystemsPreset(algaePreset)),
+                new WaitCommand(0.5).andThen(new ToSubsystemsPreset(algaePreset))),
 
             // Shoot Algae
             new ToAlgaeShoot(algaePreset),

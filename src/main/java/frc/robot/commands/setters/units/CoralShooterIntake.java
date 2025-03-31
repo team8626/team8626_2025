@@ -53,7 +53,7 @@ public class CoralShooterIntake extends CS_Command {
         intakeTimer.reset();
       }
     } else {
-      if (intakeTimer.hasElapsed(3.0)) {
+      if (intakeTimer.hasElapsed(.75)) {
         mortar.stopAll();
         intakePaused = true;
         intakeTimer.reset();

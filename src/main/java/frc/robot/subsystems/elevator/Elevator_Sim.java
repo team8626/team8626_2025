@@ -6,10 +6,8 @@ import static edu.wpi.first.units.Units.Kilograms;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Volts;
-import static frc.robot.subsystems.elevator.ElevatorConstants.gains0;
-import static frc.robot.subsystems.elevator.ElevatorConstants.gains1;
+import static frc.robot.subsystems.elevator.ElevatorConstants.gains;
 
-import com.revrobotics.spark.ClosedLoopSlot;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -24,8 +22,7 @@ public class Elevator_Sim implements ElevatorInterface, CS_InterfaceBase {
   private Distance desiredSetpoint =
       ElevatorConstants.initHeight.minus(ElevatorConstants.cascadingOffset);
 
-  private ElevatorConstants.Gains pid0gains = gains0;
-  private ElevatorConstants.Gains pid1gains = gains1;
+  private ElevatorConstants.Gains pid0gains = gains;
 
   ElevatorSim elevatorSim =
       new ElevatorSim(
@@ -71,7 +68,8 @@ public class Elevator_Sim implements ElevatorInterface, CS_InterfaceBase {
     if (goingUp) {
       this.pidController.setPID(pid0gains.kP(), pid0gains.kI(), pid0gains.kD());
     } else {
-      this.pidController.setPID(pid1gains.kP(), pid1gains.kI(), pid1gains.kD());
+      // this.pidController.setPID(pid1gains.kP(), pid1gains.kI(), pid1gains.kD());
+      this.pidController.setPID(pid0gains.kP(), pid0gains.kI(), pid0gains.kD());
     }
     this.pidController.setSetpoint(desiredSetpoint.in(Meters));
     double output = this.pidController.calculate(elevatorSim.getPositionMeters());
@@ -89,24 +87,22 @@ public class Elevator_Sim implements ElevatorInterface, CS_InterfaceBase {
     return retval;
   }
 
-  @Override
-  public void setOutputRange(double min, double max, ClosedLoopSlot slot) {
-    printf("New Range %s: %f, %f, %f", slot.toString(), min, max);
-  }
+  // @Override
+  // public void setOutputRange(double min, double max) {
+  // }
 
   @Override
-  public void setPID(double newkP, double newkI, double newkD, ClosedLoopSlot slot) {
-    printf("New PID %s: %f, %f, %f", slot.toString(), newkP, newkI, newkD);
+  public void setPID(double newkP, double newkI, double newkD) {
 
-    switch (slot) {
-      case kSlot0:
-        pid0gains = new ElevatorConstants.Gains(newkP, newkI, newkD);
-        break;
-      case kSlot1:
-        pid1gains = new ElevatorConstants.Gains(newkP, newkI, newkD);
-        break;
-      default:
-    }
+    // switch (slot) {
+    //   case kSlot0:
+    //     pid0gains = new ElevatorConstants.Gains(newkP, newkI, newkD);
+    //     break;
+    //   case kSlot1:
+    //     pid1gains = new ElevatorConstants.Gains(newkP, newkI, newkD);
+    //     break;
+    //   default:
+    // }
     pidController.setPID(newkP, newkI, newkD);
   }
 

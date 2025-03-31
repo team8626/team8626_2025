@@ -4,8 +4,10 @@
 
 package frc.robot.subsystems.drive;
 
+import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Meter;
 import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Radians;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -30,6 +32,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -726,12 +729,12 @@ public class SwerveSubsystem extends CS_SubsystemBase {
     swerveDrive.lockPose();
   }
 
-  public double getPitch() {
-    return swerveDrive.getPitch().getDegrees();
+  public Angle getPitch() {
+    return Radians.of(swerveDrive.getRoll().getRadians());
   }
 
-  public double getRoll() {
-    return swerveDrive.getRoll().getDegrees();
+  public Angle getRoll() {
+    return Radians.of(swerveDrive.getPitch().getRadians());
   }
 
   public double getYaw() {
@@ -782,8 +785,8 @@ public class SwerveSubsystem extends CS_SubsystemBase {
    */
   public void updateDashboard() {
     SmartDashboard.putNumber("Subsystem/Drive/Heading", getHeading().getDegrees());
-    SmartDashboard.putNumber("Subsystem/Drive/Pitch", this.getPitch());
-    SmartDashboard.putNumber("Subsystem/Drive/Roll", this.getRoll());
+    SmartDashboard.putNumber("Subsystem/Drive/Pitch", this.getPitch().in(Degrees));
+    SmartDashboard.putNumber("Subsystem/Drive/Roll", this.getRoll().in(Degrees));
     SmartDashboard.putNumber("Subsystem/Drive/Yaw", this.getYaw());
     SmartDashboard.putBoolean("Subsystem/Drive/IsFlipped", isFlipped);
     SmartDashboard.putBoolean("Subsystem/Drive/onOurSide", onOurSide());
