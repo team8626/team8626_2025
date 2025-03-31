@@ -425,7 +425,7 @@
             "title": "AlgaeShooterSubsystem",
             "x": 32.0,
             "y": 576.0,
-            "width": 352.0,
+            "width": 384.0,
             "height": 96.0,
             "type": "Subsystem",
             "properties": {
@@ -437,7 +437,7 @@
             "title": "WristSubsystem",
             "x": 32.0,
             "y": 480.0,
-            "width": 352.0,
+            "width": 384.0,
             "height": 96.0,
             "type": "Subsystem",
             "properties": {
@@ -449,7 +449,7 @@
             "title": "ElevatorSubsystem",
             "x": 32.0,
             "y": 384.0,
-            "width": 352.0,
+            "width": 384.0,
             "height": 96.0,
             "type": "Subsystem",
             "properties": {
@@ -725,6 +725,24 @@
             "properties": {
               "topic": "/photonvision/Arducam_AT003/hasTarget",
               "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "IsFlipped",
+            "x": 32.0,
+            "y": 288.0,
+            "width": 384.0,
+            "height": 64.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/SmartDashboard/Subsystem/Drive/IsFlipped",
+              "period": 0.06,
+              "data_type": "boolean",
               "true_color": 4283215696,
               "false_color": 4294198070,
               "true_icon": "None",
@@ -1395,164 +1413,39 @@
       "grid_layout": {
         "layouts": [
           {
-            "title": "Slot0(Up)",
-            "x": 64.0,
-            "y": 64.0,
+            "title": "Output",
+            "x": 384.0,
+            "y": 448.0,
             "width": 256.0,
-            "height": 384.0,
+            "height": 192.0,
             "type": "List Layout",
             "properties": {
               "label_position": "TOP"
             },
             "children": [
               {
-                "title": "D",
+                "title": "Max",
                 "x": 0.0,
                 "y": 0.0,
                 "width": 128.0,
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Subsystem/ElevatorSubsystem/Gains/Slot0(Up)/D",
+                  "topic": "/SmartDashboard/Subsystem/ElevatorSubsystem/Gains/Output/Max",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
                 }
               },
               {
-                "title": "I",
+                "title": "Min",
                 "x": 0.0,
                 "y": 0.0,
                 "width": 128.0,
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Subsystem/ElevatorSubsystem/Gains/Slot0(Up)/I",
-                  "period": 0.06,
-                  "data_type": "double",
-                  "show_submit_button": false
-                }
-              },
-              {
-                "title": "P",
-                "x": 0.0,
-                "y": 0.0,
-                "width": 128.0,
-                "height": 128.0,
-                "type": "Text Display",
-                "properties": {
-                  "topic": "/SmartDashboard/Subsystem/ElevatorSubsystem/Gains/Slot0(Up)/P",
-                  "period": 0.06,
-                  "data_type": "double",
-                  "show_submit_button": false
-                }
-              },
-              {
-                "title": "maxOutput",
-                "x": 0.0,
-                "y": 0.0,
-                "width": 128.0,
-                "height": 128.0,
-                "type": "Text Display",
-                "properties": {
-                  "topic": "/SmartDashboard/Subsystem/ElevatorSubsystem/Gains/Slot0(Up)/maxOutput",
-                  "period": 0.06,
-                  "data_type": "double",
-                  "show_submit_button": false
-                }
-              },
-              {
-                "title": "minOutput",
-                "x": 0.0,
-                "y": 0.0,
-                "width": 128.0,
-                "height": 128.0,
-                "type": "Text Display",
-                "properties": {
-                  "topic": "/SmartDashboard/Subsystem/ElevatorSubsystem/Gains/Slot0(Up)/minOutput",
-                  "period": 0.06,
-                  "data_type": "double",
-                  "show_submit_button": false
-                }
-              }
-            ]
-          },
-          {
-            "title": "Slot1(Down)",
-            "x": 1216.0,
-            "y": 128.0,
-            "width": 256.0,
-            "height": 384.0,
-            "type": "List Layout",
-            "properties": {
-              "label_position": "TOP"
-            },
-            "children": [
-              {
-                "title": "D",
-                "x": 0.0,
-                "y": 0.0,
-                "width": 128.0,
-                "height": 128.0,
-                "type": "Text Display",
-                "properties": {
-                  "topic": "/SmartDashboard/Subsystem/ElevatorSubsystem/Gains/Slot1(Down)/D",
-                  "period": 0.06,
-                  "data_type": "double",
-                  "show_submit_button": false
-                }
-              },
-              {
-                "title": "I",
-                "x": 0.0,
-                "y": 0.0,
-                "width": 128.0,
-                "height": 128.0,
-                "type": "Text Display",
-                "properties": {
-                  "topic": "/SmartDashboard/Subsystem/ElevatorSubsystem/Gains/Slot1(Down)/I",
-                  "period": 0.06,
-                  "data_type": "double",
-                  "show_submit_button": false
-                }
-              },
-              {
-                "title": "P",
-                "x": 0.0,
-                "y": 0.0,
-                "width": 128.0,
-                "height": 128.0,
-                "type": "Text Display",
-                "properties": {
-                  "topic": "/SmartDashboard/Subsystem/ElevatorSubsystem/Gains/Slot1(Down)/P",
-                  "period": 0.06,
-                  "data_type": "double",
-                  "show_submit_button": false
-                }
-              },
-              {
-                "title": "maxOutput",
-                "x": 0.0,
-                "y": 0.0,
-                "width": 128.0,
-                "height": 128.0,
-                "type": "Text Display",
-                "properties": {
-                  "topic": "/SmartDashboard/Subsystem/ElevatorSubsystem/Gains/Slot1(Down)/maxOutput",
-                  "period": 0.06,
-                  "data_type": "double",
-                  "show_submit_button": false
-                }
-              },
-              {
-                "title": "minOutput",
-                "x": 0.0,
-                "y": 0.0,
-                "width": 128.0,
-                "height": 128.0,
-                "type": "Text Display",
-                "properties": {
-                  "topic": "/SmartDashboard/Subsystem/ElevatorSubsystem/Gains/Slot1(Down)/minOutput",
+                  "topic": "/SmartDashboard/Subsystem/ElevatorSubsystem/Gains/Output/Min",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -1565,7 +1458,7 @@
             "x": 384.0,
             "y": 224.0,
             "width": 256.0,
-            "height": 288.0,
+            "height": 224.0,
             "type": "List Layout",
             "properties": {
               "label_position": "TOP"
@@ -1665,9 +1558,9 @@
           {
             "title": "TemperatureLeft",
             "x": 640.0,
-            "y": 416.0,
+            "y": 512.0,
             "width": 256.0,
-            "height": 96.0,
+            "height": 128.0,
             "type": "Text Display",
             "properties": {
               "topic": "/SmartDashboard/Subsystem/ElevatorSubsystem/TemperatureLeft",
@@ -1679,9 +1572,9 @@
           {
             "title": "TemperatureRight",
             "x": 896.0,
-            "y": 416.0,
+            "y": 512.0,
             "width": 256.0,
-            "height": 96.0,
+            "height": 128.0,
             "type": "Text Display",
             "properties": {
               "topic": "/SmartDashboard/Subsystem/ElevatorSubsystem/TemperatureRight",
@@ -1693,9 +1586,9 @@
           {
             "title": "AppliedOutputLeft",
             "x": 640.0,
-            "y": 320.0,
+            "y": 352.0,
             "width": 256.0,
-            "height": 96.0,
+            "height": 128.0,
             "type": "Text Display",
             "properties": {
               "topic": "/SmartDashboard/Subsystem/ElevatorSubsystem/AppliedOutputLeft",
@@ -1707,9 +1600,9 @@
           {
             "title": "AppliedOutputRight",
             "x": 896.0,
-            "y": 320.0,
+            "y": 352.0,
             "width": 256.0,
-            "height": 96.0,
+            "height": 128.0,
             "type": "Text Display",
             "properties": {
               "topic": "/SmartDashboard/Subsystem/ElevatorSubsystem/AppliedOutputRight",
@@ -1723,7 +1616,7 @@
             "x": 640.0,
             "y": 224.0,
             "width": 256.0,
-            "height": 96.0,
+            "height": 128.0,
             "type": "Text Display",
             "properties": {
               "topic": "/SmartDashboard/Subsystem/ElevatorSubsystem/AmpsLeft",
@@ -1737,7 +1630,7 @@
             "x": 896.0,
             "y": 224.0,
             "width": 256.0,
-            "height": 96.0,
+            "height": 128.0,
             "type": "Text Display",
             "properties": {
               "topic": "/SmartDashboard/Subsystem/ElevatorSubsystem/AmpsRight",
@@ -1775,7 +1668,7 @@
             "x": 288.0,
             "y": 32.0,
             "width": 256.0,
-            "height": 256.0,
+            "height": 288.0,
             "type": "List Layout",
             "properties": {
               "label_position": "TOP"
@@ -1830,7 +1723,7 @@
             "x": 544.0,
             "y": 32.0,
             "width": 256.0,
-            "height": 256.0,
+            "height": 288.0,
             "type": "List Layout",
             "properties": {
               "label_position": "TOP"
@@ -2002,6 +1895,128 @@
             "type": "Text Display",
             "properties": {
               "topic": "/SmartDashboard/Subsystem/PresetManager/AimPreset/rmpErrorMultiplier",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "OverrideRPM",
+            "x": 544.0,
+            "y": 320.0,
+            "width": 256.0,
+            "height": 96.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Commands/CoralShooterRampUp/OverrideRPM",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "ForcedRMPLeft",
+            "x": 544.0,
+            "y": 416.0,
+            "width": 128.0,
+            "height": 96.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/Commands/CoralShooterRampUp/ForcedRMPLeft",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "ForcedRMPRight",
+            "x": 672.0,
+            "y": 416.0,
+            "width": 128.0,
+            "height": 96.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/Commands/CoralShooterRampUp/ForcedRMPRight",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "OverrideRPM",
+            "x": 288.0,
+            "y": 320.0,
+            "width": 256.0,
+            "height": 96.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Commands/AlgaeShooterRampUp/OverrideRPM",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "ForcedRMP",
+            "x": 288.0,
+            "y": 416.0,
+            "width": 256.0,
+            "height": 96.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/Commands/AlgaeShooterRampUp/ForcedRMP",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "OverrideHeight",
+            "x": 288.0,
+            "y": 512.0,
+            "width": 128.0,
+            "height": 96.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Commands/ElevatorSetHeight/OverrideHeight",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "OverrideAngle",
+            "x": 288.0,
+            "y": 608.0,
+            "width": 128.0,
+            "height": 96.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Commands/WristSetAngle/OverrideAngle",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "ForcedHeight",
+            "x": 416.0,
+            "y": 512.0,
+            "width": 128.0,
+            "height": 96.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/Commands/ElevatorSetHeight/ForcedHeight",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "ForcedAngle",
+            "x": 416.0,
+            "y": 608.0,
+            "width": 128.0,
+            "height": 96.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/Commands/WristSetAngle/ForcedAngle",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -2674,9 +2689,9 @@
           },
           {
             "title": "PositionTolerance(m)",
-            "x": 672.0,
+            "x": 704.0,
             "y": 352.0,
-            "width": 352.0,
+            "width": 320.0,
             "height": 96.0,
             "type": "Text Display",
             "properties": {
@@ -2808,14 +2823,27 @@
             }
           },
           {
-            "title": "OffsetDistance(in)",
+            "title": "OverrideOffsetDistance",
             "x": 512.0,
             "y": 352.0,
-            "width": 160.0,
+            "width": 96.0,
+            "height": 96.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Commands/DriveToPoseFinkle/OverrideOffsetDistance",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "OffsetDistance(in)",
+            "x": 608.0,
+            "y": 352.0,
+            "width": 96.0,
             "height": 96.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Commands/ToPathAndFinkleAndCoralShootWithOffset/OffsetDistance(in)",
+              "topic": "/SmartDashboard/Commands/DriveToPoseFinkle/OffsetDistance(in)",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
