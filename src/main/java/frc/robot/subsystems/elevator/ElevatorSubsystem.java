@@ -43,16 +43,24 @@ public class ElevatorSubsystem extends CS_SubsystemBase {
     elevatorInterface.reset();
   }
 
-  public void setkP(double newkP) {
+  private void setkP(double newkP) {
     elevatorInterface.setPID(newkP, values.kI, values.kD);
   }
 
-  public void setkI(double newkI) {
+  private void setkI(double newkI) {
     elevatorInterface.setPID(values.kP, values.kI, newkI);
   }
 
-  public void setkD(double newkD) {
+  private void setkD(double newkD) {
     elevatorInterface.setPID(values.kP, values.kI, newkD);
+  }
+
+  private void setMaxOutput(double newMax) {
+    elevatorInterface.outputRange(values.maxOutput, newMax);
+  }
+
+  private void setMinOutput(double newMin) {
+    elevatorInterface.outputRange(newMin, values.maxOutput);
   }
 
   @Override
@@ -69,6 +77,9 @@ public class ElevatorSubsystem extends CS_SubsystemBase {
     SmartDashboard.putNumber("Subsystem/ElevatorSubsystem/Gains/P", gains.kP());
     SmartDashboard.putNumber("Subsystem/ElevatorSubsystem/Gains/I", gains.kI());
     SmartDashboard.putNumber("Subsystem/ElevatorSubsystem/Gains/D", gains.kD());
+    SmartDashboard.putNumber("Subsystem/ElevatorSubsystem/Gains/Output/Min", gains.minOutput());
+    SmartDashboard.putNumber("Subsystem/ElevatorSubsystem/Gains/Output/Max", gains.maxOutput());
+
     SmartDashboard.putBoolean("Commands/ElevatorSetHeight/OverrideHeight", false);
     SmartDashboard.putNumber("Commands/ElevatorSetHeight/ForcedHeight", 50);
   }
@@ -98,12 +109,20 @@ public class ElevatorSubsystem extends CS_SubsystemBase {
     double newkP = SmartDashboard.getNumber("Subsystem/ElevatorSubsystem/Gains/P", values.kP);
     double newkI = SmartDashboard.getNumber("Subsystem/ElevatorSubsystem/Gains/I", values.kI);
     double newkD = SmartDashboard.getNumber("Subsystem/ElevatorSubsystem/Gains/D", values.kD);
+    double newMin =
+        SmartDashboard.getNumber("Subsystem/ElevatorSubsystem/Gains/Output/Min", values.minOutput);
+    double newMax =
+        SmartDashboard.getNumber("Subsystem/ElevatorSubsystem/Gains/Output/Max", values.maxOutput);
 
     // Coefficients on SmartDashboard have changed, save new values to the PID controller
     // --------------------------------------------------
     values.kP = CS_Utils.updateFromSmartDashboard(newkP, values.kP, (value) -> setkP(value));
     values.kI = CS_Utils.updateFromSmartDashboard(newkI, values.kI, (value) -> setkI(value));
     values.kD = CS_Utils.updateFromSmartDashboard(newkD, values.kD, (value) -> setkD(value));
+    values.minOutput =
+        CS_Utils.updateFromSmartDashboard(newMin, values.minOutput, (value) -> setMinOutput(value));
+    values.maxOutput =
+        CS_Utils.updateFromSmartDashboard(newMax, values.maxOutput, (value) -> setMaxOutput(value));
 
     SmartDashboard.putData(this);
   }

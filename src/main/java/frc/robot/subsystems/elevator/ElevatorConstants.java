@@ -48,13 +48,21 @@ public class ElevatorConstants {
 
   public static final Gains gains =
       switch (RobotConstants.robotType) {
-        case COMPBOT -> new Gains(0.5, 0.0, 0.0, 0.2261, 5.7, 0.04);
+        case COMPBOT -> new Gains(0.5, 0.0, 0.0, 0.2261, 5.7, 0.04, -0.85, 0.20);
           // case COMPBOT -> new Gains(0.5, 0.0, 0.0, 0.2261, 3.07, 0.04);
-        case SIMBOT -> new Gains(0.5, 0.0, 0.0, 0.2261, 3.07, 0.04);
-        default -> new Gains(0.05, 0.0, 0.0, 0.43, 3.07, 0.04);
+        case SIMBOT -> new Gains(0.5, 0.0, 0.0, 0.2261, 3.07, 0.04, -0.85, 0.20);
+        default -> new Gains(0.05, 0.0, 0.0, 0.43, 3.07, 0.04, -0.85, 0.20);
       };
 
-  public record Gains(double kP, double kI, double kD, double kS, double kV, double kA) {}
+  public record Gains(
+      double kP,
+      double kI,
+      double kD,
+      double kS,
+      double kV,
+      double kA,
+      double minOutput /* Down */,
+      double maxOutput /* Up */) {}
 
   public record MotorConfig(int CANIdLeft, int CANIdRight) {}
 

@@ -49,6 +49,8 @@ public interface ElevatorInterface {
     protected double kP = gains.kP();
     protected double kI = gains.kI();
     protected double kD = gains.kD();
+    protected double minOutput = gains.minOutput();
+    protected double maxOutput = gains.maxOutput();
   }
 
   public default void updateInputs(ElevatorValues values) {}
@@ -62,6 +64,8 @@ public interface ElevatorInterface {
   public abstract void setHeight(Distance height);
 
   default void setPID(double kP, double kI, double kD) {}
+
+  default void outputRange(double min, double max) {}
 
   public abstract void reset();
 
