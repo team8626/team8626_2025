@@ -315,7 +315,7 @@ public class Vision {
         "Arducam_AT003",
         new Rotation3d(
             Units.degreesToRadians(0), Units.degreesToRadians(-20), Units.degreesToRadians(20)),
-        new Translation3d(0.115865, -0.210425, 0.149541),
+        new Translation3d(0.115865, -0.210425, 0.152716),
         VecBuilder.fill(4, 4, 8),
         VecBuilder.fill(0.5, 0.5, 1));
     /** Latency alert to use when high latency is detected. */
