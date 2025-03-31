@@ -67,7 +67,7 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
         .p(gains.kP(), ClosedLoopSlot.kSlot1)
         .i(gains.kI(), ClosedLoopSlot.kSlot1)
         .d(gains.kD(), ClosedLoopSlot.kSlot1)
-        .outputRange(-0.85, 0.20, ClosedLoopSlot.kSlot1); // Down, Up
+        .outputRange(gains.minOutput(), gains.maxOutput(), ClosedLoopSlot.kSlot1); // Down, Up
 
     // rightConfig
     //     .closedLoop
@@ -208,6 +208,15 @@ public class Elevator_LinearSparkMax implements ElevatorInterface, CS_InterfaceB
         leftConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
     rightMotor.configure(
         rightConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+  }
+
+  @Override
+  public void outputRange(double newMin, double newMax) {
+    printf("New Output Range: %f, %f", newMin, newMax);
+
+    leftConfig.closedLoop.outputRange(newMin, newMax, ClosedLoopSlot.kSlot1);
+    leftMotor.configure(
+        leftConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
   }
 
   @Override
