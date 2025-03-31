@@ -1,10 +1,10 @@
 {
   "imu": {
     "type": "canandgyro",
-    "id": 1,
+    "id": 0,
     "canbus": "rio"
   },
-  "invertedIMU": false,
+  "invertedIMU": true,
   "modules": [
     "frontleft.json",
     "frontright.json",

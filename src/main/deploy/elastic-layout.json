@@ -9,9 +9,9 @@
         "containers": [
           {
             "title": "Right HasTarget",
-            "x": 224.0,
+            "x": 160.0,
             "y": 0.0,
-            "width": 160.0,
+            "width": 128.0,
             "height": 96.0,
             "type": "Boolean Box",
             "properties": {
@@ -28,7 +28,7 @@
             "title": "Left HasTarget",
             "x": 32.0,
             "y": 0.0,
-            "width": 160.0,
+            "width": 128.0,
             "height": 96.0,
             "type": "Boolean Box",
             "properties": {
@@ -259,7 +259,7 @@
             "title": "Robot State",
             "x": 32.0,
             "y": 96.0,
-            "width": 352.0,
+            "width": 384.0,
             "height": 96.0,
             "type": "Text Display",
             "properties": {
@@ -436,7 +436,7 @@
           {
             "title": "WristSubsystem",
             "x": 32.0,
-            "y": 448.0,
+            "y": 480.0,
             "width": 352.0,
             "height": 96.0,
             "type": "Subsystem",
@@ -448,7 +448,7 @@
           {
             "title": "ElevatorSubsystem",
             "x": 32.0,
-            "y": 320.0,
+            "y": 384.0,
             "width": 352.0,
             "height": 96.0,
             "type": "Subsystem",
@@ -658,7 +658,7 @@
           },
           {
             "title": "Pitch",
-            "x": 160.0,
+            "x": 128.0,
             "y": 192.0,
             "width": 96.0,
             "height": 96.0,
@@ -686,7 +686,7 @@
           },
           {
             "title": "Yaw",
-            "x": 288.0,
+            "x": 224.0,
             "y": 192.0,
             "width": 96.0,
             "height": 96.0,
@@ -696,6 +696,39 @@
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
+            }
+          },
+          {
+            "title": "OurSide",
+            "x": 320.0,
+            "y": 192.0,
+            "width": 96.0,
+            "height": 96.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/SmartDashboard/Subsystem/Drive/onOurSide",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "Back HasTarget",
+            "x": 288.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 96.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/photonvision/Arducam_AT003/hasTarget",
+              "period": 0.06,
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
             }
           }
         ]
@@ -1363,9 +1396,9 @@
         "layouts": [
           {
             "title": "Slot0(Up)",
-            "x": 384.0,
-            "y": 128.0,
-            "width": 128.0,
+            "x": 64.0,
+            "y": 64.0,
+            "width": 256.0,
             "height": 384.0,
             "type": "List Layout",
             "properties": {
@@ -1446,9 +1479,9 @@
           },
           {
             "title": "Slot1(Down)",
-            "x": 512.0,
+            "x": 1216.0,
             "y": 128.0,
-            "width": 128.0,
+            "width": 256.0,
             "height": 384.0,
             "type": "List Layout",
             "properties": {
@@ -1520,6 +1553,61 @@
                 "type": "Text Display",
                 "properties": {
                   "topic": "/SmartDashboard/Subsystem/ElevatorSubsystem/Gains/Slot1(Down)/minOutput",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              }
+            ]
+          },
+          {
+            "title": "Gains",
+            "x": 384.0,
+            "y": 224.0,
+            "width": 256.0,
+            "height": 288.0,
+            "type": "List Layout",
+            "properties": {
+              "label_position": "TOP"
+            },
+            "children": [
+              {
+                "title": "D",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/Subsystem/ElevatorSubsystem/Gains/D",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              },
+              {
+                "title": "I",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/Subsystem/ElevatorSubsystem/Gains/I",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              },
+              {
+                "title": "P",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/Subsystem/ElevatorSubsystem/Gains/P",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
