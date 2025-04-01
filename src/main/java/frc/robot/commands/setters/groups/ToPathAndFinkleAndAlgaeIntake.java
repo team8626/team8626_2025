@@ -67,8 +67,8 @@ public class ToPathAndFinkleAndAlgaeIntake extends SequentialCommandGroup {
                 .onlyIf(() -> !targetPose.get().equals(new Pose2d())),
 
             // Stow
-            new ToSubsystemsPreset(() -> Presets.ALGAE_STOW),
-            alongWith(new InstantCommand(() -> algae501.stopAll())),
+            new ToSubsystemsPreset(() -> Presets.ALGAE_STOW)
+                .alongWith(new InstantCommand(() -> algae501.stopAll())),
             Commodore.getSetStateCommand(CommodoreState.IDLE)));
   }
 }

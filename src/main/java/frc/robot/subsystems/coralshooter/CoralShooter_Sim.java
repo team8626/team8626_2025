@@ -26,9 +26,11 @@ public class CoralShooter_Sim implements CoralShooterInterface, CS_InterfaceBase
   private FlywheelSim launchSim;
 
   private DigitalInput loadedSensor = new DigitalInput(CoralShooterConstants.lidarPortBottom);
-  private DigitalInput coralSensor = new DigitalInput(CoralShooterConstants.lidarPortTop);
+  private DigitalInput coralSensor1 = new DigitalInput(CoralShooterConstants.lidarPort1Top);
+  private DigitalInput coralSensor2 = new DigitalInput(CoralShooterConstants.lidarPort2Top);
   private DIOSim loadedSensorSim = new DIOSim(loadedSensor);
-  private DIOSim coralSensorSim = new DIOSim(coralSensor);
+  private DIOSim coralSensorSim1 = new DIOSim(coralSensor1);
+  private DIOSim coralSensorSim2 = new DIOSim(coralSensor2);
 
   public CoralShooter_Sim() {
 
@@ -149,7 +151,7 @@ public class CoralShooter_Sim implements CoralShooterInterface, CS_InterfaceBase
 
   @Override
   public boolean hasCoral() {
-    return !coralSensorSim.getValue();
+    return !coralSensorSim1.getValue() || !coralSensorSim2.getValue();
   }
 
   @Override

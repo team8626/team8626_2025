@@ -200,7 +200,7 @@ public class RobotContainer {
     // ---------------------------------------- Right Trigger
     //                                          Coral Shoot
     controller.btn_RightTrigger.toggleOnTrue(
-        Commands.defer((() -> new ToCoralShoot()), Set.of(mortar)));
+        Commands.defer((() -> new ToCoralShoot()), Set.of(mortar)).onlyIf(() -> mortar.isLoaded()));
 
     // ---------------------------------------- Left Bumper
     //                                          Algae Intake (based on Dashboard Selection)
@@ -357,10 +357,10 @@ public class RobotContainer {
   // ---------------------------------------- TRIGGERS --------------------------------
   // ----------------------------------------------------------------------------------
   private void configureTriggers(CS_XboxController driver, CS_XboxController operator) {
-    // ---------------------------------------- TRIGGER Intake on Coral Sensor
-    new Trigger(mortar::hasCoral)
-        .debounce(0.1)
-        .onTrue(new CoralShooterIntake().onlyIf(() -> !mortar.isLoaded()).withTimeout(2.0));
+    // // ---------------------------------------- TRIGGER Intake on Coral Sensor
+    // new Trigger(mortar::hasCoral)
+    //     .debounce(0.1)
+    //     .onTrue(new CoralShooterIntake().onlyIf(() -> !mortar.isLoaded()).withTimeout(2.0));
 
     // ---------------------------------------- TRIGGER STOW on Tipping Over
     new Trigger(

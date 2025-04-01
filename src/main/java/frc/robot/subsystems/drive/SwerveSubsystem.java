@@ -419,7 +419,10 @@ public class SwerveSubsystem extends CS_SubsystemBase {
    * @return Drive command.
    */
   public Command driveCommand(
-      DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier angularRotationX, BooleanSupplier fieldRelative) {
+      DoubleSupplier translationX,
+      DoubleSupplier translationY,
+      DoubleSupplier angularRotationX,
+      BooleanSupplier fieldRelative) {
     return run(
         () -> {
           // Make the robot move
@@ -775,10 +778,9 @@ public class SwerveSubsystem extends CS_SubsystemBase {
                         * (isFlipped ? -1.0 : 1.0),
                     OperatorConstants.LEFT_X_DEADBAND),
             () -> -xboxController.getRightX(),
-             () -> !xboxController.getStartButton());
+            () -> !xboxController.getStartButton());
     setDefaultCommand(defaultCommand);
   }
-  
 
   public void setDefaultCommand_OLD(CS_XboxController xboxController) {
     Command CS_driveCommand =

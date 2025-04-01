@@ -14,7 +14,7 @@ public class CoralShooterConstants {
   // Tuned Values
   // public static final double RPMShootLeft = 1275;
   // public static final double RPMShootRight = 1275;
-  public static final AngularVelocity RPMIntake = RPM.of(-300);
+  public static final AngularVelocity RPMIntake = RPM.of(-750);
   public static final double launcherShootSetpoint = -1.0;
   public static final double launcherIntakeSetpoint = 0.3;
 
@@ -46,7 +46,8 @@ public class CoralShooterConstants {
 
   // Lidar Port (Sensor to check if the CORAL is loaded)
   public static final int lidarPortBottom = 0; // DIO
-  public static final int lidarPortTop = 2; // DIO
+  public static final int lidarPort1Top = 2; // DIO
+  public static final int lidarPort2Top = 3; // DIO
 
   public static double usScaleFactor = 5 * 1 / (5. / 1024.); // scale converting voltage to distance
 

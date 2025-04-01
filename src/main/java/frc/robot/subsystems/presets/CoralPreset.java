@@ -30,8 +30,9 @@ public class CoralPreset {
     this.name = name;
     this.RPMLeft = RPMLeft;
     this.RPMRight = RPMRight;
+    this.Offset = Offset;
     this.hasLevel = true;
-    this.hasPose = true;
+    this.hasPose = false;
   }
 
   public void setPose(Pose2d newPose) {
@@ -49,22 +50,27 @@ public class CoralPreset {
       case L1:
         this.RPMLeft = Presets.CORAL_L1.RPMLeft;
         this.RPMRight = Presets.CORAL_L1.RPMRight;
+        this.Offset = Presets.CORAL_L1.Offset;
         this.hasLevel = true;
         break;
       case L2:
         this.RPMLeft = Presets.CORAL_L2.RPMLeft;
         this.RPMRight = Presets.CORAL_L2.RPMRight;
+        this.Offset = Presets.CORAL_L2.Offset;
+
         this.hasLevel = true;
         break;
       case L3:
         this.RPMLeft = Presets.CORAL_L3.RPMLeft;
         this.RPMRight = Presets.CORAL_L3.RPMRight;
+        this.Offset = Presets.CORAL_L3.Offset;
         this.hasLevel = true;
         break;
       case L4:
       default:
         this.RPMLeft = Presets.CORAL_L4.RPMLeft;
         this.RPMRight = Presets.CORAL_L4.RPMRight;
+        this.Offset = Presets.CORAL_L4.Offset;
         this.hasLevel = true;
         break;
     }
