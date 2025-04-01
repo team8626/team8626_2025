@@ -129,7 +129,8 @@ public class RobotContainer {
         drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(), "swerve_dart"));
         break;
       case SIMBOT:
-        drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(), "swerve_devbot"));
+        drivebase =
+            new SwerveSubsystem(new File(Filesystem.getDeployDirectory(), "swerve_tsunami"));
 
         elevator = new ElevatorSubsystem(new Elevator_Sim());
         wrist = new WristSubsystem(new Wrist_Sim());
