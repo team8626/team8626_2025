@@ -7,7 +7,6 @@ package frc.robot.subsystems.drive;
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Meter;
 import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.Radians;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -20,6 +19,7 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.DriveFeedforwards;
 import com.pathplanner.lib.util.swerve.SwerveSetpoint;
 import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
+import com.reduxrobotics.sensors.canandgyro.Canandgyro;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -76,6 +76,8 @@ public class SwerveSubsystem extends CS_SubsystemBase {
   private Vision vision;
 
   private boolean isFlipped = false;
+  private Canandgyro canandgyro = new Canandgyro(0);
+
   StructPublisher<Pose3d> robotPosePub =
       NetworkTableInstance.getDefault()
           .getStructTopic("SmartDashboard/Subsystem/Drive/RobotPose", Pose3d.struct)
@@ -417,7 +419,7 @@ public class SwerveSubsystem extends CS_SubsystemBase {
    * @return Drive command.
    */
   public Command driveCommand(
-      DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier angularRotationX) {
+      DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier angularRotationX, BooleanSupplier fieldRelative) {
     return run(
         () -> {
           // Make the robot move
@@ -429,7 +431,7 @@ public class SwerveSubsystem extends CS_SubsystemBase {
                   0.8),
               Math.pow(angularRotationX.getAsDouble(), 3)
                   * swerveDrive.getMaximumChassisAngularVelocity(),
-              true,
+              fieldRelative.getAsBoolean(),
               false);
         });
   }
@@ -730,11 +732,13 @@ public class SwerveSubsystem extends CS_SubsystemBase {
   }
 
   public Angle getPitch() {
-    return Radians.of(swerveDrive.getRoll().getRadians());
+    // return Radians.of(swerveDrive.getRoll().getRadians());
+    return Degrees.of(canandgyro.getRoll() * 180);
   }
 
   public Angle getRoll() {
-    return Radians.of(swerveDrive.getPitch().getRadians());
+    // return Radians.of(swerveDrive.getPitch().getRadians());
+    return Degrees.of(canandgyro.getPitch() * 180);
   }
 
   public double getYaw() {
@@ -756,6 +760,27 @@ public class SwerveSubsystem extends CS_SubsystemBase {
   }
 
   public void setDefaultCommand(CS_XboxController xboxController) {
+    Command defaultCommand =
+        this.driveCommand(
+            () ->
+                MathUtil.applyDeadband(
+                    -xboxController.getLeftY()
+                        * (AllianceFlipUtil.shouldFlip() ? -1.0 : 1.0)
+                        * (isFlipped ? -1.0 : 1.0),
+                    OperatorConstants.LEFT_Y_DEADBAND),
+            () ->
+                MathUtil.applyDeadband(
+                    -xboxController.getLeftX()
+                        * (AllianceFlipUtil.shouldFlip() ? -1.0 : 1.0)
+                        * (isFlipped ? -1.0 : 1.0),
+                    OperatorConstants.LEFT_X_DEADBAND),
+            () -> -xboxController.getRightX(),
+             () -> !xboxController.getStartButton());
+    setDefaultCommand(defaultCommand);
+  }
+  
+
+  public void setDefaultCommand_OLD(CS_XboxController xboxController) {
     Command CS_driveCommand =
         this.CS_driveCommand(
             () ->
