@@ -1,9 +1,11 @@
 package frc.robot.subsystems.presets;
 
+import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.RPM;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Distance;
 import frc.robot.UIConstants.CORAL_LEVEL;
 
 public class CoralPreset {
@@ -11,6 +13,7 @@ public class CoralPreset {
   public Pose2d robotPose;
   public AngularVelocity RPMLeft = RPM.of(0);
   public AngularVelocity RPMRight = RPM.of(0);
+  public Distance Offset = Inches.of(0);
   public boolean hasPose = false;
   public boolean hasLevel = false;
 
@@ -19,6 +22,11 @@ public class CoralPreset {
   }
 
   public CoralPreset(String name, AngularVelocity RPMLeft, AngularVelocity RPMRight) {
+    this(name, RPMLeft, RPMRight, Inches.of(0));
+  }
+
+  public CoralPreset(
+      String name, AngularVelocity RPMLeft, AngularVelocity RPMRight, Distance Offset) {
     this.name = name;
     this.RPMLeft = RPMLeft;
     this.RPMRight = RPMRight;
@@ -73,6 +81,11 @@ public class CoralPreset {
   public AngularVelocity getRPMRight() {
     // Get the RPM of the Coral Shooter
     return this.RPMRight;
+  }
+
+  public Distance getOffset() {
+    // Get the offset distance for shooting
+    return this.Offset;
   }
 
   public Pose2d getPose() {

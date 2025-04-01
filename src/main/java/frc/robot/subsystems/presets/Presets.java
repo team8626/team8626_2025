@@ -83,5 +83,6 @@ public class Presets {
   public static final CoralPreset CORAL_L1 = new CoralPreset("L1", RPM.of(900), RPM.of(1000));
   public static final CoralPreset CORAL_L2 = new CoralPreset("L2", RPM.of(900), RPM.of(1000));
   public static final CoralPreset CORAL_L3 = new CoralPreset("L3", RPM.of(550), RPM.of(1335));
-  public static final CoralPreset CORAL_L4 = new CoralPreset("L4", RPM.of(1300), RPM.of(1300));
+  public static final CoralPreset CORAL_L4 =
+      new CoralPreset("L4", RPM.of(1300), RPM.of(1300), Inches.of(7));
 }

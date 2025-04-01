@@ -6,8 +6,6 @@
 
 package frc.robot.commands.setters.groups;
 
-import static edu.wpi.first.units.Units.Inches;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -47,7 +45,7 @@ public class ToPathAndFinkleAndCoralShoot extends SequentialCommandGroup {
             .finallyDo((interrupted) -> Commodore.setCommodoreState(CommodoreState.IDLE)),
 
         // Drive to Target Pose
-        new DriveToPoseFinkle2(targetPose, () -> Inches.of(7))
+        new DriveToPoseFinkle2(targetPose, () -> coralPreset.get().getOffset())
             .onlyIf(() -> !targetPose.get().equals(new Pose2d())),
 
         // Coral Shoot
