@@ -1,0 +1,68 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "START_E"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "FinkleAndShootE"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "E_RIGHT"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RIGHT_C"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "FinkleAndShootC"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "C_TURN180"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "FinkleAndTake2"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": false,
+  "folder": null,
+  "choreoAuto": false
+}

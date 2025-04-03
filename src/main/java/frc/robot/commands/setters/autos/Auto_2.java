@@ -10,15 +10,15 @@ import frc.robot.subsystems.presets.PresetManager;
 import frc.robot.subsystems.presets.Presets;
 import java.util.function.Supplier;
 
-public class Auto_5 extends SequentialCommandGroup {
+public class Auto_2 extends SequentialCommandGroup {
 
   private Supplier<Pose2d> targetPose;
 
-  public Auto_5() {
-    targetPose = () -> PresetManager.getRobotPoseFromAlgae(ALGAE_FACE.IJ, 0);
+  public Auto_2() {
+    targetPose = () -> PresetManager.getRobotPoseFromAlgae(ALGAE_FACE.CD, 0);
     addCommands(
-        new ToSubsystemsPreset(() -> Presets.ALGAE_HIGH),
+        new ToSubsystemsPreset(() -> Presets.ALGAE_LOW),
         new DriveToPoseFinkle2(targetPose),
-        new AlgaeShooterIntake(() -> Presets.ALGAE_HIGH.getRPM()));
+        new AlgaeShooterIntake(() -> Presets.ALGAE_LOW.getRPM()));
   }
 }

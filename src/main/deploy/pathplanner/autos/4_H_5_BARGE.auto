@@ -1,0 +1,67 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "START_4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "FinkleAndTake4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PrepareShootLow"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "H_TURN180"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "FinkleAndShootH"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "4_BARGE_5"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "FinkleAndTake5"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "5_BARGE"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootIt"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": false,
+  "folder": null,
+  "choreoAuto": false
+}
