@@ -22,11 +22,11 @@ public class ToSubsystemsPreset extends ParallelCommandGroup {
         Commodore.getSetStateCommand(CommodoreState.SUBSYSTEMS_ADJUST),
         new PrintCommand(
             "-------------------------\nSetting Subsystems - "
-                + presetSupplier.get().getElevatorHeightInches()
+                + presetSupplier.get().getElevatorHeight()
                 + " /  "
-                + presetSupplier.get().getWristAngleDegrees()),
-        new ElevatorSetHeight(() -> presetSupplier.get().getElevatorHeightInches()),
-        new WristSetAngle(() -> presetSupplier.get().getWristAngleDegrees()),
+                + presetSupplier.get().getWristAngle()),
+        new ElevatorSetHeight(() -> presetSupplier.get().getElevatorHeight()),
+        new WristSetAngle(() -> presetSupplier.get().getWristAngle()),
         Commodore.getSetStateCommand(CommodoreState.SUBSYSTEMS_AT_SETPOINT),
         new PrintCommand("All SET!!!"));
   }

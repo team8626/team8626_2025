@@ -14,30 +14,30 @@ import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkClosedLoopController.ArbFFUnits;
+import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLimitSwitch;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkFlexConfig;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.units.measure.AngularVelocity;
 import frc.robot.subsystems.CS_InterfaceBase;
 
-public class AlgaeShooter_SparkMax implements AlgaeShooterInterface, CS_InterfaceBase {
+public class AlgaeShooter_SparkFlex implements AlgaeShooterInterface, CS_InterfaceBase {
 
-  private final SparkMax leftMotor;
-  private final SparkMaxConfig leftConfig;
+  private final SparkFlex leftMotor;
+  private final SparkFlexConfig leftConfig;
   private final SparkClosedLoopController leftController;
   private final RelativeEncoder leftEncoder;
 
-  private final SparkMax rightMotor;
-  private final SparkMaxConfig rightConfig;
+  private final SparkFlex rightMotor;
+  private final SparkFlexConfig rightConfig;
   private final SparkClosedLoopController rightController;
   private final RelativeEncoder rightEncoder;
 
-  private final SparkMax launchMotor;
-  private final SparkMaxConfig launchConfig;
+  private final SparkFlex launchMotor;
+  private final SparkFlexConfig launchConfig;
   private final SparkClosedLoopController launchController;
   private final RelativeEncoder launchEncoder;
 
@@ -52,9 +52,9 @@ public class AlgaeShooter_SparkMax implements AlgaeShooterInterface, CS_Interfac
   private boolean launcherIsEnabled = false;
   private double currentLauncherSetpoint = 0;
 
-  public AlgaeShooter_SparkMax() {
+  public AlgaeShooter_SparkFlex() {
     // Setup configuration for the left motor
-    leftConfig = new SparkMaxConfig();
+    leftConfig = new SparkFlexConfig();
     leftConfig
         .inverted(true)
         .idleMode(IdleMode.kCoast)
@@ -79,7 +79,7 @@ public class AlgaeShooter_SparkMax implements AlgaeShooterInterface, CS_Interfac
     // Disable limit switch. otherwise the loaded sensor causes the motor to stop!
     leftConfig.limitSwitch.reverseLimitSwitchEnabled(false).forwardLimitSwitchEnabled(false);
 
-    leftMotor = new SparkMax(flywheelConfig.CANIdLeft(), MotorType.kBrushless);
+    leftMotor = new SparkFlex(flywheelConfig.CANIdLeft(), MotorType.kBrushless);
     leftMotor.configure(leftConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     leftController = leftMotor.getClosedLoopController();
@@ -87,7 +87,7 @@ public class AlgaeShooter_SparkMax implements AlgaeShooterInterface, CS_Interfac
     leftController.setReference(0, ControlType.kDutyCycle);
 
     // Setup configuration for the right motor
-    rightConfig = new SparkMaxConfig();
+    rightConfig = new SparkFlexConfig();
     rightConfig
         .inverted(false)
         .idleMode(IdleMode.kCoast)
@@ -108,7 +108,7 @@ public class AlgaeShooter_SparkMax implements AlgaeShooterInterface, CS_Interfac
             ClosedLoopSlot.kSlot0)
         .outputRange(-1, 1);
 
-    rightMotor = new SparkMax(flywheelConfig.CANIdRight(), MotorType.kBrushless);
+    rightMotor = new SparkFlex(flywheelConfig.CANIdRight(), MotorType.kBrushless);
     rightMotor.configure(
         rightConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
@@ -117,7 +117,7 @@ public class AlgaeShooter_SparkMax implements AlgaeShooterInterface, CS_Interfac
     rightController.setReference(0, ControlType.kDutyCycle);
 
     // Launcher Motor
-    launchConfig = new SparkMaxConfig();
+    launchConfig = new SparkFlexConfig();
     launchConfig.inverted(false).smartCurrentLimit(AlgaeShooterConstants.maxCurrent);
 
     launchConfig
@@ -125,7 +125,7 @@ public class AlgaeShooter_SparkMax implements AlgaeShooterInterface, CS_Interfac
         .positionConversionFactor(1 / launcherConfig.reduction())
         .velocityConversionFactor(1 / launcherConfig.reduction());
 
-    launchMotor = new SparkMax(launcherConfig.CANIdLeft(), MotorType.kBrushless);
+    launchMotor = new SparkFlex(launcherConfig.CANIdLeft(), MotorType.kBrushless);
     launchMotor.configure(
         launchConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 

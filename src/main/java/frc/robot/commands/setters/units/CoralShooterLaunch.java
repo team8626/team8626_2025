@@ -6,7 +6,11 @@
 
 package frc.robot.commands.setters.units;
 
+import static edu.wpi.first.units.Units.Seconds;
+
 import edu.wpi.first.wpilibj.Timer;
+import frc.robot.Commodore;
+import frc.robot.Commodore.CommodoreState;
 import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
 import frc.robot.subsystems.Dashboard;
@@ -30,6 +34,8 @@ public class CoralShooterLaunch extends CS_Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    Commodore.setCommodoreState(CommodoreState.CORAL_SHOOT_LAUNCH);
+
     Dashboard.setCoralState(GamePieceState.LAUNCHING);
 
     mortar.startLauncher(CoralShooterConstants.launcherShootSetpoint);
@@ -48,7 +54,9 @@ public class CoralShooterLaunch extends CS_Command {
   @Override
   public void end(boolean interrupted) {
     Dashboard.setCoralState(GamePieceState.IDLE);
-
+    if (interrupted) {
+      mortar.stopShooter();
+    }
     mortar.stopLauncher();
     timer.stop();
   }
@@ -56,6 +64,6 @@ public class CoralShooterLaunch extends CS_Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer.hasElapsed(CoralShooterConstants.launchTimerSeconds);
+    return timer.hasElapsed(CoralShooterConstants.launchTimer.in(Seconds));
   }
 }

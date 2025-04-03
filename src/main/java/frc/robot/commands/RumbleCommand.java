@@ -105,4 +105,12 @@ public class RumbleCommand extends CS_Command {
   private boolean arePulseCountCompleted() {
     return m_currentPulseCount == m_pulseCount;
   }
+
+  public static RumbleCommand longRumble(CS_XboxController controller) {
+    return new RumbleCommand(controller, 1, 2, RumbleType.kBothRumble);
+  }
+
+  public static RumbleCommand longRumble() {
+    return longRumble(RobotContainer.driverController);
+  }
 }

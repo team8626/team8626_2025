@@ -9,7 +9,9 @@ package org.littletonrobotics.frc2025.util;
 
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj.DriverStation;
+import frc.robot.subsystems.presets.AlgaePreset;
 import org.littletonrobotics.frc2025.FieldConstants;
+
 // import
 // org.littletonrobotics.vehicletrajectoryservice.VehicleTrajectoryServiceOuterClass.ModuleForce;
 // import
@@ -51,6 +53,14 @@ public class AllianceFlipUtil {
     return new Pose3d(apply(pose.getTranslation()), apply(pose.getRotation()));
   }
 
+  public static AlgaePreset apply(AlgaePreset preset) {
+    return new AlgaePreset(
+        preset.getName() + " - Flipped",
+        apply(preset.getPose()),
+        preset.getElevatorHeight(),
+        preset.getWristAngle(),
+        preset.getRPM());
+  }
   // public static VehicleState apply(VehicleState state) {
   //   return shouldFlip()
   //       ? VehicleState.newBuilder()

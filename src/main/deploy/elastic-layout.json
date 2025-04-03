@@ -9,9 +9,9 @@
         "containers": [
           {
             "title": "Right HasTarget",
-            "x": 224.0,
+            "x": 160.0,
             "y": 0.0,
-            "width": 160.0,
+            "width": 128.0,
             "height": 96.0,
             "type": "Boolean Box",
             "properties": {
@@ -28,7 +28,7 @@
             "title": "Left HasTarget",
             "x": 32.0,
             "y": 0.0,
-            "width": 160.0,
+            "width": 128.0,
             "height": 96.0,
             "type": "Boolean Box",
             "properties": {
@@ -49,7 +49,7 @@
             "height": 96.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/Elevator/DesiredHeight",
+              "topic": "/SmartDashboard/Subsystem/ElevatorSubsystem/DesiredHeight",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -63,7 +63,7 @@
             "height": 96.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/Elevator/Height",
+              "topic": "/SmartDashboard/Subsystem/ElevatorSubsystem/Height",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -77,7 +77,7 @@
             "height": 96.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/Wrist/DesiredAngleDegrees",
+              "topic": "/SmartDashboard/Subsystem/WristSubsystem/DesiredAngleDegrees",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -91,7 +91,7 @@
             "height": 96.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/Wrist/CurrentAngleDegrees",
+              "topic": "/SmartDashboard/Subsystem/WristSubsystem/CurrentAngleDegrees",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -105,7 +105,7 @@
             "height": 96.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/AlgaeShooter/Shooter RPM Left",
+              "topic": "/SmartDashboard/Subsystem/AlgaeShooterSubsystem/Shooter RPM Left",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -119,7 +119,7 @@
             "height": 96.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/AlgaeShooter/Shooter RPM Right",
+              "topic": "/SmartDashboard/Subsystem/AlgaeShooterSubsystem/Shooter RPM Right",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -133,7 +133,7 @@
             "height": 96.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/AlgaeShooter/Last Shot in (ms)",
+              "topic": "/SmartDashboard/Subsystem/AlgaeShooterSubsystem/Last Shot in (ms)",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -147,7 +147,7 @@
             "height": 64.0,
             "type": "Boolean Box",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/AlgaeShooter/Launcher",
+              "topic": "/SmartDashboard/Subsystem/AlgaeShooterSubsystem/Launcher",
               "period": 0.06,
               "data_type": "boolean",
               "true_color": 4283215696,
@@ -164,7 +164,7 @@
             "height": 64.0,
             "type": "Boolean Box",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/AlgaeShooter/Shooter",
+              "topic": "/SmartDashboard/Subsystem/AlgaeShooterSubsystem/Shooter",
               "period": 0.06,
               "data_type": "boolean",
               "true_color": 4283215696,
@@ -181,7 +181,7 @@
             "height": 96.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/AlgaeShooter/Shooting RPM",
+              "topic": "/SmartDashboard/Subsystem/AlgaeShooterSubsystem/Shooting RPM",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -195,7 +195,7 @@
             "height": 64.0,
             "type": "Boolean Box",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/AlgaeShooter/isLoaded",
+              "topic": "/SmartDashboard/Subsystem/AlgaeShooterSubsystem/isLoaded",
               "period": 0.06,
               "data_type": "boolean",
               "true_color": 4283215696,
@@ -212,7 +212,7 @@
             "height": 64.0,
             "type": "Boolean Box",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/CoralShooter/Launcher",
+              "topic": "/SmartDashboard/Subsystem/CoralShooterSubsystem/Launcher",
               "period": 0.06,
               "data_type": "boolean",
               "true_color": 4283215696,
@@ -229,7 +229,7 @@
             "height": 64.0,
             "type": "Boolean Box",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/CoralShooter/IsLoaded",
+              "topic": "/SmartDashboard/Subsystem/CoralShooterSubsystem/IsLoaded",
               "period": 0.06,
               "data_type": "boolean",
               "true_color": 4283215696,
@@ -246,7 +246,7 @@
             "height": 64.0,
             "type": "Boolean Box",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/CoralShooter/Shooter",
+              "topic": "/SmartDashboard/Subsystem/CoralShooterSubsystem/Shooter",
               "period": 0.06,
               "data_type": "boolean",
               "true_color": 4283215696,
@@ -259,7 +259,7 @@
             "title": "Robot State",
             "x": 32.0,
             "y": 96.0,
-            "width": 352.0,
+            "width": 384.0,
             "height": 96.0,
             "type": "Text Display",
             "properties": {
@@ -277,7 +277,7 @@
             "height": 96.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/CoralShooter/ShootingRPMLeft",
+              "topic": "/SmartDashboard/Subsystem/CoralShooterSubsystem/ShootingRPMLeft",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -291,7 +291,7 @@
             "height": 96.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/CoralShooter/ShootingRPMRight",
+              "topic": "/SmartDashboard/Subsystem/CoralShooterSubsystem/ShootingRPMRight",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -305,7 +305,7 @@
             "height": 96.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/CoralShooter/CurrentRPMLeft",
+              "topic": "/SmartDashboard/Subsystem/CoralShooterSubsystem/CurrentRPMLeft",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -319,7 +319,7 @@
             "height": 96.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/CoralShooter/CurrentRPMRight",
+              "topic": "/SmartDashboard/Subsystem/CoralShooterSubsystem/CurrentRPMRight",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -425,7 +425,7 @@
             "title": "AlgaeShooterSubsystem",
             "x": 32.0,
             "y": 576.0,
-            "width": 352.0,
+            "width": 384.0,
             "height": 96.0,
             "type": "Subsystem",
             "properties": {
@@ -436,8 +436,8 @@
           {
             "title": "WristSubsystem",
             "x": 32.0,
-            "y": 448.0,
-            "width": 352.0,
+            "y": 480.0,
+            "width": 384.0,
             "height": 96.0,
             "type": "Subsystem",
             "properties": {
@@ -448,8 +448,8 @@
           {
             "title": "ElevatorSubsystem",
             "x": 32.0,
-            "y": 320.0,
-            "width": 352.0,
+            "y": 384.0,
+            "width": 384.0,
             "height": 96.0,
             "type": "Subsystem",
             "properties": {
@@ -465,7 +465,7 @@
             "height": 96.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/AlgaeShooter/LauncherAmps",
+              "topic": "/SmartDashboard/Subsystem/AlgaeShooterSubsystem/LauncherAmps",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -479,7 +479,7 @@
             "height": 96.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/AlgaeShooter/ShooterAmpsLeft",
+              "topic": "/SmartDashboard/Subsystem/AlgaeShooterSubsystem/ShooterAmpsLeft",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -493,7 +493,7 @@
             "height": 96.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/AlgaeShooter/ShooterAmpsRight",
+              "topic": "/SmartDashboard/Subsystem/AlgaeShooterSubsystem/ShooterAmpsRight",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -507,7 +507,7 @@
             "height": 96.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/CoralShooter/LauncherAmps",
+              "topic": "/SmartDashboard/Subsystem/CoralShooterSubsystem/LauncherAmps",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -521,7 +521,7 @@
             "height": 96.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/CoralShooter/ShooterAmpsLeft",
+              "topic": "/SmartDashboard/Subsystem/CoralShooterSubsystem/ShooterAmpsLeft",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -535,7 +535,7 @@
             "height": 96.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/CoralShooter/ShooterAmpsRight",
+              "topic": "/SmartDashboard/Subsystem/CoralShooterSubsystem/ShooterAmpsRight",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -549,7 +549,7 @@
             "height": 96.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/Elevator/AmpsLeft",
+              "topic": "/SmartDashboard/Subsystem/ElevatorSubsystem/AmpsLeft",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -563,7 +563,7 @@
             "height": 96.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/Elevator/AmpsRight",
+              "topic": "/SmartDashboard/Subsystem/ElevatorSubsystem/AmpsRight",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -577,7 +577,7 @@
             "height": 96.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/Wrist/Amps",
+              "topic": "/SmartDashboard/Subsystem/WristSubsystem/Amps",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -591,7 +591,7 @@
             "height": 64.0,
             "type": "Boolean Box",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/AlgaeShooter/Launcher",
+              "topic": "/SmartDashboard/Subsystem/AlgaeShooterSubsystem/Launcher",
               "period": 0.06,
               "data_type": "boolean",
               "true_color": 4283215696,
@@ -608,7 +608,7 @@
             "height": 96.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/AlgaeShooter/Launcher Setpoint",
+              "topic": "/SmartDashboard/Subsystem/AlgaeShooterSubsystem/Launcher Setpoint",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -622,7 +622,7 @@
             "height": 96.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/CoralShooter/LastShotIn(ms)",
+              "topic": "/SmartDashboard/Subsystem/CoralShooterSubsystem/LastShotIn(ms)",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -636,7 +636,7 @@
             "height": 96.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/AlgaeShooter/Launcher Setpoint",
+              "topic": "/SmartDashboard/Subsystem/AlgaeShooterSubsystem/Launcher Setpoint",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -650,7 +650,7 @@
             "height": 96.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/CoralShooter/LauncherSetpoint",
+              "topic": "/SmartDashboard/Subsystem/CoralShooterSubsystem/LauncherSetpoint",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -658,7 +658,7 @@
           },
           {
             "title": "Pitch",
-            "x": 160.0,
+            "x": 128.0,
             "y": 192.0,
             "width": 96.0,
             "height": 96.0,
@@ -686,7 +686,7 @@
           },
           {
             "title": "Yaw",
-            "x": 288.0,
+            "x": 224.0,
             "y": 192.0,
             "width": 96.0,
             "height": 96.0,
@@ -696,6 +696,57 @@
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
+            }
+          },
+          {
+            "title": "OurSide",
+            "x": 320.0,
+            "y": 192.0,
+            "width": 96.0,
+            "height": 96.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/SmartDashboard/Subsystem/Drive/onOurSide",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "Back HasTarget",
+            "x": 288.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 96.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/photonvision/Arducam_AT003/hasTarget",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "IsFlipped",
+            "x": 32.0,
+            "y": 288.0,
+            "width": 384.0,
+            "height": 64.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/SmartDashboard/Subsystem/Drive/IsFlipped",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
             }
           }
         ]
@@ -806,7 +857,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Subsystem/Wrist/Gains/D",
+                  "topic": "/SmartDashboard/Subsystem/WristSubsystem/Gains/D",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -820,7 +871,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Subsystem/Wrist/Gains/I",
+                  "topic": "/SmartDashboard/Subsystem/WristSubsystem/Gains/I",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -834,7 +885,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Subsystem/Wrist/Gains/P",
+                  "topic": "/SmartDashboard/Subsystem/WristSubsystem/Gains/P",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -852,7 +903,7 @@
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/Wrist/Amps",
+              "topic": "/SmartDashboard/Subsystem/WristSubsystem/Amps",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -866,7 +917,7 @@
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/Wrist/AppliedOutput",
+              "topic": "/SmartDashboard/Subsystem/WristSubsystem/AppliedOutput",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -880,7 +931,7 @@
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/Wrist/DesiredAngleDegrees",
+              "topic": "/SmartDashboard/Subsystem/WristSubsystem/DesiredAngleDegrees",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -894,7 +945,7 @@
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/Wrist/CurrentAngleDegrees",
+              "topic": "/SmartDashboard/Subsystem/WristSubsystem/CurrentAngleDegrees",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -908,7 +959,7 @@
             "height": 64.0,
             "type": "Boolean Box",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/Wrist/Enabled",
+              "topic": "/SmartDashboard/Subsystem/WristSubsystem/Enabled",
               "period": 0.06,
               "data_type": "boolean",
               "true_color": 4283215696,
@@ -925,7 +976,7 @@
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/Wrist/Temperature",
+              "topic": "/SmartDashboard/Subsystem/WristSubsystem/Temperature",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -974,7 +1025,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Subsystem/AlgaeShooter/Gains/D",
+                  "topic": "/SmartDashboard/Subsystem/AlgaeShooterSubsystem/Gains/D",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -988,7 +1039,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Subsystem/AlgaeShooter/Gains/I",
+                  "topic": "/SmartDashboard/Subsystem/AlgaeShooterSubsystem/Gains/I",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -1002,7 +1053,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Subsystem/AlgaeShooter/Gains/P",
+                  "topic": "/SmartDashboard/Subsystem/AlgaeShooterSubsystem/Gains/P",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -1020,7 +1071,7 @@
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/AlgaeShooter/Shooter RPM Right",
+              "topic": "/SmartDashboard/Subsystem/AlgaeShooterSubsystem/Shooter RPM Right",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -1034,7 +1085,7 @@
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/AlgaeShooter/AppliedOutputLauncher",
+              "topic": "/SmartDashboard/Subsystem/AlgaeShooterSubsystem/AppliedOutputLauncher",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -1048,7 +1099,7 @@
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/AlgaeShooter/AppliedOutputShooterLeft",
+              "topic": "/SmartDashboard/Subsystem/AlgaeShooterSubsystem/AppliedOutputShooterLeft",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -1062,7 +1113,7 @@
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/AlgaeShooter/AppliedOutputShooterRight",
+              "topic": "/SmartDashboard/Subsystem/AlgaeShooterSubsystem/AppliedOutputShooterRight",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -1076,7 +1127,7 @@
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/AlgaeShooter/Last Shot in (ms)",
+              "topic": "/SmartDashboard/Subsystem/AlgaeShooterSubsystem/Last Shot in (ms)",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -1090,7 +1141,7 @@
             "height": 64.0,
             "type": "Boolean Box",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/AlgaeShooter/Launcher",
+              "topic": "/SmartDashboard/Subsystem/AlgaeShooterSubsystem/Launcher",
               "period": 0.06,
               "data_type": "boolean",
               "true_color": 4283215696,
@@ -1107,7 +1158,7 @@
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/AlgaeShooter/Launcher Setpoint",
+              "topic": "/SmartDashboard/Subsystem/AlgaeShooterSubsystem/Launcher Setpoint",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -1121,7 +1172,7 @@
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/AlgaeShooter/LauncherAmps",
+              "topic": "/SmartDashboard/Subsystem/AlgaeShooterSubsystem/LauncherAmps",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -1135,7 +1186,7 @@
             "height": 64.0,
             "type": "Boolean Box",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/AlgaeShooter/Shooter",
+              "topic": "/SmartDashboard/Subsystem/AlgaeShooterSubsystem/Shooter",
               "period": 0.06,
               "data_type": "boolean",
               "true_color": 4283215696,
@@ -1152,7 +1203,7 @@
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/AlgaeShooter/Shooter RPM Left",
+              "topic": "/SmartDashboard/Subsystem/AlgaeShooterSubsystem/Shooter RPM Left",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -1166,7 +1217,7 @@
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/AlgaeShooter/ShooterAmpsLeft",
+              "topic": "/SmartDashboard/Subsystem/AlgaeShooterSubsystem/ShooterAmpsLeft",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -1180,7 +1231,7 @@
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/AlgaeShooter/ShooterAmpsRight",
+              "topic": "/SmartDashboard/Subsystem/AlgaeShooterSubsystem/ShooterAmpsRight",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -1194,7 +1245,7 @@
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/AlgaeShooter/Shooting RPM",
+              "topic": "/SmartDashboard/Subsystem/AlgaeShooterSubsystem/Shooting RPM",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -1208,7 +1259,7 @@
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/AlgaeShooter/TemperatureLauncher",
+              "topic": "/SmartDashboard/Subsystem/AlgaeShooterSubsystem/TemperatureLauncher",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -1222,7 +1273,7 @@
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/AlgaeShooter/TemperatureShooterLeft",
+              "topic": "/SmartDashboard/Subsystem/AlgaeShooterSubsystem/TemperatureShooterLeft",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -1236,7 +1287,7 @@
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/AlgaeShooter/TemperatureShooterRight",
+              "topic": "/SmartDashboard/Subsystem/AlgaeShooterSubsystem/TemperatureShooterRight",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -1250,7 +1301,7 @@
             "height": 64.0,
             "type": "Boolean Box",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/AlgaeShooter/isLoaded",
+              "topic": "/SmartDashboard/Subsystem/AlgaeShooterSubsystem/isLoaded",
               "period": 0.06,
               "data_type": "boolean",
               "true_color": 4283215696,
@@ -1267,7 +1318,7 @@
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/AlgaeShooter/launcher RPM Right",
+              "topic": "/SmartDashboard/Subsystem/AlgaeShooterSubsystem/launcher RPM Right",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -1362,11 +1413,52 @@
       "grid_layout": {
         "layouts": [
           {
+            "title": "Output",
+            "x": 384.0,
+            "y": 448.0,
+            "width": 256.0,
+            "height": 192.0,
+            "type": "List Layout",
+            "properties": {
+              "label_position": "TOP"
+            },
+            "children": [
+              {
+                "title": "Max",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/Subsystem/ElevatorSubsystem/Gains/Output/Max",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              },
+              {
+                "title": "Min",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/Subsystem/ElevatorSubsystem/Gains/Output/Min",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              }
+            ]
+          },
+          {
             "title": "Gains",
             "x": 384.0,
-            "y": 192.0,
+            "y": 224.0,
             "width": 256.0,
-            "height": 256.0,
+            "height": 224.0,
             "type": "List Layout",
             "properties": {
               "label_position": "TOP"
@@ -1380,7 +1472,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Subsystem/Elevator/Gains/D",
+                  "topic": "/SmartDashboard/Subsystem/ElevatorSubsystem/Gains/D",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -1394,7 +1486,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Subsystem/Elevator/Gains/I",
+                  "topic": "/SmartDashboard/Subsystem/ElevatorSubsystem/Gains/I",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -1408,7 +1500,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Subsystem/Elevator/Gains/P",
+                  "topic": "/SmartDashboard/Subsystem/ElevatorSubsystem/Gains/P",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -1420,13 +1512,13 @@
         "containers": [
           {
             "title": "DesiredHeight",
-            "x": 384.0,
+            "x": 640.0,
             "y": 64.0,
-            "width": 384.0,
+            "width": 256.0,
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/Elevator/DesiredHeight",
+              "topic": "/SmartDashboard/Subsystem/ElevatorSubsystem/DesiredHeight",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -1434,13 +1526,13 @@
           },
           {
             "title": "Height",
-            "x": 768.0,
+            "x": 896.0,
             "y": 64.0,
-            "width": 384.0,
+            "width": 256.0,
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/Elevator/Height",
+              "topic": "/SmartDashboard/Subsystem/ElevatorSubsystem/Height",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -1449,12 +1541,12 @@
           {
             "title": "IsZeroed",
             "x": 384.0,
-            "y": 448.0,
+            "y": 64.0,
             "width": 256.0,
-            "height": 128.0,
+            "height": 64.0,
             "type": "Boolean Box",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/Elevator/IsZeroed",
+              "topic": "/SmartDashboard/Subsystem/ElevatorSubsystem/IsZeroed",
               "period": 0.06,
               "data_type": "boolean",
               "true_color": 4283215696,
@@ -1466,12 +1558,12 @@
           {
             "title": "TemperatureLeft",
             "x": 640.0,
-            "y": 448.0,
+            "y": 512.0,
             "width": 256.0,
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/Elevator/TemperatureLeft",
+              "topic": "/SmartDashboard/Subsystem/ElevatorSubsystem/TemperatureLeft",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -1480,12 +1572,12 @@
           {
             "title": "TemperatureRight",
             "x": 896.0,
-            "y": 448.0,
+            "y": 512.0,
             "width": 256.0,
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/Elevator/TemperatureRight",
+              "topic": "/SmartDashboard/Subsystem/ElevatorSubsystem/TemperatureRight",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -1494,12 +1586,12 @@
           {
             "title": "AppliedOutputLeft",
             "x": 640.0,
-            "y": 320.0,
+            "y": 352.0,
             "width": 256.0,
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/Elevator/AppliedOutputLeft",
+              "topic": "/SmartDashboard/Subsystem/ElevatorSubsystem/AppliedOutputLeft",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -1508,12 +1600,12 @@
           {
             "title": "AppliedOutputRight",
             "x": 896.0,
-            "y": 320.0,
+            "y": 352.0,
             "width": 256.0,
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/Elevator/AppliedOutputRight",
+              "topic": "/SmartDashboard/Subsystem/ElevatorSubsystem/AppliedOutputRight",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -1522,12 +1614,12 @@
           {
             "title": "AmpsLeft",
             "x": 640.0,
-            "y": 192.0,
+            "y": 224.0,
             "width": 256.0,
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/Elevator/AmpsLeft",
+              "topic": "/SmartDashboard/Subsystem/ElevatorSubsystem/AmpsLeft",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -1536,12 +1628,12 @@
           {
             "title": "AmpsRight",
             "x": 896.0,
-            "y": 192.0,
+            "y": 224.0,
             "width": 256.0,
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/Elevator/AmpsRight",
+              "topic": "/SmartDashboard/Subsystem/ElevatorSubsystem/AmpsRight",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -1573,10 +1665,10 @@
         "layouts": [
           {
             "title": "AlgaePreset",
-            "x": 512.0,
-            "y": 0.0,
+            "x": 288.0,
+            "y": 32.0,
             "width": 256.0,
-            "height": 256.0,
+            "height": 288.0,
             "type": "List Layout",
             "properties": {
               "label_position": "TOP"
@@ -1628,10 +1720,10 @@
           },
           {
             "title": "CoralPreset",
-            "x": 768.0,
-            "y": 0.0,
+            "x": 544.0,
+            "y": 32.0,
             "width": 256.0,
-            "height": 256.0,
+            "height": 288.0,
             "type": "List Layout",
             "properties": {
               "label_position": "TOP"
@@ -1669,10 +1761,10 @@
           },
           {
             "title": "AimPreset",
-            "x": 1024.0,
-            "y": 0.0,
-            "width": 256.0,
-            "height": 640.0,
+            "x": 800.0,
+            "y": 32.0,
+            "width": 384.0,
+            "height": 480.0,
             "type": "List Layout",
             "properties": {
               "label_position": "TOP"
@@ -1779,7 +1871,158 @@
             ]
           }
         ],
-        "containers": []
+        "containers": [
+          {
+            "title": "angleAdjust(deg)",
+            "x": 800.0,
+            "y": 512.0,
+            "width": 384.0,
+            "height": 96.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/Subsystem/PresetManager/AimPreset/angleAdjust(deg)",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "rmpErrorMultiplier",
+            "x": 800.0,
+            "y": 608.0,
+            "width": 384.0,
+            "height": 96.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/Subsystem/PresetManager/AimPreset/rmpErrorMultiplier",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "OverrideRPM",
+            "x": 544.0,
+            "y": 320.0,
+            "width": 256.0,
+            "height": 96.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Commands/CoralShooterRampUp/OverrideRPM",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "ForcedRMPLeft",
+            "x": 544.0,
+            "y": 416.0,
+            "width": 128.0,
+            "height": 96.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/Commands/CoralShooterRampUp/ForcedRMPLeft",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "ForcedRMPRight",
+            "x": 672.0,
+            "y": 416.0,
+            "width": 128.0,
+            "height": 96.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/Commands/CoralShooterRampUp/ForcedRMPRight",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "OverrideRPM",
+            "x": 288.0,
+            "y": 320.0,
+            "width": 256.0,
+            "height": 96.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Commands/AlgaeShooterRampUp/OverrideRPM",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "ForcedRMP",
+            "x": 288.0,
+            "y": 416.0,
+            "width": 256.0,
+            "height": 96.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/Commands/AlgaeShooterRampUp/ForcedRMP",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "OverrideHeight",
+            "x": 288.0,
+            "y": 512.0,
+            "width": 128.0,
+            "height": 96.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Commands/ElevatorSetHeight/OverrideHeight",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "OverrideAngle",
+            "x": 288.0,
+            "y": 608.0,
+            "width": 128.0,
+            "height": 96.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Commands/WristSetAngle/OverrideAngle",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "ForcedHeight",
+            "x": 416.0,
+            "y": 512.0,
+            "width": 128.0,
+            "height": 96.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/Commands/ElevatorSetHeight/ForcedHeight",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "ForcedAngle",
+            "x": 416.0,
+            "y": 608.0,
+            "width": 128.0,
+            "height": 96.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/Commands/WristSetAngle/ForcedAngle",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
+          }
+        ]
       }
     },
     {
@@ -1805,7 +2048,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Subsystem/CoralShooter/Gains/Left/D",
+                  "topic": "/SmartDashboard/Subsystem/CoralShooterSubsystem/Gains/Left/D",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -1819,7 +2062,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Subsystem/CoralShooter/Gains/Left/I",
+                  "topic": "/SmartDashboard/Subsystem/CoralShooterSubsystem/Gains/Left/I",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -1833,7 +2076,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Subsystem/CoralShooter/Gains/Left/P",
+                  "topic": "/SmartDashboard/Subsystem/CoralShooterSubsystem/Gains/Left/P",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -1860,7 +2103,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Subsystem/CoralShooter/Gains/Right/D",
+                  "topic": "/SmartDashboard/Subsystem/CoralShooterSubsystem/Gains/Right/D",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -1874,7 +2117,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Subsystem/CoralShooter/Gains/Right/I",
+                  "topic": "/SmartDashboard/Subsystem/CoralShooterSubsystem/Gains/Right/I",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -1888,7 +2131,7 @@
                 "height": 128.0,
                 "type": "Text Display",
                 "properties": {
-                  "topic": "/SmartDashboard/Subsystem/CoralShooter/Gains/Right/P",
+                  "topic": "/SmartDashboard/Subsystem/CoralShooterSubsystem/Gains/Right/P",
                   "period": 0.06,
                   "data_type": "double",
                   "show_submit_button": false
@@ -1906,7 +2149,7 @@
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/CoralShooter/CurrentRPMLeft",
+              "topic": "/SmartDashboard/Subsystem/CoralShooterSubsystem/CurrentRPMLeft",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -1920,7 +2163,7 @@
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/CoralShooter/CurrentRPMRight",
+              "topic": "/SmartDashboard/Subsystem/CoralShooterSubsystem/CurrentRPMRight",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -1934,7 +2177,7 @@
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/CoralShooter/ShootingRPMLeft",
+              "topic": "/SmartDashboard/Subsystem/CoralShooterSubsystem/ShootingRPMLeft",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -1948,7 +2191,7 @@
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/CoralShooter/ShootingRPMRight",
+              "topic": "/SmartDashboard/Subsystem/CoralShooterSubsystem/ShootingRPMRight",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -2003,7 +2246,7 @@
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/CoralShooter/AppliedOutputLauncher",
+              "topic": "/SmartDashboard/Subsystem/CoralShooterSubsystem/AppliedOutputLauncher",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -2017,7 +2260,7 @@
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/CoralShooter/AppliedOutputShooterLeft",
+              "topic": "/SmartDashboard/Subsystem/CoralShooterSubsystem/AppliedOutputShooterLeft",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -2031,7 +2274,7 @@
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/CoralShooter/AppliedOutputShooterRight",
+              "topic": "/SmartDashboard/Subsystem/CoralShooterSubsystem/AppliedOutputShooterRight",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -2045,7 +2288,7 @@
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/CoralShooter/CurrentRPMLauncher",
+              "topic": "/SmartDashboard/Subsystem/CoralShooterSubsystem/CurrentRPMLauncher",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -2059,7 +2302,7 @@
             "height": 64.0,
             "type": "Boolean Box",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/CoralShooter/IsLoaded",
+              "topic": "/SmartDashboard/Subsystem/CoralShooterSubsystem/IsLoaded",
               "period": 0.06,
               "data_type": "boolean",
               "true_color": 4283215696,
@@ -2076,7 +2319,7 @@
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/CoralShooter/LastShotIn(ms)",
+              "topic": "/SmartDashboard/Subsystem/CoralShooterSubsystem/LastShotIn(ms)",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -2090,7 +2333,7 @@
             "height": 64.0,
             "type": "Boolean Box",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/CoralShooter/Launcher",
+              "topic": "/SmartDashboard/Subsystem/CoralShooterSubsystem/Launcher",
               "period": 0.06,
               "data_type": "boolean",
               "true_color": 4283215696,
@@ -2107,7 +2350,7 @@
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/CoralShooter/LauncherSetpoint",
+              "topic": "/SmartDashboard/Subsystem/CoralShooterSubsystem/LauncherSetpoint",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -2121,7 +2364,7 @@
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/CoralShooter/LauncherappliedOutputAmps",
+              "topic": "/SmartDashboard/Subsystem/CoralShooterSubsystem/LauncherappliedOutputAmps",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -2135,7 +2378,7 @@
             "height": 64.0,
             "type": "Boolean Box",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/CoralShooter/Shooter",
+              "topic": "/SmartDashboard/Subsystem/CoralShooterSubsystem/Shooter",
               "period": 0.06,
               "data_type": "boolean",
               "true_color": 4283215696,
@@ -2152,7 +2395,7 @@
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/CoralShooter/ShooterAmpsLeft",
+              "topic": "/SmartDashboard/Subsystem/CoralShooterSubsystem/ShooterAmpsLeft",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -2166,7 +2409,7 @@
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/CoralShooter/ShooterAmpsRight",
+              "topic": "/SmartDashboard/Subsystem/CoralShooterSubsystem/ShooterAmpsRight",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -2180,7 +2423,7 @@
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/CoralShooter/TemperatureLauncher",
+              "topic": "/SmartDashboard/Subsystem/CoralShooterSubsystem/TemperatureLauncher",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -2194,7 +2437,7 @@
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/CoralShooter/TemperatureShooterLeft",
+              "topic": "/SmartDashboard/Subsystem/CoralShooterSubsystem/TemperatureShooterLeft",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -2208,7 +2451,7 @@
             "height": 128.0,
             "type": "Text Display",
             "properties": {
-              "topic": "/SmartDashboard/Subsystem/CoralShooter/TemperatureShooterRight",
+              "topic": "/SmartDashboard/Subsystem/CoralShooterSubsystem/TemperatureShooterRight",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false
@@ -2446,9 +2689,9 @@
           },
           {
             "title": "PositionTolerance(m)",
-            "x": 512.0,
+            "x": 704.0,
             "y": 352.0,
-            "width": 512.0,
+            "width": 320.0,
             "height": 96.0,
             "type": "Text Display",
             "properties": {
@@ -2574,6 +2817,33 @@
             "type": "Text Display",
             "properties": {
               "topic": "/SmartDashboard/Commands/DriveToPoseFinkle/RotationVelocityConstraint",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "OverrideOffsetDistance",
+            "x": 512.0,
+            "y": 352.0,
+            "width": 96.0,
+            "height": 96.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Commands/DriveToPoseFinkle/OverrideOffsetDistance",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "OffsetDistance(in)",
+            "x": 608.0,
+            "y": 352.0,
+            "width": 96.0,
+            "height": 96.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/Commands/DriveToPoseFinkle/OffsetDistance(in)",
               "period": 0.06,
               "data_type": "double",
               "show_submit_button": false

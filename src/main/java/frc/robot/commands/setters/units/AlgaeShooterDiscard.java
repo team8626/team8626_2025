@@ -7,6 +7,8 @@
 package frc.robot.commands.setters.units;
 
 import edu.wpi.first.wpilibj.Timer;
+import frc.robot.Commodore;
+import frc.robot.Commodore.CommodoreState;
 import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
 import frc.robot.subsystems.algaeshooter.AlgaeShooterConstants;
@@ -24,6 +26,7 @@ public class AlgaeShooterDiscard extends CS_Command {
 
   @Override
   public void initialize() {
+    Commodore.setCommodoreState(CommodoreState.ALGAE_DISCARD);
 
     algae501.startLauncher(AlgaeShooterConstants.launcherShootSetpoint);
     algae501.startShooterBySetpoint(AlgaeShooterConstants.discardShootSetpoint);

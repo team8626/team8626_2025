@@ -1,11 +1,18 @@
 package frc.robot.subsystems.algaeshooter;
 
+import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.Celsius;
+import static edu.wpi.first.units.Units.RPM;
 import static frc.robot.subsystems.algaeshooter.AlgaeShooterConstants.gains;
 
-public interface AlgaeShooterInterface {
-  void startShooter(double new_RPM);
+import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Current;
+import edu.wpi.first.units.measure.Temperature;
 
-  void updateShooterRPM(double new_RPM);
+public interface AlgaeShooterInterface {
+  void startShooter(AngularVelocity new_RPM);
+
+  void updateShooterRPM(AngularVelocity new_RPM);
 
   void stopShooter();
 
@@ -19,11 +26,11 @@ public interface AlgaeShooterInterface {
 
   boolean shooterIsLoaded();
 
-  double getShooterRPMLeft();
+  AngularVelocity getShooterRPMLeft();
 
-  double getShooterRPMRight();
+  AngularVelocity getShooterRPMRight();
 
-  double getLauncherRPM();
+  AngularVelocity getLauncherRPM();
 
   double getLauncherSetpoint();
 
@@ -42,25 +49,25 @@ public interface AlgaeShooterInterface {
     protected boolean launchIsEnabled = false;
     protected boolean shooterIsEnabled = false;
 
-    protected double currentRPMLeft = 0; // RPM
-    protected double currentRPMRight = 0; // RPM
-    protected double currentRMPLauncher = 0; // RPM
+    protected AngularVelocity currentRPMLeft = RPM.of(0);
+    protected AngularVelocity currentRPMRight = RPM.of(0);
+    protected AngularVelocity currentRMPLauncher = RPM.of(0);
     protected double currentLauncherSetpoint = 0; // [-1;1]
 
-    protected double ampsLeft = 0;
-    protected double ampsRight = 0;
-    protected double ampsLauncher = 0;
+    protected Current ampsLeft = Amps.of(0);
+    protected Current ampsRight = Amps.of(0);
+    protected Current ampsLauncher = Amps.of(0);
 
-    protected double tempLeft = 0;
-    protected double tempRight = 0;
-    protected double tempLauncher = 0;
+    protected Temperature tempLeft = Celsius.of(0);
+    protected Temperature tempRight = Celsius.of(0);
+    protected Temperature tempLauncher = Celsius.of(0);
 
     protected double appliedOutputLeft = 0;
     protected double appliedOutputRight = 0;
     protected double appliedOutputLauncher = 0;
 
     protected boolean isLoaded = false;
-    protected double desiredRPM = AlgaeShooterConstants.shootRPM;
+    protected AngularVelocity desiredRPM = RPM.of(0);
 
     protected double kP = gains.kP();
     protected double kI = gains.kI();

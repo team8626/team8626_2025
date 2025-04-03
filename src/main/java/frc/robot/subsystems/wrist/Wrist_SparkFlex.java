@@ -1,5 +1,9 @@
 package frc.robot.subsystems.wrist;
 
+import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.DegreesPerSecond;
+import static edu.wpi.first.units.Units.Fahrenheit;
 import static frc.robot.subsystems.wrist.WristConstants.wristConfig;
 
 import com.revrobotics.AbsoluteEncoder;
@@ -14,6 +18,7 @@ import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.units.measure.Angle;
 import frc.robot.subsystems.CS_InterfaceBase;
 
 public class Wrist_SparkFlex implements WristInterface, CS_InterfaceBase {
@@ -24,7 +29,7 @@ public class Wrist_SparkFlex implements WristInterface, CS_InterfaceBase {
   private final SparkClosedLoopController controller;
   private AbsoluteEncoder encoder;
   private final AbsoluteEncoderConfig encoderConfig = new AbsoluteEncoderConfig();
-  private double desiredAngleDegree;
+  private Angle desiredAngle;
 
   // SimpleMotorFeedforward leftFF = new SimpleMotorFeedforward(gains.kS(), gains.kV(), gains.kA());
 
@@ -34,8 +39,8 @@ public class Wrist_SparkFlex implements WristInterface, CS_InterfaceBase {
     // Setup configuration for the encoder
     encoderConfig
         .inverted(true)
-        .positionConversionFactor(WristConstants.positionConversionFactor)
-        .velocityConversionFactor(WristConstants.velocityConversionFactor);
+        .positionConversionFactor(WristConstants.positionConversionFactor.in(Degrees))
+        .velocityConversionFactor(WristConstants.velocityConversionFactor.in(DegreesPerSecond));
 
     // Setup configuration for the motor
     config = new SparkFlexConfig();
@@ -61,17 +66,17 @@ public class Wrist_SparkFlex implements WristInterface, CS_InterfaceBase {
 
     controller = motor.getClosedLoopController();
     controller.setReference(0, ControlType.kDutyCycle);
-    desiredAngleDegree = WristConstants.restAngleDegrees;
+    desiredAngle = WristConstants.restAngle;
   }
 
   @Override
   public void updateInputs(WristValues values) {
     values.isEnabled = isEnabled;
-    values.currentAngleDegrees = getAngleDegrees();
-    values.amps = motor.getOutputCurrent();
-    values.desiredAngleDegrees = this.desiredAngleDegree;
+    values.currentAngle = getAngle();
+    values.amps = Amps.of(motor.getOutputCurrent());
+    values.desiredAngle = this.desiredAngle;
     values.appliedOutput = motor.getAppliedOutput();
-    values.temperature = motor.getMotorTemperature();
+    values.temperature = Fahrenheit.of(motor.getMotorTemperature());
 
     if (encoder.getVelocity() > 0) {
       values.isEnabled = true;
@@ -83,18 +88,22 @@ public class Wrist_SparkFlex implements WristInterface, CS_InterfaceBase {
       values.isEnabled = false;
     }
 
-    controller.setReference(desiredAngleDegree, ControlType.kPosition);
+    controller.setReference(desiredAngle.in(Degrees), ControlType.kPosition);
   }
 
-  public double getAngleDegrees() {
-    return encoder.getPosition();
+  public Angle getAngle() {
+    return Degrees.of(encoder.getPosition());
   }
 
   // added to fix error at top of class (im hope this doesn't break anything)
   @Override
-  public void setAngleDegrees(double new_angle) {
-    desiredAngleDegree =
-        MathUtil.clamp(new_angle, WristConstants.minAngleDegrees, WristConstants.maxAngleDegrees);
+  public void setAngle(Angle new_angle) {
+    desiredAngle =
+        Degrees.of(
+            MathUtil.clamp(
+                new_angle.in(Degrees),
+                WristConstants.minAngle.in(Degrees),
+                WristConstants.maxAngle.in(Degrees)));
   }
 
   @Override
@@ -111,12 +120,12 @@ public class Wrist_SparkFlex implements WristInterface, CS_InterfaceBase {
   }
 
   @Override
-  public void goUp(double offsetDegrees) {
-    desiredAngleDegree += offsetDegrees;
+  public void goUp(Angle offset) {
+    desiredAngle = desiredAngle.plus(offset);
   }
 
   @Override
-  public void goDown(double offsetDegrees) {
-    desiredAngleDegree -= offsetDegrees;
+  public void goDown(Angle offset) {
+    desiredAngle = desiredAngle.minus(offset);
   }
 }

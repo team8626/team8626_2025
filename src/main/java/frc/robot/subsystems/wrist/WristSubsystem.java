@@ -1,5 +1,10 @@
 package frc.robot.subsystems.wrist;
 
+import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.Celsius;
+import static edu.wpi.first.units.Units.Degrees;
+
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.CS_SubsystemBase;
 import frc.robot.subsystems.wrist.WristInterface.WristValues;
@@ -14,18 +19,17 @@ public class WristSubsystem extends CS_SubsystemBase {
 
     this.wristInterface = subsystem_interface;
     values = new WristValues();
-    println("Created");
   }
 
   // Calls to the wrist interface
 
-  public void setAngleDegrees(double new_Angle) {
+  public void setAngle(Angle new_Angle) {
     println("Setting angle to " + new_Angle);
-    wristInterface.setAngleDegrees(new_Angle);
+    wristInterface.setAngle(new_Angle);
   }
 
-  public double getAngleDegrees() {
-    return values.currentAngleDegrees;
+  public Angle getAngle() {
+    return values.currentAngle;
   }
 
   public void setPID(double newkP, double newkI, double newkD) {
@@ -44,11 +48,11 @@ public class WristSubsystem extends CS_SubsystemBase {
     wristInterface.setPID(values.kP, values.kI, newkD);
   }
 
-  public void goUp(double offsetDegrees) {
+  public void goUp(Angle offsetDegrees) {
     wristInterface.goUp(offsetDegrees);
   }
 
-  public void goDown(double offsetDegrees) {
+  public void goDown(Angle offsetDegrees) {
     wristInterface.goDown(offsetDegrees);
   }
 
@@ -63,9 +67,9 @@ public class WristSubsystem extends CS_SubsystemBase {
 
     // Using SmartDashboard to tune PIDs
     // --------------------------------------------------
-    SmartDashboard.putNumber("Subsystem/Wrist/Gains/P", WristConstants.gains.kP());
-    SmartDashboard.putNumber("Subsystem/Wrist/Gains/I", WristConstants.gains.kI());
-    SmartDashboard.putNumber("Subsystem/Wrist/Gains/D", WristConstants.gains.kD());
+    SmartDashboard.putNumber("Subsystem/WristSubsystem/Gains/P", WristConstants.gains.kP());
+    SmartDashboard.putNumber("Subsystem/WristSubsystem/Gains/I", WristConstants.gains.kI());
+    SmartDashboard.putNumber("Subsystem/WristSubsystem/Gains/D", WristConstants.gains.kD());
     SmartDashboard.putBoolean("Commands/WristSetAngle/OverrideAngle", false);
     SmartDashboard.putNumber("Commands/WristSetAngle/ForcedAngle", 110);
   }
@@ -74,9 +78,9 @@ public class WristSubsystem extends CS_SubsystemBase {
   public void updateDashboard() {
     // Using SmartDashboard to tune PIDs
     // --------------------------------------------------
-    double newkP = SmartDashboard.getNumber("Subsystem/Wrist/Gains/P", values.kP);
-    double newkI = SmartDashboard.getNumber("Subsystem/Wrist/Gains/I", values.kI);
-    double newkD = SmartDashboard.getNumber("Subsystem/Wrist/Gains/D", values.kD);
+    double newkP = SmartDashboard.getNumber("Subsystem/WristSubsystem/Gains/P", values.kP);
+    double newkI = SmartDashboard.getNumber("Subsystem/WristSubsystem/Gains/I", values.kI);
+    double newkD = SmartDashboard.getNumber("Subsystem/WristSubsystem/Gains/D", values.kD);
 
     // Coefficients on SmartDashboard have changed, save new values to the PID controller
     // --------------------------------------------------
@@ -85,21 +89,26 @@ public class WristSubsystem extends CS_SubsystemBase {
     values.kD = CS_Utils.updateFromSmartDashboard(newkD, values.kD, (value) -> setkD(value));
 
     // Update the SmartDashboard with the current state of the subsystem
-    SmartDashboard.putBoolean("Subsystem/Wrist/Enabled", values.isEnabled);
-    SmartDashboard.putNumber("Subsystem/Wrist/CurrentAngleDegrees", values.currentAngleDegrees);
-    SmartDashboard.putNumber("Subsystem/Wrist/Amps", values.amps);
-    SmartDashboard.putNumber("Subsystem/Wrist/DesiredAngleDegrees", values.desiredAngleDegrees);
-    SmartDashboard.putNumber("Subsystem/Wrist/AppliedOutput", values.appliedOutput);
-    SmartDashboard.putNumber("Subsystem/Wrist/Temperature", values.temperature);
+    SmartDashboard.putBoolean("Subsystem/WristSubsystem/Enabled", values.isEnabled);
+    SmartDashboard.putNumber(
+        "Subsystem/WristSubsystem/CurrentAngleDegrees", values.currentAngle.in(Degrees));
+    SmartDashboard.putNumber("Subsystem/WristSubsystem/Amps", values.amps.in(Amps));
+    SmartDashboard.putNumber(
+        "Subsystem/WristSubsystem/DesiredAngleDegrees", values.desiredAngle.in(Degrees));
+    SmartDashboard.putNumber("Subsystem/WristSubsystem/AppliedOutput", values.appliedOutput);
+    SmartDashboard.putNumber(
+        "Subsystem/WristSubsystem/Temperature", values.temperature.in(Celsius));
 
     SmartDashboard.putData(this);
     //   double newAngle =
     //       SmartDashboard.getNumber(
-    //           "Subsystem/Wrist/desiredAngleDegrees", WristConstants.defaultAngleDegrees);
+    //           "Subsystem/WristSubsystem/desiredAngleDegrees",
+    // WristConstants.defaultAngleDegrees);
     //   if (newAngle != desiredAngleDegrees) {
     //     setAngleDegrees(newAngle);
     //   }
-    //   SmartDashboard.putNumber("Subsystem/Wrist/desiredAngleDegrees", desiredAngleDegrees);
+    //   SmartDashboard.putNumber("Subsystem/WristSubsystem/desiredAngleDegrees",
+    // desiredAngleDegrees);
   }
 
   // Characterization methods
@@ -108,6 +117,6 @@ public class WristSubsystem extends CS_SubsystemBase {
   }
 
   public double getCharacterizationAngle() {
-    return values.currentAngleDegrees;
+    return values.currentAngle.in(Degrees);
   }
 }

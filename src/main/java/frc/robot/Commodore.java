@@ -35,25 +35,38 @@ public class Commodore extends CS_SubsystemBase {
     DISCONNECTED,
     DISABLED,
     IDLE,
+    // INTERRUPTED,
 
     UNKNOWN,
     TRANSITION,
 
     // CORAL_SHOOT,
-    // CORAL_SHOOT_RAMPINGUP,
-    // CORAL_SHOOT_LAUNCHING,
-    // CORAL_INTAKE,
+    CORAL_SHOOT_RAMPUP,
+    CORAL_SHOOT_LAUNCH,
+    CORAL_INTAKE,
+    CORAL_SHOOT_FINISHED,
+
     // CORAL_LOADED,
 
     // ALGAE_SHOOT_SETTINGSUBSYSTEMS,
     // ALGAE_SHOOT,
-    // ALGAE_SHOOT_RAMPINGUP,
-    // ALGAE_SHOOT_LAUNCHING,
-    // ALGAE_INTAKE,
-    // ALGAE_LOADED,
+    ALGAE_SHOOT_RAMPUP,
+    ALGAE_SHOOT_LAUNCH,
+    ALGAE_INTAKE,
+    ALGAE_SHOOT_FINISHED,
+    ALGAE_DISCARD,
 
     DRIVE_AUTO,
+    DRIVE_AUTO_FINISHED,
+    DRIVE_AUTO_INTERRUPTED,
+
     DRIVE_FINKLE,
+    DRIVE_FINKLE_FINISHED,
+    DRIVE_FINKLE_INTERRUPTED,
+
+    DRIVE_TURN_TO_ANGLE,
+    DRIVE_TURN_TO_ANGLE_INTERRUPTED,
+    DRIVE_TURN_TO_ANGLE_FINISHED,
 
     SUBSYSTEMS_ADJUST,
     SUBSYSTEMS_AT_SETPOINT,
@@ -106,7 +119,7 @@ public class Commodore extends CS_SubsystemBase {
       pushLastState(currentState);
       currentState = newState;
 
-      getInstance().printf("New State: %s\n", newState.toString());
+      // getInstance().printf("New State: %s\n", newState.toString());
     }
     // Same state, nothing to do
     else {
@@ -143,8 +156,7 @@ public class Commodore extends CS_SubsystemBase {
   }
 
   public static Command getSetStateCommand(CommodoreState state) {
-    SmartDashboard.putString("Commodore/Desired State", state.toString());
-
+    // SmartDashboard.putString("Commodore/Desired State", state.toString());
     return new InstantCommand(() -> Commodore.applyState(state));
   }
 

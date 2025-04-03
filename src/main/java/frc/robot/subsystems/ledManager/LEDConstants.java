@@ -9,6 +9,7 @@ import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.util.Color;
+import frc.robot.subsystems.ledManager.LEDConstants.LEDSection;
 
 public class LEDConstants {
   public static final int kLEDStripLength = 247;
@@ -30,10 +31,10 @@ public class LEDConstants {
 
   public static final LEDSection kLEDSectionStatusLeft = new LEDSection(62, 67);
   public static final LEDSection kLEDSectionLeft = new LEDSection(0, 67);
-  public static final LEDSection kLEDSectionCoral = new LEDSection(68, 120);
-  public static final LEDSection kLEDSectionAlgae = new LEDSection(121, 173);
-  public static final LEDSection kLEDSectionRight = new LEDSection(174, 242);
-  public static final LEDSection kLEDSectionStatusRight = new LEDSection(174, 179);
+  public static final LEDSection kLEDSectionCoral = new LEDSection(68, 109);
+  public static final LEDSection kLEDSectionAlgae = new LEDSection(110, 151);
+  public static final LEDSection kLEDSectionRight = new LEDSection(152, 218);
+  public static final LEDSection kLEDSectionStatusRight = new LEDSection(179, 180);
 
   public static final Distance ledSpacing = Meters.of(1.0 / 144.0); // 144 LEDs per Meter
 

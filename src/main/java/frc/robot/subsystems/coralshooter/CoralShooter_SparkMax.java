@@ -1,5 +1,8 @@
 package frc.robot.subsystems.coralshooter;
 
+import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.Celsius;
+import static edu.wpi.first.units.Units.RPM;
 import static frc.robot.subsystems.coralshooter.CoralShooterConstants.flywheelConfig;
 import static frc.robot.subsystems.coralshooter.CoralShooterConstants.gainsLeft;
 import static frc.robot.subsystems.coralshooter.CoralShooterConstants.gainsRight;
@@ -18,6 +21,7 @@ import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.subsystems.CS_InterfaceBase;
 
@@ -43,7 +47,9 @@ public class CoralShooter_SparkMax implements CoralShooterInterface, CS_Interfac
   SimpleMotorFeedforward shooterFFRight =
       new SimpleMotorFeedforward(gainsRight.kS(), gainsRight.kV(), gainsRight.kA());
 
-  private DigitalInput loadedSensor = new DigitalInput(CoralShooterConstants.lidarPort);
+  private DigitalInput loadedSensor = new DigitalInput(CoralShooterConstants.lidarPortBottom);
+  private DigitalInput coralSensor1 = new DigitalInput(CoralShooterConstants.lidarPort1Top);
+  private DigitalInput coralSensor2 = new DigitalInput(CoralShooterConstants.lidarPort2Top);
 
   // private AnalogInput leftSensor = new AnalogInput(CoralShooterConstants.leftUSPort);
   // private AnalogInput rightSensor = new AnalogInput(CoralShooterConstants.rightUSPort);
@@ -137,13 +143,13 @@ public class CoralShooter_SparkMax implements CoralShooterInterface, CS_Interfac
     values.currentRMPLauncher = getRPMLauncher();
     values.currentLauncherSetpoint = getSetpointLauncher();
 
-    values.ampsLeft = leftMotor.getOutputCurrent();
-    values.ampsRight = rightMotor.getOutputCurrent();
-    values.ampsLauncher = launchMotor.getOutputCurrent();
+    values.ampsLeft = Amps.of(leftMotor.getOutputCurrent());
+    values.ampsRight = Amps.of(rightMotor.getOutputCurrent());
+    values.ampsLauncher = Amps.of(launchMotor.getOutputCurrent());
 
-    values.tempLeft = leftMotor.getMotorTemperature();
-    values.tempRight = rightMotor.getMotorTemperature();
-    values.tempLauncher = launchMotor.getMotorTemperature();
+    values.tempLeft = Celsius.of(leftMotor.getMotorTemperature());
+    values.tempRight = Celsius.of(rightMotor.getMotorTemperature());
+    values.tempLauncher = Celsius.of(launchMotor.getMotorTemperature());
 
     values.appliedOutputLeft = leftMotor.getAppliedOutput();
     values.appliedOutputRight = rightMotor.getAppliedOutput();
@@ -156,19 +162,19 @@ public class CoralShooter_SparkMax implements CoralShooterInterface, CS_Interfac
   }
 
   @Override
-  public void startShooter(double new_RPMLeft, double new_RPMRight) {
+  public void startShooter(AngularVelocity new_RPMLeft, AngularVelocity new_RPMRight) {
     leftController.setReference(
-        -new_RPMLeft,
+        -new_RPMLeft.in(RPM),
         ControlType.kVelocity,
         ClosedLoopSlot.kSlot0,
-        shooterFFLeft.calculate(-new_RPMLeft),
+        shooterFFLeft.calculate(-new_RPMLeft.in(RPM)),
         ArbFFUnits.kVoltage);
 
     rightController.setReference(
-        new_RPMRight,
+        new_RPMRight.in(RPM),
         ControlType.kVelocity,
         ClosedLoopSlot.kSlot0,
-        shooterFFRight.calculate(new_RPMRight),
+        shooterFFRight.calculate(new_RPMRight.in(RPM)),
         ArbFFUnits.kVoltage);
 
     shooterIsEnabled = true;
@@ -182,20 +188,20 @@ public class CoralShooter_SparkMax implements CoralShooterInterface, CS_Interfac
   }
 
   @Override
-  public void updateRPMShooter(double new_RPMLeft, double new_RPMRight) {
+  public void updateRPMShooter(AngularVelocity new_RPMLeft, AngularVelocity new_RPMRight) {
     if (shooterIsEnabled) {
       leftController.setReference(
-          -new_RPMLeft,
+          -new_RPMLeft.in(RPM),
           ControlType.kVelocity,
           ClosedLoopSlot.kSlot0,
-          shooterFFLeft.calculate(-new_RPMLeft),
+          shooterFFLeft.calculate(-new_RPMLeft.in(RPM)),
           ArbFFUnits.kVoltage);
 
       rightController.setReference(
-          new_RPMRight,
+          new_RPMRight.in(RPM),
           ControlType.kVelocity,
           ClosedLoopSlot.kSlot0,
-          shooterFFRight.calculate(new_RPMRight),
+          shooterFFRight.calculate(new_RPMRight.in(RPM)),
           ArbFFUnits.kVoltage);
     }
   }
@@ -222,18 +228,18 @@ public class CoralShooter_SparkMax implements CoralShooterInterface, CS_Interfac
   }
 
   @Override
-  public double getRPMLeft() {
-    return leftEncoder.getVelocity();
+  public AngularVelocity getRPMLeft() {
+    return RPM.of(leftEncoder.getVelocity());
   }
 
   @Override
-  public double getRPMRight() {
-    return rightEncoder.getVelocity();
+  public AngularVelocity getRPMRight() {
+    return RPM.of(rightEncoder.getVelocity());
   }
 
   @Override
-  public double getRPMLauncher() {
-    return launchEncoder.getVelocity();
+  public AngularVelocity getRPMLauncher() {
+    return RPM.of(launchEncoder.getVelocity());
   }
 
   public double getSetpointLauncher() {
@@ -243,6 +249,11 @@ public class CoralShooter_SparkMax implements CoralShooterInterface, CS_Interfac
   @Override
   public boolean isLoaded() {
     return !loadedSensor.get();
+  }
+
+  @Override
+  public boolean hasCoral() {
+    return !coralSensor1.get() || !coralSensor2.get();
   }
 
   @Override

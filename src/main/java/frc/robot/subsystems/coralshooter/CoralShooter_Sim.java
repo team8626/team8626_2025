@@ -1,10 +1,14 @@
 package frc.robot.subsystems.coralshooter;
 
+import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.RPM;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static frc.robot.subsystems.coralshooter.CoralShooterConstants.flywheelConfig;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.simulation.DIOSim;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
@@ -21,8 +25,12 @@ public class CoralShooter_Sim implements CoralShooterInterface, CS_InterfaceBase
   private FlywheelSim rightSim;
   private FlywheelSim launchSim;
 
-  private DigitalInput loadedSensor = new DigitalInput(CoralShooterConstants.lidarPort);
+  private DigitalInput loadedSensor = new DigitalInput(CoralShooterConstants.lidarPortBottom);
+  private DigitalInput coralSensor1 = new DigitalInput(CoralShooterConstants.lidarPort1Top);
+  private DigitalInput coralSensor2 = new DigitalInput(CoralShooterConstants.lidarPort2Top);
   private DIOSim loadedSensorSim = new DIOSim(loadedSensor);
+  private DIOSim coralSensorSim1 = new DIOSim(coralSensor1);
+  private DIOSim coralSensorSim2 = new DIOSim(coralSensor2);
 
   public CoralShooter_Sim() {
 
@@ -65,33 +73,33 @@ public class CoralShooter_Sim implements CoralShooterInterface, CS_InterfaceBase
     values.currentRMPLauncher = getRPMLauncher();
     values.currentLauncherSetpoint = getSetpointLauncher();
 
-    values.ampsLeft = leftSim.getCurrentDrawAmps();
-    values.ampsRight = rightSim.getCurrentDrawAmps();
-    values.ampsLauncher = launchSim.getCurrentDrawAmps();
+    values.ampsLeft = Amps.of(leftSim.getCurrentDrawAmps());
+    values.ampsRight = Amps.of(rightSim.getCurrentDrawAmps());
+    values.ampsLauncher = Amps.of(launchSim.getCurrentDrawAmps());
 
     values.isLoaded = isLoaded();
   }
 
   @Override
-  public void startShooter(double new_RPMLeft, double new_RPMRight) {
-    leftSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_RPMLeft));
-    rightSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_RPMRight));
+  public void startShooter(AngularVelocity new_RPMLeft, AngularVelocity new_RPMRight) {
+    leftSim.setAngularVelocity(new_RPMLeft.in(RadiansPerSecond));
+    rightSim.setAngularVelocity(new_RPMRight.in(RadiansPerSecond));
     shooterIsEnabled = true;
-    printf("Shooter RPM: %f / %f", new_RPMLeft, new_RPMRight);
+    printf("Shooter RPM: %f / %f", new_RPMLeft.in(RPM), new_RPMRight.in(RPM));
   }
 
   @Override
   public void stopShooter() {
-    updateRPMShooter(0, 0);
+    updateRPMShooter(RPM.of(0), RPM.of(0));
     shooterIsEnabled = false;
   }
 
   @Override
-  public void updateRPMShooter(double new_RPMLeft, double new_RPMRight) {
+  public void updateRPMShooter(AngularVelocity new_RPMLeft, AngularVelocity new_RPMRight) {
     if (shooterIsEnabled) {
-      leftSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_RPMLeft));
-      rightSim.setAngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(new_RPMRight));
-      printf("Shooter RPM: %f / %f", new_RPMLeft, new_RPMRight);
+      leftSim.setAngularVelocity(new_RPMLeft.in(RadiansPerSecond));
+      rightSim.setAngularVelocity(new_RPMRight.in(RadiansPerSecond));
+      printf("Shooter RPM: %f / %f", new_RPMLeft.in(RPM), new_RPMRight.in(RPM));
     }
   }
 
@@ -118,18 +126,18 @@ public class CoralShooter_Sim implements CoralShooterInterface, CS_InterfaceBase
   }
 
   @Override
-  public double getRPMLeft() {
-    return leftSim.getAngularVelocityRPM();
+  public AngularVelocity getRPMLeft() {
+    return RPM.of(leftSim.getAngularVelocityRPM());
   }
 
   @Override
-  public double getRPMRight() {
-    return rightSim.getAngularVelocityRPM();
+  public AngularVelocity getRPMRight() {
+    return RPM.of(rightSim.getAngularVelocityRPM());
   }
 
   @Override
-  public double getRPMLauncher() {
-    return launchSim.getAngularVelocityRPM();
+  public AngularVelocity getRPMLauncher() {
+    return RPM.of(launchSim.getAngularVelocityRPM());
   }
 
   public double getSetpointLauncher() {
@@ -139,6 +147,11 @@ public class CoralShooter_Sim implements CoralShooterInterface, CS_InterfaceBase
   @Override
   public boolean isLoaded() {
     return !loadedSensorSim.getValue();
+  }
+
+  @Override
+  public boolean hasCoral() {
+    return !coralSensorSim1.getValue() || !coralSensorSim2.getValue();
   }
 
   @Override

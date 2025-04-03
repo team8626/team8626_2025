@@ -6,6 +6,8 @@
 
 package frc.robot.commands.setters.units;
 
+import frc.robot.Commodore;
+import frc.robot.Commodore.CommodoreState;
 import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
 import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
@@ -24,8 +26,10 @@ public class CoralShooterStop extends CS_Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+
     mortar.stopShooter();
     mortar.stopLauncher();
+    Commodore.setCommodoreState(CommodoreState.CORAL_SHOOT_FINISHED);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

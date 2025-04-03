@@ -6,6 +6,8 @@
 
 package frc.robot.commands.setters.units;
 
+import frc.robot.Commodore;
+import frc.robot.Commodore.CommodoreState;
 import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
 import frc.robot.subsystems.Dashboard;
@@ -30,6 +32,7 @@ public class AlgaeShooterStop extends CS_Command {
   public void initialize() {
     algae501.stopShooter();
     algae501.stopLauncher();
+    Commodore.setCommodoreState(CommodoreState.ALGAE_SHOOT_FINISHED);
     Dashboard.setAlgaeState(GamePieceState.IDLE);
   }
 

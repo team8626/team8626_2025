@@ -1,0 +1,114 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.3279487179487175,
+        "y": 5.346025641025641
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.753477805906504,
+        "y": 5.250674574223453
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 6.976795054290254,
+        "y": 6.258014019465042
+      },
+      "prevControl": {
+        "x": 6.907028612548141,
+        "y": 6.017946021583933
+      },
+      "nextControl": {
+        "x": 7.046561496032367,
+        "y": 6.498082017346151
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 6.248449913930085,
+        "y": 6.869680630958686
+      },
+      "prevControl": {
+        "x": 7.006812041463214,
+        "y": 6.20202962174783
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.833861088039867,
+      "maxWaypointRelativePos": 1.561695390365449,
+      "constraints": {
+        "maxVelocity": 1.0,
+        "maxAcceleration": 4.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [
+    {
+      "fieldPosition": {
+        "x": 0.4,
+        "y": 5.5
+      },
+      "rotationOffset": 135.0,
+      "minWaypointRelativePos": 0.25,
+      "maxWaypointRelativePos": 0.75,
+      "name": "PointToBarge"
+    }
+  ],
+  "eventMarkers": [
+    {
+      "name": "PrepareShootLow",
+      "waypointRelativePos": 0.1700309327411167,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
+      "name": "PrepareRampUp",
+      "waypointRelativePos": 0.1998730964467006,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
+      "name": "ShootIt",
+      "waypointRelativePos": 0.9246311865482232,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 6.77,
+    "maxAcceleration": 4.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -45.0
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -119.99999999999999
+  },
+  "useDefaultConstraints": true
+}

@@ -6,7 +6,11 @@
 
 package frc.robot.commands.setters.units;
 
+import static edu.wpi.first.units.Units.Seconds;
+
 import edu.wpi.first.wpilibj.Timer;
+import frc.robot.Commodore;
+import frc.robot.Commodore.CommodoreState;
 import frc.robot.RobotContainer;
 import frc.robot.commands.CS_Command;
 import frc.robot.subsystems.Dashboard;
@@ -29,6 +33,7 @@ public class CoralShooterIntake extends CS_Command {
 
   @Override
   public void initialize() {
+    Commodore.setCommodoreState(CommodoreState.CORAL_INTAKE);
     Dashboard.setCoralState(GamePieceState.INTAKING);
     mortar.startIntake();
     intakeTimer.stop();
@@ -48,7 +53,7 @@ public class CoralShooterIntake extends CS_Command {
         intakeTimer.reset();
       }
     } else {
-      if (intakeTimer.hasElapsed(3.0)) {
+      if (intakeTimer.hasElapsed(10)) {
         mortar.stopAll();
         intakePaused = true;
         intakeTimer.reset();
@@ -72,6 +77,6 @@ public class CoralShooterIntake extends CS_Command {
     if (mortar.isLoaded()) {
       timer.start();
     }
-    return timer.hasElapsed(CoralShooterConstants.launchTimerSeconds);
+    return timer.hasElapsed(CoralShooterConstants.launchTimer.in(Seconds));
   }
 }
