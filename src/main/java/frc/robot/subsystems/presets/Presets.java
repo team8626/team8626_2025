@@ -11,11 +11,11 @@ import edu.wpi.first.math.util.Units;
 public class Presets {
 
   public static final AlgaePreset ALGAE_LOW =
-      new AlgaePreset("LOW", Inches.of(36), Degrees.of(200), RPM.of(-1000.0));
+      new AlgaePreset("LOW", Inches.of(39), Degrees.of(200), RPM.of(-1000.0));
   public static final AlgaePreset ALGAE_HIGH =
-      new AlgaePreset("HIGH", Inches.of(48), Degrees.of(190), RPM.of(-1000));
+      new AlgaePreset("HIGH", Inches.of(51), Degrees.of(190), RPM.of(-1000));
   public static final AlgaePreset ALGAE_FLOOR =
-      new AlgaePreset("FLOOR", Inches.of(8), Degrees.of(195), RPM.of(-1000));
+      new AlgaePreset("FLOOR", Inches.of(11), Degrees.of(195), RPM.of(-1000));
   public static final AlgaePreset ALGAE_SPIT =
       new AlgaePreset("SPIT", Inches.of(8), Degrees.of(205), RPM.of(1000));
   public static final AlgaePreset ALGAE_DISCARD =
