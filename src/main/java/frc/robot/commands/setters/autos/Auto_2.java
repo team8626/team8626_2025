@@ -18,7 +18,7 @@ public class Auto_2 extends SequentialCommandGroup {
     targetPose = () -> PresetManager.getRobotPoseFromAlgae(ALGAE_FACE.CD, 0);
     addCommands(
         new ToSubsystemsPreset(() -> Presets.ALGAE_LOW),
-        new DriveToPoseFinkle2(targetPose),
-        new AlgaeShooterIntake(() -> Presets.ALGAE_LOW.getRPM()));
+        new DriveToPoseFinkle2(targetPose)
+            .deadlineFor(new AlgaeShooterIntake(() -> Presets.ALGAE_LOW.getRPM())));
   }
 }
