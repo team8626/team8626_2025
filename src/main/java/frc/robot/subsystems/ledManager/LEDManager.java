@@ -108,6 +108,12 @@ public class LEDManager extends CS_SubsystemBase {
         currentColor = new Color[] {Color.kGreen, Color.kGreenYellow};
         break;
 
+      case OOOPS: // We tipped over
+        currentColor = new Color[] {Color.kOrange};
+        blink(currentColor).applyTo(m_left);
+        blink(currentColor).applyTo(m_right);
+        break;
+
         // IDLE & default case... just show alliance color
       case IDLE:
       default:
@@ -145,6 +151,14 @@ public class LEDManager extends CS_SubsystemBase {
       default:
         break;
     }
+    switch (Commodore.getCurrentState()) {
+      case OOOPS: // We tipped over
+        currentColor = new Color[] {Color.kOrange};
+        blink(currentColor).applyTo(m_back_top);
+        break;
+      default:
+        break;
+    }
   }
 
   private static void updateAlgaeLEDs() {
@@ -168,6 +182,14 @@ public class LEDManager extends CS_SubsystemBase {
       case LOADED:
         new_pattern = LEDPattern.solid(color);
         new_pattern.applyTo(m_back_bottom);
+        break;
+      default:
+        break;
+    }
+    switch (Commodore.getCurrentState()) {
+      case OOOPS: // We tipped over
+        currentColor = new Color[] {Color.kOrange};
+        blink(currentColor).applyTo(m_back_bottom);
         break;
       default:
         break;
@@ -213,6 +235,13 @@ public class LEDManager extends CS_SubsystemBase {
     LEDBuffer.setRGB(i + 5, r, g, b);
     LEDBuffer.setRGB(j - 4, r, g, b);
     LEDBuffer.setRGB(j - 5, r, g, b);
+  }
+
+  private static LEDPattern blink(Color... colors) {
+    LEDPattern new_pattern =
+        LEDPattern.gradient(LEDPattern.GradientType.kContinuous, colors)
+            .blink(LEDConstants.blinkDuration);
+    return new_pattern;
   }
 
   private static LEDPattern flash(Color... colors) {

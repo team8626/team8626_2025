@@ -20,6 +20,7 @@ public class LEDConstants {
   public static final Time breathSlowDuration = Seconds.of(.8);
   public static final Time breathFastDuration = Seconds.of(.2);
   public static final Time flashDuration = Seconds.of(.1);
+  public static final Time blinkDuration = Seconds.of(.75);
   public static final LinearVelocity scrollVelocity = Centimeters.per(Second).of(6);
 
   // public static final LEDSection kLEDSectionStatusLeft = new LEDSection(0, 5);
