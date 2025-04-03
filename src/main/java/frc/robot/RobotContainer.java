@@ -41,6 +41,7 @@ import frc.robot.commands.setters.autos.Auto_L;
 import frc.robot.commands.setters.groups.ToAlgaeShoot;
 import frc.robot.commands.setters.groups.ToCoralShoot;
 import frc.robot.commands.setters.groups.ToPathAndFinkleAndAlgaeIntake;
+import frc.robot.commands.setters.groups.ToPathAndFinkleAndAlgaeProcess;
 import frc.robot.commands.setters.groups.ToPathAndFinkleAndAlgaeShoot;
 import frc.robot.commands.setters.groups.ToPathAndFinkleAndCoralIntake;
 import frc.robot.commands.setters.groups.ToPathAndFinkleAndCoralShoot;
@@ -345,7 +346,7 @@ public class RobotContainer {
         .whileTrue(
             Commands.defer(
                 (() ->
-                    new ToPathAndFinkleAndAlgaeShoot(
+                    new ToPathAndFinkleAndAlgaeProcess(
                             () -> AllianceFlipUtil.apply(Presets.ALGAE_PROCESS_OURSIDE))
                         .onlyIf(() -> algae501.isLoaded())
                         .handleInterrupt(
@@ -358,7 +359,7 @@ public class RobotContainer {
         .whileTrue(
             Commands.defer(
                 (() ->
-                    new ToPathAndFinkleAndAlgaeShoot(
+                    new ToPathAndFinkleAndAlgaeProcess(
                             () -> AllianceFlipUtil.apply(Presets.ALGAE_PROCESS_THEIRSIDE))
                         .onlyIf(() -> algae501.isLoaded())
                         .handleInterrupt(
