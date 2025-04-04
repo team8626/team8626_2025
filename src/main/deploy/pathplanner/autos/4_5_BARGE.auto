@@ -5,6 +5,12 @@
     "data": {
       "commands": [
         {
+          "type": "path",
+          "data": {
+            "pathName": "START_4"
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "FinkleAndTake4"
@@ -36,22 +42,9 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "BARGE_5"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Stow"
-                }
-              }
-            ]
+            "pathName": "BARGE_5"
           }
         },
         {
@@ -83,12 +76,6 @@
           "type": "named",
           "data": {
             "name": "PrepAndShootHigh"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Stow"
           }
         }
       ]
