@@ -1,0 +1,37 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "START_5"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "FinkleAndTake5"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "5_BARGE"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootIt"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": false,
+  "folder": null,
+  "choreoAuto": false
+}
