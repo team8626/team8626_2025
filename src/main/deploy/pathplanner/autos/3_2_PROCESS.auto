@@ -7,49 +7,49 @@
         {
           "type": "path",
           "data": {
-            "pathName": "START_4"
+            "pathName": "START_3"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "FinkleAndTake4"
+            "name": "FinkleAndTake3"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "4_BARGE"
+            "pathName": "3_PROCESS"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ShootHigh"
+            "name": "FinkleAndProcess"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "BARGE_5"
+            "pathName": "PROCESS_2"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "FinkleAndTake5"
+            "name": "FinkleAndTake2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "5_BARGE"
+            "pathName": "2_PROCESS"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "FinkleAndShootHigh"
+            "name": "FinkleAndProcess"
           }
         }
       ]

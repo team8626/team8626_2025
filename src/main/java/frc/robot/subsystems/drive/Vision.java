@@ -128,7 +128,7 @@ public class Vision {
         if (poseEst.isPresent()) {
           var pose = poseEst.get();
 
-          posePublisher.set(getEstimatedGlobalPose(camera).get().estimatedPose.toPose2d());
+          posePublisher.set(pose.estimatedPose.toPose2d());
 
           swerveDrive.addVisionMeasurement(
               pose.estimatedPose.toPose2d(), pose.timestampSeconds, camera.curStdDevs);

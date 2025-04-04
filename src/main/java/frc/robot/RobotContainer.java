@@ -507,9 +507,13 @@ public class RobotContainer {
     NamedCommands.registerCommand("FinkleAndTake4", new Auto_4());
     NamedCommands.registerCommand("FinkleAndTake5", new Auto_5());
     NamedCommands.registerCommand(
-        "z",
-        Commands.defer(
-            () -> new ToSubsystemsPreset(() -> Presets.ALGAE_SHOOTLOW_OURSIDE), Set.of()));
+        "FinkleAndProcess",
+        new ToPathAndFinkleAndAlgaeProcess(
+                () -> AllianceFlipUtil.apply(Presets.ALGAE_PROCESS_OURSIDE))
+            .onlyIf(() -> algae501.isLoaded()));
+
+    NamedCommands.registerCommand(
+        "ShootHigh", new ToAlgaeShoot(() -> Presets.ALGAE_SHOOTBARGE_OURSIDE));
 
     NamedCommands.registerCommand(
         "RemoveSelectedAlgae",
