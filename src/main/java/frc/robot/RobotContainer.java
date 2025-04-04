@@ -41,6 +41,7 @@ import frc.robot.commands.setters.autos.Auto_J;
 import frc.robot.commands.setters.autos.Auto_K;
 import frc.robot.commands.setters.autos.Auto_L;
 import frc.robot.commands.setters.groups.ToAlgaeShoot;
+import frc.robot.commands.setters.groups.ToAlgaeShootNoStow;
 import frc.robot.commands.setters.groups.ToCoralShoot;
 import frc.robot.commands.setters.groups.ToPathAndFinkleAndAlgaeIntake;
 import frc.robot.commands.setters.groups.ToPathAndFinkleAndAlgaeProcess;
@@ -518,7 +519,7 @@ public class RobotContainer {
     NamedCommands.registerCommand(
         "PrepAndShootHigh",
         new ToSubsystemsPreset(() -> Presets.ALGAE_SHOOTBARGE_OURSIDE)
-            .andThen(new ToAlgaeShoot(() -> Presets.ALGAE_SHOOTBARGE_OURSIDE)));
+            .andThen(new ToAlgaeShootNoStow(() -> Presets.ALGAE_SHOOTBARGE_OURSIDE)));
 
     NamedCommands.registerCommand(
         "RemoveSelectedAlgae",

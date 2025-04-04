@@ -56,7 +56,14 @@
       "name": "PointToBarge"
     }
   ],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "Stow",
+      "waypointRelativePos": 0.09579439252336476,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 6.77,
     "maxAcceleration": 4.0,
