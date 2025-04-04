@@ -99,7 +99,7 @@ public class SwerveSubsystem extends CS_SubsystemBase {
                   RobotConstants.MAX_LINEAR_VELOCITY.in(MetersPerSecond),
                   AllianceFlipUtil.apply(
                       new Pose2d(
-                          new Translation2d(Meter.of(7.2), Meter.of(4)),
+                          new Translation2d(Meter.of(0), Meter.of(0)),
                           Rotation2d.fromDegrees(180))));
       // Alternative method if you don't want to supply the conversion factor via JSON files.
       // swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumSpeed,

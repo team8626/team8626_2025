@@ -43,7 +43,7 @@ public class Presets {
   public static final AlgaePreset ALGAE_SHOOTBARGE_THEIRSIDE =
       new AlgaePreset(
           "ALGAE_SHOOTBARGE_THEIRSIDE",
-          new Pose2d(10.6, 6.0, new Rotation2d(Units.degreesToRadians(-180))),
+          new Pose2d(11, 7.0, new Rotation2d(Units.degreesToRadians(-180))),
           Inches.of(45),
           Degrees.of(110),
           RPM.of(1600));
