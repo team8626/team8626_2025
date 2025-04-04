@@ -525,6 +525,10 @@ public class RobotContainer {
         .whileTrue(
             Commands.defer(
                 () -> new ToSubsystemsPreset(() -> Presets.ALGAE_SHOOTLOW_OURSIDE), Set.of()));
+    new EventTrigger("PrepareShootHigh")
+        .whileTrue(
+            Commands.defer(
+                () -> new ToSubsystemsPreset(() -> Presets.ALGAE_SHOOTBARGE_OURSIDE), Set.of()));
 
     new EventTrigger("Stow")
         .whileTrue(
@@ -538,6 +542,21 @@ public class RobotContainer {
                     new AlgaeShooterRampUp(() -> Presets.ALGAE_SHOOTLOW_OURSIDE.getRPM())
                         .withDoNotStopOnInterrupt(),
                 Set.of()));
+
+    new EventTrigger("PrepareRampUpHigh")
+        .and(algae501::isLoaded)
+        .whileTrue(
+            Commands.defer(
+                () ->
+                    new AlgaeShooterRampUp(() -> Presets.ALGAE_SHOOTBARGE_OURSIDE.getRPM())
+                        .withDoNotStopOnInterrupt(),
+                Set.of()));
+
+    new EventTrigger("ShootItHigh")
+        .and(algae501::isLoaded)
+        .onTrue(
+            Commands.defer(
+                (() -> new ToAlgaeShoot(() -> Presets.ALGAE_SHOOTBARGE_OURSIDE)), Set.of()));
 
     new EventTrigger("ShootIt")
         .and(algae501::isLoaded)

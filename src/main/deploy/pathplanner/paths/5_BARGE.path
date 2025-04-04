@@ -16,28 +16,12 @@
     },
     {
       "anchor": {
-        "x": 6.976795054290254,
-        "y": 6.258014019465042
+        "x": 6.950198863636363,
+        "y": 6.333423295454545
       },
       "prevControl": {
-        "x": 6.933951331427904,
-        "y": 6.01171254685212
-      },
-      "nextControl": {
-        "x": 7.019638777152604,
-        "y": 6.504315492077964
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 6.248449913930085,
-        "y": 6.869680630958686
-      },
-      "prevControl": {
-        "x": 7.080709805836455,
-        "y": 6.168330576182416
+        "x": 6.907355140774013,
+        "y": 6.087121822841623
       },
       "nextControl": null,
       "isLocked": false,
@@ -49,7 +33,7 @@
     {
       "name": "Constraints Zone",
       "minWaypointRelativePos": 0.833861088039867,
-      "maxWaypointRelativePos": 1.561695390365449,
+      "maxWaypointRelativePos": 1,
       "constraints": {
         "maxVelocity": 1.0,
         "maxAcceleration": 4.0,
@@ -66,7 +50,7 @@
         "x": 0.4,
         "y": 5.5
       },
-      "rotationOffset": 135.0,
+      "rotationOffset": 170.0,
       "minWaypointRelativePos": 0.25,
       "maxWaypointRelativePos": 0.75,
       "name": "PointToBarge"
@@ -74,20 +58,20 @@
   ],
   "eventMarkers": [
     {
-      "name": "PrepareShootLow",
-      "waypointRelativePos": 0.1700309327411167,
-      "endWaypointRelativePos": null,
-      "command": null
-    },
-    {
-      "name": "PrepareRampUp",
+      "name": "PrepareRampUpHigh",
       "waypointRelativePos": 0.1998730964467006,
       "endWaypointRelativePos": null,
       "command": null
     },
     {
-      "name": "ShootIt",
-      "waypointRelativePos": 0.9246311865482232,
+      "name": "PrepareShootHigh",
+      "waypointRelativePos": 0.26992896606155786,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
+      "name": "ShootItHigh",
+      "waypointRelativePos": 0.5177584846093135,
       "endWaypointRelativePos": null,
       "command": null
     }
@@ -102,7 +86,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -45.0
+    "rotation": -1.8572903539702927
   },
   "reversed": false,
   "folder": null,
