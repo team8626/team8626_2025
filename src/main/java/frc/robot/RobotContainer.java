@@ -24,6 +24,7 @@ import frc.robot.Commodore.CommodoreState;
 import frc.robot.RobotConstants.RobotType;
 import frc.robot.commands.RumbleCommand;
 import frc.robot.commands.setters.autos.Auto_2;
+import frc.robot.commands.setters.autos.Auto_3;
 import frc.robot.commands.setters.autos.Auto_4;
 import frc.robot.commands.setters.autos.Auto_5;
 import frc.robot.commands.setters.autos.Auto_A;
@@ -502,6 +503,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("FinkleAndShootK", new Auto_K());
     NamedCommands.registerCommand("FinkleAndShootL", new Auto_L());
     NamedCommands.registerCommand("FinkleAndTake2", new Auto_2());
+    NamedCommands.registerCommand("FinkleAndTake3", new Auto_3());
     NamedCommands.registerCommand("FinkleAndTake4", new Auto_4());
     NamedCommands.registerCommand("FinkleAndTake5", new Auto_5());
     NamedCommands.registerCommand(
