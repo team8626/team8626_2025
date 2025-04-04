@@ -27,6 +27,7 @@ import frc.robot.commands.setters.autos.Auto_2;
 import frc.robot.commands.setters.autos.Auto_3;
 import frc.robot.commands.setters.autos.Auto_4;
 import frc.robot.commands.setters.autos.Auto_5;
+import frc.robot.commands.setters.autos.Auto_6;
 import frc.robot.commands.setters.autos.Auto_A;
 import frc.robot.commands.setters.autos.Auto_B;
 import frc.robot.commands.setters.autos.Auto_C;
@@ -48,6 +49,7 @@ import frc.robot.commands.setters.groups.ToPathAndFinkleAndCoralIntake;
 import frc.robot.commands.setters.groups.ToPathAndFinkleAndCoralShoot;
 import frc.robot.commands.setters.groups.ToSubsystemsPreset;
 import frc.robot.commands.setters.units.AlgaeShooterDiscard;
+import frc.robot.commands.setters.units.AlgaeShooterIntake;
 import frc.robot.commands.setters.units.AlgaeShooterRampUp;
 import frc.robot.commands.setters.units.CoralShooterIntake;
 import frc.robot.commands.setters.units.DriveTurnToAngle;
@@ -330,14 +332,9 @@ public class RobotContainer {
                 Set.of(drivebase, elevator, wrist, algae501)));
 
     // ---------------------------------------- POV LEFT Button
-    //                                          Auto Shoot Algae
-    // controller.btn_West.toggleOnTrue(
-    //     Commands.defer(
-    //         (() ->
-    //             new ToAlgaeShoot(
-    //                     () -> PresetManager.getAimAndShootPreset(() -> drivebase.getPose()))
-    //                 .onlyIf(() -> algae501.isLoaded())),
-    //         Set.of(elevator, wrist, algae501)));
+    //                                          Intakes Algae
+    controller.btn_West.toggleOnTrue(
+        Commands.defer((() -> new AlgaeShooterIntake()), Set.of(algae501)));
 
     // ---------------------------------------- POV Right Button
     //                                          Process Algae
@@ -506,6 +503,9 @@ public class RobotContainer {
     NamedCommands.registerCommand("FinkleAndTake3", new Auto_3());
     NamedCommands.registerCommand("FinkleAndTake4", new Auto_4());
     NamedCommands.registerCommand("FinkleAndTake5", new Auto_5());
+    NamedCommands.registerCommand("FinkleAndTake6", new Auto_6());
+    NamedCommands.registerCommand(
+        "AlgaeIntake", Commands.defer((() -> new AlgaeShooterIntake()), Set.of(algae501)));
     NamedCommands.registerCommand(
         "FinkleAndProcess",
         new ToPathAndFinkleAndAlgaeProcess(
@@ -514,6 +514,11 @@ public class RobotContainer {
 
     NamedCommands.registerCommand(
         "ShootHigh", new ToAlgaeShoot(() -> Presets.ALGAE_SHOOTBARGE_OURSIDE));
+
+    NamedCommands.registerCommand(
+        "PrepAndShootHigh",
+        new ToSubsystemsPreset(() -> Presets.ALGAE_SHOOTBARGE_OURSIDE)
+            .andThen(new ToAlgaeShoot(() -> Presets.ALGAE_SHOOTBARGE_OURSIDE)));
 
     NamedCommands.registerCommand(
         "RemoveSelectedAlgae",

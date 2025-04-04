@@ -17,15 +17,28 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "4_BARGE"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "4_BARGE"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AlgaeIntake"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ShootHigh"
+            "name": "PrepAndShootHigh"
           }
         },
         {
@@ -41,15 +54,28 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "5_BARGE"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "5_BARGE"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AlgaeIntake"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "FinkleAndShootHigh"
+            "name": "PrepAndShootHigh"
           }
         }
       ]

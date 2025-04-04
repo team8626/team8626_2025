@@ -7,13 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "START_3"
+            "pathName": "START_5"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "FinkleAndTake3"
+            "name": "FinkleAndTake5"
           }
         },
         {
@@ -23,7 +23,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "3_PROCESS"
+                  "pathName": "5_BARGE"
                 }
               },
               {
@@ -38,19 +38,19 @@
         {
           "type": "named",
           "data": {
-            "name": "FinkleAndProcess"
+            "name": "PrepareShootHigh"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "PROCESS_2"
+            "pathName": "BARGE_6"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "FinkleAndTake2"
+            "name": "FinkleAndTake6"
           }
         },
         {
@@ -60,7 +60,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "2_PROCESS"
+                  "pathName": "6_BARGE"
                 }
               },
               {
@@ -75,7 +75,7 @@
         {
           "type": "named",
           "data": {
-            "name": "FinkleAndProcess"
+            "name": "PrepareShootHigh"
           }
         }
       ]

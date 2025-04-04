@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.3279487179487175,
-        "y": 5.346025641025641
+        "x": 6.7625,
+        "y": 6.367756410256411
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.578402566008439,
-        "y": 5.261777753906943
+        "x": 6.569644893635293,
+        "y": 6.208674959580798
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Barge"
     },
     {
       "anchor": {
-        "x": 6.979230769230769,
-        "y": 6.388397435897435
+        "x": 3.6457051282051283,
+        "y": 5.573076923076924
       },
       "prevControl": {
-        "x": 6.0227878792070495,
-        "y": 6.010154928070334
+        "x": 4.419743589743588,
+        "y": 6.388397435897437
       },
       "nextControl": null,
       "isLocked": false,
@@ -29,29 +29,15 @@
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [
-    {
-      "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.833861088039867,
-      "maxWaypointRelativePos": 1,
-      "constraints": {
-        "maxVelocity": 1.0,
-        "maxAcceleration": 4.0,
-        "maxAngularVelocity": 540.0,
-        "maxAngularAcceleration": 720.0,
-        "nominalVoltage": 12.0,
-        "unlimited": false
-      }
-    }
-  ],
+  "constraintZones": [],
   "pointTowardsZones": [
     {
       "fieldPosition": {
         "x": 0.4,
         "y": 5.5
       },
-      "rotationOffset": 170.0,
-      "minWaypointRelativePos": 0.25,
+      "rotationOffset": 180.0,
+      "minWaypointRelativePos": 0.35,
       "maxWaypointRelativePos": 0.75,
       "name": "PointToBarge"
     }
@@ -67,13 +53,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -1.8572903539702927
+    "rotation": -64.1790080258107
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": -0.6510603802295715
   },
   "useDefaultConstraints": true
 }
