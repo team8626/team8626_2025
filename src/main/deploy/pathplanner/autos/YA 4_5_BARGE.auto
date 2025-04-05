@@ -1,0 +1,87 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "START_4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "FinkleAndTake4"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "fast 4_BARGE"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AlgaeIntake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PrepAndShootHigh"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "fast BARGE_5"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "FinkleAndTake5"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "fast 5_BARGE"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AlgaeIntake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PrepAndShootHigh"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": false,
+  "folder": null,
+  "choreoAuto": false
+}
