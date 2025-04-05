@@ -434,6 +434,9 @@ public class RobotContainer {
     // ---------------------------------------- Back Button
     //                                          Flip Drivebase directon
     controller.btn_Back.onTrue(new InstantCommand(() -> drivebase.flipToggle()));
+     // ---------------------------------------- A BTN
+    //                                          crazyshot
+    controller.btn_A.onTrue(new ToSubsystemsPreset(() -> Presets.ALGAE_CRAZYSHOT));
 
     // ---------------------------------------- Elevator Characterization
     //

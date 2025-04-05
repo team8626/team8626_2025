@@ -24,6 +24,8 @@ public class Presets {
       new AlgaePreset("STOW", Inches.of(8), Degrees.of(80), RPM.of(0));
   public static final AlgaePreset ALGAE_POPSTICLE =
       new AlgaePreset("POPSTICLE", Inches.of(9), Degrees.of(210), RPM.of(0));
+  public static final AlgaePreset ALGAE_CRAZYSHOT =
+      new AlgaePreset("CRAZYSHOT", Inches.of(24), Degrees.of(110), RPM.of(2700));
 
   public static final AlgaePreset ALGAE_NETFROMREEF =
       new AlgaePreset("ALGAE_NETFROMREEF", Inches.of(45), Degrees.of(110), RPM.of(1600));
