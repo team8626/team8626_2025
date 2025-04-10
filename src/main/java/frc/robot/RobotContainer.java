@@ -20,10 +20,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Commodore.CommodoreState;
 import frc.robot.RobotConstants.RobotType;
 import frc.robot.commands.RumbleCommand;
+import frc.robot.commands.setters.autos.Auto_2;
+import frc.robot.commands.setters.autos.Auto_3;
 import frc.robot.commands.setters.autos.Auto_4;
 import frc.robot.commands.setters.autos.Auto_5;
+import frc.robot.commands.setters.autos.Auto_6;
 import frc.robot.commands.setters.autos.Auto_A;
 import frc.robot.commands.setters.autos.Auto_B;
 import frc.robot.commands.setters.autos.Auto_C;
@@ -39,11 +43,13 @@ import frc.robot.commands.setters.autos.Auto_L;
 import frc.robot.commands.setters.groups.ToAlgaeShoot;
 import frc.robot.commands.setters.groups.ToCoralShoot;
 import frc.robot.commands.setters.groups.ToPathAndFinkleAndAlgaeIntake;
+import frc.robot.commands.setters.groups.ToPathAndFinkleAndAlgaeProcess;
 import frc.robot.commands.setters.groups.ToPathAndFinkleAndAlgaeShoot;
 import frc.robot.commands.setters.groups.ToPathAndFinkleAndCoralIntake;
 import frc.robot.commands.setters.groups.ToPathAndFinkleAndCoralShoot;
 import frc.robot.commands.setters.groups.ToSubsystemsPreset;
 import frc.robot.commands.setters.units.AlgaeShooterDiscard;
+import frc.robot.commands.setters.units.AlgaeShooterIntake;
 import frc.robot.commands.setters.units.AlgaeShooterRampUp;
 import frc.robot.commands.setters.units.CoralShooterIntake;
 import frc.robot.commands.setters.units.DriveTurnToAngle;
@@ -218,11 +224,21 @@ public class RobotContainer {
 
     // ---------------------------------------- Left Trigger
     //                                          Algae Shoot Preset from Barge (low)
+    // controller.btn_LeftTrigger.toggleOnTrue(
+    //     Commands.defer(
+    //         (() ->
+    //             new ToPathAndFinkleAndAlgaeShoot(() -> PresetManager.getBargeShootPreset())
+    //                 .onlyIf(() -> algae501.isLoaded())
+    //                 .handleInterrupt(
+    //                     () -> new ToSubsystemsPreset(() -> Presets.ALGAE_STOW).schedule())),
+    //         Set.of(elevator, wrist, algae501)));
+
     controller.btn_LeftTrigger.toggleOnTrue(
         Commands.defer(
             (() ->
-                new ToPathAndFinkleAndAlgaeShoot(() -> PresetManager.getBargeShootPreset())
+                new ToAlgaeShoot(() -> PresetManager.getBargeShootPreset())
                     .onlyIf(() -> algae501.isLoaded())
+                    .andThen(new ToSubsystemsPreset(() -> Presets.ALGAE_STOW))
                     .handleInterrupt(
                         () -> new ToSubsystemsPreset(() -> Presets.ALGAE_STOW).schedule())),
             Set.of(elevator, wrist, algae501)));
@@ -316,14 +332,9 @@ public class RobotContainer {
                 Set.of(drivebase, elevator, wrist, algae501)));
 
     // ---------------------------------------- POV LEFT Button
-    //                                          Auto Shoot Algae
-    // controller.btn_West.toggleOnTrue(
-    //     Commands.defer(
-    //         (() ->
-    //             new ToAlgaeShoot(
-    //                     () -> PresetManager.getAimAndShootPreset(() -> drivebase.getPose()))
-    //                 .onlyIf(() -> algae501.isLoaded())),
-    //         Set.of(elevator, wrist, algae501)));
+    //                                          Intakes Algae
+    controller.btn_West.toggleOnTrue(
+        Commands.defer((() -> new AlgaeShooterIntake()), Set.of(algae501)));
 
     // ---------------------------------------- POV Right Button
     //                                          Process Algae
@@ -333,7 +344,7 @@ public class RobotContainer {
         .whileTrue(
             Commands.defer(
                 (() ->
-                    new ToPathAndFinkleAndAlgaeShoot(
+                    new ToPathAndFinkleAndAlgaeProcess(
                             () -> AllianceFlipUtil.apply(Presets.ALGAE_PROCESS_OURSIDE))
                         .onlyIf(() -> algae501.isLoaded())
                         .handleInterrupt(
@@ -346,7 +357,7 @@ public class RobotContainer {
         .whileTrue(
             Commands.defer(
                 (() ->
-                    new ToPathAndFinkleAndAlgaeShoot(
+                    new ToPathAndFinkleAndAlgaeProcess(
                             () -> AllianceFlipUtil.apply(Presets.ALGAE_PROCESS_THEIRSIDE))
                         .onlyIf(() -> algae501.isLoaded())
                         .handleInterrupt(
@@ -373,6 +384,20 @@ public class RobotContainer {
             new ToSubsystemsPreset(() -> Presets.ALGAE_STOW)
                 .alongWith(RumbleCommand.longRumble(driver))
                 .alongWith(RumbleCommand.longRumble(operator)));
+
+    new Trigger(
+            () ->
+                ((Math.abs(drivebase.getPitch().in(Degrees)) > 20
+                    || Math.abs(drivebase.getRoll().in(Degrees)) > 20)))
+        .debounce(7)
+        .onTrue(
+            Commodore.getSetStateCommand(CommodoreState.OOOPS)
+                .ignoringDisable(true)
+                .handleInterrupt(
+                    () ->
+                        Commodore.getSetStateCommand(CommodoreState.IDLE)
+                            .ignoringDisable(true)
+                            .schedule()));
 
     // ---------------------------------------- TRIGGER RUMBLE
     new Trigger(algae501::isLoaded)
@@ -409,6 +434,9 @@ public class RobotContainer {
     // ---------------------------------------- Back Button
     //                                          Flip Drivebase directon
     controller.btn_Back.onTrue(new InstantCommand(() -> drivebase.flipToggle()));
+    // ---------------------------------------- A BTN
+    //                                          crazyshot
+    controller.btn_A.onTrue(new ToSubsystemsPreset(() -> Presets.ALGAE_CRAZYSHOT));
 
     // ---------------------------------------- Elevator Characterization
     //
@@ -474,8 +502,27 @@ public class RobotContainer {
     NamedCommands.registerCommand("FinkleAndShootJ", new Auto_J());
     NamedCommands.registerCommand("FinkleAndShootK", new Auto_K());
     NamedCommands.registerCommand("FinkleAndShootL", new Auto_L());
+    NamedCommands.registerCommand("FinkleAndTake2", new Auto_2());
+    NamedCommands.registerCommand("FinkleAndTake3", new Auto_3());
     NamedCommands.registerCommand("FinkleAndTake4", new Auto_4());
     NamedCommands.registerCommand("FinkleAndTake5", new Auto_5());
+    NamedCommands.registerCommand("FinkleAndTake6", new Auto_6());
+    NamedCommands.registerCommand(
+        "AlgaeIntake", Commands.defer((() -> new AlgaeShooterIntake()), Set.of(algae501)));
+    NamedCommands.registerCommand(
+        "FinkleAndProcess",
+        new ToPathAndFinkleAndAlgaeProcess(
+                () -> AllianceFlipUtil.apply(Presets.ALGAE_PROCESS_OURSIDE))
+            .onlyIf(() -> algae501.isLoaded()));
+
+    NamedCommands.registerCommand(
+        "ShootHigh", new ToAlgaeShoot(() -> Presets.ALGAE_SHOOTBARGE_OURSIDE));
+
+    NamedCommands.registerCommand(
+        "PrepAndShootHigh",
+        new ToSubsystemsPreset(() -> Presets.ALGAE_SHOOTBARGE_OURSIDE)
+            .andThen(new ToAlgaeShoot(() -> Presets.ALGAE_SHOOTBARGE_OURSIDE)));
+
     NamedCommands.registerCommand(
         "RemoveSelectedAlgae",
         Commands.defer(
@@ -492,6 +539,10 @@ public class RobotContainer {
         .whileTrue(
             Commands.defer(
                 () -> new ToSubsystemsPreset(() -> Presets.ALGAE_SHOOTLOW_OURSIDE), Set.of()));
+    new EventTrigger("PrepareShootHigh")
+        .whileTrue(
+            Commands.defer(
+                () -> new ToSubsystemsPreset(() -> Presets.ALGAE_SHOOTBARGE_OURSIDE), Set.of()));
 
     new EventTrigger("Stow")
         .whileTrue(
@@ -505,6 +556,21 @@ public class RobotContainer {
                     new AlgaeShooterRampUp(() -> Presets.ALGAE_SHOOTLOW_OURSIDE.getRPM())
                         .withDoNotStopOnInterrupt(),
                 Set.of()));
+
+    new EventTrigger("PrepareRampUpHigh")
+        .and(algae501::isLoaded)
+        .whileTrue(
+            Commands.defer(
+                () ->
+                    new AlgaeShooterRampUp(() -> Presets.ALGAE_SHOOTBARGE_OURSIDE.getRPM())
+                        .withDoNotStopOnInterrupt(),
+                Set.of()));
+
+    new EventTrigger("ShootItHigh")
+        .and(algae501::isLoaded)
+        .onTrue(
+            Commands.defer(
+                (() -> new ToAlgaeShoot(() -> Presets.ALGAE_SHOOTBARGE_OURSIDE)), Set.of()));
 
     new EventTrigger("ShootIt")
         .and(algae501::isLoaded)

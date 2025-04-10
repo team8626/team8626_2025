@@ -35,6 +35,7 @@ public class Commodore extends CS_SubsystemBase {
     DISCONNECTED,
     DISABLED,
     IDLE,
+    OOOPS,
     // INTERRUPTED,
 
     UNKNOWN,

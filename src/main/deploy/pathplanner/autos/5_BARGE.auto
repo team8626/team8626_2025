@@ -7,13 +7,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Practice_L"
+            "pathName": "START_5"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "FinkleAndShootL"
+            "name": "FinkleAndTake5"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "5_BARGE"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootIt"
           }
         }
       ]

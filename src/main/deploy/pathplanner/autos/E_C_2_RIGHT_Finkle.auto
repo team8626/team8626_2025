@@ -7,13 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "START_4"
+            "pathName": "START_E"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "FinkleAndTake4"
+            "name": "FinkleAndShootE"
           }
         },
         {
@@ -21,61 +21,42 @@
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "4_BARGE"
+                  "name": "Intake"
                 }
               },
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "AlgaeIntake"
+                  "pathName": "E_RIGHT"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "PrepAndShootHigh"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "BARGE_5"
+            "pathName": "RIGHT_C"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "FinkleAndTake5"
+            "name": "FinkleAndShootC"
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "5_BARGE"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AlgaeIntake"
-                }
-              }
-            ]
+            "pathName": "C_TURN180"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "PrepAndShootHigh"
+            "name": "FinkleAndTake2"
           }
         }
       ]

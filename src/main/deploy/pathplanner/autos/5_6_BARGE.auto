@@ -7,44 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "START_4"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "FinkleAndTake4"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "4_BARGE"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AlgaeIntake"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "PrepAndShootHigh"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "BARGE_5"
+            "pathName": "START_5"
           }
         },
         {
@@ -75,7 +38,44 @@
         {
           "type": "named",
           "data": {
-            "name": "PrepAndShootHigh"
+            "name": "PrepareShootHigh"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BARGE_6"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "FinkleAndTake6"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "6_BARGE"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AlgaeIntake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PrepareShootHigh"
           }
         }
       ]

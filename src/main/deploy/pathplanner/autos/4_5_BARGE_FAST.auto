@@ -17,34 +17,34 @@
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "fast 4_BARGE"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootItHigh"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "4_BARGE"
+                  "pathName": "fast BARGE_5"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "AlgaeIntake"
+                  "name": "Stow"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "PrepAndShootHigh"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "BARGE_5"
           }
         },
         {
@@ -54,28 +54,21 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "5_BARGE"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AlgaeIntake"
-                }
-              }
-            ]
+            "pathName": "fast 5_BARGE"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "PrepAndShootHigh"
+            "name": "ShootItHigh"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stow"
           }
         }
       ]

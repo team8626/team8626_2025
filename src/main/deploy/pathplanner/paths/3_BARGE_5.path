@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.9575,
-        "y": 4.004358974358975
+        "x": 5.3716581645764805,
+        "y": 2.7039743589743592
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.742585542286397,
-        "y": 4.132076537229819
+        "x": 5.722555600473917,
+        "y": 3.0032692307692312
       },
       "isLocked": false,
       "linkedName": null
@@ -52,8 +52,8 @@
         "y": 5.582852654708058
       },
       "prevControl": {
-        "x": 5.998782051282051,
-        "y": 5.810448717948718
+        "x": 6.5589731657762265,
+        "y": 5.234431587383508
       },
       "nextControl": null,
       "isLocked": false,
@@ -97,7 +97,7 @@
     },
     {
       "name": "ShootItHigh",
-      "waypointRelativePos": 0.4214680347277106,
+      "waypointRelativePos": 0.44158878504672977,
       "endWaypointRelativePos": null,
       "command": null
     },
@@ -130,7 +130,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 122.5284456414948
   },
   "useDefaultConstraints": true
 }

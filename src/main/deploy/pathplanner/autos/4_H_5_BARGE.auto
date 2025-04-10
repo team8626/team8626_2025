@@ -17,34 +17,27 @@
           }
         },
         {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "4_BARGE"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AlgaeIntake"
-                }
-              }
-            ]
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "PrepAndShootHigh"
+            "name": "PrepareShootLow"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "BARGE_5"
+            "pathName": "H_TURN180"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "FinkleAndShootH"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "4_BARGE_5"
           }
         },
         {
@@ -54,28 +47,15 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "5_BARGE"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AlgaeIntake"
-                }
-              }
-            ]
+            "pathName": "5_BARGE"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "PrepAndShootHigh"
+            "name": "ShootIt"
           }
         }
       ]
