@@ -83,12 +83,24 @@ public class SwerveSubsystem extends CS_SubsystemBase {
           .getStructTopic("SmartDashboard/Subsystem/Drive/RobotPose", Pose3d.struct)
           .publish();
 
+  // sets speed multiplier for swerve. Not the constant in Constants.
+  // private Double speedMultiplier = 1.0;
+
+  double driveSpeed = 0.8; // 0.5; // speed multiplier for swerve drive
+  boolean isSlowToggle = false;
+
+  public void setSlow(boolean isSlow) {
+    System.out.println("Speed Toggled");
+    driveSpeed = isSlow ? RobotConstants.MAX_LINEAR_VELOCITY_LOW : 0.8;
+    // System.out.println("Speed: " + driveSpeed);
+  }
   /**
    * Initialize {@link SwerveDrive} with the directory provided.
    *
    * @param directory Directory of swerve drive config files.
    */
   public SwerveSubsystem(File directory) {
+
     // Configure the Telemetry before creating the SwerveDrive to avoid unnecessary objects being
     // created.
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
@@ -431,7 +443,7 @@ public class SwerveSubsystem extends CS_SubsystemBase {
                   new Translation2d(
                       translationX.getAsDouble() * swerveDrive.getMaximumChassisVelocity(),
                       translationY.getAsDouble() * swerveDrive.getMaximumChassisVelocity()),
-                  0.8),
+                  driveSpeed),
               Math.pow(angularRotationX.getAsDouble(), 3)
                   * swerveDrive.getMaximumChassisAngularVelocity(),
               fieldRelative.getAsBoolean(),
@@ -477,7 +489,8 @@ public class SwerveSubsystem extends CS_SubsystemBase {
         () -> {
           Translation2d scaledInputs =
               SwerveMath.scaleTranslation(
-                  new Translation2d(translationX.getAsDouble(), translationY.getAsDouble()), 0.8);
+                  new Translation2d(translationX.getAsDouble(), translationY.getAsDouble()),
+                  driveSpeed);
 
           // Make the robot move
           driveFieldOriented(

@@ -121,6 +121,9 @@ public class RobotContainer {
 
   private SendableChooser<Command> autoChooser;
 
+  // sets the toggle for speed mode
+  private boolean isSlowMode = false;
+
   private RobotContainer() {
     // Display build information
     displayCredits();
@@ -407,7 +410,9 @@ public class RobotContainer {
     new Trigger(() -> mortar.isLoaded() || mortar.hasCoral())
         .debounce(0.1)
         .onTrue(new RumbleCommand(driver, RumbleType.kBothRumble));
+
   }
+
 
   // ------------------------------------ OPERATOR CONTROLLER -------------------------
   // ----------------------------------------------------------------------------------
@@ -434,9 +439,19 @@ public class RobotContainer {
     // ---------------------------------------- Back Button
     //                                          Flip Drivebase directon
     controller.btn_Back.onTrue(new InstantCommand(() -> drivebase.flipToggle()));
-     // ---------------------------------------- A BTN
+    // ---------------------------------------- A BTN
     //                                          crazyshot
     controller.btn_A.onTrue(new ToSubsystemsPreset(() -> Presets.ALGAE_CRAZYSHOT));
+    // ---------------------------------------- B BTN
+    //                                          setSlow enabled (true) / disabled (false)
+    //
+    controller.btn_B.onTrue(
+        new InstantCommand(
+            () -> {
+              isSlowMode = !isSlowMode;
+              drivebase.setSlow(isSlowMode);
+              System.out.println("Slow Mode: " + isSlowMode);
+            }));
 
     // ---------------------------------------- Elevator Characterization
     //
@@ -451,7 +466,7 @@ public class RobotContainer {
 
   }
 
-  private void configureTestOperatorBindings(CS_XboxController controller) {}
+  private void configureTestOperatorBindings(CS_XboxController controller) {} 
 
   // ---------------------------------------- BUTTON BOX ------------------------------
   //

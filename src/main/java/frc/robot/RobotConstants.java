@@ -62,6 +62,10 @@ public class RobotConstants {
   public static final double driveBaseRadius =
       Math.hypot(FrameWidthInches / 2, FrameLengthInches / 2);
   public static final LinearVelocity MAX_LINEAR_VELOCITY = MetersPerSecond.of(6.77);
+
+  //  Slower robot speed for demonstrations
+  public static final Double MAX_LINEAR_VELOCITY_LOW = 0.2;
+
   public static final AngularVelocity MAX_ANGULAR_VELOCITY = DegreesPerSecond.of(720);
 
   public static final LinearAcceleration MAX_LINEAR_ACCELERATION = MetersPerSecondPerSecond.of(1.5);
