@@ -551,4 +551,6 @@ public class Vision {
       }
     }
   }
+  public static Cameras[] camerasIndexed = new Cameras[] {Arducam_AT001, Arducam_AT002};
+
 }
