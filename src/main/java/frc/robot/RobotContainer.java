@@ -60,7 +60,7 @@ import frc.robot.subsystems.algaeshooter.AlgaeShooter_Sim;
 import frc.robot.subsystems.algaeshooter.AlgaeShooter_SparkFlex;
 import frc.robot.subsystems.coralshooter.CoralShooterSubsystem;
 import frc.robot.subsystems.coralshooter.CoralShooter_Sim;
-import frc.robot.subsystems.coralshooter.CoralShooter_SparkMax;
+import frc.robot.subsystems.coralshooter.CoralShooter_SparkMax2;
 import frc.robot.subsystems.drive.SwerveSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.elevator.Elevator_LinearSparkMax;
@@ -150,7 +150,7 @@ public class RobotContainer {
             new SwerveSubsystem(new File(Filesystem.getDeployDirectory(), "swerve_tsunami"));
         elevator = new ElevatorSubsystem(new Elevator_LinearSparkMax());
         wrist = new WristSubsystem(new Wrist_SparkFlex());
-        mortar = new CoralShooterSubsystem(new CoralShooter_SparkMax());
+        mortar = new CoralShooterSubsystem(new CoralShooter_SparkMax2());
         algae501 = new AlgaeShooterSubsystem(new AlgaeShooter_SparkFlex());
 
         break;

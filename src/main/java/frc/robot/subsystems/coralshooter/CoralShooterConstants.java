@@ -15,8 +15,8 @@ public class CoralShooterConstants {
   // public static final double RPMShootLeft = 1275;
   // public static final double RPMShootRight = 1275;
   public static final AngularVelocity RPMIntake = RPM.of(-750);
-  public static final double launcherShootSetpoint = -1.0;
-  public static final double launcherIntakeSetpoint = 0.3;
+  public static final double launcherShootSetpoint = 1;
+  public static final double launcherIntakeSetpoint = 0;
 
   public static final AngularVelocity RPMTolerance = RPM.of(20);
   public static final AngularVelocity RPMDifferentialTolerance = RPM.of(10);
@@ -49,7 +49,10 @@ public class CoralShooterConstants {
   public static final int lidarPort1Top = 2; // DIO
   public static final int lidarPort2Top = 3; // DIO
 
+  public static final int servoPWM = 0; // DIO
+
   public static double usScaleFactor = 5 * 1 / (5. / 1024.); // scale converting voltage to distance
+  public static int lidarPort;
 
   // PID Constants
   public static final Gains gainsLeft =
