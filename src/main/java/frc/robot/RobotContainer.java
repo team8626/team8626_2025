@@ -202,12 +202,12 @@ public class RobotContainer {
     // ---------------------------------------- Right Bumper
     //                                          Coral Intake
     controller.btn_RightBumper.toggleOnTrue(
-        Commands.defer((() -> new CoralShooterIntake()), Set.of(mortar)));
+        Commands.defer((() -> new ToPathAndFinkleAndCoralIntake()), Set.of(mortar)));
 
     // ---------------------------------------- Right Trigger
     //                                          Coral Shoot
     controller.btn_RightTrigger.toggleOnTrue(
-        Commands.defer((() -> new ToCoralShoot()), Set.of(mortar)).onlyIf(() -> mortar.isLoaded()));
+        Commands.defer((() -> new ToPathAndFinkleAndCoralShoot()), Set.of(mortar)).onlyIf(() -> mortar.isLoaded()));
 
     // ---------------------------------------- Left Bumper
     //                                          Algae Intake (based on Dashboard Selection)
