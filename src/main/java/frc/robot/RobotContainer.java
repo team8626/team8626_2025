@@ -41,6 +41,7 @@ import frc.robot.commands.setters.autos.Auto_J;
 import frc.robot.commands.setters.autos.Auto_K;
 import frc.robot.commands.setters.autos.Auto_L;
 import frc.robot.commands.setters.groups.ToAlgaeShoot;
+import frc.robot.commands.setters.groups.ToClosestBargeAndAlgaeShoot;
 import frc.robot.commands.setters.groups.ToCoralShoot;
 import frc.robot.commands.setters.groups.ToPathAndFinkleAndAlgaeIntake;
 import frc.robot.commands.setters.groups.ToPathAndFinkleAndAlgaeProcess;
@@ -311,8 +312,8 @@ public class RobotContainer {
         .whileTrue(
             Commands.defer(
                 (() ->
-                    new ToPathAndFinkleAndAlgaeShoot(
-                            () -> AllianceFlipUtil.apply(Presets.ALGAE_SHOOTLOW_OURSIDE))
+                    new ToClosestBargeAndAlgaeShoot(
+                            () -> AllianceFlipUtil.apply(Presets.ALGAE_SHOOTLOW_OURSIDE_2))
                         .onlyIf(() -> algae501.isLoaded())
                         .handleInterrupt(
                             () -> new ToSubsystemsPreset(() -> Presets.ALGAE_STOW).schedule())),
@@ -324,8 +325,8 @@ public class RobotContainer {
         .whileTrue(
             Commands.defer(
                 (() ->
-                    new ToPathAndFinkleAndAlgaeShoot(
-                            () -> AllianceFlipUtil.apply(Presets.ALGAE_SHOOTLOW_THEIRSIDE))
+                    new ToClosestBargeAndAlgaeShoot(
+                            () -> AllianceFlipUtil.apply(Presets.ALGAE_SHOOTLOW_THEIRSIDE_2))
                         .onlyIf(() -> algae501.isLoaded())
                         .handleInterrupt(
                             () -> new ToSubsystemsPreset(() -> Presets.ALGAE_STOW).schedule())),
