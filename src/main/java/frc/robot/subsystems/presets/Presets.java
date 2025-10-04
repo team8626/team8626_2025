@@ -66,6 +66,22 @@ public class Presets {
           Degrees.of(105),
           RPM.of(2700));
 
+  public static final AlgaePreset ALGAE_SHOOTLOW_OURSIDE_2 =
+      new AlgaePreset(
+          "ALGAE_SHOOTLOW_OURSIDE_2",
+          new Pose2d(7.3, 4.75, new Rotation2d(Units.degreesToRadians(0))),
+          Inches.of(8),
+          Degrees.of(105),
+          RPM.of(2700));
+
+  public static final AlgaePreset ALGAE_SHOOTLOW_THEIRSIDE_2 =
+      new AlgaePreset(
+          "ALGAE_SHOOTLOW_THEIRSIDE_2",
+          new Pose2d(10.2, 4.75, new Rotation2d(Units.degreesToRadians(-180))),
+          Inches.of(8),
+          Degrees.of(105),
+          RPM.of(2700));
+
   public static final AlgaePreset ALGAE_PROCESS_OURSIDE =
       new AlgaePreset(
           "ALGAE_PROCESS_OURSIDE",

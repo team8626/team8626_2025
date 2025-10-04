@@ -62,7 +62,7 @@ public class CoralShooter_SparkMax implements CoralShooterInterface, CS_Interfac
     // Setup configuration for the left motor
     leftConfig = new SparkMaxConfig();
     leftConfig
-        .inverted(false)
+        .inverted(true)
         .idleMode(IdleMode.kCoast)
         .smartCurrentLimit(CoralShooterConstants.maxCurrent);
     ;
@@ -92,7 +92,7 @@ public class CoralShooter_SparkMax implements CoralShooterInterface, CS_Interfac
     // Setup configuration for the right motor
     rightConfig = new SparkMaxConfig();
     rightConfig
-        .inverted(false)
+        .inverted(true)
         .idleMode(IdleMode.kCoast)
         .smartCurrentLimit(CoralShooterConstants.maxCurrent);
 
